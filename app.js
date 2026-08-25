@@ -1935,6 +1935,20 @@ function statoReport(msg, attivo){
   el.classList.toggle("attivo", !!attivo);
 }
 
+/** Come statoReport, ma con in più un link cliccabile che apre/scarica il PDF appena generato — resta
+ *  visibile finché non si genera un altro report, come rete di sicurezza se il download automatico non
+ *  fosse partito (succede su alcuni browser mobili). */
+function statoReportConLink(msg, url, nomeFile){
+  const el = $("#rp-stato");
+  el.classList.remove("attivo");
+  el.innerHTML = "";
+  el.appendChild(document.createTextNode(msg + " "));
+  const a = document.createElement("a");
+  a.href = url; a.download = nomeFile; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "Se il download non è partito, tocca qui per aprirlo.";
+  el.appendChild(a);
+}
+
 function nomeFileData(prefisso, d){
   const s = d instanceof Date && !isNaN(d) ? d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0") : "";
   return `${prefisso}_${s}.pdf`;
@@ -2009,11 +2023,60 @@ function piePaginaReport(pagina, n, tot){
   foot.innerHTML = `<span>Report generato automaticamente il ${dataLabel(new Date())} — dati raccolti dall'utente</span><span>Pagina ${n} di ${tot}</span>`;
   pagina.centro.appendChild(foot);
 }
+/** Ogni KPI può avere anche `d`/`dTipo` (testo + "up"/"down"/"flat") per mostrare, in piccolo sotto il
+ *  valore, il confronto col mese/periodo precedente — es. "+6pt vs mese prec." in verde o rosso. */
 function kpiRowReport(pagina, kpis){
   const row = document.createElement("div");
   row.className = "rp-kpi-row";
-  row.innerHTML = kpis.map(k => `<div class="rp-kpi"><div class="l">${esc(k.l)}</div><div class="v">${k.v}</div></div>`).join("");
+  row.innerHTML = kpis.map(k => `<div class="rp-kpi"><div class="l">${esc(k.l)}</div><div class="v">${k.v}</div>${
+    k.d ? `<div class="d ${k.dTipo||"flat"}">${esc(k.d)}</div>` : ""}</div>`).join("");
   pagina.corpo.appendChild(row);
+}
+
+/** Calcola un confronto rispetto al periodo precedente per una singola KPI: testo pronto ("+6pt vs mese
+ *  prec.") e "tipo" (up/down/flat) da colorare. `soglia` è la variazione minima sotto la quale si
+ *  considera "stabile"; `invert:true` per le metriche dove un aumento è un segnale negativo (es. numero
+ *  di giocatori sotto la soglia di presenza). Ritorna null se manca uno dei due valori da confrontare. */
+function deltaKpi(delta, formatta, soglia=0, invert=false){
+  if(delta===null || delta===undefined || Number.isNaN(delta)) return null;
+  let tipo = "flat";
+  if(delta > soglia) tipo = invert ? "down" : "up";
+  else if(delta < -soglia) tipo = invert ? "up" : "down";
+  const segno = delta > 0 ? "+" : "";
+  return {testo:`${segno}${formatta(delta)} vs mese prec.`, tipo};
+}
+
+/** Elenco di giocatori con una variazione degna di nota rispetto al mese precedente (presenza e, se
+ *  disponibile, carico di allenamento), da mostrare come righe con badge IN MIGLIORAMENTO/IN CALO/DA
+ *  MONITORARE — la richiesta esplicita dell'utente di vedere "tendenze in calo o in miglioramento" nel
+ *  Report Mensile Allenamenti, non solo i numeri assoluti del mese. */
+function tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE){
+  const precByName = new Map(righeAllenPrec.map(r => [r.Giocatore, r]));
+  const risultati = [];
+  righeAllen.forEach(r => {
+    const prec = precByName.get(r.Giocatore);
+    if(!prec) return;
+    const deltaPres = (r.Tasso_Presenza_pct!=null && prec.Tasso_Presenza_pct!=null) ? r.Tasso_Presenza_pct - prec.Tasso_Presenza_pct : null;
+    let tipo = null, testo = null;
+    if(haRPE && prec.Carico_Tot){
+      const rapporto = r.Carico_Tot / prec.Carico_Tot;
+      if(rapporto >= 1.5){ tipo = "watch"; testo = `carico di allenamento in forte aumento (${nf(rapporto,1)}× rispetto al mese scorso)`; }
+    }
+    if(!tipo && deltaPres !== null){
+      if(deltaPres >= 12){ tipo = "up"; testo = `presenza in crescita (+${nf0(deltaPres)} punti rispetto al mese scorso)`; }
+      else if(deltaPres <= -12){ tipo = "down"; testo = `presenza in calo (${nf0(deltaPres)} punti rispetto al mese scorso)`; }
+    }
+    if(tipo) risultati.push({giocatore:r.Giocatore, tipo, testo});
+  });
+  return risultati;
+}
+
+const ETICHETTA_FLAG = {up:"IN MIGLIORAMENTO", down:"IN CALO", watch:"DA MONITORARE"};
+function flagGiocatoriReport(pagina, elenco){
+  const wrap = document.createElement("div");
+  wrap.className = "rp-flag-list";
+  wrap.innerHTML = elenco.map(e => `<div class="rp-flag-riga"><span class="rp-flag ${e.tipo}">${ETICHETTA_FLAG[e.tipo]}</span> <b>${esc(e.giocatore)}</b> — ${esc(e.testo)}</div>`).join("");
+  pagina.corpo.appendChild(wrap);
 }
 function titoloSezioneReport(pagina, testo){
   const h = document.createElement("div");
@@ -2089,12 +2152,53 @@ function opzioniGraficoReport(extra={}){
   }, extra);
 }
 
+/** Converte una "pagina" (div .rp-page renderizzato fuori schermo) in una o più pagine del PDF.
+ *  Prima veniva sempre forzata dentro un'unica pagina A4: se il contenuto era più alto di una pagina
+ *  (es. Report Partita con possesso palla + disciplina, molto più pieno di quando è stato disegnato il
+ *  layout), l'immagine veniva "schiacciata" verticalmente per farcela stare — risultato illeggibile.
+ *  Ora invece, se il contenuto è più alto di una pagina A4, lo si affetta in più pagine successive,
+ *  mantenendo sempre le proporzioni corrette: niente viene più compresso o distorto. */
 async function esportaPaginaAPdf(pdf, pagina, isPrima){
   const canvas = await html2canvas(pagina, {scale:2, backgroundColor:"#FFFFFF", logging:false, windowWidth:794});
-  const img = canvas.toDataURL("image/jpeg", 0.92);
   const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
-  if(!isPrima) pdf.addPage();
-  pdf.addImage(img, "JPEG", 0, 0, pageW, pageW*(canvas.height/canvas.width) > pageH ? pageH : pageW*(canvas.height/canvas.width));
+  const pxPerPt = canvas.width / pageW;
+  const pageHpx = Math.round(pageH * pxPerPt);
+  let y = 0, primaFetta = true;
+  while(y < canvas.height){
+    const altezzaFetta = Math.min(pageHpx, canvas.height - y);
+    if(!(isPrima && primaFetta)) pdf.addPage();
+    const fetta = document.createElement("canvas");
+    fetta.width = canvas.width; fetta.height = altezzaFetta;
+    fetta.getContext("2d").drawImage(canvas, 0, y, canvas.width, altezzaFetta, 0, 0, canvas.width, altezzaFetta);
+    // PNG invece di JPEG: nessun artefatto di compressione sul testo (soprattutto quello chiaro su
+    // sfondo scuro della colonna laterale, segnalato come "grigio, illeggibile" con la JPEG precedente).
+    pdf.addImage(fetta.toDataURL("image/png"), "PNG", 0, 0, pageW, altezzaFetta / pxPerPt);
+    y += altezzaFetta;
+    primaFetta = false;
+  }
+}
+
+/** Innesca il download del PDF in modo robusto anche su mobile. `pdf.save()` di jsPDF, su alcuni
+ *  browser mobili (soprattutto Safari iOS e i browser "in-app"), non avvia un vero download: naviga la
+ *  scheda corrente sul PDF, facendo sparire la dashboard senza modo di tornare indietro — esattamente il
+ *  problema segnalato. Qui si crea invece un vero file (Blob) e si prova ad aprirlo/scaricarlo in una
+ *  scheda separata (target="_blank"), lasciando questa scheda con la dashboard intatta; in più si lascia
+ *  sempre un link manuale visibile nello stato del report, come rete di sicurezza se il tentativo
+ *  automatico non dovesse partire (un tocco reale dell'utente su un link è il modo più affidabile in
+ *  assoluto per far partire un download su qualsiasi browser). */
+function scaricaPdfRobusto(pdf, nomeFile){
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
+  try{
+    const a = document.createElement("a");
+    a.href = url; a.download = nomeFile; a.target = "_blank"; a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }catch(err){ console.error("Download automatico non riuscito:", err); }
+  statoReportConLink(`Report pronto: ${nomeFile}.`, url, nomeFile);
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
 }
 
 async function generaEScarica(nomeFile, paginaGeneratori){
@@ -2114,7 +2218,7 @@ async function generaEScarica(nomeFile, paginaGeneratori){
     for(let i=0;i<pagineDom.length;i++){
       await esportaPaginaAPdf(pdf, pagineDom[i], i===0);
     }
-    pdf.save(nomeFile);
+    scaricaPdfRobusto(pdf, nomeFile);
   } finally {
     stage.innerHTML = "";
   }
@@ -2270,7 +2374,6 @@ async function generaReportPartita(matchId){
       piePaginaReport(pag, 3, 3);
     }, {piena:true})
   ]);
-  statoReport("Report Partita scaricato.", false);
 }
 
 /* ---- Report Mensile Allenamenti ---- */
@@ -2281,8 +2384,6 @@ async function generaReportMensile(mese){
   const dMese = datiMese(mese);
   const mPrec = mesePrecedenteConDati(mese);
   const dPrec = mPrec ? datiMese(mPrec) : null;
-  const sMese = riepilogoSquadra(dMese.giocatori, dMese.partite);
-  const sPrec = dPrec ? riepilogoSquadra(dPrec.giocatori, dPrec.partite) : null;
   const {totSess, righe: righeAllen} = ds.haAllenamenti ? aggregaAllenamenti(dMese.allenamenti, dMese.presenze) : {totSess:0, righe:[]};
   const sottoSoglia = righeAllen.filter(r => r.Tasso_Presenza_pct !== null && r.Tasso_Presenza_pct < 60);
   const mensile = (ds.haAllenamenti && haRPE) ? caricoMensile(ds.allenamenti, ds.presenze) : [];
@@ -2295,9 +2396,33 @@ async function generaReportMensile(mese){
     ? righeAllen.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot)[0]
     : righeAllen.filter(r=>r.Tasso_Presenza_pct!==null).slice().sort((a,b)=>a.Tasso_Presenza_pct-b.Tasso_Presenza_pct)[0];
   const ruoloDi = nome => ds.giocatori.find(g=>g.Giocatore===nome)?.Ruolo || "";
-  const righeAllenPrec = (dPrec && ds.haAllenamenti) ? aggregaAllenamenti(dPrec.allenamenti, dPrec.presenze).righe : [];
+  const aggAllenPrec = (dPrec && ds.haAllenamenti) ? aggregaAllenamenti(dPrec.allenamenti, dPrec.presenze) : {totSess:0, righe:[]};
+  const righeAllenPrec = aggAllenPrec.righe;
   const caricoPrecGiocatore = piuCaricoGiocatore ? righeAllenPrec.find(r => r.Giocatore === piuCaricoGiocatore.Giocatore) : null;
   const variazioneGiocatore = (haRPE && piuCaricoGiocatore && caricoPrecGiocatore && caricoPrecGiocatore.Carico_Tot) ? piuCaricoGiocatore.Carico_Tot/caricoPrecGiocatore.Carico_Tot : null;
+
+  // Confronto col mese precedente: quello che l'utente ha chiesto esplicitamente di vedere ("percentuali
+  // medie, dello scorso mese e del mese terminato" + "tendenze in calo o in miglioramento"), non solo i
+  // numeri assoluti del mese corrente.
+  const presenzaMedia = media(righeAllen.map(r=>r.Tasso_Presenza_pct));
+  const presenzaMediaPrec = righeAllenPrec.length ? media(righeAllenPrec.map(r=>r.Tasso_Presenza_pct)) : null;
+  const deltaPresenza = (presenzaMedia!=null && presenzaMediaPrec!=null) ? presenzaMedia - presenzaMediaPrec : null;
+  const deltaSessioni = dPrec ? totSess - aggAllenPrec.totSess : null;
+  const minutiTot = righeAllen.reduce((a,r)=>a+r.Minuti_Tot,0);
+  const minutiTotPrec = righeAllenPrec.length ? righeAllenPrec.reduce((a,r)=>a+r.Minuti_Tot,0) : null;
+  const deltaMinuti = minutiTotPrec!=null ? minutiTot - minutiTotPrec : null;
+  const sottoSogliaPrecCount = righeAllenPrec.filter(r=>r.Tasso_Presenza_pct!==null && r.Tasso_Presenza_pct<60).length;
+  const deltaSottoSoglia = righeAllenPrec.length ? sottoSoglia.length - sottoSogliaPrecCount : null;
+  const rpeSquadra = haRPE ? media(righeAllen.map(r=>r.RPE_Medio)) : null;
+  const rpeSquadraPrec = (haRPE && righeAllenPrec.length) ? media(righeAllenPrec.map(r=>r.RPE_Medio)) : null;
+  const deltaRpe = (rpeSquadra!=null && rpeSquadraPrec!=null) ? rpeSquadra - rpeSquadraPrec : null;
+  const dSess = deltaKpi(deltaSessioni, v=>nf0(v));
+  const dPres = deltaKpi(deltaPresenza, v=>nf0(v)+"pt", 2);
+  const dCarico = rapportoCarico!==null ? {testo:`${rapportoCarico>=1?"+":""}${nf0((rapportoCarico-1)*100)}% vs mese prec.`, tipo: rapportoCarico>=1.15 ? "up" : rapportoCarico<=0.85 ? "down" : "flat"} : null;
+  const dMinuti = deltaKpi(deltaMinuti, v=>nf0(v));
+  const dSottoSoglia = deltaKpi(deltaSottoSoglia, v=>nf0(v), 0, true);
+  const dRpe = deltaKpi(deltaRpe, v=>nf(v,1), 0.3);
+  const tendenzeMese = righeAllenPrec.length ? tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE) : [];
 
   statoReport("Genero il Report Mensile…", true);
   await generaEScarica(nomeFileData("Report_Mensile_"+mese.replace("-",""), new Date()), [
@@ -2327,24 +2452,31 @@ async function generaReportMensile(mese){
         ]) : []
       });
       kpiRowReport(pag, haRPE ? [
-        {l:"Sessioni nel mese", v:nf0(totSess)},
-        {l:"Presenza media", v:pctTxt(media(righeAllen.map(r=>r.Tasso_Presenza_pct)),0)},
-        {l:"Carico medio", v: caricoMeseCorr ? nf0(caricoMeseCorr.Carico_Medio) : "—"},
-        {l:"Variazione carico", v: rapportoCarico!==null ? (rapportoCarico>=1?"+":"")+nf0((rapportoCarico-1)*100)+"%" : "—"}
+        {l:"Sessioni nel mese", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
+        {l:"Carico medio", v: caricoMeseCorr ? nf0(caricoMeseCorr.Carico_Medio) : "—", ...(dCarico?{d:dCarico.testo, dTipo:dCarico.tipo}:{})},
+        {l:"RPE medio squadra", v: rpeSquadra!=null ? nf(rpeSquadra,1) : "—", ...(dRpe?{d:dRpe.testo, dTipo:dRpe.tipo}:{})}
       ] : [
-        {l:"Sessioni nel mese", v:nf0(totSess)},
-        {l:"Presenza media", v:pctTxt(media(righeAllen.map(r=>r.Tasso_Presenza_pct)),0)},
-        {l:"Minuti tot. squadra", v:nf0(righeAllen.reduce((a,r)=>a+r.Minuti_Tot,0))},
-        {l:"Sotto il 60% di presenza", v:nf0(sottoSoglia.length)}
+        {l:"Sessioni nel mese", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
+        {l:"Minuti tot. squadra", v:nf0(minutiTot), ...(dMinuti?{d:dMinuti.testo, dTipo:dMinuti.tipo}:{})},
+        {l:"Sotto il 60% di presenza", v:nf0(sottoSoglia.length), ...(dSottoSoglia?{d:dSottoSoglia.testo, dTipo:dSottoSoglia.tipo}:{})}
       ]);
       titoloSezioneReport(pag, "Cosa dicono i dati questo mese");
       const bullet = [];
-      bullet.push(`In ${meseLabel(mese)} la squadra ha svolto ${nf0(totSess)} sessioni di allenamento con una presenza media del ${pctTxt(media(righeAllen.map(r=>r.Tasso_Presenza_pct)),0)}.`);
-      if(sPrec) bullet.push(`I gol a partita sono ${sMese.partite ? (sMese.gol_fatti/sMese.partite>sPrec.gol_fatti/Math.max(sPrec.partite,1)?"in crescita":"in calo") : "stabili"} rispetto a ${meseLabel(mPrec)}.`);
+      bullet.push(`In ${meseLabel(mese)} la squadra ha svolto ${nf0(totSess)} sessioni di allenamento con una presenza media del ${pctTxt(presenzaMedia,0)}${presenzaMediaPrec!=null?` (${pctTxt(presenzaMediaPrec,0)} il mese precedente)`:""}.`);
       if(haRPE && caricoMeseCorr) bullet.push(`Il carico medio di allenamento (sRPE) è stato di ${nf0(caricoMeseCorr.Carico_Medio)} unità a presenza${caricoMesePrec?`, contro ${nf0(caricoMesePrec.Carico_Medio)} del mese precedente`:""}.`);
       if(haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha accumulato il carico più alto del mese (${nf0(piuCaricoGiocatore.Carico_Tot)} u.a.).`);
       if(!haRPE) bullet.push("Il carico di allenamento (sRPE) non è disponibile: i file caricati non includono l'RPE percepito.");
       bulletsReport(pag, bullet);
+      titoloSezioneReport(pag, "Tendenze rispetto al mese scorso");
+      if(!righeAllenPrec.length){
+        bulletsReport(pag, [`Non disponibile: manca un mese precedente con dati di allenamento da confrontare con ${meseLabel(mese)}.`]);
+      } else if(!tendenzeMese.length){
+        bulletsReport(pag, ["Nessuna variazione degna di nota rispetto al mese scorso: presenza e carico sono rimasti stabili per tutti i giocatori."]);
+      } else {
+        flagGiocatoriReport(pag, tendenzeMese);
+      }
       titoloSezioneReport(pag, "Segnali da monitorare");
       const avvisi = [];
       sottoSoglia.forEach(r => avvisi.push(`<b>${esc(r.Giocatore)}</b>: presenza del ${pctTxt(r.Tasso_Presenza_pct,0)}, sotto la soglia consigliata del 60%.`));
@@ -2362,12 +2494,19 @@ async function generaReportMensile(mese){
       if(righeAllen.length){
         titoloSezioneReport(pag, "Presenze e carico di allenamento");
         const intestazioni = haRPE
-          ? ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Minuti tot.","Carico tot. (sRPE)","RPE medio"]
-          : ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Minuti tot."];
+          ? ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza mese prec.","Carico tot. (sRPE)","RPE medio","Tendenza"]
+          : ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza mese prec.","Minuti tot.","Tendenza"];
         tabellaReport(pag, intestazioni,
           righeAllen.map(r => {
-            const base = [esc(r.Giocatore), esc(ruoloDi(r.Giocatore)), `${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}`, pctTxt(r.Tasso_Presenza_pct,0), nf0(r.Minuti_Tot)];
-            return haRPE ? [...base, nf0(r.Carico_Tot), nf(r.RPE_Medio,1)] : base;
+            const prec = righeAllenPrec.find(p => p.Giocatore === r.Giocatore);
+            const deltaPres = (prec && r.Tasso_Presenza_pct!=null && prec.Tasso_Presenza_pct!=null) ? r.Tasso_Presenza_pct - prec.Tasso_Presenza_pct : null;
+            const presenzaPrecTxt = prec ? pctTxt(prec.Tasso_Presenza_pct,0) : "—";
+            const tendenzaTxt = deltaPres===null ? `<span class="rp-flag flat">n/d</span>`
+              : deltaPres>=8 ? `<span class="rp-flag up">▲ ${nf0(deltaPres)}pt</span>`
+              : deltaPres<=-8 ? `<span class="rp-flag down">▼ ${nf0(Math.abs(deltaPres))}pt</span>`
+              : `<span class="rp-flag flat">stabile</span>`;
+            const base = [esc(r.Giocatore), esc(ruoloDi(r.Giocatore)), `${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}`, pctTxt(r.Tasso_Presenza_pct,0), presenzaPrecTxt];
+            return haRPE ? [...base, nf0(r.Carico_Tot), nf(r.RPE_Medio,1), tendenzaTxt] : [...base, nf0(r.Minuti_Tot), tendenzaTxt];
           }));
         if(!haRPE) bulletsReport(pag, ["Carico di allenamento (sRPE) non disponibile: i file caricati non includono l'RPE percepito."]);
       } else {
@@ -2376,7 +2515,6 @@ async function generaReportMensile(mese){
       piePaginaReport(pag, 2, 2);
     }, {piena:true})
   ]);
-  statoReport("Report Mensile scaricato.", false);
 }
 
 /* ---- Report Stagionale ---- */
@@ -2407,9 +2545,12 @@ async function generaReportStagionale(){
           ...(andamentoLeader.length ? [{titolo:"Andamento indice, partita per partita", righe:andamentoLeader}] : [])
         ] : []
       });
+      const vinte = ds.partite.filter(p=>p.Gol_Fatti>p.Gol_Subiti).length;
+      const pareggiate = ds.partite.filter(p=>p.Gol_Fatti===p.Gol_Subiti).length;
+      const perse = ds.partite.filter(p=>p.Gol_Fatti<p.Gol_Subiti).length;
       kpiRowReport(pag, [
         {l:"Partite giocate", v:nf0(ds.partite.length)},
-        {l:"Gol fatti / subiti", v:`${nf0(sq.gol_fatti)} / ${nf0(sq.gol_subiti)}`},
+        {l:"Vittorie / Pareggi / Sconfitte", v:`${nf0(vinte)} / ${nf0(pareggiate)} / ${nf0(perse)}`},
         {l:"Precisione passaggi", v:pctTxt(sq.precisione_passaggi)},
         {l:"Tasso di errore", v:pctTxt(sq.tasso_errore)}
       ]);
@@ -2475,7 +2616,6 @@ async function generaReportStagionale(){
       piePaginaReport(pag, 3, 3);
     }, {piena:true})
   ]);
-  statoReport("Report Stagionale scaricato.", false);
 }
 
 /* =====================================================================
