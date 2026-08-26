@@ -1,16 +1,16 @@
 /* =====================================================================
    DATI DEMO (stagione di esempio, usati dal pulsante "Prova con dati di esempio")
    ===================================================================== */
-const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":"Cannobio FC","Competizione":"Campionato","Gol_Fatti":4,"Gol_Subiti":3,"Durata_Minuti":60,"Note":null},{"Match_ID":"P1","Data":"2026-05-03","Avversario":"Real Verbania","Competizione":"Campionato","Gol_Fatti":6,"Gol_Subiti":4,"Durata_Minuti":60,"Note":null},{"Match_ID":"P2","Data":"2026-05-10","Avversario":"Bee United","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":3,"Durata_Minuti":60,"Note":null},{"Match_ID":"P3","Data":"2026-05-17","Avversario":"Stresa Calcio","Competizione":"Campionato","Gol_Fatti":5,"Gol_Subiti":2,"Durata_Minuti":60,"Note":null}],"Statistiche_Giocatori":[{"Match_ID":"P0","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":7.0,"Note":null},{"Match_ID":"P0","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":11,"Passaggi_Sbagliati":6,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":1,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":12,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":8.0,"Note":null},{"Match_ID":"P1","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":3,"Assist":1,"Tiri_In_Porta":6,"Tiri_Fuori":4,"Passaggi_Corretti":14,"Passaggi_Sbagliati":5,"Dribbling_Tentati":8,"Dribbling_Falliti":3,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":1,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":2,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":22,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":50,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":6.0,"Note":null},{"Match_ID":"P2","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":5,"Passaggi_Corretti":10,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":4,"Recuperi":1,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":1,"Assist":1,"Tiri_In_Porta":3,"Tiri_Fuori":3,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":19,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":45,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":9,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":1,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":9.0,"Note":null},{"Match_ID":"P3","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":1,"Tiri_In_Porta":5,"Tiri_Fuori":3,"Passaggi_Corretti":15,"Passaggi_Sbagliati":4,"Dribbling_Tentati":7,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":2,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":3,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":24,"Passaggi_Sbagliati":5,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":55,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":6,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":21,"Passaggi_Sbagliati":3,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":5,"Dribbling_Tentati":2,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null}],"Allenamenti":[{"Sessione_ID":"T1","Data":"2026-04-01","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T2","Data":"2026-04-08","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":65,"Note":null},{"Sessione_ID":"T3","Data":"2026-04-15","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":60,"Note":null},{"Sessione_ID":"T4","Data":"2026-04-22","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":50,"Note":null},{"Sessione_ID":"T5","Data":"2026-05-01","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":75,"Note":null},{"Sessione_ID":"T6","Data":"2026-05-08","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T7","Data":"2026-05-15","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":75,"Note":null},{"Sessione_ID":"T8","Data":"2026-05-22","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":70,"Note":null}],"Presenze_Allenamento":[{"Sessione_ID":"T1","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":70,"RPE":3.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":70,"RPE":4.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":70,"RPE":4.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":65,"RPE":3.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":65,"RPE":3.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":70,"RPE":5.0,"Note":null},{"Sessione_ID":"T1","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":70,"RPE":3.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":65,"RPE":5.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":4.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":60,"RPE":5.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":65,"RPE":6.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":60,"RPE":6.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":65,"RPE":5.0,"Note":null},{"Sessione_ID":"T2","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":60,"RPE":5.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":60,"RPE":8.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":7.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":60,"RPE":7.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":60,"RPE":6.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":60,"RPE":8.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":60,"RPE":7.0,"Note":null},{"Sessione_ID":"T3","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":60,"RPE":7.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":45,"RPE":7.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":50,"RPE":5.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":45,"RPE":5.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":45,"RPE":6.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":45,"RPE":6.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":6.0,"Note":null},{"Sessione_ID":"T4","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":50,"RPE":5.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":75,"RPE":8.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":75,"RPE":8.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":75,"RPE":10.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":75,"RPE":8.0,"Note":null},{"Sessione_ID":"T5","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":70,"RPE":8.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":65,"RPE":6.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":65,"RPE":5.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":65,"RPE":6.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":70,"RPE":6.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":70,"RPE":9.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":65,"RPE":6.0,"Note":null},{"Sessione_ID":"T6","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T7","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":70,"RPE":7.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":75,"RPE":9.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":70,"RPE":7.0,"Note":null},{"Sessione_ID":"T7","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":75,"RPE":7.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":70,"RPE":10.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":70,"RPE":10.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":70,"RPE":9.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":65,"RPE":9.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":65,"RPE":10.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":65,"RPE":10.0,"Note":null},{"Sessione_ID":"T8","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"}]};
+const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":"Cannobio FC","Competizione":"Campionato","Gol_Fatti":2,"Gol_Subiti":4,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P1","Data":"2026-04-19","Avversario":"Real Verbania","Competizione":"Campionato","Gol_Fatti":5,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null},{"Match_ID":"P2","Data":"2026-05-03","Avversario":"Bee United","Competizione":"Campionato","Gol_Fatti":4,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"1-3-2","Note":null},{"Match_ID":"P3","Data":"2026-05-17","Avversario":"Stresa Calcio","Competizione":"Campionato","Gol_Fatti":5,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-2-2","Note":null},{"Match_ID":"P4","Data":"2026-05-31","Avversario":"Omegna Sport","Competizione":"Campionato","Gol_Fatti":6,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P5","Data":"2026-06-14","Avversario":"Baveno Calcio","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null},{"Match_ID":"P6","Data":"2026-06-28","Avversario":"Gravellona FC","Competizione":"Campionato","Gol_Fatti":1,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"1-3-2","Note":null},{"Match_ID":"P7","Data":"2026-07-12","Avversario":"Arona United","Competizione":"Campionato","Gol_Fatti":6,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-2-2","Note":null},{"Match_ID":"P8","Data":"2026-07-26","Avversario":"Verbano Team","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P9","Data":"2026-08-09","Avversario":"Pallanza Sport","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":2,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null}],"Statistiche_Giocatori":[{"Match_ID":"P0","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":10,"Note":null},{"Match_ID":"P0","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":3,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":36,"Gol":2,"Assist":2,"Tiri_In_Porta":5,"Tiri_Fuori":2,"Passaggi_Corretti":9,"Passaggi_Sbagliati":9,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":26,"Passaggi_Sbagliati":3,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":25,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":43,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":59,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":9,"Note":null},{"Match_ID":"P1","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":47,"Gol":2,"Assist":1,"Tiri_In_Porta":5,"Tiri_Fuori":4,"Passaggi_Corretti":12,"Passaggi_Sbagliati":8,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":59,"Gol":2,"Assist":2,"Tiri_In_Porta":5,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":55,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":36,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":25,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":4,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":5,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":45,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5,"Note":null},{"Match_ID":"P2","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":53,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":4,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":43,"Gol":0,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":9,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":38,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":35,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":15,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":5,"Note":null},{"Match_ID":"P3","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":3,"Assist":1,"Tiri_In_Porta":5,"Tiri_Fuori":3,"Passaggi_Corretti":11,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":25,"Passaggi_Sbagliati":3,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":7,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":18,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":22,"Passaggi_Sbagliati":8,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":12,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":8,"Note":null},{"Match_ID":"P4","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":3,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":1,"Passaggi_Corretti":11,"Passaggi_Sbagliati":4,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":44,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":10,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":53,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":23,"Passaggi_Sbagliati":5,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":42,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":21,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":35,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":36,"Gol":1,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":3,"Dribbling_Tentati":2,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":5,"Note":null},{"Match_ID":"P5","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":37,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":5,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":2,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":4,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":39,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":49,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":49,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":54,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":10,"Note":null},{"Match_ID":"P6","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":14,"Passaggi_Sbagliati":2,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":38,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":3,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":4,"Note":null},{"Match_ID":"P7","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":38,"Gol":3,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":15,"Passaggi_Sbagliati":4,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":51,"Gol":1,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":3,"Passaggi_Corretti":15,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":46,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":59,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":7,"Note":null},{"Match_ID":"P8","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":15,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":45,"Gol":2,"Assist":0,"Tiri_In_Porta":5,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":25,"Passaggi_Sbagliati":3,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":19,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":40,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":4,"Note":null},{"Match_ID":"P9","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":43,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":4,"Dribbling_Tentati":7,"Dribbling_Falliti":3,"Recuperi":1,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":47,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":3,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":49,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":24,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":54,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":9,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null}],"Allenamenti":[{"Sessione_ID":"T1","Data":"2026-04-01","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":61,"Note":null},{"Sessione_ID":"T2","Data":"2026-04-05","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":66,"Note":null},{"Sessione_ID":"T3","Data":"2026-04-09","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":75,"Note":null},{"Sessione_ID":"T4","Data":"2026-04-13","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":50,"Note":null},{"Sessione_ID":"T5","Data":"2026-04-17","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T6","Data":"2026-04-21","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T7","Data":"2026-04-25","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":63,"Note":null},{"Sessione_ID":"T8","Data":"2026-05-01","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":65,"Note":null},{"Sessione_ID":"T9","Data":"2026-05-05","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":49,"Note":null},{"Sessione_ID":"T10","Data":"2026-05-09","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":61,"Note":null},{"Sessione_ID":"T11","Data":"2026-05-13","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":65,"Note":null},{"Sessione_ID":"T12","Data":"2026-05-17","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":62,"Note":null},{"Sessione_ID":"T13","Data":"2026-05-21","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":63,"Note":null},{"Sessione_ID":"T14","Data":"2026-05-25","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":53,"Note":null},{"Sessione_ID":"T15","Data":"2026-06-01","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":69,"Note":null},{"Sessione_ID":"T16","Data":"2026-06-05","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":69,"Note":null},{"Sessione_ID":"T17","Data":"2026-06-09","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T18","Data":"2026-06-13","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":68,"Note":null},{"Sessione_ID":"T19","Data":"2026-06-17","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":44,"Note":null},{"Sessione_ID":"T20","Data":"2026-06-21","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":70,"Note":null}],"Presenze_Allenamento":[{"Sessione_ID":"T1","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":58,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":46,"RPE":4,"Note":null},{"Sessione_ID":"T1","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":56,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":58,"RPE":9,"Note":null},{"Sessione_ID":"T1","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":60,"RPE":4,"Note":null},{"Sessione_ID":"T1","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":50,"RPE":6,"Note":null},{"Sessione_ID":"T1","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":57,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T1","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":47,"RPE":7,"Note":null},{"Sessione_ID":"T2","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T2","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":48,"RPE":8,"Note":null},{"Sessione_ID":"T2","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":62,"RPE":6,"Note":null},{"Sessione_ID":"T2","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":46,"RPE":7,"Note":null},{"Sessione_ID":"T2","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":49,"RPE":5,"Note":null},{"Sessione_ID":"T2","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":60,"RPE":5,"Note":null},{"Sessione_ID":"T2","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":66,"RPE":9,"Note":null},{"Sessione_ID":"T2","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":6,"Note":null},{"Sessione_ID":"T2","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":57,"RPE":6,"Note":null},{"Sessione_ID":"T3","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":60,"RPE":7,"Note":null},{"Sessione_ID":"T3","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":61,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":58,"RPE":5,"Note":null},{"Sessione_ID":"T3","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":72,"RPE":5,"Note":null},{"Sessione_ID":"T3","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":73,"RPE":7,"Note":null},{"Sessione_ID":"T3","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":75,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":71,"RPE":8,"Note":null},{"Sessione_ID":"T3","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":54,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":61,"RPE":3,"Note":null},{"Sessione_ID":"T4","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":48,"RPE":6,"Note":null},{"Sessione_ID":"T4","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":36,"RPE":6,"Note":null},{"Sessione_ID":"T4","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":44,"RPE":5,"Note":null},{"Sessione_ID":"T4","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":46,"RPE":4,"Note":null},{"Sessione_ID":"T4","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":49,"RPE":8,"Note":null},{"Sessione_ID":"T4","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":4,"Note":null},{"Sessione_ID":"T4","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":39,"RPE":3,"Note":null},{"Sessione_ID":"T4","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T4","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":46,"RPE":6,"Note":null},{"Sessione_ID":"T5","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":52,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":67,"RPE":5,"Note":null},{"Sessione_ID":"T5","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":67,"RPE":4,"Note":null},{"Sessione_ID":"T5","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":57,"RPE":7,"Note":null},{"Sessione_ID":"T5","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":50,"RPE":7,"Note":null},{"Sessione_ID":"T5","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T5","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":61,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":55,"RPE":4,"Note":null},{"Sessione_ID":"T6","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":69,"RPE":9,"Note":null},{"Sessione_ID":"T6","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":50,"RPE":8,"Note":null},{"Sessione_ID":"T6","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T6","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":60,"RPE":3,"Note":null},{"Sessione_ID":"T6","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":63,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":69,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":66,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T6","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":70,"RPE":3,"Note":null},{"Sessione_ID":"T7","Giocatore":"Luca Bianchi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T7","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":54,"RPE":6,"Note":null},{"Sessione_ID":"T7","Giocatore":"Andrea Verdi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T7","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":53,"RPE":6,"Note":null},{"Sessione_ID":"T7","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":56,"RPE":7,"Note":null},{"Sessione_ID":"T7","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T7","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":58,"RPE":3,"Note":null},{"Sessione_ID":"T7","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":4,"Note":null},{"Sessione_ID":"T7","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":47,"RPE":7,"Note":null},{"Sessione_ID":"T8","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":60,"RPE":3,"Note":null},{"Sessione_ID":"T8","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":54,"RPE":9,"Note":null},{"Sessione_ID":"T8","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":64,"RPE":9,"Note":null},{"Sessione_ID":"T8","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":54,"RPE":7,"Note":null},{"Sessione_ID":"T8","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":56,"RPE":5,"Note":null},{"Sessione_ID":"T8","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":64,"RPE":3,"Note":null},{"Sessione_ID":"T8","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":52,"RPE":4,"Note":null},{"Sessione_ID":"T8","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":52,"RPE":6,"Note":null},{"Sessione_ID":"T8","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":58,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":41,"RPE":9,"Note":null},{"Sessione_ID":"T9","Giocatore":"Mario Rossi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T9","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":35,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":41,"RPE":7,"Note":null},{"Sessione_ID":"T9","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":40,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":40,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":46,"RPE":3,"Note":null},{"Sessione_ID":"T9","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":35,"RPE":9,"Note":null},{"Sessione_ID":"T9","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":44,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":51,"RPE":7,"Note":null},{"Sessione_ID":"T10","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":61,"RPE":3,"Note":null},{"Sessione_ID":"T10","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":43,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":52,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":43,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T10","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T10","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T10","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T11","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":3,"Note":null},{"Sessione_ID":"T11","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":48,"RPE":5,"Note":null},{"Sessione_ID":"T11","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":63,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T11","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":59,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":56,"RPE":4,"Note":null},{"Sessione_ID":"T11","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":50,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":49,"RPE":9,"Note":null},{"Sessione_ID":"T11","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":62,"RPE":9,"Note":null},{"Sessione_ID":"T12","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":56,"RPE":7,"Note":null},{"Sessione_ID":"T12","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":8,"Note":null},{"Sessione_ID":"T12","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":58,"RPE":4,"Note":null},{"Sessione_ID":"T12","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":59,"RPE":4,"Note":null},{"Sessione_ID":"T12","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":52,"RPE":5,"Note":null},{"Sessione_ID":"T12","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":9,"Note":null},{"Sessione_ID":"T12","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":47,"RPE":5,"Note":null},{"Sessione_ID":"T12","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T12","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":44,"RPE":8,"Note":null},{"Sessione_ID":"T13","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":48,"RPE":3,"Note":null},{"Sessione_ID":"T13","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":53,"RPE":3,"Note":null},{"Sessione_ID":"T13","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":63,"RPE":8,"Note":null},{"Sessione_ID":"T13","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":51,"RPE":7,"Note":null},{"Sessione_ID":"T13","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":50,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":52,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":51,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T13","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":53,"RPE":4,"Note":null},{"Sessione_ID":"T14","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":44,"RPE":5,"Note":null},{"Sessione_ID":"T14","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":43,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":46,"RPE":9,"Note":null},{"Sessione_ID":"T14","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":44,"RPE":8,"Note":null},{"Sessione_ID":"T14","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T14","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":9,"Note":null},{"Sessione_ID":"T14","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":45,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":42,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":41,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":67,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":50,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":67,"RPE":9,"Note":null},{"Sessione_ID":"T15","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":54,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":48,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":63,"RPE":5,"Note":null},{"Sessione_ID":"T15","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":61,"RPE":9,"Note":null},{"Sessione_ID":"T15","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":51,"RPE":6,"Note":null},{"Sessione_ID":"T16","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T16","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":59,"RPE":3,"Note":null},{"Sessione_ID":"T16","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":48,"RPE":9,"Note":null},{"Sessione_ID":"T16","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":57,"RPE":8,"Note":null},{"Sessione_ID":"T16","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T16","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":61,"RPE":4,"Note":null},{"Sessione_ID":"T16","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":52,"RPE":7,"Note":null},{"Sessione_ID":"T16","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":7,"Note":null},{"Sessione_ID":"T16","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T17","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":63,"RPE":9,"Note":null},{"Sessione_ID":"T17","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":56,"RPE":6,"Note":null},{"Sessione_ID":"T17","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":57,"RPE":5,"Note":null},{"Sessione_ID":"T17","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":53,"RPE":8,"Note":null},{"Sessione_ID":"T17","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T17","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":54,"RPE":8,"Note":null},{"Sessione_ID":"T17","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":51,"RPE":4,"Note":null},{"Sessione_ID":"T17","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":66,"RPE":3,"Note":null},{"Sessione_ID":"T17","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T18","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":8,"Note":null},{"Sessione_ID":"T18","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":52,"RPE":6,"Note":null},{"Sessione_ID":"T18","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":68,"RPE":4,"Note":null},{"Sessione_ID":"T18","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":63,"RPE":6,"Note":null},{"Sessione_ID":"T18","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":51,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":65,"RPE":4,"Note":null},{"Sessione_ID":"T18","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":58,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":63,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":55,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":31,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":33,"RPE":5,"Note":null},{"Sessione_ID":"T19","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":42,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":37,"RPE":3,"Note":null},{"Sessione_ID":"T19","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T19","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":31,"RPE":9,"Note":null},{"Sessione_ID":"T19","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":44,"RPE":6,"Note":null},{"Sessione_ID":"T19","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":34,"RPE":4,"Note":null},{"Sessione_ID":"T19","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":34,"RPE":6,"Note":null},{"Sessione_ID":"T20","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":67,"RPE":3,"Note":null},{"Sessione_ID":"T20","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T20","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T20","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":69,"RPE":5,"Note":null},{"Sessione_ID":"T20","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":58,"RPE":7,"Note":null},{"Sessione_ID":"T20","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":63,"RPE":7,"Note":null},{"Sessione_ID":"T20","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":55,"RPE":8,"Note":null},{"Sessione_ID":"T20","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":70,"RPE":3,"Note":null},{"Sessione_ID":"T20","Giocatore":"Luca Conti","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"}],"Statistiche_Allenamento":[{"Sessione_ID":"T3","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":3},{"Sessione_ID":"T3","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":61,"Gol":1,"Assist":1,"Tiri_In_Porta":3,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":2,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":3,"Passaggi_Corretti":12,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":72,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":73,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":75,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":12,"Passaggi_Sbagliati":4,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":71,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":61,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":12,"Passaggi_Sbagliati":5,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":52,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5},{"Sessione_ID":"T5","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":64,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":7,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":1,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":4,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":61,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5},{"Sessione_ID":"T8","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":54,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":14,"Passaggi_Sbagliati":3,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":64,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":6,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":56,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":24,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":64,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":51,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":6},{"Sessione_ID":"T10","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":61,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":8,"Passaggi_Sbagliati":8,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":43,"Gol":2,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":1,"Passaggi_Corretti":7,"Passaggi_Sbagliati":2,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":1,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":21,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":43,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":4,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":6,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":5},{"Sessione_ID":"T13","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":53,"Gol":1,"Assist":0,"Tiri_In_Porta":3,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":3,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":2,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":63,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":0,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":5,"Dribbling_Tentati":4,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":50,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":7,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":6,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":7,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":67,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":9},{"Sessione_ID":"T15","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":50,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":12,"Passaggi_Sbagliati":7,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":6,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":48,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":63,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":61,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":57,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":9},{"Sessione_ID":"T18","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":52,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":68,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":63,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":24,"Passaggi_Sbagliati":7,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":1,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":3,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":65,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":5,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":7,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":63,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":7,"Dribbling_Tentati":5,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":67,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":2},{"Sessione_ID":"T20","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":1,"Passaggi_Corretti":8,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":7,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":69,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":21,"Passaggi_Sbagliati":4,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":58,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":63,"Gol":1,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":5,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":70,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":23,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":5,"Parate":null}]};
 
 /* =====================================================================
    VERSIONE — da aggiornare a ogni consegna, così l'utente può verificare a colpo d'occhio, aprendo il
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.9.0",
+  numero: "1.11.1",
   data: "2026-08-26",
-  note: "Dashboard riorganizzata in tre schede fisicamente separate — Dashboard Partita (KPI, andamento partite, classifica, tendenze, coinvolgimento e formazioni), Dashboard Allenamento (presenze/carico, segnali incrociati) e Giocatori (andamento per giocatore, vista singolo giocatore, confronto tra due giocatori) — con Report PDF, Qualità dei dati, Metodologia e Assistente IA sempre visibili sotto qualunque scheda. La scheda scelta resta ricordata nel browser. Nessuna modifica ai calcoli né ai report PDF."
+  note: "Dati di esempio («Prova con dati di esempio») molto più ricchi, su richiesta esplicita per testare la dashboard con un cluster realistico: 10 partite (invece di 4) con 4 moduli tattici diversi per popolare davvero «Formazioni a confronto», 20 allenamenti (invece di 8) con 9 giocatori, e — novità — statistiche di gioco vere e proprie sulle partitelle di allenamento, così le nuove sezioni della Dashboard Allenamento (KPI, andamento, classifica, tendenze) si vedono piene invece che vuote. Include anche i due miglioramenti della versione precedente: intestazione più leggera su telefono (non più fissa durante lo scroll su schermi stretti) e i pulsanti di export PDF spostati dentro la dashboard di appartenenza (Partita+Stagionale nella Dashboard Partita, Mensile nella Dashboard Allenamento). Nessuna modifica ai calcoli, alla generazione dei PDF né alle statistiche vere caricate da Seven Lab: solo i dati di esempio sono cambiati."
 };
 
 /* =====================================================================
@@ -643,8 +643,29 @@ function assemblaDataset(grezzo){
     Tipo_Allenamento: String(r.Tipo_Allenamento ?? "").trim() || "Non indicato",
     Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? ""
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
-  allenamenti.forEach(a => a.Mese = meseKey(a.Data));
+  allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento; });
   const mappaSessioni = new Map(allenamenti.map(a => [a.Sessione_ID, a]));
+
+  // Statistiche "da partita" (gol, tiri, passaggi, dribbling, recuperi, parate) registrate per giocatore
+  // durante le partitelle di allenamento: Seven Lab le esporta con lo stesso schema delle partite vere, ma
+  // qui restano un cluster a parte — non entrano mai nella classifica/indice stagionale delle partite vere,
+  // proprio perché un gol segnato contro i compagni in allenamento non è lo stesso di un gol in partita.
+  const statAllenamentoRaw = (grezzo.Statistiche_Allenamento || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  const statAllenamento = statAllenamentoRaw.map(r => {
+    const g = {
+      Match_ID: String(r.Sessione_ID ?? "").trim(), // stesso nome campo di "giocatori" per riuso di aggregaGiocatori/calcolaTendenze
+      Sessione_ID: String(r.Sessione_ID ?? "").trim(),
+      Giocatore: String(r.Giocatore ?? "").trim(), Ruolo: String(r.Ruolo ?? "").trim() || "Non indicato",
+      Minuti_Giocati: N(r.Minuti_Giocati), Gol: N(r.Gol), Assist: N(r.Assist),
+      Tiri_In_Porta: N(r.Tiri_In_Porta), Tiri_Fuori: N(r.Tiri_Fuori),
+      Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
+      Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
+      Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: "",
+      Cartellini_Gialli: null, Cartellini_Rossi: null, Angoli_Tentati: null, Angoli_Gol: null,
+      Punizioni_Tentate: null, Punizioni_Realizzate: null, Rigori_Tentati: null, Rigori_Realizzati: null
+    };
+    return derivaRiga(g, mappaSessioni.get(g.Sessione_ID));
+  }).filter(g => g.Giocatore);
 
   const presenze = (grezzo.Presenze_Allenamento || []).filter(r => !rigaVuota(r) && !isEsempio(r)).map(r => {
     const s = mappaSessioni.get(String(r.Sessione_ID ?? "").trim());
@@ -661,11 +682,12 @@ function assemblaDataset(grezzo){
   }).filter(p => p.Giocatore);
 
   const mesi = Array.from(new Set([...partite.map(p=>p.Mese), ...allenamenti.map(a=>a.Mese)].filter(Boolean))).sort();
-  const nomiGiocatori = Array.from(new Set([...giocatori.map(g=>g.Giocatore), ...presenze.map(p=>p.Giocatore)])).sort((a,b)=>a.localeCompare(b,"it"));
+  const nomiGiocatori = Array.from(new Set([...giocatori.map(g=>g.Giocatore), ...presenze.map(p=>p.Giocatore), ...statAllenamento.map(g=>g.Giocatore)])).sort((a,b)=>a.localeCompare(b,"it"));
 
-  return {partite, giocatori, allenamenti, presenze, mesi, nomiGiocatori,
+  return {partite, giocatori, allenamenti, presenze, statAllenamento, mesi, nomiGiocatori,
     haAllenamenti: allenamenti.length>0 && presenze.length>0,
     haRPE: presenze.some(p => p.RPE !== null),
+    haStatAllenamento: statAllenamento.length>0,
     haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null)};
 }
 
@@ -675,7 +697,7 @@ function assemblaDataset(grezzo){
  *  basta una sola sessione di un solo tipo per iniziare a vedere qualcosa. */
 function costruisciDatasetDaSessioni(sessioni){
   if(!sessioni.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
-  const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [];
+  const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [];
   sessioni.forEach(s => {
     if(s.tipo === "partita"){
       partiteRaw.push({
@@ -723,11 +745,33 @@ function costruisciDatasetDaSessioni(sessioni){
           Presente: "Sì", // ogni riga nel file = giocatore convocato/presente a quella sessione
           Minuti_Allenamento: N(r["Minuti giocati"]), RPE: null, Note: ""
         });
+        // Seven Lab registra, nelle partitelle di allenamento (7 contro 7 interno), le stesse colonne "da
+        // partita" per ogni giocatore (gol, tiri, passaggi, dribbling, recuperi, parate): per molte squadre
+        // la maggior parte delle statistiche arriva proprio dagli allenamenti, non dalle partite vere. Le
+        // teniamo quindi anche qui, invece di scartarle come accadeva prima — ma sempre come cluster a
+        // parte rispetto a statAllenamentoRaw/giocatoriRaw (vedi assemblaDataset), mai mescolate insieme.
+        // Alcuni export potrebbero avere solo presenza/minuti senza le colonne di gioco (es. un formato
+        // Seven Lab più vecchio o un file compilato a mano): in quel caso non creiamo una riga finta a
+        // zeri, che sembrerebbe un dato vero, ma semplicemente non contribuiamo a statAllenamentoRaw.
+        const haStatGioco = r["Tiri"] !== undefined || r["Passaggi corretti"] !== undefined || r["Gol"] !== undefined;
+        if(haStatGioco){
+          const tiriTotAll = N(r["Tiri"]), tiriPortaAll = N(r["Tiri in porta"]);
+          const dribRiuscitiAll = N(r["Dribbling riusciti"]), dribFallitiAll = N(r["Dribbling falliti"]);
+          statAllenamentoRaw.push({
+            Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
+            Minuti_Giocati: N(r["Minuti giocati"]), Gol: N(r["Gol"]), Assist: N(r["Assist"]),
+            Tiri_In_Porta: tiriPortaAll, Tiri_Fuori: Math.max(0, tiriTotAll - tiriPortaAll),
+            Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
+            Dribbling_Tentati: dribRiuscitiAll + dribFallitiAll, Dribbling_Falliti: dribFallitiAll,
+            Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"])
+          });
+        }
       });
     }
   });
   if(!partiteRaw.length && !allenamentiRaw.length) throw new Error("Nei file caricati non ho trovato né partite né allenamenti validi.");
-  return assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw, Presenze_Allenamento:presenzeRaw});
+  return assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw,
+    Presenze_Allenamento:presenzeRaw, Statistiche_Allenamento:statAllenamentoRaw});
 }
 
 function derivaRiga(g, partita){
@@ -1064,7 +1108,8 @@ function validaDati(ds){
 /* =====================================================================
    STATO E RENDER
    ===================================================================== */
-const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null};
+const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Prestazione_Tot", dir:-1},
+  ordinaAllenamento:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null};
 
 function colore(nome){ return getComputedStyle(document.documentElement).getPropertyValue("--"+nome).trim(); }
 function distruggiGrafici(){ Object.values(stato.grafici).forEach(c => { try{ c.destroy(); }catch(e){} }); stato.grafici = {}; }
@@ -1098,13 +1143,15 @@ function baseOpzioni(extra={}){
 function datiFiltrati(){
   const ds = stato.ds;
   if(stato.periodo === "tutto")
-    return {partite:ds.partite, giocatori:ds.giocatori, allenamenti:ds.allenamenti, presenze:ds.presenze, mese:null};
+    return {partite:ds.partite, giocatori:ds.giocatori, allenamenti:ds.allenamenti, presenze:ds.presenze,
+      statAllenamento: ds.statAllenamento, mese:null};
   const m = stato.periodo;
   const partite = ds.partite.filter(p => p.Mese === m);
   const ids = new Set(partite.map(p=>p.Match_ID));
   return {partite, giocatori: ds.giocatori.filter(g => ids.has(g.Match_ID)),
     allenamenti: ds.allenamenti.filter(a => a.Mese === m),
-    presenze: ds.presenze.filter(p => p.Mese === m), mese:m};
+    presenze: ds.presenze.filter(p => p.Mese === m),
+    statAllenamento: ds.statAllenamento.filter(g => g.Mese === m), mese:m};
 }
 function mesePrecedenteConDati(mese){
   const ds = stato.ds;
@@ -1116,6 +1163,23 @@ function meseCorrenteRiferimento(mese){
   const ds = stato.ds;
   const mesiPartite = Array.from(new Set(ds.partite.map(p=>p.Mese).filter(Boolean))).sort();
   return mese || (mesiPartite.length ? mesiPartite[mesiPartite.length-1] : null);
+}
+/** Equivalenti dei tre helper sopra ma basati sui mesi delle sessioni di allenamento invece che delle
+ *  partite: usati per il confronto mese su mese delle statistiche da allenamento (KPI, andamento). */
+function datiMeseAllenamento(m){
+  const ds = stato.ds;
+  return {allenamenti: ds.allenamenti.filter(a=>a.Mese===m), statAllenamento: ds.statAllenamento.filter(g=>g.Mese===m)};
+}
+function mesePrecedenteConDatiAllenamento(mese){
+  const ds = stato.ds;
+  const mesiAll = Array.from(new Set(ds.allenamenti.map(a=>a.Mese).filter(Boolean))).sort();
+  if(mese){ const i = mesiAll.indexOf(mese); return i > 0 ? mesiAll[i-1] : null; }
+  return mesiAll.length >= 2 ? mesiAll[mesiAll.length-2] : null;
+}
+function meseCorrenteRiferimentoAllenamento(mese){
+  const ds = stato.ds;
+  const mesiAll = Array.from(new Set(ds.allenamenti.map(a=>a.Mese).filter(Boolean))).sort();
+  return mese || (mesiAll.length ? mesiAll[mesiAll.length-1] : null);
 }
 function datiMese(m){
   const ds = stato.ds;
@@ -1256,6 +1320,10 @@ const COLONNE_TAB = [
   {k:"Indice_Prestazione_Tot", eti:"Indice prest.", tipo:"num", dec:1},
   {k:"sparkline", eti:"Andamento indice", tipo:"spark"}
 ];
+/** Stesse colonne di COLONNE_TAB per la classifica giocatori da statistiche di allenamento: unica
+ *  differenza, "Partite" diventa "Sessioni" perché qui si conta il numero di sessioni con dati, non di
+ *  partite vere (il campo JS sottostante resta Partite_Giocate, riusato da aggregaGiocatori). */
+const COLONNE_TAB_ALLENAMENTO = COLONNE_TAB.map(c => c.k === "Partite_Giocate" ? {...c, eti:"Sessioni"} : {...c});
 function renderClassifica(f){
   const cont = $("#contenuto-classifica");
   const agg = aggregaGiocatori(f.giocatori);
@@ -1396,6 +1464,279 @@ function disegnaTrend(id, t){
       scales:{
         x:{type:"linear", min:t.xmin-0.4, max:t.xmax+0.4,
           title:{display:true, text:"Partita del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
+          ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
+          grid:{color:colore("grid")}, border:{color:colore("grid")}},
+        y:{min:Math.max(0, minY-pad), max:maxY+pad,
+          title:{display:true, text:cfg.label+" ("+ (cfg.unit==="'"?"minuti":"%") +")", color:colore("faint"), font:{size:10.5}},
+          ticks:{color:colore("muted"), font:{size:11}, maxTicksLimit:6, callback:v=>nf0(v)+cfg.unit}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }
+    })
+  });
+}
+
+/* ===========================================================================
+   6c. STATISTICHE DA ALLENAMENTO (partitelle): stessa profondità di analisi
+   delle partite vere (KPI, andamento, classifica, tendenze), calcolata su
+   ds.statAllenamento — un cluster di dati sempre tenuto separato da
+   ds.giocatori/ds.partite. Riusa le funzioni generiche di aggregazione
+   (aggregaGiocatori, riepilogoSquadra, calcolaTendenze) già verificate sui
+   dati di partita, ma con copie dedicate delle funzioni di rendering/testo
+   per usare un linguaggio corretto ("sessione"/"allenamento" invece di
+   "partita") e per non condividere lo stato di ordinamento della classifica
+   con quello della classifica partite (stato.ordinaAllenamento a parte).
+   =========================================================================== */
+function renderKPIAllenamentoStat(f){
+  const cont = $("#griglia-kpi-stat-allenamento");
+  const desc = $("#kpi-stat-allenamento-desc");
+  if(!stato.ds.haStatAllenamento){
+    desc.textContent = "Non disponibile: i file allenamento caricati non includono le statistiche per giocatore (gol, tiri, passaggi, ecc.), solo presenze e minuti.";
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Se le tue partitelle di allenamento vengono registrate da Seven Lab con le statistiche per giocatore, ricaricale: verranno lette automaticamente.</div>`;
+    return;
+  }
+  if(f.statAllenamento.length === 0){
+    desc.textContent = "Sintesi del periodo selezionato.";
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento nel periodo selezionato.</strong> Cambia periodo dal filtro in alto.</div>`;
+    return;
+  }
+  const s = riepilogoSquadra(f.statAllenamento, []);
+  const nSessioni = new Set(f.statAllenamento.map(g=>g.Sessione_ID)).size;
+  const mCorr = meseCorrenteRiferimentoAllenamento(f.mese), mPrec = mesePrecedenteConDatiAllenamento(f.mese);
+  let sPrec = null, sCorr = null;
+  if(mPrec){
+    const dPrec = datiMeseAllenamento(mPrec), dCorr = datiMeseAllenamento(mCorr);
+    sPrec = riepilogoSquadra(dPrec.statAllenamento, []);
+    sCorr = riepilogoSquadra(dCorr.statAllenamento, []);
+  }
+  const kpi = [
+    {eti:"Sessioni con statistiche", val:nf0(nSessioni), nota:"Partitelle di allenamento con dati per giocatore", raw:nSessioni, prevRaw:null, currRaw:null},
+    {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist", raw:s.gol_giocatori,
+      prevRaw: sPrec?sPrec.gol_giocatori:null, currRaw: sCorr?sCorr.gol_giocatori:null, meglio:"alto", dec:0, unit:""},
+    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
+      prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
+    {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
+      prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"},
+    {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:nf0(s.recuperi)+" recuperi, "+nf0(s.parate)+" parate",
+      prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
+  ];
+  desc.textContent = mPrec
+    ? (f.mese
+        ? `Valori di ${meseLabel(mCorr)}. Le frecce confrontano ${meseBreve(mCorr)} con ${meseLabel(mPrec)}, l'ultimo mese precedente con dati.`
+        : `Totali di tutta la stagione caricata. Le frecce confrontano ${meseLabel(mCorr)} con ${meseLabel(mPrec)}, cioè gli ultimi due mesi con dati.`)
+    : "Sintesi del periodo selezionato. Il confronto mese su mese comparirà quando avrai caricato allenamenti con statistiche in almeno due mesi diversi.";
+  cont.innerHTML = kpi.map(k => {
+    let delta = "";
+    if(k.prevRaw !== null && k.prevRaw !== undefined && k.currRaw !== null && k.currRaw !== undefined && isFinite(k.prevRaw) && isFinite(k.currRaw)){
+      const d = k.currRaw - k.prevRaw;
+      const buono = k.meglio === "basso" ? d < 0 : d > 0;
+      const cls = Math.abs(d) < (k.dec===0?0.5:0.05) ? "neutro" : (buono ? "su":"giu");
+      const freccia = d > 0 ? "▲" : (d < 0 ? "▼" : "▬");
+      const etichetta = cls==="neutro" ? "stabile" : (buono ? "in miglioramento" : "in peggioramento");
+      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)} · ${etichetta}</span></div>`;
+    } else if(k.eti !== "Sessioni con statistiche") {
+      delta = `<div class="kpi-delta neutro"><span>Confronto mese su mese non disponibile</span></div>`;
+    }
+    return `<div class="kpi"><div class="kpi-eti">${esc(k.eti)}</div><div class="kpi-valore">${k.val}</div>${delta}${k.nota?`<div class="kpi-nota">${esc(k.nota)}</div>`:""}</div>`;
+  }).join("");
+}
+
+function renderAndamentoAllenamentoStat(f){
+  const cont = $("#contenuto-andamento-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.className = ""; cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore (gol, tiri, passaggi, ecc.), non solo presenze.</div>`;
+    return;
+  }
+  const sessioniConDati = Array.from(new Set(f.statAllenamento.map(g=>g.Sessione_ID)));
+  if(sessioniConDati.length === 0){
+    cont.className = ""; cont.innerHTML = `<div class="vuoto"><strong>Nessuna sessione con statistiche nel periodo selezionato.</strong> Cambia periodo dal filtro in alto.</div>`;
+    return;
+  }
+  const sessioni = f.allenamenti.filter(a => sessioniConDati.includes(a.Sessione_ID)).sort((a,b)=>a.Ordine-b.Ordine);
+  const perSessione = sessioni.map(sess => {
+    const righe = f.statAllenamento.filter(g => g.Sessione_ID === sess.Sessione_ID);
+    const s = riepilogoSquadra(righe, []);
+    return {sess, s};
+  });
+  const etichette = perSessione.map(x => x.sess.Etichetta);
+  const serie = [
+    {id:"gr-all-gol", titolo:"Gol segnati in allenamento", sub:"Totale gol dei giocatori per sessione; la tratteggiata è la media del periodo.",
+     dataset:[{label:"Gol", data:perSessione.map(x=>x.s.gol_giocatori), color:colore("c1")}],
+     media: media(perSessione.map(x=>x.s.gol_giocatori)), mediaLabel:"Media periodo", suffisso:""},
+    {id:"gr-all-passaggi", titolo:"Precisione passaggi in allenamento", sub:"Passaggi corretti sul totale, sessione per sessione.",
+     dataset:[{label:"Precisione passaggi", data:perSessione.map(x=>x.s.precisione_passaggi), color:colore("c1")}],
+     media: media(perSessione.map(x=>x.s.precisione_passaggi)), mediaLabel:"Media periodo", suffisso:"%"},
+    {id:"gr-all-tiro", titolo:"Precisione al tiro in allenamento", sub:"Tiri in porta sul totale dei tiri, sessione per sessione.",
+     dataset:[{label:"Precisione al tiro", data:perSessione.map(x=>x.s.precisione_tiro), color:colore("c3")}],
+     media: media(perSessione.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"},
+    {id:"gr-all-errore", titolo:"Tasso di errore in allenamento", sub:"Palloni persi sul totale delle azioni: più è basso, meglio è.",
+     dataset:[{label:"Tasso di errore", data:perSessione.map(x=>x.s.tasso_errore), color:colore("c5")}],
+     media: media(perSessione.map(x=>x.s.tasso_errore)), mediaLabel:"Media periodo", suffisso:"%"}
+  ];
+  cont.className = "griglia g-2";
+  cont.innerHTML = serie.map(s => `<div class="card"><div class="grafico-titolo">${esc(s.titolo)}</div><div class="grafico-sub">${esc(s.sub)}</div><div class="grafico-wrap"><canvas id="${s.id}"></canvas></div></div>`).join("");
+  serie.forEach(s => {
+    const ds = s.dataset.map(d => ({
+      label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color,
+      pointRadius:4, pointHoverRadius:6, borderWidth:2.5, tension:0.25, spanGaps:true
+    }));
+    if(s.media !== null && isFinite(s.media)){
+      ds.push({label:s.mediaLabel+" ("+nf(s.media,1)+s.suffisso+")",
+        data:etichette.map(()=>s.media), borderColor:colore("faint"), borderDash:[6,5], borderWidth:1.8, pointRadius:0, fill:false});
+    }
+    creaGrafico(s.id, {type:"line", data:{labels:etichette, datasets:ds},
+      options:baseOpzioni({scales:{
+        x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, minRotation:0, autoSkip:true, maxTicksLimit:8}, grid:{display:false}, border:{color:colore("grid")}},
+        y:{beginAtZero:true, suggestedMax: s.suffisso==="%"?100:undefined, ticks:{color:colore("muted"), font:{size:11}, callback:v=>nf0(v)+s.suffisso}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }})});
+  });
+}
+
+function renderClassificaAllenamentoStat(f){
+  const cont = $("#contenuto-classifica-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore.</div>`;
+    return;
+  }
+  const agg = aggregaGiocatori(f.statAllenamento);
+  if(agg.length === 0){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna riga giocatore nel periodo selezionato.</strong> Prova a scegliere «Tutta la stagione» dal filtro Periodo.</div>`;
+    return;
+  }
+  const {col, dir} = stato.ordinaAllenamento;
+  agg.sort((a,b) => {
+    if(col === "Giocatore") return dir * String(a.Giocatore).localeCompare(String(b.Giocatore), "it");
+    const va = a[col], vb = b[col];
+    const na = (va===null||va===undefined||!isFinite(va)) ? -Infinity : va;
+    const nb = (vb===null||vb===undefined||!isFinite(vb)) ? -Infinity : vb;
+    return dir === -1 ? nb - na : na - nb;
+  });
+  const righe = agg.map(a => `<tr>
+    <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
+    <td>${nf0(a.Partite_Giocate)}</td>
+    <td>${nf0(a.Minuti_Totali)}'</td>
+    <td>${nf0(a.Gol)}</td>
+    <td>${nf0(a.Assist)}</td>
+    <td>${pctTxt(a.Precisione_Passaggi_pct)}</td>
+    <td>${pctTxt(a.Successo_Dribbling_pct)}</td>
+    <td>${pctTxt(a.Tasso_Errore_pct)}</td>
+    <td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a sessione</span></td>
+    <td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)} in allenamento"></canvas></td>
+  </tr>`).join("");
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Classifica dei giocatori nelle statistiche di allenamento del periodo selezionato</caption>
+    <thead><tr>${COLONNE_TAB_ALLENAMENTO.map(c => {
+      const sort = c.k === col ? (dir===-1?"descending":"ascending") : "none";
+      return `<th scope="col" data-col="${c.k}" ${c.tipo==="spark"?"":`aria-sort="${sort}" tabindex="0" role="columnheader"`}>${esc(c.eti)}</th>`;
+    }).join("")}</tr></thead><tbody>${righe}</tbody></table></div>
+    <p class="kpi-nota" style="margin-top:8px">Statistiche accumulate nelle partitelle di allenamento, tenute separate dalle statistiche di partita vera. Stesso indice prestazione (somma pesata non ufficiale) usato per le partite, qui applicato ai dati di allenamento.</p>`;
+  $$("th[data-col]", cont).forEach(th => {
+    if(th.dataset.col === "sparkline") return;
+    const attiva = () => {
+      const c = th.dataset.col;
+      if(stato.ordinaAllenamento.col === c) stato.ordinaAllenamento.dir *= -1;
+      else stato.ordinaAllenamento = {col:c, dir: c==="Giocatore" ? 1 : -1};
+      renderClassificaAllenamentoStat(datiFiltrati());
+    };
+    th.addEventListener("click", attiva);
+    th.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); attiva(); } });
+  });
+  $$("canvas.spark", cont).forEach(disegnaSpark);
+}
+
+function renderTendenzeAllenamentoStat(f){
+  const cont = $("#contenuto-tendenze-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore.</div>`;
+    return;
+  }
+  const nSessPerG = new Map();
+  f.statAllenamento.forEach(g => nSessPerG.set(g.Giocatore, (nSessPerG.get(g.Giocatore)||0)+1));
+  const maxSess = Math.max(0, ...Array.from(nSessPerG.values()));
+  if(maxSess < 3){
+    cont.innerHTML = `<div class="vuoto"><strong>Servono almeno 3 sessioni di allenamento con statistiche dello stesso giocatore per tracciare una retta di interpolazione.</strong><br>
+      Nel periodo selezionato il giocatore con più sessioni con dati ne ha ${nf0(maxSess)}. Questa sezione si arricchisce da sola man mano che carichi nuovi allenamenti con statistiche.</div>`;
+    return;
+  }
+  const tutte = calcolaTendenze(f.statAllenamento);
+  const blocchi = Object.keys(CONFIG_TREND).map(metrica => {
+    const cfg = CONFIG_TREND[metrica];
+    const rilev = tutte.filter(t => t.Metrica === metrica && t.rilevante)
+      .sort((a,b) => Math.abs(b.delta_totale) - Math.abs(a.delta_totale)).slice(0,3);
+    const tot = tutte.filter(t => t.Metrica === metrica).length;
+    let corpo;
+    if(tot === 0){
+      corpo = `<div class="vuoto"><strong>Dati insufficienti per questa metrica.</strong><br>Nessun giocatore ha almeno 3 sessioni con questo valore registrato.</div>`;
+    } else if(rilev.length === 0){
+      corpo = `<div class="vuoto">Nessuna tendenza marcata su questa metrica: per i ${nf0(tot)} giocatori con almeno 3 sessioni valide i valori restano abbastanza stabili sessione dopo sessione (variazione sotto ${nf0(cfg.soglia)}${cfg.unit} oppure andamento troppo irregolare per essere considerato una tendenza).</div>`;
+    } else {
+      corpo = `<div class="griglia g-2">` + rilev.map((t,i) => {
+        const id = "gr-all-trend-"+metrica+"-"+i;
+        const pill = t.giudizio==="positivo" ? `<span class="pill pos">Segnale positivo</span>`
+          : t.giudizio==="negativo" ? `<span class="pill neg">Da attenzionare</span>` : `<span class="pill neu">Da leggere nel contesto</span>`;
+        return `<div class="trend-card">
+          <div class="trend-testa"><div><div class="trend-nome">${esc(t.Giocatore)}</div><div class="trend-stat">${esc(t.Ruolo)} · ${cfg.label} ${t.direzione}</div></div>${pill}</div>
+          <div class="grafico-wrap"><canvas id="${id}"></canvas></div>
+          <div class="trend-frase">${esc(fraseTendenzaAllenamento(t))}</div>
+          <div class="trend-stat">Variazione stimata dalla retta: ${t.delta_totale>0?"+":""}${nf(t.delta_totale,cfg.dec)}${cfg.unit} su ${nf0(t.n)} sessioni · correlazione r = ${nf(t.r,2)} · soglia di rilevanza ${nf0(cfg.soglia)}${cfg.unit}</div>
+        </div>`;
+      }).join("") + `</div>`;
+    }
+    return {metrica, cfg, rilev, html:`<div class="trend-blocco">
+      <h3>${esc(cfg.label)}</h3><div class="meta">${esc(cfg.desc)}</div>${corpo}</div>`};
+  });
+  cont.innerHTML = blocchi.map(b => b.html).join("");
+  blocchi.forEach(b => b.rilev.forEach((t,i) => disegnaTrendAllenamento("gr-all-trend-"+b.metrica+"-"+i, t)));
+  const nRil = tutte.filter(t=>t.rilevante).length;
+  cont.insertAdjacentHTML("beforeend", `<p class="kpi-nota">Analizzati ${nf0(new Set(tutte.map(t=>t.Giocatore)).size)} giocatori con almeno 3 sessioni: ${nf0(nRil)} tendenze superano la soglia di rilevanza. Statistiche di allenamento, tenute separate da quelle di partita vera.</p>`);
+}
+
+function fraseTendenzaAllenamento(t){
+  const g = t.Giocatore, n = t.n, d = Math.abs(t.delta_totale);
+  const vi = nf(t.valore_iniziale, t.cfg.dec)+t.cfg.unit, vf = nf(t.valore_finale, t.cfg.dec)+t.cfg.unit;
+  if(t.Metrica === "Tasso_Errore_pct"){
+    return t.delta_totale > 0
+      ? `Il tasso di errore di ${g} in allenamento è aumentato di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`
+      : `Il tasso di errore di ${g} in allenamento è diminuito di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}): segnale di maggiore sicurezza nella gestione del pallone.`;
+  }
+  if(t.Metrica === "Precisione_Tiro_pct"){
+    return t.delta_totale > 0
+      ? `La precisione al tiro di ${g} in allenamento è migliorata di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`
+      : `La precisione al tiro di ${g} in allenamento è peggiorata di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`;
+  }
+  if(t.Metrica === "Minuti_Giocati"){
+    return t.delta_totale > 0
+      ? `I minuti giocati da ${g} nelle partitelle di allenamento sono in crescita (da circa ${vi} a ${vf} a sessione).`
+      : `I minuti giocati da ${g} nelle partitelle di allenamento sono in calo (da circa ${vi} a ${vf} a sessione).`;
+  }
+  return `${g}: ${t.cfg.label.toLowerCase()} ${t.direzione}.`;
+}
+
+function disegnaTrendAllenamento(id, t){
+  const cfg = t.cfg;
+  const punti = t.punti.map(p => ({x:p.x, y:p.y, etichetta:p.etichetta}));
+  const retta = [{x:t.xmin, y:t.valore_iniziale}, {x:t.xmax, y:t.valore_finale}];
+  const colPunti = t.giudizio==="negativo" ? colore("c2") : colore("c1");
+  const ys = punti.map(p=>p.y).concat([t.valore_iniziale, t.valore_finale]);
+  const minY = Math.min(...ys), maxY = Math.max(...ys), pad = Math.max(2, (maxY-minY)*0.25);
+  creaGrafico(id, {
+    type:"scatter",
+    data:{datasets:[
+      {label:"Sessioni di allenamento", data:punti, backgroundColor:colPunti, borderColor:colPunti,
+       pointRadius:5.5, pointHoverRadius:8, showLine:false, order:2},
+      {label:"Retta di interpolazione", data:retta, borderColor:colore("text"), borderDash:[7,5], borderWidth:2.2,
+       pointRadius:0, showLine:true, fill:false, order:1}
+    ]},
+    options:baseOpzioni({
+      plugins:{
+        legend:{display:true, position:"bottom", labels:{color:colore("muted"), boxWidth:14, boxHeight:2, font:{size:11}, usePointStyle:false, padding:10}},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{
+            title:(items)=> items[0].datasetIndex===0 ? (punti[items[0].dataIndex]?.etichetta || "Sessione "+items[0].parsed.x) : "Retta di interpolazione",
+            label:(it)=> cfg.label+": "+nf(it.parsed.y, cfg.dec===0?1:cfg.dec)+cfg.unit
+          }}
+      },
+      scales:{
+        x:{type:"linear", min:t.xmin-0.4, max:t.xmax+0.4,
+          title:{display:true, text:"Sessione del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
           ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
           grid:{color:colore("grid")}, border:{color:colore("grid")}},
         y:{min:Math.max(0, minY-pad), max:maxY+pad,
@@ -1891,6 +2232,10 @@ function render(){
   renderAndamento(f);
   renderClassifica(f);
   renderTendenze(f);
+  renderKPIAllenamentoStat(f);
+  renderAndamentoAllenamentoStat(f);
+  renderClassificaAllenamentoStat(f);
+  renderTendenzeAllenamentoStat(f);
   renderAndamentoIndividuale();
   renderGiocatore(f);
   renderConfronto(f);
@@ -2067,7 +2412,7 @@ function aggiornaSelettoriReport(){
   if(mesiConDati.length) selM.value = mesiConDati[mesiConDati.length-1];
 }
 
-function statoReport(msg, attivo, idEl="#rp-stato"){
+function statoReport(msg, attivo, idEl="#rp-stato-partita"){
   const el = $(idEl);
   el.textContent = msg;
   el.classList.toggle("attivo", !!attivo);
@@ -2076,7 +2421,7 @@ function statoReport(msg, attivo, idEl="#rp-stato"){
 /** Come statoReport, ma con in più un link cliccabile che apre/scarica il PDF appena generato — resta
  *  visibile finché non si genera un altro report, come rete di sicurezza se il download automatico non
  *  fosse partito (succede su alcuni browser mobili). */
-function statoReportConLink(msg, url, nomeFile, idEl="#rp-stato"){
+function statoReportConLink(msg, url, nomeFile, idEl="#rp-stato-partita"){
   const el = $(idEl);
   el.classList.remove("attivo");
   el.innerHTML = "";
@@ -2406,7 +2751,7 @@ async function esportaPaginaAPdf(pdf, pagina, isPrima){
  *  sempre un link manuale visibile nello stato del report, come rete di sicurezza se il tentativo
  *  automatico non dovesse partire (un tocco reale dell'utente su un link è il modo più affidabile in
  *  assoluto per far partire un download su qualsiasi browser). */
-function scaricaPdfRobusto(pdf, nomeFile, idEl="#rp-stato"){
+function scaricaPdfRobusto(pdf, nomeFile, idEl="#rp-stato-partita"){
   const blob = pdf.output("blob");
   const url = URL.createObjectURL(blob);
   try{
@@ -2421,7 +2766,7 @@ function scaricaPdfRobusto(pdf, nomeFile, idEl="#rp-stato"){
   setTimeout(() => URL.revokeObjectURL(url), 120000);
 }
 
-async function generaEScarica(nomeFile, paginaGeneratori){
+async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partita"){
   const stage = $("#report-stage");
   stage.innerHTML = "";
   const { jsPDF } = window.jspdf;
@@ -2438,7 +2783,7 @@ async function generaEScarica(nomeFile, paginaGeneratori){
     for(let i=0;i<pagineDom.length;i++){
       await esportaPaginaAPdf(pdf, pagineDom[i], i===0);
     }
-    scaricaPdfRobusto(pdf, nomeFile);
+    scaricaPdfRobusto(pdf, nomeFile, idEl);
   } finally {
     stage.innerHTML = "";
   }
@@ -2448,7 +2793,7 @@ async function generaEScarica(nomeFile, paginaGeneratori){
 async function generaReportPartita(matchId){
   const ds = stato.ds;
   const partita = ds.partite.find(p => p.Match_ID === matchId);
-  if(!partita){ statoReport("Seleziona una partita valida.", false); return; }
+  if(!partita){ statoReport("Seleziona una partita valida.", false, "#rp-stato-partita"); return; }
   const righeGara = ds.giocatori.filter(g => g.Match_ID === matchId);
   const sGara = riepilogoSquadra(righeGara, [partita]);
   const aggGara = aggregaGiocatori(righeGara);
@@ -2487,7 +2832,7 @@ async function generaReportPartita(matchId){
     };
   }
 
-  statoReport("Genero il Report Partita…", true);
+  statoReport("Genero il Report Partita…", true, "#rp-stato-partita");
   await generaEScarica(nomeFileData("Report_Partita_"+matchId, partita.Data), [
     async (pag) => {
       bandaReport(pag, "Report Partita", partita.Avversario, `${dataLabel(partita.Data)} · ${esc(partita.Competizione||"Amichevole")}`, partita.Risultato);
@@ -2600,7 +2945,7 @@ async function generaReportPartita(matchId){
 async function generaReportMensile(mese){
   const ds = stato.ds;
   const haRPE = ds.haRPE;
-  if(!mese){ statoReport("Seleziona un mese valido.", false); return; }
+  if(!mese){ statoReport("Seleziona un mese valido.", false, "#rp-stato-allenamento"); return; }
   const dMese = datiMese(mese);
   const mPrec = mesePrecedenteConDati(mese);
   const dPrec = mPrec ? datiMese(mPrec) : null;
@@ -2644,7 +2989,7 @@ async function generaReportMensile(mese){
   const dRpe = deltaKpi(deltaRpe, v=>nf(v,1), 0.3);
   const tendenzeMese = righeAllenPrec.length ? tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE) : [];
 
-  statoReport("Genero il Report Mensile…", true);
+  statoReport("Genero il Report Mensile…", true, "#rp-stato-allenamento");
   await generaEScarica(nomeFileData("Report_Mensile_"+mese.replace("-",""), new Date()), [
     async (pag) => {
       bandaReport(pag, "Report Mensile Allenamenti", meseLabel(mese), mPrec ? `confronto con ${meseLabel(mPrec)}` : "");
@@ -2734,7 +3079,7 @@ async function generaReportMensile(mese){
       }
       piePaginaReport(pag, 2, 2);
     }, {piena:true})
-  ]);
+  ], "#rp-stato-allenamento");
 }
 
 /* ---- Report Stagionale ---- */
@@ -2750,7 +3095,7 @@ async function generaReportStagionale(){
     .slice().sort((a,b)=>(a.Data?+a.Data:0)-(b.Data?+b.Data:0))
     .map(r => ({label:r.EtichettaPartita, valore:nf(r.Indice_Prestazione,1)})) : [];
 
-  statoReport("Genero il Report Stagionale…", true);
+  statoReport("Genero il Report Stagionale…", true, "#rp-stato-partita");
   await generaEScarica(nomeFileData("Report_Stagionale", new Date()), [
     async (pag) => {
       bandaReport(pag, "Report Stagionale", "Vista stagionale", `${ds.partite.length} partite · aggiornato al ${dataLabel(new Date())}`);
@@ -3207,21 +3552,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if(!stato.ds) return;
     const btn = $("#rp-btn-partita"); btn.disabled = true;
     try{ await generaReportPartita($("#rp-sel-partita").value); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
     finally{ btn.disabled = false; }
   });
   $("#rp-btn-mensile").addEventListener("click", async () => {
     if(!stato.ds) return;
     const btn = $("#rp-btn-mensile"); btn.disabled = true;
     try{ await generaReportMensile($("#rp-sel-mese").value); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
     finally{ btn.disabled = false; }
   });
   $("#rp-btn-stagionale").addEventListener("click", async () => {
     if(!stato.ds) return;
     const btn = $("#rp-btn-stagionale"); btn.disabled = true;
     try{ await generaReportStagionale(); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
     finally{ btn.disabled = false; }
   });
 

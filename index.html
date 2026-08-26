@@ -91,6 +91,7 @@ select{font-family:inherit; font-size:14px; padding:7px 10px; border-radius:9px;
   padding:9px 18px; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s, border-color .15s, color .15s}
 .tab-btn:hover{border-color:var(--primary); color:var(--primary)}
 .tab-btn.attiva{background:var(--primary); border-color:var(--primary); color:#fff}
+.tab-btn .etichetta-corta{display:none}
 
 /* ---------- layout ---------- */
 main{max-width:var(--maxw); margin:0 auto; padding:24px 20px 80px}
@@ -305,6 +306,19 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
   .campo{flex:1 1 140px}
   .grafico-wrap{height:230px}
   .rp-kpi-row{grid-template-columns:repeat(2,1fr)}
+
+  /* --- intestazione più compatta su telefono: la barra in alto (fissa durante lo scroll) occupava
+     troppo schermo, lasciando poco spazio ai contenuti sotto. Sul telefono smette di restare fissa
+     durante lo scroll (si vede solo in cima alla pagina) e i suoi elementi si stringono. --- */
+  .topbar{position:static}
+  .topbar-inner{padding:10px 14px; gap:10px}
+  .marchio .s, .versione-app{display:none}
+  #nav-sezioni{display:none}
+  .filtri{gap:8px; padding-bottom:8px}
+  .tab-dashboard{padding:2px 14px 10px; gap:6px; flex-wrap:nowrap}
+  .tab-btn{flex:1 1 0; padding:8px 4px; font-size:12px; text-align:center; white-space:nowrap}
+  .tab-btn .etichetta-lunga{display:none}
+  .tab-btn .etichetta-corta{display:inline}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
@@ -344,9 +358,15 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     </div>
   </div>
   <div class="tab-dashboard nascosto" id="tab-switcher" role="tablist" aria-label="Scegli la dashboard">
-    <button type="button" class="tab-btn attiva" data-tab="partita" role="tab" aria-selected="true">Dashboard Partita</button>
-    <button type="button" class="tab-btn" data-tab="allenamento" role="tab" aria-selected="false">Dashboard Allenamento</button>
-    <button type="button" class="tab-btn" data-tab="giocatori" role="tab" aria-selected="false">Giocatori</button>
+    <button type="button" class="tab-btn attiva" data-tab="partita" role="tab" aria-selected="true">
+      <span class="etichetta-lunga">Dashboard Partita</span><span class="etichetta-corta">Partita</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="allenamento" role="tab" aria-selected="false">
+      <span class="etichetta-lunga">Dashboard Allenamento</span><span class="etichetta-corta">Allenamento</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="giocatori" role="tab" aria-selected="false">
+      <span class="etichetta-lunga">Giocatori</span><span class="etichetta-corta">Giocatori</span>
+    </button>
   </div>
   <nav class="nav-sezioni nascosto" id="nav-sezioni" aria-label="Sezioni della dashboard">
     <a href="#sez-kpi" data-tab="partita">KPI di squadra</a>
@@ -354,12 +374,17 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-classifica" data-tab="partita">Classifica giocatori</a>
     <a href="#sez-tendenze" data-tab="partita">Tendenze individuali</a>
     <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
-    <a href="#sez-allenamenti" data-tab="allenamento">Allenamenti</a>
+    <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
+    <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
+    <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
+    <a href="#sez-classifica-stat-allenamento" data-tab="allenamento">Classifica da allenamento</a>
+    <a href="#sez-tendenze-stat-allenamento" data-tab="allenamento">Tendenze da allenamento</a>
+    <a href="#sez-allenamenti" data-tab="allenamento">Presenze e carico</a>
     <a href="#sez-incroci" data-tab="allenamento">Segnali incrociati</a>
+    <a href="#sez-report-allenamento" data-tab="allenamento">Report Mensile</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
     <a href="#sez-confronto" data-tab="giocatori">Confronto giocatori</a>
-    <a href="#sez-report">Report PDF</a>
     <a href="#sez-qualita">Qualità dei dati</a>
     <a href="#sez-metodo">Metodologia</a>
     <a href="#sez-ia">Assistente IA</a>
@@ -438,19 +463,81 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div id="contenuto-formazioni"></div>
     </section>
 
+    <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) -->
+    <section id="sez-report-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
+      <p class="sez-desc">Il report di una singola partita e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="card">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="rp-sel-partita">Partita</label>
+            <select id="rp-sel-partita"></select>
+          </div>
+          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
+          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
+        </div>
+        <div class="report-status" id="rp-stato-partita">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo.</div>
+      </div>
+    </section>
+
     <!-- ===================== DASHBOARD ALLENAMENTO ===================== -->
+    <!-- 7. KPI DA ALLENAMENTO (statistiche di gioco raccolte nelle partitelle) -->
+    <section id="sez-kpi-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">01</span><h2>KPI da allenamento (partitelle)</h2></div>
+      <p class="sez-desc" id="kpi-stat-allenamento-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
+      <div class="griglia g-kpi" id="griglia-kpi-stat-allenamento"></div>
+      <p class="sez-desc">Statistiche di gioco (gol, tiri, passaggi, dribbling, recuperi, parate) registrate durante le partitelle di allenamento: un cluster tenuto sempre separato dalle statistiche di partita vera qui sopra, anche quando Seven Lab le esporta con le stesse colonne.</p>
+    </section>
+
+    <!-- 7b. ANDAMENTO DA ALLENAMENTO -->
+    <section id="sez-andamento-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">02</span><h2>Andamento nel tempo (allenamento)</h2></div>
+      <p class="sez-desc">Una sessione di allenamento con statistiche per punto, in ordine cronologico. La linea tratteggiata è la media del periodo.</p>
+      <div id="contenuto-andamento-stat-allenamento" class="griglia g-2"></div>
+    </section>
+
+    <!-- 7c. CLASSIFICA DA ALLENAMENTO -->
+    <section id="sez-classifica-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori (allenamento)</h2></div>
+      <p class="sez-desc">Clicca su un'intestazione per ordinare. Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole sessioni. La sparkline mostra l'indice prestazione sessione per sessione.</p>
+      <div id="contenuto-classifica-stat-allenamento"></div>
+    </section>
+
+    <!-- 7d. TENDENZE DA ALLENAMENTO -->
+    <section id="sez-tendenze-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Tendenze individuali (allenamento)</h2></div>
+      <p class="sez-desc">Per ogni giocatore i punti sono le sue sessioni di allenamento con statistiche, in ordine cronologico; la retta tratteggiata è la retta di interpolazione (regressione lineare ai minimi quadrati) che riassume la direzione dell'andamento. Servono almeno 3 sessioni con dati.</p>
+      <div id="contenuto-tendenze-stat-allenamento"></div>
+    </section>
+
     <!-- 8. ALLENAMENTI -->
     <section id="sez-allenamenti" data-tab-sezione="allenamento">
-      <div class="sez-testa"><span class="sez-num">01</span><h2>Allenamenti: presenze e carico</h2></div>
+      <div class="sez-testa"><span class="sez-num">05</span><h2>Allenamenti: presenze e carico</h2></div>
       <p class="sez-desc">Il carico è calcolato con il metodo session-RPE (minuti × RPE percepito): un valore soggettivo che il giocatore o lo staff assegnano a fine seduta, senza bisogno di GPS, cardiofrequenzimetri o altri dispositivi biometrici. Sono segnalati i giocatori sotto il 60% di presenza e gli aumenti di carico pari o superiori a 1,5 volte da un mese all'altro: sono segnali da valutare con lo staff, non diagnosi.</p>
       <div id="contenuto-allenamenti"></div>
     </section>
 
     <!-- 8b. SEGNALI INCROCIATI -->
     <section id="sez-incroci" data-tab-sezione="allenamento">
-      <div class="sez-testa"><span class="sez-num">02</span><h2>Segnali incrociati: carico e rendimento</h2></div>
+      <div class="sez-testa"><span class="sez-num">06</span><h2>Segnali incrociati: carico e rendimento</h2></div>
       <p class="sez-desc">Confronta, mese su mese, la variazione del carico di allenamento di ogni giocatore con la variazione del suo indice prestazione medio in partita. Non è un cluster nuovo di dati: è una lettura che mette insieme gli allenamenti e le partite, gli unici due cluster che raccogli.</p>
       <div id="contenuto-incroci"></div>
+    </section>
+
+    <!-- 8c. REPORT MENSILE ALLENAMENTI (export PDF) -->
+    <section id="sez-report-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><h2>Report PDF: mensile allenamenti</h2></div>
+      <p class="sez-desc">Il report mensile degli allenamenti, sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="card">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="rp-sel-mese">Mese allenamenti</label>
+            <select id="rp-sel-mese"></select>
+          </div>
+          <button class="btn primario" id="rp-btn-mensile">Scarica Report Mensile</button>
+        </div>
+        <div class="report-status" id="rp-stato-allenamento">Scegli un mese: il PDF viene generato e scaricato sul tuo dispositivo.</div>
+      </div>
     </section>
 
     <!-- ===================== GIOCATORI ===================== -->
@@ -490,28 +577,6 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     </section>
 
     <!-- ===================== SEZIONI COMUNI (visibili in ogni scheda) ===================== -->
-    <!-- 9. REPORT PDF -->
-    <section id="sez-report">
-      <div class="sez-testa"><h2>Report esportabili in PDF</h2></div>
-      <p class="sez-desc">Tre formati pronti da inviare allo staff: il report di una singola partita, il report mensile degli allenamenti e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser.</p>
-      <div class="card">
-        <div class="report-toolbar">
-          <div class="campo">
-            <label for="rp-sel-partita">Partita</label>
-            <select id="rp-sel-partita"></select>
-          </div>
-          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
-          <div class="campo" style="margin-left:18px">
-            <label for="rp-sel-mese">Mese allenamenti</label>
-            <select id="rp-sel-mese"></select>
-          </div>
-          <button class="btn primario" id="rp-btn-mensile">Scarica Report Mensile</button>
-          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
-        </div>
-        <div class="report-status" id="rp-stato">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo, nessun dato viene inviato altrove.</div>
-      </div>
-    </section>
-
     <!-- 10. QUALITÀ DATI -->
     <section id="sez-qualita">
       <div class="sez-testa"><h2>Qualità dei dati</h2></div>
