@@ -129,6 +129,10 @@ tbody td{padding:9px 10px; text-align:right; border-bottom:1px solid color-mix(i
 tbody tr:hover td{background:var(--primary-soft)}
 tbody tr:hover td:first-child{background:var(--primary-soft)}
 .ruolo{font-size:11.5px; color:var(--muted); font-weight:500; display:block}
+td.conf-migliore{font-weight:800; color:var(--primary); background:var(--primary-soft)}
+.conf-testata{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border)}
+.conf-testata .nome{font-weight:800; font-size:15px}
+.conf-testata .ruolo-badge{font-size:11.5px; color:var(--muted); font-weight:600}
 .barra-wrap{display:flex; align-items:center; gap:8px; min-width:140px}
 .barra-wrap .barra{height:9px; border-radius:99px; min-width:3px}
 .barra-wrap span{font-size:12.5px; font-weight:700; white-space:nowrap}
@@ -324,6 +328,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-tendenze">Tendenze individuali</a>
     <a href="#sez-andamento-individuale">Andamento e formazioni</a>
     <a href="#sez-giocatore">Vista giocatore</a>
+    <a href="#sez-confronto">Confronto giocatori</a>
     <a href="#sez-allenamenti">Allenamenti</a>
     <a href="#sez-incroci">Segnali incrociati</a>
     <a href="#sez-report">Report PDF</a>
@@ -415,23 +420,42 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div id="contenuto-giocatore"></div>
     </section>
 
+    <!-- 7. CONFRONTO TRA DUE GIOCATORI -->
+    <section id="sez-confronto">
+      <div class="sez-testa"><span class="sez-num">07</span><h2>Confronto tra due giocatori</h2></div>
+      <p class="sez-desc">Metti a confronto due giocatori a scelta, anche di ruoli diversi: utile per capire chi, per caratteristiche statistiche, può coprire un ruolo al posto di un altro. Il confronto usa lo stesso periodo scelto nel filtro in alto.</p>
+      <div class="card" style="margin-bottom:16px">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="cf-sel-a">Giocatore A</label>
+            <select id="cf-sel-a"></select>
+          </div>
+          <div class="campo">
+            <label for="cf-sel-b">Giocatore B</label>
+            <select id="cf-sel-b"></select>
+          </div>
+        </div>
+      </div>
+      <div id="contenuto-confronto"></div>
+    </section>
+
     <!-- 8. ALLENAMENTI -->
     <section id="sez-allenamenti">
-      <div class="sez-testa"><span class="sez-num">07</span><h2>Allenamenti: presenze e carico</h2></div>
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Allenamenti: presenze e carico</h2></div>
       <p class="sez-desc">Il carico è calcolato con il metodo session-RPE (minuti × RPE percepito): un valore soggettivo che il giocatore o lo staff assegnano a fine seduta, senza bisogno di GPS, cardiofrequenzimetri o altri dispositivi biometrici. Sono segnalati i giocatori sotto il 60% di presenza e gli aumenti di carico pari o superiori a 1,5 volte da un mese all'altro: sono segnali da valutare con lo staff, non diagnosi.</p>
       <div id="contenuto-allenamenti"></div>
     </section>
 
     <!-- 8b. SEGNALI INCROCIATI -->
     <section id="sez-incroci">
-      <div class="sez-testa"><span class="sez-num">08</span><h2>Segnali incrociati: carico e rendimento</h2></div>
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Segnali incrociati: carico e rendimento</h2></div>
       <p class="sez-desc">Confronta, mese su mese, la variazione del carico di allenamento di ogni giocatore con la variazione del suo indice prestazione medio in partita. Non è un cluster nuovo di dati: è una lettura che mette insieme gli allenamenti e le partite, gli unici due cluster che raccogli.</p>
       <div id="contenuto-incroci"></div>
     </section>
 
     <!-- 9. REPORT PDF -->
     <section id="sez-report">
-      <div class="sez-testa"><span class="sez-num">09</span><h2>Report esportabili in PDF</h2></div>
+      <div class="sez-testa"><span class="sez-num">10</span><h2>Report esportabili in PDF</h2></div>
       <p class="sez-desc">Tre formati pronti da inviare allo staff: il report di una singola partita, il report mensile degli allenamenti e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser.</p>
       <div class="card">
         <div class="report-toolbar">
@@ -453,14 +477,14 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 
     <!-- 10. QUALITÀ DATI -->
     <section id="sez-qualita">
-      <div class="sez-testa"><span class="sez-num">10</span><h2>Qualità dei dati</h2></div>
+      <div class="sez-testa"><span class="sez-num">11</span><h2>Qualità dei dati</h2></div>
       <p class="sez-desc">Controlli automatici sulle righe caricate. Sono avvisi, non blocchi: la dashboard funziona comunque.</p>
       <div id="contenuto-qualita"></div>
     </section>
 
     <!-- 11. METODOLOGIA -->
     <section id="sez-metodo">
-      <div class="sez-testa"><span class="sez-num">11</span><h2>Metodologia e avvertenze</h2></div>
+      <div class="sez-testa"><span class="sez-num">12</span><h2>Metodologia e avvertenze</h2></div>
       <p class="sez-desc">Come è calcolato ogni numero che vedi, e come va letto.</p>
       <details class="metodo">
         <summary>Apri le formule e le avvertenze</summary>
@@ -497,7 +521,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 
     <!-- 12. IA -->
     <section id="sez-ia">
-      <div class="sez-testa"><span class="sez-num">12</span><h2>Assistente IA (opzionale)</h2></div>
+      <div class="sez-testa"><span class="sez-num">13</span><h2>Assistente IA (opzionale)</h2></div>
       <p class="sez-desc">Fai una domanda in italiano sui tuoi dati. La chiave API OpenAI resta sul tuo dispositivo e viene usata solo per chiamare OpenAI; all'IA vengono inviati soltanto i dati già aggregati (classifica, tendenze, aggregati mensili, carico di allenamento), non il file.</p>
       <div class="card">
         <div class="griglia g-2" style="align-items:end">
