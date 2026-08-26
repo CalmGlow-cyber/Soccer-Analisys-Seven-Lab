@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.7.0",
+  numero: "1.8.1",
   data: "2026-08-26",
-  note: "Vista singolo giocatore: il radar ora confronta il giocatore con la media dei soli compagni nello stesso ruolo (non più con la media dell'intera squadra), con avviso quando non ci sono pari ruolo nel periodo. Nuova sezione «Confronto tra due giocatori»: scegli due giocatori qualsiasi e confrontali con un radar diretto e una tabella dettagliata che evidenzia chi ha il valore migliore per ogni indicatore, utile per capire chi può coprire un ruolo al posto di un altro."
+  note: "Verifica approfondita dei report PDF stampabili: corretta una fuga di stile che in alcuni casi poteva mostrare intestazioni di tabella fuori posto o con lo sfondo del tema scuro invece che bianco; corretto il calcolo dei salti di pagina perché non tagli più a metà una riga nelle colonne laterali (CV/punti di forza) dei report; corretto il conteggio \"Pagina X di Y\" nel Report Confronto quando il contenuto occupa due pagine fisiche."
 };
 
 /* =====================================================================
@@ -1640,12 +1640,12 @@ function formattaValoreConfronto(riga, v){
   if(riga.tipo === "dec") return nf(v,1);
   return esc(String(v));
 }
-function classeMiglior(riga, va, vb, perA){
+function classeMiglior(riga, va, vb, perA, classe="conf-migliore"){
   if(!riga.meglio || va===null || vb===null || va===undefined || vb===undefined || va===vb) return "";
   const aVince = riga.meglio === "alto" ? va > vb : va < vb;
   const bVince = riga.meglio === "alto" ? vb > va : vb < va;
-  if(perA && aVince) return " class=\"conf-migliore\"";
-  if(!perA && bVince) return " class=\"conf-migliore\"";
+  if(perA && aVince) return ` class="${classe}"`;
+  if(!perA && bVince) return ` class="${classe}"`;
   return "";
 }
 
@@ -2065,8 +2065,8 @@ function aggiornaSelettoriReport(){
   if(mesiConDati.length) selM.value = mesiConDati[mesiConDati.length-1];
 }
 
-function statoReport(msg, attivo){
-  const el = $("#rp-stato");
+function statoReport(msg, attivo, idEl="#rp-stato"){
+  const el = $(idEl);
   el.textContent = msg;
   el.classList.toggle("attivo", !!attivo);
 }
@@ -2074,8 +2074,8 @@ function statoReport(msg, attivo){
 /** Come statoReport, ma con in più un link cliccabile che apre/scarica il PDF appena generato — resta
  *  visibile finché non si genera un altro report, come rete di sicurezza se il download automatico non
  *  fosse partito (succede su alcuni browser mobili). */
-function statoReportConLink(msg, url, nomeFile){
-  const el = $("#rp-stato");
+function statoReportConLink(msg, url, nomeFile, idEl="#rp-stato"){
+  const el = $(idEl);
   el.classList.remove("attivo");
   el.innerHTML = "";
   el.appendChild(document.createTextNode(msg + " "));
@@ -2299,19 +2299,42 @@ const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rend
  *  Se un singolo blocco è più alto di una pagina intera (capita raramente, es. una tabella enorme) non
  *  c'è modo di evitare di tagliarlo: in quel caso esportaPaginaAPdf ricade sul taglio "alla cieca" solo
  *  per quel blocco, esattamente come prima di questa modifica. */
-function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
-  const corpo = pagina.corpo;
-  if(!corpo || !corpo.children.length) return [];
-  const paginaTop = pagina.getBoundingClientRect().top;
-  const grezzi = Array.from(corpo.children).map(el => {
+/** Blocchi "atomici" dei figli diretti di un contenitore (un titolo di sezione è sempre tenuto insieme
+ *  al blocco che lo segue — vale sia per ".rp-section-title" nel corpo centrale sia per gli "<h4>" delle
+ *  colonne laterali stile "CV"). Funzione di supporto per puntiDiInterruzionePagina. */
+function blocchiAtomici(container, paginaTop){
+  if(!container || !container.children.length) return [];
+  const grezzi = Array.from(container.children).map(el => {
     const r = el.getBoundingClientRect();
-    return {top: r.top - paginaTop, bottom: r.bottom - paginaTop, titolo: el.classList.contains("rp-section-title")};
+    return {top: r.top - paginaTop, bottom: r.bottom - paginaTop, titolo: el.classList.contains("rp-section-title") || el.tagName === "H4"};
   });
   const blocchi = [];
   for(let i=0; i<grezzi.length; i++){
     if(grezzi[i].titolo && grezzi[i+1]){ blocchi.push({top:grezzi[i].top, bottom:grezzi[i+1].bottom}); i++; }
     else blocchi.push(grezzi[i]);
   }
+  return blocchi;
+}
+
+function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
+  if(!pagina.corpo || !pagina.corpo.children.length) return [];
+  const paginaTop = pagina.getBoundingClientRect().top;
+  // Una pagina con colonna laterale (stile "CV") o due colonne laterali (report di confronto) affianca
+  // al corpo centrale una colonna scura con la sua stessa altezza: html2canvas + il taglio in fette di
+  // esportaPaginaAPdf tagliano l'INTERA larghezza della pagina a una certa altezza, quindi un'interruzione
+  // è sicura solo se non cade in mezzo a un blocco né nel corpo né in NESSUNA colonna laterale. Le colonne
+  // vengono quindi raccolte tutte insieme (pagina.latoA/pagina.latoB per il report a tre colonne, altrimenti
+  // il singolo pagina.lato) e i loro blocchi, ordinati per posizione verticale, vengono uniti in un'unica
+  // lista di intervalli "occupati" prima di calcolare le interruzioni — esattamente come se fosse un'unica
+  // colonna con tutti i blocchi di corpo e laterali mescolati per altezza.
+  const colonne = (pagina.latoA || pagina.latoB) ? [pagina.corpo, pagina.latoA, pagina.latoB] : [pagina.corpo, pagina.lato];
+  const grezzi = colonne.filter(Boolean).flatMap(c => blocchiAtomici(c, paginaTop)).sort((a,b) => a.top - b.top);
+  const blocchi = [];
+  grezzi.forEach(b => {
+    const ultimo = blocchi[blocchi.length-1];
+    if(ultimo && b.top <= ultimo.bottom) ultimo.bottom = Math.max(ultimo.bottom, b.bottom);
+    else blocchi.push({top:b.top, bottom:b.bottom});
+  });
   const interruzioni = [];
   let inizioPagina = 0;
   blocchi.forEach(b => {
@@ -2381,7 +2404,7 @@ async function esportaPaginaAPdf(pdf, pagina, isPrima){
  *  sempre un link manuale visibile nello stato del report, come rete di sicurezza se il tentativo
  *  automatico non dovesse partire (un tocco reale dell'utente su un link è il modo più affidabile in
  *  assoluto per far partire un download su qualsiasi browser). */
-function scaricaPdfRobusto(pdf, nomeFile){
+function scaricaPdfRobusto(pdf, nomeFile, idEl="#rp-stato"){
   const blob = pdf.output("blob");
   const url = URL.createObjectURL(blob);
   try{
@@ -2392,7 +2415,7 @@ function scaricaPdfRobusto(pdf, nomeFile){
     a.click();
     document.body.removeChild(a);
   }catch(err){ console.error("Download automatico non riuscito:", err); }
-  statoReportConLink(`Report pronto: ${nomeFile}.`, url, nomeFile);
+  statoReportConLink(`Report pronto: ${nomeFile}.`, url, nomeFile, idEl);
   setTimeout(() => URL.revokeObjectURL(url), 120000);
 }
 
@@ -2916,6 +2939,184 @@ async function chiediIA(){
   }
 }
 
+/* ---- Report Confronto tra due giocatori ---- */
+
+/** Pagina di report a tre colonne: colonna scura a sinistra (giocatore A), colonna centrale chiara
+ *  (grafico radar + tabella completa), colonna scura a destra (giocatore B). A differenza di
+ *  nuovaPaginaReport (una sola colonna laterale) qui servono due "lato", quindi la struttura è costruita
+ *  a mano invece di riusare quella funzione. `pagina.corpo` punta comunque al contenuto della colonna
+ *  centrale, cosicché puntiDiInterruzionePagina() ed esportaPaginaAPdf() funzionino come per le altre pagine. */
+function nuovaPaginaReportConfronto(){
+  const stage = $("#report-stage");
+  const pagina = document.createElement("div");
+  pagina.className = "rp-page rp3-page";
+  const latoA = document.createElement("div");
+  latoA.className = "rp2-side rp3-side";
+  const centro = document.createElement("div");
+  centro.className = "rp3-center";
+  const corpo = document.createElement("div");
+  corpo.className = "rp3-body";
+  centro.appendChild(corpo);
+  const latoB = document.createElement("div");
+  latoB.className = "rp2-side rp3-side";
+  pagina.appendChild(latoA);
+  pagina.appendChild(centro);
+  pagina.appendChild(latoB);
+  stage.appendChild(pagina);
+  pagina.latoA = latoA; pagina.latoB = latoB; pagina.centro = centro; pagina.corpo = corpo;
+  return pagina;
+}
+
+/** Tabella "Indicatore / Giocatore A / Giocatore B" per la colonna centrale del report, con la stessa
+ *  logica di evidenziazione del migliore usata a schermo (RIGHE_CONFRONTO + classeMiglior), ma con una
+ *  classe CSS a sé (rp-migliore) perché il report usa una tavolozza di colori fissa, non le variabili
+ *  CSS del tema chiaro/scuro dell'app. */
+function tabellaConfrontoReport(pagina, a, b, righe){
+  const tbl = document.createElement("table");
+  tbl.className = "rp-table rp-table-confronto";
+  tbl.innerHTML = `<thead><tr><th>Indicatore</th><th>${esc(a.Giocatore)}</th><th>${esc(b.Giocatore)}</th></tr></thead>
+    <tbody>${righe.map(r => {
+      const va = r.get(a), vb = r.get(b);
+      return `<tr><td>${esc(r.label)}</td>
+        <td${classeMiglior(r, va, vb, true, "rp-migliore")}>${formattaValoreConfronto(r, va)}</td>
+        <td${classeMiglior(r, va, vb, false, "rp-migliore")}>${formattaValoreConfronto(r, vb)}</td></tr>`;
+    }).join("")}</tbody>`;
+  pagina.corpo.appendChild(tbl);
+}
+
+/** Fino a 3 indicatori (tra i 5 del radar) dove `mio` batte `altro`, ordinati per margine — il cuore
+ *  della colonna laterale: non ripete la tabella centrale, la riassume in chiave "perché scegliere lui/lei". */
+function insightConfrontoLato(mio, altro){
+  const metriche = [
+    ["Precisione al tiro", mio.Precisione_Tiro_pct, altro.Precisione_Tiro_pct],
+    ["Precisione passaggi", mio.Precisione_Passaggi_pct, altro.Precisione_Passaggi_pct],
+    ["Successo dribbling", mio.Successo_Dribbling_pct, altro.Successo_Dribbling_pct],
+    ["Efficacia realizzativa", mio.Efficacia_Realizzativa_pct, altro.Efficacia_Realizzativa_pct],
+    ["Affidabilità (100 − errore)", mio.Tasso_Errore_pct===null?null:100-mio.Tasso_Errore_pct, altro.Tasso_Errore_pct===null?null:100-altro.Tasso_Errore_pct]
+  ];
+  return metriche
+    // Il margine deve arrotondare ad almeno 1 punto: altrimenti comparirebbe un "punto di forza" con un
+    // "(+0pt)" accanto, che sembra un errore invece di un vero vantaggio.
+    .filter(([,v1,v2]) => v1!==null && v2!==null && Math.round(v1-v2) >= 1)
+    .sort((x,y) => (y[1]-y[2]) - (x[1]-x[2]))
+    .slice(0,3)
+    .map(([label,v1,v2]) => ({label, valore:`${pctTxt(v1,0)} (+${nf0(v1-v2)}pt)`, colore:"#8FD9C4"}));
+}
+
+/** Se i due giocatori hanno ruoli diversi, confronta `mio` con la media (pesata sui totali) di chi
+ *  gioca nel ruolo `ruoloAltro` nel periodo: risponde direttamente alla domanda "per statistiche,
+ *  potrebbe coprire l'altro ruolo?". Solo indicatori in percentuale, confrontabili a prescindere da
+ *  quanti giocatori compongono il gruppo di riferimento (a differenza di conteggi grezzi come i recuperi). */
+function compatibilitaRuoloReport(mio, ruoloAltro, righeDataset){
+  const peer = righeDataset.filter(g => g.Ruolo === ruoloAltro);
+  if(!peer.length) return null;
+  const base = riepilogoSquadra(peer, []);
+  const voci = [
+    ["Precisione passaggi", mio.Precisione_Passaggi_pct, base.precisione_passaggi, "alto"],
+    ["Precisione al tiro", mio.Precisione_Tiro_pct, base.precisione_tiro, "alto"],
+    ["Tasso di errore", mio.Tasso_Errore_pct, base.tasso_errore, "basso"]
+  ].filter(([,v1,v2]) => v1!==null && v2!==null);
+  if(!voci.length) return null;
+  return voci.map(([label,v1,v2,meglio]) => {
+    // Confronta gli arrotondamenti mostrati (pctTxt a 0 decimali), non i valori grezzi: altrimenti "24%
+    // vs 24%" può risultare colorato come se uno battesse l'altro per una differenza invisibile a schermo.
+    const r1 = Math.round(v1), r2 = Math.round(v2);
+    const colore = r1 === r2 ? "#B9C9C4" : (meglio==="alto" ? r1>r2 : r1<r2) ? "#8FD9C4" : "#E8A2AE";
+    return {label, valore:`${pctTxt(v1,0)} vs ${pctTxt(v2,0)}`, colore};
+  });
+}
+
+async function generaReportConfronto(nomeA, nomeB){
+  const ds = stato.ds;
+  if(!nomeA || !nomeB || nomeA === nomeB){ statoReport("Scegli due giocatori diversi nella sezione Confronto per generare il report.", false, "#cf-rp-stato"); return; }
+  const f = datiFiltrati();
+  const agg = aggregaGiocatori(f.giocatori);
+  const a = agg.find(x => x.Giocatore === nomeA), b = agg.find(x => x.Giocatore === nomeB);
+  if(!a || !b){ statoReport("Dati insufficienti per uno dei due giocatori nel periodo scelto.", false, "#cf-rp-stato"); return; }
+
+  const rankA = agg.findIndex(x => x.Giocatore === a.Giocatore) + 1;
+  const rankB = agg.findIndex(x => x.Giocatore === b.Giocatore) + 1;
+  const stessoRuolo = a.Ruolo === b.Ruolo;
+  const righeStat = ds.haEventiDisciplinari ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+
+  statoReport("Genero il Report Confronto…", true, "#cf-rp-stato");
+  const stage = $("#report-stage");
+  stage.innerHTML = "";
+  try{
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit:"pt", format:"a4"});
+    const pagina = nuovaPaginaReportConfronto();
+
+    bandaReport(pagina, "Report Confronto", `${a.Giocatore} vs ${b.Giocatore}`,
+      `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}`);
+
+    pagina.lato = pagina.latoA;
+    sidebarReport(pagina, {
+      eyebrow:"Giocatore A", nome:a.Giocatore, ruolo:a.Ruolo, colore:"#C99400",
+      gruppi:[
+        {titolo:"In sintesi", righe:[
+          {label:"Partite · minuti", valore:`${nf0(a.Partite_Giocate)} · ${nf0(a.Minuti_Totali)}'`},
+          {label:"Indice prestazione", valore:`${nf(a.Indice_Prestazione_Tot,1)} (${rankA}° in squadra)`}
+        ]},
+        ...(insightConfrontoLato(a,b).length ? [{titolo:`Punti di forza su ${b.Giocatore}`, righe:insightConfrontoLato(a,b)}] : []),
+        ...(!stessoRuolo && compatibilitaRuoloReport(a, b.Ruolo, f.giocatori) ? [{titolo:`Compatibilità ruolo ${b.Ruolo}`, righe:compatibilitaRuoloReport(a, b.Ruolo, f.giocatori)}] : [])
+      ]
+    });
+
+    titoloSezioneReport(pagina, "Confronto diretto");
+    const metricheRadar = [
+      ["Precisione passaggi", a.Precisione_Passaggi_pct, b.Precisione_Passaggi_pct],
+      ["Precisione al tiro", a.Precisione_Tiro_pct, b.Precisione_Tiro_pct],
+      ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
+      ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
+      ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
+    ];
+    graficoReport(pagina, "rp-cf-radar", {
+      type:"radar",
+      data:{labels:metricheRadar.map(m=>m[0]), datasets:[
+        {label:a.Giocatore, data:metricheRadar.map(m=>m[1]===null?0:m[1]), borderColor:PALETTE_REPORT.c1, backgroundColor:PALETTE_REPORT.c1+"33", pointBackgroundColor:PALETTE_REPORT.c1, borderWidth:2.4},
+        {label:b.Giocatore, data:metricheRadar.map(m=>m[2]===null?0:m[2]), borderColor:PALETTE_REPORT.c2, backgroundColor:PALETTE_REPORT.c2+"33", pointBackgroundColor:PALETTE_REPORT.c2, borderWidth:2.4}
+      ]},
+      options:{
+        responsive:true, maintainAspectRatio:false, animation:false,
+        plugins:{legend:{display:true, position:"bottom", labels:{color:PALETTE_REPORT.muted, boxWidth:11, boxHeight:11, font:{size:10}, usePointStyle:true, padding:10}}},
+        scales:{r:{min:0, max:100, ticks:{stepSize:25, color:PALETTE_REPORT.muted, font:{size:9}, backdropColor:"transparent", callback:v=>v+"%"},
+          grid:{color:PALETTE_REPORT.grid}, angleLines:{color:PALETTE_REPORT.grid}, pointLabels:{color:PALETTE_REPORT.text, font:{size:9.5}}}}
+      }
+    });
+    titoloSezioneReport(pagina, "Tutti gli indicatori");
+    tabellaConfrontoReport(pagina, a, b, righeStat);
+    bulletsReport(pagina, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]);
+
+    pagina.lato = pagina.latoB;
+    sidebarReport(pagina, {
+      eyebrow:"Giocatore B", nome:b.Giocatore, ruolo:b.Ruolo, colore:"#5EC4CE",
+      gruppi:[
+        {titolo:"In sintesi", righe:[
+          {label:"Partite · minuti", valore:`${nf0(b.Partite_Giocate)} · ${nf0(b.Minuti_Totali)}'`},
+          {label:"Indice prestazione", valore:`${nf(b.Indice_Prestazione_Tot,1)} (${rankB}° in squadra)`}
+        ]},
+        ...(insightConfrontoLato(b,a).length ? [{titolo:`Punti di forza su ${a.Giocatore}`, righe:insightConfrontoLato(b,a)}] : []),
+        ...(!stessoRuolo && compatibilitaRuoloReport(b, a.Ruolo, f.giocatori) ? [{titolo:`Compatibilità ruolo ${a.Ruolo}`, righe:compatibilitaRuoloReport(b, a.Ruolo, f.giocatori)}] : [])
+      ]
+    });
+
+    // Il numero di pagine PDF fisiche non è noto finché non si calcolano i salti di pagina: con molte
+    // righe di confronto (dati disciplinari inclusi) o colonne laterali ricche, questa singola "pagina"
+    // del DOM può finire su due pagine fisiche del PDF — meglio dirlo nel piè di pagina piuttosto che
+    // scrivere sempre "di 1" anche quando il PDF ne contiene chiaramente due.
+    const altezzaPaginaCssFooter = pdf.internal.pageSize.getHeight() * (LARGHEZZA_PAGINA_CSS / pdf.internal.pageSize.getWidth());
+    const numPagineFisiche = puntiDiInterruzionePagina(pagina, altezzaPaginaCssFooter).length + 1;
+    piePaginaReport(pagina, 1, numPagineFisiche);
+
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    await esportaPaginaAPdf(pdf, pagina, true);
+    scaricaPdfRobusto(pdf, nomeFileData(`Report_Confronto_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), "#cf-rp-stato");
+  } finally {
+    stage.innerHTML = "";
+  }
+}
+
 /* =====================================================================
    EVENTI
    ===================================================================== */
@@ -2991,6 +3192,13 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); });
   $("#cf-sel-a").addEventListener("change", e => { stato.confrontoA = e.target.value; renderConfronto(datiFiltrati()); });
   $("#cf-sel-b").addEventListener("change", e => { stato.confrontoB = e.target.value; renderConfronto(datiFiltrati()); });
+  $("#cf-btn-report").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#cf-btn-report"); btn.disabled = true;
+    try{ await generaReportConfronto(stato.confrontoA, stato.confrontoB); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#cf-rp-stato"); }
+    finally{ btn.disabled = false; }
+  });
 
   $("#rp-btn-partita").addEventListener("click", async () => {
     if(!stato.ds) return;

@@ -220,11 +220,17 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-table td{padding:7px 9px; border-bottom:1px solid #EDEBE4; color:#28251D; overflow-wrap:break-word; white-space:normal; text-align:left; line-height:1.35}
 .rp-table tr td:first-child, .rp-table tr th:first-child{padding-left:0}
 .rp-table td:first-child, .rp-table th:first-child{width:22%}
+/* le tabelle dei report ereditano per errore da "thead th"/"tbody td:first-child" (pensate per le tabelle
+   interattive scorrevoli, .tabella-scroll) sia la posizione "sticky" sia uno sfondo legato al tema chiaro/scuro
+   dell'app: nei report va tolta entrambe le cose, perché il report è statico, sempre a sfondo bianco, e in
+   certi contesti di cattura un'intestazione "sticky" può finire disegnata fuori posto invece che in cima alla
+   tabella. Il grassetto della prima colonna (font-weight, ereditato dalla stessa regola) resta invece voluto. */
+.rp-table th, .rp-table td:first-child{position:static; top:auto; left:auto; z-index:auto; background:transparent}
 /* dentro la colonna principale del report stile "CV" c'è meno spazio orizzontale: tabelle un po' più compatte,
    ma restano leggibili — prima erano troppo piccole (9.5px/8px) ed è stato segnalato come "schiacciato" */
-.rp2-body .rp-table{font-size:10.5px}
-.rp2-body .rp-table th{font-size:9px; padding:3px 6px 7px}
-.rp2-body .rp-table td{padding:6px 6px; line-height:1.3}
+.rp2-body .rp-table, .rp3-body .rp-table{font-size:10.5px}
+.rp2-body .rp-table th, .rp3-body .rp-table th{font-size:9px; padding:3px 6px 7px}
+.rp2-body .rp-table td, .rp3-body .rp-table td{padding:6px 6px; line-height:1.3}
 .rp-flag{display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:99px; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap}
 .rp-flag.up{background:#E6F1DD; color:#437A22}
 .rp-flag.down{background:#F5E2E4; color:#A13544}
@@ -261,6 +267,15 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp2-mini b{color:#fff; font-weight:800}
 .rp2-mini span:first-child{color:#F3F1E7; font-weight:600}
 .rp-foot-b{margin:14px 34px 0; padding:10px 0 18px; border-top:1px solid #EDEBE4; display:flex; justify-content:space-between; font-size:9.5px; color:#A9A8A3}
+
+/* --- report a tre colonne: confronto tra due giocatori (giocatore A | radar+tabella | giocatore B) --- */
+.rp-page.rp3-page{padding:0; display:flex}
+.rp3-page .rp2-side.rp3-side{width:172px; padding:26px 16px 22px}
+.rp3-center{flex:1; min-width:0; display:flex; flex-direction:column}
+.rp3-body{padding:20px 22px 4px; flex:1; min-width:0; box-sizing:border-box}
+.rp3-page .rp-foot-b{margin-left:22px; margin-right:22px}
+.rp-table.rp-table-confronto th:first-child, .rp-table.rp-table-confronto td:first-child{width:46%}
+.rp-table td.rp-migliore{background:#E3F2EF; color:#01696F; font-weight:800}
 
 /* --- statistiche di squadra, stile SofaScore: solo la propria squadra --- */
 .stat-squadra-grid{display:grid; grid-template-columns:1fr 1fr; column-gap:26px}
@@ -434,7 +449,9 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
             <label for="cf-sel-b">Giocatore B</label>
             <select id="cf-sel-b"></select>
           </div>
+          <button class="btn primario" id="cf-btn-report" style="margin-left:18px">Scarica report PDF</button>
         </div>
+        <div class="report-status" id="cf-rp-stato">Il report è un foglio A4 a tre colonne: statistiche e punti di forza di Giocatore A a sinistra, radar e tabella completa al centro, statistiche e punti di forza di Giocatore B a destra.</div>
       </div>
       <div id="contenuto-confronto"></div>
     </section>
