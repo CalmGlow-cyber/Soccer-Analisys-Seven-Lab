@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.11.1",
+  numero: "1.11.2",
   data: "2026-08-26",
-  note: "Dati di esempio («Prova con dati di esempio») molto più ricchi, su richiesta esplicita per testare la dashboard con un cluster realistico: 10 partite (invece di 4) con 4 moduli tattici diversi per popolare davvero «Formazioni a confronto», 20 allenamenti (invece di 8) con 9 giocatori, e — novità — statistiche di gioco vere e proprie sulle partitelle di allenamento, così le nuove sezioni della Dashboard Allenamento (KPI, andamento, classifica, tendenze) si vedono piene invece che vuote. Include anche i due miglioramenti della versione precedente: intestazione più leggera su telefono (non più fissa durante lo scroll su schermi stretti) e i pulsanti di export PDF spostati dentro la dashboard di appartenenza (Partita+Stagionale nella Dashboard Partita, Mensile nella Dashboard Allenamento). Nessuna modifica ai calcoli, alla generazione dei PDF né alle statistiche vere caricate da Seven Lab: solo i dati di esempio sono cambiati."
+  note: "Correzione: se index.html non è allineato con questa versione di app.js (es. caricato per errore un index.html più vecchio insieme al nuovo app.js), generare un report PDF non fallisce più in silenzio senza nessun messaggio — ora, quando non trova il riquadro di stato dedicato (Partita/Allenamento), l'app ripiega sul vecchio riquadro condiviso «#rp-stato» invece di bloccarsi. Resta comunque necessario caricare sempre la coppia corretta e aggiornata di index.html e app.js insieme. Nessuna modifica ai calcoli né alla generazione dei PDF."
 };
 
 /* =====================================================================
@@ -2412,8 +2412,16 @@ function aggiornaSelettoriReport(){
   if(mesiConDati.length) selM.value = mesiConDati[mesiConDati.length-1];
 }
 
+/** Trova l'elemento di stato per idEl; se index.html non è aggiornato (versione disallineata rispetto
+ *  ad app.js, con id diversi) ripiega sul vecchio id condiviso "#rp-stato" invece di fallire in silenzio:
+ *  meglio un messaggio nel posto "sbagliato" che nessun messaggio affatto. */
+function elementoStatoReport(idEl){
+  return $(idEl) || $("#rp-stato") || null;
+}
+
 function statoReport(msg, attivo, idEl="#rp-stato-partita"){
-  const el = $(idEl);
+  const el = elementoStatoReport(idEl);
+  if(!el){ console.error("Elemento di stato report non trovato:", idEl); return; }
   el.textContent = msg;
   el.classList.toggle("attivo", !!attivo);
 }
@@ -2422,7 +2430,8 @@ function statoReport(msg, attivo, idEl="#rp-stato-partita"){
  *  visibile finché non si genera un altro report, come rete di sicurezza se il download automatico non
  *  fosse partito (succede su alcuni browser mobili). */
 function statoReportConLink(msg, url, nomeFile, idEl="#rp-stato-partita"){
-  const el = $(idEl);
+  const el = elementoStatoReport(idEl);
+  if(!el){ console.error("Elemento di stato report non trovato:", idEl); return; }
   el.classList.remove("attivo");
   el.innerHTML = "";
   el.appendChild(document.createTextNode(msg + " "));
