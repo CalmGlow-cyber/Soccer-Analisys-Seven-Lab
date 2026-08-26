@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.8.1",
+  numero: "1.9.0",
   data: "2026-08-26",
-  note: "Verifica approfondita dei report PDF stampabili: corretta una fuga di stile che in alcuni casi poteva mostrare intestazioni di tabella fuori posto o con lo sfondo del tema scuro invece che bianco; corretto il calcolo dei salti di pagina perché non tagli più a metà una riga nelle colonne laterali (CV/punti di forza) dei report; corretto il conteggio \"Pagina X di Y\" nel Report Confronto quando il contenuto occupa due pagine fisiche."
+  note: "Dashboard riorganizzata in tre schede fisicamente separate — Dashboard Partita (KPI, andamento partite, classifica, tendenze, coinvolgimento e formazioni), Dashboard Allenamento (presenze/carico, segnali incrociati) e Giocatori (andamento per giocatore, vista singolo giocatore, confronto tra due giocatori) — con Report PDF, Qualità dei dati, Metodologia e Assistente IA sempre visibili sotto qualunque scheda. La scheda scelta resta ricordata nel browser. Nessuna modifica ai calcoli né ai report PDF."
 };
 
 /* =====================================================================
@@ -1915,6 +1915,7 @@ function attivaDashboard(ds, etichettaOrigine){
   $("#sez-caricamento").classList.add("nascosto");
   $("#dashboard").classList.remove("nascosto");
   $("#barra-filtri").classList.remove("nascosto");
+  $("#tab-switcher").classList.remove("nascosto");
   $("#nav-sezioni").classList.remove("nascosto");
   $("#btn-nuovo").classList.remove("nascosto");
   const b = $("#badge-dataset");
@@ -2013,6 +2014,7 @@ function ricaricaDaSessioni(){
     $("#dashboard").classList.add("nascosto");
     $("#sez-caricamento").classList.remove("nascosto");
     $("#barra-filtri").classList.add("nascosto");
+    $("#tab-switcher").classList.add("nascosto");
     $("#nav-sezioni").classList.add("nascosto");
     $("#btn-nuovo").classList.add("nascosto");
     $("#badge-dataset").classList.add("nascosto");
@@ -3177,6 +3179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#dashboard").classList.add("nascosto");
     $("#sez-caricamento").classList.remove("nascosto");
     $("#barra-filtri").classList.add("nascosto");
+    $("#tab-switcher").classList.add("nascosto");
     $("#nav-sezioni").classList.add("nascosto");
     $("#btn-nuovo").classList.add("nascosto");
     $("#badge-dataset").classList.add("nascosto");
@@ -3246,4 +3249,32 @@ document.addEventListener("DOMContentLoaded", () => {
     memoriaRimuovi("openai-key-calcio7");
     statoChiave("Chiave dimenticata: non è più salvata su questo dispositivo.");
   });
+
+  /* ---------------------------------------------------------------------
+     Tab "Dashboard Partita" / "Dashboard Allenamento" / "Giocatori": separano fisicamente
+     le sezioni della dashboard, mostrando solo quelle della scheda attiva (attributo
+     data-tab-sezione sul <section>) più le sezioni comuni a tutte le schede (Report PDF,
+     Qualità dei dati, Metodologia, Assistente IA), che non hanno quell'attributo e restano
+     sempre visibili sotto la scheda scelta. La barra dei filtri periodo/giocatore in alto
+     resta unica e vale per tutte le schede, così come i calcoli in app.js: qui si cambia
+     solo cosa viene mostrato, non come viene calcolato. La preferenza si ricorda nel browser.
+     --------------------------------------------------------------------- */
+  function impostaTabDashboard(tab){
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      const attiva = b.dataset.tab === tab;
+      b.classList.toggle("attiva", attiva);
+      b.setAttribute("aria-selected", attiva ? "true" : "false");
+    });
+    document.querySelectorAll("[data-tab-sezione]").forEach(el => {
+      el.classList.toggle("nascosto", el.dataset.tabSezione !== tab);
+    });
+    document.querySelectorAll("#nav-sezioni a[data-tab]").forEach(a => {
+      a.classList.toggle("nascosto", a.dataset.tab !== tab);
+    });
+    if(localOk()) memoriaScrivi("calcio7-tab-dashboard", tab);
+  }
+  document.querySelectorAll(".tab-btn").forEach(b => {
+    b.addEventListener("click", () => impostaTabDashboard(b.dataset.tab));
+  });
+  impostaTabDashboard((localOk() && memoriaLeggi("calcio7-tab-dashboard")) || "partita");
 });
