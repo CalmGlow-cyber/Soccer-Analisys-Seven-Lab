@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.11.2",
+  numero: "1.11.3",
   data: "2026-08-26",
-  note: "Correzione: se index.html non è allineato con questa versione di app.js (es. caricato per errore un index.html più vecchio insieme al nuovo app.js), generare un report PDF non fallisce più in silenzio senza nessun messaggio — ora, quando non trova il riquadro di stato dedicato (Partita/Allenamento), l'app ripiega sul vecchio riquadro condiviso «#rp-stato» invece di bloccarsi. Resta comunque necessario caricare sempre la coppia corretta e aggiornata di index.html e app.js insieme. Nessuna modifica ai calcoli né alla generazione dei PDF."
+  note: "Correzione di impaginazione: la riga di KPI in cima ai report PDF (Partita/Mensile/Stagionale/Confronto) usava per errore la stessa regola \"solo per telefono\" pensata per la dashboard a schermo, restringendosi da 4 a 2 colonne su schermi stretti — cosa che poteva capitare anche nel report generato, non solo nella pagina normale. Rimossa: la riga di KPI nei report resta sempre a 4 colonne come su desktop, indipendentemente dal dispositivo usato per generarla. Include anche la correzione della versione precedente (1.11.2): se index.html non è allineato con questa versione di app.js, generare un report PDF non fallisce più in silenzio senza nessun messaggio. Nessuna modifica ai calcoli."
 };
 
 /* =====================================================================
