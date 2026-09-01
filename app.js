@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.11.3",
-  data: "2026-08-26",
-  note: "Correzione di impaginazione: la riga di KPI in cima ai report PDF (Partita/Mensile/Stagionale/Confronto) usava per errore la stessa regola \"solo per telefono\" pensata per la dashboard a schermo, restringendosi da 4 a 2 colonne su schermi stretti — cosa che poteva capitare anche nel report generato, non solo nella pagina normale. Rimossa: la riga di KPI nei report resta sempre a 4 colonne come su desktop, indipendentemente dal dispositivo usato per generarla. Include anche la correzione della versione precedente (1.11.2): se index.html non è allineato con questa versione di app.js, generare un report PDF non fallisce più in silenzio senza nessun messaggio. Nessuna modifica ai calcoli."
+  numero: "1.13.0",
+  data: "2026-09-01",
+  note: "Sistemata l'impaginazione dei 4 report PDF (Partita, Mensile, Stagionale, Confronto), finora davvero problematica su contenuti lunghi. Ora ogni pagina A4 mostra tutto quello che ci sta, il resto continua automaticamente sui fogli successivi (pagina 3, 4, 5… quante ne servono) con lo stesso stile grafico. Corretti tre problemi concreti trovati testando a fondo: 1) la fascia laterale scura a volte si allungava fino a diventare un rettangolo vuoto su più pagine; 2) il piè di pagina (numero pagina) a volte mancava sui fogli intermedi o riportava un totale sbagliato — ora compare corretto su ogni pagina fisica del PDF; 3) un errore di conversione nei calcoli interni poteva far traboccare il contenuto oltre il bordo del foglio A4. Verificato con test automatizzati su tutti e 4 i tipi di report, sia con dati minimi che con stagioni intere (15+ partite, 22 giocatori)."
 };
 
 /* =====================================================================
@@ -1199,26 +1199,6 @@ function renderKPI(f){
     sPrec = riepilogoSquadra(dPrec.giocatori, dPrec.partite);
     sCorr = riepilogoSquadra(dCorr.giocatori, dCorr.partite);
   }
-  let presMedia = null, presMediaPrec = null;
-  if(stato.ds.haAllenamenti){
-    const ag = aggregaAllenamenti(f.allenamenti, f.presenze);
-    const vals = ag.righe.map(r=>r.Tasso_Presenza_pct).filter(v=>v!==null);
-    presMedia = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
-    if(mPrec){
-      const dp = datiMese(mPrec), agp = aggregaAllenamenti(dp.allenamenti, dp.presenze);
-      const vp = agp.righe.map(r=>r.Tasso_Presenza_pct).filter(v=>v!==null);
-      const dc = datiMese(mCorr), agc = aggregaAllenamenti(dc.allenamenti, dc.presenze);
-      const vc = agc.righe.map(r=>r.Tasso_Presenza_pct).filter(v=>v!==null);
-      if(vp.length && vc.length){
-        presMediaPrec = vp.reduce((a,b)=>a+b,0)/vp.length;
-        presMedia = f.mese ? presMedia : (vc.reduce((a,b)=>a+b,0)/vc.length);
-        if(!f.mese){
-          presMedia = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
-        }
-      }
-    }
-  }
-
   const perGara = v => f.partite.length>0 ? v/f.partite.length : null;
   const kpi = [
     {eti:"Gol fatti", val:nf0(s.gol_fatti), nota: f.partite.length? nf(perGara(s.gol_fatti),1)+" a partita":"", raw:s.gol_fatti,
@@ -1230,11 +1210,7 @@ function renderKPI(f){
     {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
       prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"},
     {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:"Tasso di errore squadra "+pctTxt(s.tasso_errore),
-      prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"},
-    stato.ds.haAllenamenti
-      ? {eti:"Presenza media allenamenti", val:pctTxt(presMedia,0), nota:"Media dei tassi di presenza dei giocatori",
-         prevRaw:presMediaPrec, currRaw:presMedia, meglio:"alto", dec:0, unit:" pt"}
-      : {eti:"Presenza media allenamenti", val:"—", nota:"Fogli Allenamenti/Presenze non presenti nel file", prevRaw:null, currRaw:null}
+      prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
   ];
 
   $("#kpi-desc").textContent = mPrec
@@ -1753,6 +1729,7 @@ function renderAndamentoIndividuale(){
   renderAndamentoGiocatore(ds);
   renderCoinvolgimento(ds);
   renderFormazioni(ds);
+  renderConvocazioni(ds);
 }
 
 function renderAndamentoGiocatore(ds){
@@ -1841,6 +1818,29 @@ function renderFormazioni(ds){
     </tr>`).join("")}</tbody>
   </table></div>
   <p class="kpi-nota" style="margin-top:8px">Righe sotto le 2 partite o senza modulo indicato sono mostrate in trasparenza: troppo poco dato per essere lette come un segnale. Ricorda l'avvertenza sulla forza dell'avversario in Metodologia.</p>`;
+}
+
+/** Classifica stagionale (tutta la stagione, non risente del filtro periodo) che incrocia le convocazioni
+ *  (partite in cui il giocatore ha una scheda statistiche, unico dato di "presenza alla convocazione"
+ *  disponibile da Seven Lab) con i minuti totali giocati, per stabilire chi ha giocato di più nell'anno. */
+function renderConvocazioni(ds){
+  const cont = $("#contenuto-convocazioni");
+  const righe = aggregaGiocatori(ds.giocatori)
+    .map(a => ({Giocatore:a.Giocatore, Ruolo:a.Ruolo, Convocazioni:a.Partite_Giocate, Minuti_Totali:a.Minuti_Totali,
+      Media_Minuti: a.Partite_Giocate>0 ? a.Minuti_Totali/a.Partite_Giocate : null}))
+    .sort((a,b) => b.Minuti_Totali - a.Minuti_Totali);
+  if(!righe.length){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per calcolare convocazioni e minutaggio.</div>`; return; }
+  const max = Math.max(...righe.map(r=>r.Minuti_Totali));
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Convocazioni e minuti totali giocati, tutta la stagione, ordinati per minuti totali</caption>
+    <thead><tr><th scope="col">Giocatore</th><th scope="col">Convocazioni</th><th scope="col">Media minuti/convocazione</th><th scope="col">Minuti totali</th></tr></thead>
+    <tbody>${righe.map(r => `<tr>
+      <td>${esc(r.Giocatore)}<span class="ruolo">${esc(r.Ruolo)}</span></td>
+      <td>${nf0(r.Convocazioni)}</td>
+      <td>${r.Media_Minuti!==null?nf0(r.Media_Minuti)+"'":"—"}</td>
+      <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(r.Minuti_Totali/max*100):0}%; background:var(--c1)"></div><span>${nf0(r.Minuti_Totali)}'</span></div></td>
+    </tr>`).join("")}</tbody>
+  </table></div>`;
 }
 
 /* --------- 7. Vista giocatore --------- */
@@ -2509,11 +2509,38 @@ function sidebarReport(pagina, {eyebrow, nome, ruolo, colore="#5EC4CE", gruppi=[
   pagina.lato.innerHTML = html;
 }
 
-function piePaginaReport(pagina, n, tot){
-  const foot = document.createElement("div");
-  foot.className = "rp-foot-b";
-  foot.innerHTML = `<span>Report generato automaticamente il ${dataLabel(new Date())} — dati raccolti dall'utente</span><span>Pagina ${n} di ${tot}</span>`;
-  pagina.centro.appendChild(foot);
+/** Piè di pagina numerato: NON viene più incollato una sola volta in fondo al contenuto (prima di questa
+ *  modifica, con un report più lungo di una pagina finiva per comparire solo sull'ultima fetta fisica del
+ *  PDF, lasciando le pagine precedenti senza numerazione) — viene invece rasterizzato a parte da
+ *  esportaPaginaAPdf() e sovrapposto in fondo a OGNI pagina fisica, con il numero corretto. Le due funzioni
+ *  seguenti si occupano solo di costruire/misurare quel piè di pagina isolato. */
+function costruisciFooterReport(n, tot, larghezzaCss){
+  const box = document.createElement("div");
+  box.style.cssText = `width:${larghezzaCss}px; background:#FFFFFF; box-sizing:border-box;`;
+  box.innerHTML = `<div class="rp-foot-b" style="margin:14px 34px 0"><span>Report generato automaticamente il ${dataLabel(new Date())} — dati raccolti dall'utente</span><span>Pagina ${n} di ${tot}</span></div>`;
+  return box;
+}
+/** Altezza (px CSS) del piè di pagina: misurata sul rendering reale invece che una costante fissa, così
+ *  resta corretta anche se in futuro cambia il CSS di `.rp-foot-b`. Va riservata in fondo a ogni pagina
+ *  fisica, quindi sottratta dall'altezza utile per il contenuto prima di calcolare i punti di interruzione. */
+function altezzaFooterReportCss(larghezzaCss){
+  const stage = $("#report-stage");
+  const box = costruisciFooterReport(1, 1, larghezzaCss);
+  stage.appendChild(box);
+  const h = box.getBoundingClientRect().height;
+  stage.removeChild(box);
+  return h;
+}
+/** Rasterizza (html2canvas, stessa scala/config del contenuto) il piè di pagina n/tot da sovrapporre in
+ *  fondo a una pagina fisica del PDF. */
+async function catturaFooterReport(n, tot, larghezzaCss){
+  const stage = $("#report-stage");
+  const box = costruisciFooterReport(n, tot, larghezzaCss);
+  stage.appendChild(box);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const canvas = await html2canvas(box, {scale:2, backgroundColor:"#FFFFFF", logging:false, windowWidth:larghezzaCss});
+  stage.removeChild(box);
+  return canvas;
 }
 /** Ogni KPI può avere anche `d`/`dTipo` (testo + "up"/"down"/"flat") per mostrare, in piccolo sotto il
  *  valore, il confronto col mese/periodo precedente — es. "+6pt vs mese prec." in verde o rosso. */
@@ -2712,6 +2739,32 @@ function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
   return interruzioni;
 }
 
+/** Confini di fine-pagina fisica per una "pagina" (in px CSS, coordinate della pagina renderizzata):
+ *  prende i punti "sicuri" da puntiDiInterruzionePagina() e aggiunge, tra un punto sicuro e il successivo,
+ *  tutti i tagli forzati dalla rete di sicurezza quando quel segmento è comunque più alto di una pagina
+ *  intera (blocco enorme da solo). Unica fonte di verità sul NUMERO di pagine fisiche che una "pagina"
+ *  produrrà: sia chi deve solo CONTARLE in anticipo (per scrivere "Pagina N di TOT" nel piè di pagina)
+ *  sia chi deve davvero AFFETTARE il canvas catturato (esportaPaginaAPdf) usano questa stessa funzione,
+ *  così le due cose non possono più disallinearsi — prima di questa modifica, contarle con una formula a
+ *  parte (interruzioni.length + 1) sottostimava il totale ogni volta che scattava la rete di sicurezza. */
+function confiniFisiciPagina(pagina, altezzaPaginaCss){
+  const interruzioni = puntiDiInterruzionePagina(pagina, altezzaPaginaCss);
+  const altezzaTotale = pagina.getBoundingClientRect().height;
+  const bordi = [...interruzioni, altezzaTotale];
+  const confini = [];
+  let y = 0;
+  for(const fine of bordi){
+    let restante = fine - y;
+    while(restante > 0.01){
+      const passo = Math.min(altezzaPaginaCss, restante);
+      y += passo;
+      restante -= passo;
+      confini.push(y);
+    }
+  }
+  return confini.length ? confini : [0];
+}
+
 /** Converte una "pagina" (div .rp-page renderizzato fuori schermo) in una o più pagine del PDF.
  *  Prima veniva sempre forzata dentro un'unica pagina A4: se il contenuto era più alto di una pagina
  *  (es. Report Partita con possesso palla + disciplina, molto più pieno di quando è stato disegnato il
@@ -2719,25 +2772,39 @@ function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
  *  Poi si è passati ad affettarla in più pagine a intervalli fissi: risolveva lo schiacciamento ma
  *  tagliava a metà qualunque cosa si trovasse esattamente sul bordo pagina, grafici compresi. Ora i punti
  *  di taglio si calcolano PRIMA, guardando dove finiscono davvero i blocchi di contenuto nella pagina
- *  renderizzata: quello che non entra nella pagina corrente scorre intero in quella successiva. */
-async function esportaPaginaAPdf(pdf, pagina, isPrima){
+ *  renderizzata: quello che non entra nella pagina corrente scorre intero in quella successiva, su un
+ *  foglio successivo con lo stesso layout (stessi margini, stesso stile — la colonna laterale, se
+ *  presente, non si ripete: il contenuto centrale continua semplicemente sotto di essa).
+ *  `altezzaPaginaCss` arriva già calcolata dal chiamante (generaEScarica / generaReportConfronto) e ha
+ *  già lo spazio del piè di pagina sottratto, cosicché i punti di taglio non finiscano mai sotto il piè di
+ *  pagina che verrà sovrapposto. `numeroIniziale`/`totalePagine` servono per numerare correttamente ogni
+ *  pagina fisica generata qui (il piè di pagina viene ridisegnato una volta per pagina fisica, non più
+ *  incollato una sola volta in fondo al contenuto — prima restava visibile solo sull'ultima fetta).
+ *  Ritorna il numero di pagina successivo da usare per la prossima "pagina" logica. I confini fisici
+ *  (dove finisce ciascuna pagina) arrivano da confiniFisiciPagina(), la stessa funzione che il chiamante
+ *  usa per CONTARE le pagine in anticipo (numero totale nel piè di pagina): usare un'unica fonte di verità
+ *  per contare e per affettare evita che le due cose possano disallinearsi.
+ *  Nota su un bug di conversione trovato e corretto qui (31/08/2026): i confini arrivano in px CSS
+ *  (coordinate reali della pagina renderizzata, "spazio a 794px"), mentre il canvas catturato da
+ *  html2canvas è in px del canvas ("spazio a 794×scale px"). Il codice precedente li convertiva
+ *  moltiplicando per `pxPerPt` (px canvas per punto PDF) invece che per lo scala px-canvas/px-CSS: i due
+ *  rapporti sono diversi (il primo include anche la conversione px-CSS→punto), e usare quello sbagliato
+ *  spostava ogni confine più in basso del dovuto — con contenuto abbastanza lungo, il taglio "sicuro"
+ *  finiva oltre il bordo reale della pagina fisica, vanificando lo scopo della funzione (evitare di
+ *  tagliare un blocco a metà) esattamente nei casi con più contenuto, cioè quelli che contano di più. */
+async function esportaPaginaAPdf(pdf, pagina, isPrima, numeroIniziale, totalePagine, altezzaPaginaCss){
   const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
-  const cssPerPt = LARGHEZZA_PAGINA_CSS / pageW;
-  const altezzaPaginaCss = pageH * cssPerPt;
-  const interruzioniCss = puntiDiInterruzionePagina(pagina, altezzaPaginaCss);
+  const confiniCss = confiniFisiciPagina(pagina, altezzaPaginaCss);
 
   const canvas = await html2canvas(pagina, {scale:2, backgroundColor:"#FFFFFF", logging:false, windowWidth:LARGHEZZA_PAGINA_CSS});
-  const pxPerPt = canvas.width / pageW;
-  const pageHpx = Math.round(pageH * pxPerPt);
-  const confini = [...interruzioniCss.map(y => Math.round(y * pxPerPt)), canvas.height];
+  const pxPerPt = canvas.width / pageW; // px canvas per punto PDF: per posizionare le immagini nel PDF
+  const pxPerCss = canvas.width / LARGHEZZA_PAGINA_CSS; // px canvas per px CSS: per convertire i confini
+  const confini = confiniCss.map(cssY => Math.min(canvas.height, Math.round(cssY * pxPerCss)));
 
-  let y = 0, primaFetta = true;
+  let y = 0, primaFetta = true, numero = numeroIniziale, footerCanvas = null;
   for(const fine of confini){
-    let restante = fine - y;
-    while(restante > 0){
-      // rete di sicurezza: se il segmento tra due interruzioni sicure è comunque più alto di una
-      // pagina (un blocco enorme da solo), si affetta per lunghezza pagina come prima di questa modifica
-      const altezzaFetta = Math.min(pageHpx, restante);
+    const altezzaFetta = fine - y;
+    if(altezzaFetta > 0){
       if(!(isPrima && primaFetta)) pdf.addPage();
       const fetta = document.createElement("canvas");
       fetta.width = canvas.width; fetta.height = altezzaFetta;
@@ -2745,11 +2812,20 @@ async function esportaPaginaAPdf(pdf, pagina, isPrima){
       // PNG invece di JPEG: nessun artefatto di compressione sul testo (soprattutto quello chiaro su
       // sfondo scuro della colonna laterale, segnalato come "grigio, illeggibile" con la JPEG precedente).
       pdf.addImage(fetta.toDataURL("image/png"), "PNG", 0, 0, pageW, altezzaFetta / pxPerPt);
-      y += altezzaFetta;
-      restante -= altezzaFetta;
+
+      // Il piè di pagina è catturato a parte (stessa scala/larghezza del contenuto, quindi la sua altezza
+      // in px canvas è già direttamente confrontabile) e sovrapposto in fondo a OGNI pagina fisica, non
+      // più incollato una sola volta in fondo al contenuto — prima restava visibile solo sull'ultima fetta.
+      footerCanvas = await catturaFooterReport(numero, totalePagine, LARGHEZZA_PAGINA_CSS);
+      const footerHpt = footerCanvas.height / pxPerPt;
+      pdf.addImage(footerCanvas.toDataURL("image/png"), "PNG", 0, pageH - footerHpt, pageW, footerHpt);
+
+      numero += 1;
       primaFetta = false;
     }
+    y = fine;
   }
+  return numero;
 }
 
 /** Innesca il download del PDF in modo robusto anche su mobile. `pdf.save()` di jsPDF, su alcuni
@@ -2789,8 +2865,18 @@ async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partit
     }
     // Chart.js needs a frame to paint onto the offscreen canvases before capture
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
+
+    // Passata di conteggio: quante pagine fisiche del PDF servirà davvero ciascuna "pagina" logica —
+    // serve PRIMA di disegnare qualunque piè di pagina, altrimenti il primo "Pagina 1 di N" scritto
+    // avrebbe un N sbagliato (calcolato solo dopo aver visto tutte le altre pagine).
+    const totalePagine = pagineDom.reduce((tot, pagina) => tot + confiniFisiciPagina(pagina, altezzaPaginaCss).length, 0);
+
+    let numero = 1;
     for(let i=0;i<pagineDom.length;i++){
-      await esportaPaginaAPdf(pdf, pagineDom[i], i===0);
+      numero = await esportaPaginaAPdf(pdf, pagineDom[i], i===0, numero, totalePagine, altezzaPaginaCss);
     }
     scaricaPdfRobusto(pdf, nomeFile, idEl);
   } finally {
@@ -2918,7 +3004,6 @@ async function generaReportPartita(matchId){
       titoloSezioneReport(pag, "Contributo dei giocatori");
       tabellaReport(pag, ["Giocatore","Ruolo","Min","Gol","Ast","Prec. pass.","Indice"],
         aggGara.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]));
-      piePaginaReport(pag, 1, 3);
     },
     async (pag) => {
       bandaReport(pag, "Report Partita", "Stagione fin qui", `${partiteFinQui.length} partite disputate — si aggiorna a ogni gara`);
@@ -2940,12 +3025,10 @@ async function generaReportPartita(matchId){
         {label:"Gol fatti", data:partiteFinQui.map(p=>p.Gol_Fatti), backgroundColor:PALETTE_REPORT.c1, borderRadius:3},
         {label:"Gol subiti", data:partiteFinQui.map(p=>p.Gol_Subiti), backgroundColor:PALETTE_REPORT.c2, borderRadius:3}
       ]}, options: opzioniGraficoReport()});
-      piePaginaReport(pag, 2, 3);
     },
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Partita", "Statistiche dettagliate", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — tutti i giocatori, tutte le voci raccolte`);
       tabelleDettaglioGiocatori(pag, aggGara, !!disciplinaGaraTot);
-      piePaginaReport(pag, 3, 3);
     }, {piena:true})
   ]);
 }
@@ -3061,7 +3144,6 @@ async function generaReportMensile(mese){
       graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
         {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
       ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}}}})});
-      piePaginaReport(pag, 1, 2);
     },
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Mensile Allenamenti", "Dettaglio per giocatore", `${meseLabel(mese)} — tutti i giocatori, tutte le voci raccolte`);
@@ -3086,7 +3168,6 @@ async function generaReportMensile(mese){
       } else {
         bulletsReport(pag, ["Nessun dato di allenamento disponibile per questo mese."]);
       }
-      piePaginaReport(pag, 2, 2);
     }, {piena:true})
   ], "#rp-stato-allenamento");
 }
@@ -3146,7 +3227,6 @@ async function generaReportStagionale(){
       titoloSezioneReport(pag, "Classifica stagionale per indice prestazione");
       tabellaReport(pag, ["Giocatore","Ruolo","Partite","Gol","Assist","Prec. pass.","Indice tot."],
         agg.slice(0,10).map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Partite_Giocate), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]));
-      piePaginaReport(pag, 1, 3);
     },
     async (pag) => {
       bandaReport(pag, "Report Stagionale", "Tendenze e segnali incrociati", "Vista d'insieme su partite e allenamenti");
@@ -3182,12 +3262,10 @@ async function generaReportStagionale(){
       } else {
         bulletsReport(pag, ["Non disponibile: nei file caricati non ci sono ancora cartellini, angoli, punizioni o rigori."]);
       }
-      piePaginaReport(pag, 2, 3);
     },
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Stagionale", "Statistiche dettagliate", "Tutti i giocatori, tutte le voci raccolte in stagione");
       tabelleDettaglioGiocatori(pag, agg, ds.haEventiDisciplinari);
-      piePaginaReport(pag, 3, 3);
     }, {piena:true})
   ]);
 }
@@ -3457,16 +3535,15 @@ async function generaReportConfronto(nomeA, nomeB){
       ]
     });
 
-    // Il numero di pagine PDF fisiche non è noto finché non si calcolano i salti di pagina: con molte
-    // righe di confronto (dati disciplinari inclusi) o colonne laterali ricche, questa singola "pagina"
-    // del DOM può finire su due pagine fisiche del PDF — meglio dirlo nel piè di pagina piuttosto che
-    // scrivere sempre "di 1" anche quando il PDF ne contiene chiaramente due.
-    const altezzaPaginaCssFooter = pdf.internal.pageSize.getHeight() * (LARGHEZZA_PAGINA_CSS / pdf.internal.pageSize.getWidth());
-    const numPagineFisiche = puntiDiInterruzionePagina(pagina, altezzaPaginaCssFooter).length + 1;
-    piePaginaReport(pagina, 1, numPagineFisiche);
-
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-    await esportaPaginaAPdf(pdf, pagina, true);
+
+    // Come in generaEScarica: il numero di pagine PDF fisiche non è noto finché non si calcolano i salti
+    // di pagina — con molte righe di confronto (dati disciplinari inclusi) o colonne laterali ricche,
+    // questa singola "pagina" del DOM può finire su più pagine fisiche del PDF.
+    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
+    const totalePagine = confiniFisiciPagina(pagina, altezzaPaginaCss).length;
+    await esportaPaginaAPdf(pdf, pagina, true, 1, totalePagine, altezzaPaginaCss);
     scaricaPdfRobusto(pdf, nomeFileData(`Report_Confronto_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), "#cf-rp-stato");
   } finally {
     stage.innerHTML = "";

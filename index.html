@@ -250,8 +250,8 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-chart-wrap{width:100%; height:230px; position:relative; margin-bottom:6px}
 
 /* ---------- report stile "CV": colonna laterale scura + fascia colorata ---------- */
-.rp-page.rp2-page{padding:0; display:flex}
-.rp2-side{width:230px; flex:none; background:#152A28; color:#EFEBE0; padding:30px 24px 26px; box-sizing:border-box}
+.rp-page.rp2-page{padding:0; display:flex; align-items:flex-start}
+.rp2-side{width:230px; flex:none; background:#152A28; color:#EFEBE0; padding:30px 24px 26px; box-sizing:border-box; border-radius:0 0 14px 14px}
 .rp2-main{flex:1; min-width:0; display:flex; flex-direction:column}
 .rp2-band{background:#01696F; color:#fff; padding:26px 34px 20px}
 .rp2-band .eyebrow{font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.85; font-weight:700}
@@ -277,7 +277,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-foot-b{margin:14px 34px 0; padding:10px 0 18px; border-top:1px solid #EDEBE4; display:flex; justify-content:space-between; font-size:9.5px; color:#A9A8A3}
 
 /* --- report a tre colonne: confronto tra due giocatori (giocatore A | radar+tabella | giocatore B) --- */
-.rp-page.rp3-page{padding:0; display:flex}
+.rp-page.rp3-page{padding:0; display:flex; align-items:flex-start}
 .rp3-page .rp2-side.rp3-side{width:172px; padding:26px 16px 22px}
 .rp3-center{flex:1; min-width:0; display:flex; flex-direction:column}
 .rp3-body{padding:20px 22px 4px; flex:1; min-width:0; box-sizing:border-box}
@@ -460,6 +460,10 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <h3 class="sotto-tit">Formazioni a confronto</h3>
       <p class="sez-desc">Confronta il rendimento di squadra per modulo tattico. Per usarla, aggiungi una colonna <strong>Modulo</strong> al foglio Partite del tuo Excel (es. «2-3-1», «3-2-1»): finché non la compili, le partite restano in un unico gruppo «Non indicato». <strong>Attenzione ai falsi positivi:</strong> un modulo può risultare migliore solo perché usato contro avversari più deboli, non perché sia davvero il modulo più efficace — con poche partite per modulo questo confronto va letto con cautela, e stiamo valutando come tenere conto anche della forza dell'avversario.</p>
       <div id="contenuto-formazioni"></div>
+
+      <h3 class="sotto-tit">Convocazioni e minutaggio stagionale</h3>
+      <p class="sez-desc">Per «convocazioni» si intende il numero di partite in cui il giocatore risulta sceso in campo (una scheda statistiche registrata per quella partita): i file che carichi non distinguono chi è stato convocato ma è rimasto sempre in panchina, quindi questo è il dato più vicino disponibile. La classifica incrocia le convocazioni con i minuti totali giocati nella stagione, per vedere chi ha giocato di più durante l'anno.</p>
+      <div id="contenuto-convocazioni"></div>
     </section>
 
     <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) -->
