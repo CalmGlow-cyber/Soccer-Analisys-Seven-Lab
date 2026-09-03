@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.17.2",
+  numero: "1.18.0",
   data: "2026-09-03",
-  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato). Corrette anche due segnalazioni sulla Dashboard Allenamento: (1) l'indice di carico di stanchezza stimato risultava \"Alto\" per quasi tutta la rosa dopo un solo allenamento — non tarato per un campione così piccolo; ora richiede almeno 4 allenamenti con statistiche di gioco nel periodo scelto e almeno 2 per il singolo giocatore prima di classificare Alto/Medio/Basso, mostrando \"n/d\" con una nota esplicita quando il campione non basta; (2) aggiunta un'etichetta \"Porta propria\"/\"Porta avversaria\" su tutti i grafici a campo (zone e heatmap, dashboard e report): la porta avversaria è sempre a destra, sia in partita sia in allenamento con due squadre interne, perché le coordinate sono già normalizzate dal punto di vista di chi compie l'azione."
+  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato). Corrette anche due segnalazioni sulla Dashboard Allenamento: (1) l'indice di carico di stanchezza stimato risultava \"Alto\" per quasi tutta la rosa dopo un solo allenamento — non tarato per un campione così piccolo; ora richiede almeno 4 allenamenti con statistiche di gioco nel periodo scelto e almeno 2 per il singolo giocatore prima di classificare Alto/Medio/Basso, mostrando \"n/d\" con una nota esplicita quando il campione non basta; (2) aggiunta un'etichetta \"Porta propria\"/\"Porta avversaria\" su tutti i grafici a campo (zone e heatmap, dashboard e report): la porta avversaria è sempre a destra, sia in partita sia in allenamento con due squadre interne, perché le coordinate sono già normalizzate dal punto di vista di chi compie l'azione. Aggiunta, nella Dashboard e nel Report Allenamenti (Periodo/Mensile/Stagionale), una vista \u00abper squadra\u00bb dei grafici di recupero/palla persa: oltre al grafico con la totalit\u00e0 (A+B insieme, che resta il dato pi\u00f9 importante per capire la tendenza generale, come richiesto esplicitamente), quattro riquadri pi\u00f9 piccoli mostrano Recuperi e Palle perse separatamente per Squadra A e Squadra B, con lo stesso orientamento (porta propria a sinistra, avversaria a destra). Compare solo quando l'allenamento ha eventi con posizione per entrambe le squadre interne; non si applica alle partite, dove il dato \u00e8 gi\u00e0 a un'unica direzione. Verificato con un file di allenamento reale con eventi Team A e Team B (allenamento_4.csv): la Dashboard mostra i quattro riquadri con le etichette porta corrette, il Report Periodo Allenamenti li include nella pagina generata, nessun errore JS in nessuno dei due casi."
 };
 
 /* =====================================================================
@@ -515,7 +515,7 @@ function estraiEventiZonaGrezzi(sessione){
 function estraiEventiZonaDaSessione(sessione, soloSquadraA){
   return estraiEventiZonaGrezzi(sessione)
     .filter(p => !(soloSquadraA && p.team === "B"))
-    .map(p => ({tipo:p.tipo, x:p.x, y:p.y, giocatore:p.giocatore}));
+    .map(p => ({tipo:p.tipo, x:p.x, y:p.y, giocatore:p.giocatore, team:p.team}));
 }
 /** Abbina ogni punto di zona (DATI SPAZIALI: ha la posizione ma non il tempo) al periodo (1° o 2° tempo)
  *  del suo evento corrispondente nella TIMELINE EVENTI (ha il tempo ma non la posizione) — richiesta
@@ -573,6 +573,22 @@ function raccogliEventiZona(sessioni){
   const recupero = [], persa = [];
   (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => (p.tipo==="recupero"?recupero:persa).push(p)));
   return {recupero, persa};
+}
+/** Come raccogliEventiZona, ma spezzato per squadra interna (A/B) — richiesta esplicita dell'utente
+ *  (03/09/2026): negli allenamenti, dove entrambe le squadre partitella contano (punto 23), il grafico
+ *  "totalità" che somma A+B resta il dato più importante (tutti gli eventi già nello stesso orientamento
+ *  0=propria porta→50=porta avversaria, vedi disegnaEtichettePorte), ma vuole anche vedere l'andamento
+ *  delle due squadre separatamente. Non usata per le partite (lì l'unica squadra rilevante è già A, un
+ *  confronto A/B non avrebbe senso — la squadra "B" in un file partita è l'avversario). Torna null se una
+ *  sessione non porta il campo `team` sui suoi punti di zona (non dovrebbe succedere su dati aggiornati). */
+function raccogliEventiZonaPerSquadra(sessioni){
+  const out = {A:{recupero:[], persa:[]}, B:{recupero:[], persa:[]}};
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    const squadra = (p.team === "A" || p.team === "B") ? p.team : null;
+    if(!squadra) return;
+    (p.tipo==="recupero" ? out[squadra].recupero : out[squadra].persa).push(p);
+  }));
+  return out;
 }
 /** "Baricentro stimato" (03/09/2026, richiesta dell'utente): la posizione media in metri (asse X, 0=propria
  *  porta → 50=porta avversaria, stesso riferimento usato per le zone) di un elenco di eventi di
@@ -2651,7 +2667,7 @@ function renderIncroci(){
  *  altrimenti le due dashboard, entrambe sempre nel DOM, andrebbero in conflitto sugli stessi id). Gating
  *  esplicito, non un grafico vuoto: finché nessun file caricato include le coordinate, la sezione lo dice
  *  chiaramente invece di mostrare percentuali a zero che sembrerebbero un dato vero. */
-function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo){
+function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostraPerSquadra){
   const cont = $("#"+idContenitore);
   if(!cont) return;
   if(!stato.ds.haCoordinateZona){
@@ -2716,6 +2732,40 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo){
       cont.appendChild(cardTempo);
     }
   }
+  // Confronto tra le due squadre interne, solo in allenamento (richiesta esplicita dell'utente 03/09/2026):
+  // il grafico "totalità" qui sopra (A+B insieme) resta il dato più importante — vedi il commento su
+  // raccogliEventiZonaPerSquadra — questi quattro grafici più piccoli aggiungono la vista per singola
+  // squadra, utile per confrontare la tendenza di una partitella con l'altra.
+  if(mostraPerSquadra){
+    const perSquadra = raccogliEventiZonaPerSquadra(sessioni);
+    const haEntrambe = (perSquadra.A.recupero.length || perSquadra.A.persa.length) &&
+                        (perSquadra.B.recupero.length || perSquadra.B.persa.length);
+    if(haEntrambe){
+      const blocco = document.createElement("div");
+      blocco.style.marginTop = "16px";
+      blocco.innerHTML = `<div class="grafico-titolo" style="margin-bottom:10px">Recuperi e palle perse per squadra</div>
+        <div class="griglia g-2">
+          <div class="card"><div class="grafico-titolo">Recuperi — Squadra A</div>
+            <div class="grafico-sub">${nf0(perSquadra.A.recupero.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero-a" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Recuperi — Squadra B</div>
+            <div class="grafico-sub">${nf0(perSquadra.B.recupero.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero-b" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Palle perse — Squadra A</div>
+            <div class="grafico-sub">${nf0(perSquadra.A.persa.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa-a" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Palle perse — Squadra B</div>
+            <div class="grafico-sub">${nf0(perSquadra.B.persa.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa-b" width="480" height="288"></canvas></div></div>
+        </div>
+        <p class="nota-piccola" style="margin-top:8px">Stesso orientamento del grafico "totalità" qui sopra (propria porta a sinistra, porta avversaria a destra per ciascuna squadra) — utile per confrontare la tendenza di una squadra con l'altra, ma il dato più affidabile per capire dove la squadra recupera/perde palla in generale resta quello con entrambe le squadre insieme.</p>`;
+      cont.appendChild(blocco);
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-recupero-a"), perSquadra.A.recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-recupero-b"), perSquadra.B.recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-persa-a"), perSquadra.A.persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-persa-b"), perSquadra.B.persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+    }
+  }
 }
 
 /* --------- 9. Qualità dati --------- */
@@ -2755,7 +2805,7 @@ function render(){
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
   renderAllenamenti();
   renderIncroci();
-  renderZoneCampo("contenuto-zone-allenamento", f.allenamenti);
+  renderZoneCampo("contenuto-zone-allenamento", f.allenamenti, null, true);
   renderQualita();
   aggiornaSelettoriReport();
 }
@@ -3210,7 +3260,7 @@ function opzioniGraficoReport(extra={}){
  *  delle colonne X/Y è un'assunzione provvisoria). Non aggiunge nulla al report se non ci sono eventi con
  *  coordinate valide nel periodo — stesso criterio già usato per il possesso palla (vedi playbook punto 9):
  *  niente sezione vuota o "non disponibile" a stampa, semplicemente non compare finché non c'è il dato. */
-function zoneCampoReport(pagina, sessioni, perTempo){
+function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
   const {recupero, persa} = raccogliEventiZona(sessioni);
   if(!recupero.length && !persa.length) return;
   titoloSezioneReport(pagina, "Zone di recupero e palla persa");
@@ -3250,6 +3300,35 @@ function zoneCampoReport(pagina, sessioni, perTempo){
   aggiungiCampo("Zone di palla persa (%)", disegnaCampoZone, persa, Object.assign({}, optsBase, {colore:"#A13544"}));
   aggiungiCampo("Heatmap recuperi", disegnaCampoHeatmap, recupero, optsBase);
   aggiungiCampo("Heatmap palle perse", disegnaCampoHeatmap, persa, optsBase);
+  // Riquadro per-squadra (solo allenamenti): il grafico con la totalità sopra resta quello di riferimento,
+  // questo aggiunge solo il confronto di tendenza tra le due squadre — stesso orientamento (porta propria
+  // a sinistra, avversaria a destra per ciascuna squadra). Vedi playbook per la richiesta originale.
+  if(mostraPerSquadra){
+    const perSquadra = raccogliEventiZonaPerSquadra(sessioni);
+    const haEntrambe = (perSquadra.A.recupero.length || perSquadra.A.persa.length) &&
+                        (perSquadra.B.recupero.length || perSquadra.B.persa.length);
+    if(haEntrambe){
+      titoloSezioneReport(pagina, "Recuperi e palle perse per squadra");
+      bulletsReport(pagina, ["Stesso orientamento del grafico con la totalità qui sopra (propria porta a sinistra, avversaria a destra per ciascuna squadra) — utile per confrontare la tendenza di una squadra con l'altra; il dato più affidabile per capire dove si recupera/perde palla in generale resta quello con entrambe le squadre insieme."]);
+      const grigliaSquadra = document.createElement("div");
+      grigliaSquadra.className = "rp-campo-griglia";
+      pagina.corpo.appendChild(grigliaSquadra);
+      const aggiungiCampoSquadra = (titolo, punti, extraOpts) => {
+        const cella = document.createElement("div");
+        const etichetta = document.createElement("div");
+        etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+        cella.appendChild(etichetta);
+        const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+        const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+        wrap.appendChild(cv); cella.appendChild(wrap); grigliaSquadra.appendChild(cella);
+        disegnaCampoZone(cv, punti, extraOpts);
+      };
+      aggiungiCampoSquadra("Recuperi — Squadra A", perSquadra.A.recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+      aggiungiCampoSquadra("Recuperi — Squadra B", perSquadra.B.recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+      aggiungiCampoSquadra("Palle perse — Squadra A", perSquadra.A.persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+      aggiungiCampoSquadra("Palle perse — Squadra B", perSquadra.B.persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+    }
+  }
 }
 
 const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
@@ -3754,7 +3833,7 @@ async function generaReportAllenamentoPeriodo(da, a){
       graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
         {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
       ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}}}})});
-      zoneCampoReport(pag, periodoCorr.allenamenti);
+      zoneCampoReport(pag, periodoCorr.allenamenti, false, true);
     },
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
