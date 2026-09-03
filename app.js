@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.17.1",
+  numero: "1.17.2",
   data: "2026-09-03",
-  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato)."
+  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato). Corrette anche due segnalazioni sulla Dashboard Allenamento: (1) l'indice di carico di stanchezza stimato risultava \"Alto\" per quasi tutta la rosa dopo un solo allenamento — non tarato per un campione così piccolo; ora richiede almeno 4 allenamenti con statistiche di gioco nel periodo scelto e almeno 2 per il singolo giocatore prima di classificare Alto/Medio/Basso, mostrando \"n/d\" con una nota esplicita quando il campione non basta; (2) aggiunta un'etichetta \"Porta propria\"/\"Porta avversaria\" su tutti i grafici a campo (zone e heatmap, dashboard e report): la porta avversaria è sempre a destra, sia in partita sia in allenamento con due squadre interne, perché le coordinate sono già normalizzate dal punto di vista di chi compie l'azione."
 };
 
 /* =====================================================================
@@ -621,6 +621,26 @@ function disegnaSagomaCampo(ctx, w, h, coloreLinee){
   ctx.strokeRect(w-areaW-ctx.lineWidth, (h-areaH)/2, areaW, areaH);
   ctx.restore();
 }
+/** Etichette "Porta propria"/"Porta avversaria" lungo il bordo inferiore del campo — richiesta esplicita
+ *  dell'utente (03/09/2026): senza un'indicazione esplicita non si capisce guardando il grafico quale lato
+ *  è la propria porta e quale quella avversaria. Le coordinate X che alimentano questi grafici sono già,
+ *  per ogni evento, normalizzate dal punto di vista di chi lo compie (0 = propria porta, 50 = porta
+ *  avversaria — verificato sui dati reali al punto 24 del playbook), quindi disegnare X=0 sempre a sinistra
+ *  e X=50 sempre a destra basta a dare UN SOLO orientamento coerente per tutti gli eventi disegnati insieme
+ *  — anche in allenamento con due squadre interne che in realtà giocano verso porte fisiche opposte (la
+ *  richiesta dell'utente di "un solo lato, tralasciando la porta attaccata dalle due squadre" è quindi già
+ *  soddisfatta dal dato stesso: qui serve solo rendere esplicito quale lato è quale). Porta avversaria a
+ *  destra, come richiesto esplicitamente dall'utente, sia per le partite sia per gli allenamenti. */
+function disegnaEtichettePorte(ctx, w, h, coloreTesto){
+  ctx.save();
+  ctx.font = `600 ${Math.max(10, Math.round(h*0.042))}px Satoshi, system-ui, sans-serif`;
+  ctx.fillStyle = coloreTesto;
+  ctx.textBaseline = "bottom";
+  const yBase = h - h*0.015, pad = w*0.018;
+  ctx.textAlign = "left"; ctx.fillText("‹ Porta propria", pad, yBase);
+  ctx.textAlign = "right"; ctx.fillText("Porta avversaria ›", w-pad, yBase);
+  ctx.restore();
+}
 /** Grafico a 9 zone (griglia 3×3) con la percentuale di eventi in ciascuna, colorata dal più chiaro (zona
  *  fredda) al colore pieno (zona con più eventi in proporzione alle altre). `opts`: {sfondo, lineaCampo,
  *  testo, testoChiaro, colore} — `colore` è l'hex della scala usata per questo grafico. */
@@ -648,6 +668,7 @@ function disegnaCampoZone(canvas, punti, opts){
     ctx.beginPath(); ctx.moveTo(0,i*h/3); ctx.lineTo(w,i*h/3); ctx.stroke();
   }
   disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
 }
 /** Heatmap vera e propria (non solo la griglia a zone): ogni evento disegna un alone sfumato sul campo
  *  su un canvas offscreen, che si accumula dove più eventi cadono vicini; l'intensità accumulata viene poi
@@ -691,6 +712,7 @@ function disegnaCampoHeatmap(canvas, punti, opts){
     ctx.putImageData(out, 0, 0);
   }
   disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
 }
 
 /* =====================================================================
@@ -1333,21 +1355,43 @@ function datiAllenamentoIntervallo(da, a){
   };
 }
 
+/** Sotto questa soglia di allenamenti-con-statistiche-di-gioco nel periodo scelto, l'indice sotto non
+ *  classifica più nessuno come Alto/Basso (mostra "n/d" per tutti) — vedi il commento sopra
+ *  stimaCaricoStanchezza per il motivo. Valori scelti da me, non richiesti esplicitamente dall'utente:
+ *  ragionevoli per un'amatoriale che si allena 1-2 volte a settimana, ma tarabili se servisse diversamente. */
+const CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA = 4;
+const CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE = 2;
 /** Stima un indice di carico/stanchezza SENZA un vero dato RPE (che oggi non è disponibile, vedi
  *  ds.haRPE): combina quanto spesso un giocatore è presente agli allenamenti con quanti minuti gioca
  *  davvero nelle partitelle (l'unico dato di volume/intensità reale che i file contengono oggi). È un
  *  PROXY dichiarato, non un vero carico sRPE — due giocatori con lo stesso minutaggio risultano con lo
  *  stesso indice anche se uno si allena più intensamente. Peso maggiore (70%) al volume di minuti
  *  giocati, che è il segnale più diretto di carico fisico reale; peso minore (30%) alla sola frequenza
- *  di presenza, che conta come esposizione ma non misura l'intensità. */
+ *  di presenza, che conta come esposizione ma non misura l'intensità.
+ *  Bug segnalato dall'utente il 03/09/2026: con un solo allenamento nel periodo scelto, quasi tutta la
+ *  rosa risultava "Alto" — non perché fossero davvero più carichi, ma solo perché confrontare un
+ *  giocatore contro la MEDIA DELLA SQADRA in quello stesso, unico allenamento è statisticamente fragile:
+ *  bastano un paio di giocatori entrati poco o rimasti in panchina per abbassare la media e far
+ *  risultare "sopra media" chiunque abbia giocato una seduta normale. L'utente si aspetta un "Alto" solo
+ *  dopo MOLTI allenamenti con carico alto, non da un singolo dato. Corretto imponendo due soglie minime,
+ *  sotto le quali il livello resta "n/d" invece di un'etichetta fuorviante: (1) la squadra nel suo
+ *  insieme deve avere almeno CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA allenamenti con statistiche di
+ *  gioco nel periodo, altrimenti la media di confronto stessa non è affidabile; (2) il singolo giocatore
+ *  deve averne giocate almeno CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE, altrimenti il suo indice
+ *  riflette una sola seduta isolata, non una tendenza. */
 function stimaCaricoStanchezza(righeAllenamento, statAllenamentoPeriodo){
   const minutiPerGiocatore = new Map();
+  const sessioniPerGiocatore = new Map();
   statAllenamentoPeriodo.forEach(r => {
     minutiPerGiocatore.set(r.Giocatore, (minutiPerGiocatore.get(r.Giocatore)||0) + N(r.Minuti_Giocati));
+    if(!sessioniPerGiocatore.has(r.Giocatore)) sessioniPerGiocatore.set(r.Giocatore, new Set());
+    sessioniPerGiocatore.get(r.Giocatore).add(r.Sessione_ID);
   });
+  const sessioniConStatNelPeriodo = new Set(statAllenamentoPeriodo.map(r=>r.Sessione_ID)).size;
   const righe = righeAllenamento.map(r => ({
     Giocatore: r.Giocatore, Sessioni_Presenti: r.Sessioni_Presenti, Sessioni_Totali: r.Sessioni_Totali,
-    Tasso_Presenza_pct: r.Tasso_Presenza_pct, Minuti_Partitelle: minutiPerGiocatore.get(r.Giocatore) || 0
+    Tasso_Presenza_pct: r.Tasso_Presenza_pct, Minuti_Partitelle: minutiPerGiocatore.get(r.Giocatore) || 0,
+    Sessioni_Con_Stat: sessioniPerGiocatore.get(r.Giocatore) ? sessioniPerGiocatore.get(r.Giocatore).size : 0
   }));
   const maxMinuti = Math.max(1, ...righe.map(r=>r.Minuti_Partitelle));
   righe.forEach(r => {
@@ -1355,10 +1399,13 @@ function stimaCaricoStanchezza(righeAllenamento, statAllenamentoPeriodo){
     r.Indice_Stanchezza = Math.round(normMinuti*0.7 + (r.Tasso_Presenza_pct??0)*0.3);
   });
   const mediaIndice = righe.length ? righe.reduce((a,r)=>a+r.Indice_Stanchezza,0)/righe.length : 0;
+  const campioneSquadraSufficiente = sessioniConStatNelPeriodo >= CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA;
   righe.forEach(r => {
-    r.Livello_Stanchezza = mediaIndice<=0 ? "n/d" : (r.Indice_Stanchezza >= mediaIndice*1.2 ? "Alto" : r.Indice_Stanchezza <= mediaIndice*0.8 ? "Basso" : "Medio");
+    const campioneGiocatoreSufficiente = r.Sessioni_Con_Stat >= CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE;
+    r.Livello_Stanchezza = (mediaIndice<=0 || !campioneSquadraSufficiente || !campioneGiocatoreSufficiente)
+      ? "n/d" : (r.Indice_Stanchezza >= mediaIndice*1.2 ? "Alto" : r.Indice_Stanchezza <= mediaIndice*0.8 ? "Basso" : "Medio");
   });
-  return righe.sort((a,b)=>b.Indice_Stanchezza - a.Indice_Stanchezza);
+  return {righe: righe.sort((a,b)=>b.Indice_Stanchezza - a.Indice_Stanchezza), sessioniConStatNelPeriodo, campioneSquadraSufficiente};
 }
 
 /** Indice prestazione medio di un giocatore in un dato mese, sulle sole partite di quel mese. */
@@ -2477,8 +2524,10 @@ function renderAllenamenti(){
     }
   });
   // Carico di stanchezza stimato senza RPE reale (presenza + minuti nelle partitelle): vedi
-  // stimaCaricoStanchezza per i dettagli del calcolo e i limiti dichiarati.
-  const stanchezza = stimaCaricoStanchezza(righe, f.statAllenamento);
+  // stimaCaricoStanchezza per i dettagli del calcolo, le due soglie minime introdotte il 03/09/2026 e i
+  // limiti dichiarati.
+  const stimaStanchezza = stimaCaricoStanchezza(righe, f.statAllenamento);
+  const stanchezza = stimaStanchezza.righe;
   const classeLivello = l => l==="Alto" ? "neg" : l==="Basso" ? "pos" : "neu";
 
   const avvisi = [];
@@ -2486,6 +2535,8 @@ function renderAllenamenti(){
     testo:`<strong>${esc(r.Giocatore)}</strong> ha un carico di stanchezza stimato alto in questo periodo: frequenza di presenza e minuti nelle partitelle sopra la media della squadra.`}));
   picchi.forEach(p => avvisi.push({tipo:"attenzione",
     testo:`Carico di <strong>${esc(p.g)}</strong>: da ${nf0(p.prec)} a ${nf0(p.curr)} unità sRPE tra ${meseBreve(p.da)} e ${meseBreve(p.a)}, cioè ${nf(p.rapporto,1)} volte tanto.`}));
+  if(!stimaStanchezza.campioneSquadraSufficiente) avvisi.push({tipo:"ok",
+    testo:`Il confronto Alto/Medio/Basso richiede almeno ${CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA} allenamenti con statistiche di gioco nel periodo scelto (ce ne sono ${nf0(stimaStanchezza.sessioniConStatNelPeriodo)}): con poche sedute, un solo giocatore uscito prima o rimasto in panchina basta a sballare la media della squadra, quindi qui sotto tutti restano "n/d". Allarga il periodo o attendi altri allenamenti.`});
   if(avvisi.length === 0) avvisi.push({tipo:"ok", testo: haRPE
     ? "Nessun carico di stanchezza stimato alto e nessun salto di carico sRPE pari o superiore a 1,5 volte tra un mese e l'altro."
     : "Nessun carico di stanchezza stimato alto in questo periodo."});
@@ -3603,7 +3654,7 @@ async function generaReportAllenamentoPeriodo(da, a){
   // Carico di stanchezza stimato (presenza + minuti in partitelle, senza RPE reale): vedi
   // stimaCaricoStanchezza. Usato anche come criterio "da tenere d'occhio" quando l'RPE non c'è, al posto
   // della semplice presenza più bassa usata in una versione precedente di questo report.
-  const stanchezza = stimaCaricoStanchezza(righeAllen, periodoCorr.statAllenamento);
+  const stanchezza = stimaCaricoStanchezza(righeAllen, periodoCorr.statAllenamento).righe;
   const livelloStanchezzaDi = new Map(stanchezza.map(r => [r.Giocatore, r.Livello_Stanchezza]));
   const piuCaricoGiocatore = haRPE
     ? righeAllen.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot)[0]
