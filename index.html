@@ -119,6 +119,8 @@ html[data-tema="scuro"] .kpi-valore{color:var(--primary-hover)}
 /* ---------- grafici ---------- */
 .grafico-wrap{position:relative; width:100%; height:260px}
 .grafico-wrap.alto{height:320px}
+.grafico-wrap-campo{position:relative; width:100%; aspect-ratio:5/3}
+.grafico-wrap-campo canvas{width:100%; height:100%; display:block; border-radius:8px}
 .grafico-titolo{font-size:14.5px; font-weight:700; margin-bottom:2px}
 .grafico-sub{font-size:12.5px; color:var(--muted); margin-bottom:12px}
 
@@ -248,6 +250,10 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-flag-riga{font-size:12.5px; color:#28251D; padding:7px 0; border-bottom:1px solid #EDEBE4; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .rp-flag-riga:last-child{border-bottom:none}
 .rp-chart-wrap{width:100%; height:230px; position:relative; margin-bottom:6px}
+.rp-campo-griglia{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px}
+.rp-campo-etichetta{font-size:11px; font-weight:700; color:#28251D; margin-bottom:5px}
+.rp-campo-wrap{width:100%; aspect-ratio:5/3; position:relative}
+.rp-campo-wrap canvas{width:100%; height:100%; display:block; border-radius:6px}
 
 /* ---------- report stile "CV": colonna laterale scura + fascia colorata ---------- */
 .rp-page.rp2-page{padding:0; display:flex; align-items:flex-start}
@@ -373,14 +379,16 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-classifica" data-tab="partita">Classifica giocatori</a>
     <a href="#sez-tendenze" data-tab="partita">Tendenze individuali</a>
     <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
+    <a href="#sez-zone-partita" data-tab="partita">Zone recupero/palla persa</a>
     <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
     <a href="#sez-classifica-stat-allenamento" data-tab="allenamento">Classifica da allenamento</a>
     <a href="#sez-tendenze-stat-allenamento" data-tab="allenamento">Tendenze da allenamento</a>
-    <a href="#sez-allenamenti" data-tab="allenamento">Presenze e carico</a>
+    <a href="#sez-allenamenti" data-tab="allenamento">Carico e stanchezza</a>
     <a href="#sez-incroci" data-tab="allenamento">Segnali incrociati</a>
-    <a href="#sez-report-allenamento" data-tab="allenamento">Report Mensile</a>
+    <a href="#sez-zone-allenamento" data-tab="allenamento">Zone recupero/palla persa</a>
+    <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
     <a href="#sez-confronto" data-tab="giocatori">Confronto giocatori</a>
@@ -466,6 +474,13 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div id="contenuto-convocazioni"></div>
     </section>
 
+    <!-- 6b2. ZONE DI RECUPERO E PALLA PERSA -->
+    <section id="sez-zone-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">06</span><h2>Zone di recupero e palla persa</h2></div>
+      <p class="sez-desc">Su richiesta del mister: in quali zone del campo avvengono i recuperi e le palle perse, sul periodo selezionato in alto. Richiede che i file caricati includano la posizione (coordinate X/Y) di questi eventi — un dato che Seven Lab non esporta ancora oggi.</p>
+      <div id="contenuto-zone-partita"></div>
+    </section>
+
     <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) -->
     <section id="sez-report-partita" data-tab-sezione="partita">
       <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
@@ -515,8 +530,18 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 
     <!-- 8. ALLENAMENTI -->
     <section id="sez-allenamenti" data-tab-sezione="allenamento">
-      <div class="sez-testa"><span class="sez-num">05</span><h2>Allenamenti: presenze e carico</h2></div>
-      <p class="sez-desc">Il carico è calcolato con il metodo session-RPE (minuti × RPE percepito): un valore soggettivo che il giocatore o lo staff assegnano a fine seduta, senza bisogno di GPS, cardiofrequenzimetri o altri dispositivi biometrici. Sono segnalati i giocatori sotto il 60% di presenza e gli aumenti di carico pari o superiori a 1,5 volte da un mese all'altro: sono segnali da valutare con lo staff, non diagnosi.</p>
+      <div class="sez-testa"><span class="sez-num">05</span><h2>Carico di allenamento e stanchezza stimata</h2></div>
+      <p class="sez-desc">Il carico vero si calcola con il metodo session-RPE (minuti × RPE percepito, un valore soggettivo che il giocatore o lo staff assegnano a fine seduta): quando è disponibile lo vedi qui sotto. Le presenze non compaiono più a schermo — restano solo nel Report PDF, per lo staff — mentre qui trovi una stima di chi accumula più carico, incrociando quanto spesso un giocatore è presente con quanti minuti gioca davvero nelle partitelle. Il periodo qui sotto è indipendente dal filtro Periodo in alto.</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; max-width:420px; margin-bottom:14px">
+        <div class="campo" style="flex:1; min-width:150px">
+          <label for="sel-all-da">Da</label>
+          <select id="sel-all-da"><option value="">Inizio stagione</option></select>
+        </div>
+        <div class="campo" style="flex:1; min-width:150px">
+          <label for="sel-all-a">A</label>
+          <select id="sel-all-a"><option value="">Fine stagione</option></select>
+        </div>
+      </div>
       <div id="contenuto-allenamenti"></div>
     </section>
 
@@ -527,19 +552,31 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div id="contenuto-incroci"></div>
     </section>
 
-    <!-- 8c. REPORT MENSILE ALLENAMENTI (export PDF) -->
+    <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->
+    <section id="sez-zone-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di recupero e palla persa (allenamento)</h2></div>
+      <p class="sez-desc">Le stesse zone di recupero e palla persa, calcolate sulle partitelle di allenamento nel periodo selezionato in alto (Team A/B interni contano entrambi, sono comunque tuoi giocatori). Richiede la posizione (coordinate X/Y) di questi eventi nei file caricati.</p>
+      <div id="contenuto-zone-allenamento"></div>
+    </section>
+
+    <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
     <section id="sez-report-allenamento" data-tab-sezione="allenamento">
-      <div class="sez-testa"><h2>Report PDF: mensile allenamenti</h2></div>
-      <p class="sez-desc">Il report mensile degli allenamenti, sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="sez-testa"><h2>Report PDF: allenamenti</h2></div>
+      <p class="sez-desc">Il report di un periodo a tua scelta — un mese solo o un arco più ampio, lascia vuoto Da/A per tutta la stagione — e il report della stagione intera, sempre aggiornati. Includono anche le presenze per giocatore, che non compaiono più nella dashboard a schermo qui sopra. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
       <div class="card">
         <div class="report-toolbar">
           <div class="campo">
-            <label for="rp-sel-mese">Mese allenamenti</label>
-            <select id="rp-sel-mese"></select>
+            <label for="rp-sel-all-da">Da</label>
+            <select id="rp-sel-all-da"><option value="">Inizio stagione</option></select>
           </div>
-          <button class="btn primario" id="rp-btn-mensile">Scarica Report Mensile</button>
+          <div class="campo">
+            <label for="rp-sel-all-a">A</label>
+            <select id="rp-sel-all-a"><option value="">Fine stagione</option></select>
+          </div>
+          <button class="btn primario" id="rp-btn-periodo-allenamento">Scarica Report Periodo</button>
+          <button class="btn primario" id="rp-btn-stagionale-allenamento" style="margin-left:18px">Scarica Report Stagionale</button>
         </div>
-        <div class="report-status" id="rp-stato-allenamento">Scegli un mese: il PDF viene generato e scaricato sul tuo dispositivo.</div>
+        <div class="report-status" id="rp-stato-allenamento">Scegli un periodo (o lascia Da/A vuoti per tutta la stagione): il PDF viene generato e scaricato sul tuo dispositivo.</div>
       </div>
     </section>
 

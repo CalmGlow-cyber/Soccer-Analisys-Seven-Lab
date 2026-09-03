@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.13.0",
-  data: "2026-09-01",
-  note: "Sistemata l'impaginazione dei 4 report PDF (Partita, Mensile, Stagionale, Confronto), finora davvero problematica su contenuti lunghi. Ora ogni pagina A4 mostra tutto quello che ci sta, il resto continua automaticamente sui fogli successivi (pagina 3, 4, 5… quante ne servono) con lo stesso stile grafico. Corretti tre problemi concreti trovati testando a fondo: 1) la fascia laterale scura a volte si allungava fino a diventare un rettangolo vuoto su più pagine; 2) il piè di pagina (numero pagina) a volte mancava sui fogli intermedi o riportava un totale sbagliato — ora compare corretto su ogni pagina fisica del PDF; 3) un errore di conversione nei calcoli interni poteva far traboccare il contenuto oltre il bordo del foglio A4. Verificato con test automatizzati su tutti e 4 i tipi di report, sia con dati minimi che con stagioni intere (15+ partite, 22 giocatori)."
+  numero: "1.17.1",
+  data: "2026-09-03",
+  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato)."
 };
 
 /* =====================================================================
@@ -33,6 +33,40 @@ const pctTxt = (v, d=1) => (v===null||v===undefined||!isFinite(v)) ? "—" : nf(
 const MESI_IT = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 function meseLabel(m){ if(!m) return "—"; const [a,me]=m.split("-"); return MESI_IT[parseInt(me,10)-1]+" "+a; }
 function meseBreve(m){ if(!m) return "—"; const [,me]=m.split("-"); return MESI_IT[parseInt(me,10)-1]; }
+/** Sposta una chiave mese "YYYY-MM" di n mesi (n può essere negativo). Usato per calcolare il periodo
+ *  precedente "equivalente" quando il periodo scelto per gli allenamenti è un arco di più mesi, non un
+ *  singolo mese: es. se scelgo aprile-giugno (3 mesi), il periodo precedente equivalente sono i 3 mesi
+ *  immediatamente prima, gennaio-marzo, calcolati sul calendario indipendentemente da dove ci sono dati. */
+function meseAggiungi(m, n){
+  const [a,me] = m.split("-").map(Number);
+  const d = new Date(a, (me-1)+n, 1);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+/** true se il mese m (chiave "YYYY-MM") cade nell'intervallo [da,a] incluso; da/a null = nessun limite
+ *  su quel lato (da null e a null insieme = "tutta la stagione"). */
+function meseNelPeriodo(m, da, a){
+  if(!m) return false;
+  if(da && m < da) return false;
+  if(a && m > a) return false;
+  return true;
+}
+/** Etichetta leggibile per un periodo allenamenti: un solo mese, un arco di mesi, o tutta la stagione. */
+function etichettaPeriodoAllenamento(da, a){
+  if(!da && !a) return "Tutta la stagione";
+  if(da === a) return meseLabel(da);
+  if(!da) return "Fino a " + meseLabel(a);
+  if(!a) return "Da " + meseLabel(da);
+  return meseLabel(da) + " – " + meseLabel(a);
+}
+/** Calcola il periodo precedente "equivalente" (stessa durata in mesi di calendario, subito prima) a un
+ *  periodo [da,a] scelto per gli allenamenti. Restituisce null se non c'è un periodo precedente sensato
+ *  (periodo "tutta la stagione", oppure da/a mancanti). */
+function periodoAllenamentoPrecedente(da, a){
+  if(!da || !a) return null;
+  const [ya,ma] = da.split("-").map(Number), [yb,mb] = a.split("-").map(Number);
+  const durataMesi = (yb*12+mb) - (ya*12+ma) + 1;
+  return {da: meseAggiungi(da, -durataMesi), a: meseAggiungi(da, -1)};
+}
 function dataLabel(d){
   if(!(d instanceof Date) || isNaN(d)) return "—";
   return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
@@ -186,7 +220,20 @@ function parsaFileSevenLab(testo){
     };
   }
 
-  return {tipo, meta, righe, eventi, riepilogoTempi};
+  // Sezione "DATI SPAZIALI" (comparsa per la prima volta in un file reale il 02/09/2026, allenamento_3.csv):
+  // una riga per ogni evento di Recupero/Palla persa con posizione registrata sul campo, del tutto separata
+  // dalla timeline eventi — non colonne X/Y aggiunte lì come inizialmente ipotizzato. Vedi il blocco "ZONE DI
+  // RECUPERO E PALLA PERSA" più sotto per come viene usata.
+  let datiSpaziali = null;
+  const titoloSpaziale = Object.keys(sezioni).find(t => /dati.*spazial/i.test(t));
+  if(titoloSpaziale && sezioni[titoloSpaziale].length){
+    const [intSpaziale, ...righeSpaziale] = sezioni[titoloSpaziale];
+    datiSpaziali = righeSpaziale.map(campi => {
+      const obj = {}; intSpaziale.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  return {tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali};
 }
 
 /** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
@@ -209,7 +256,7 @@ function aggiungiSessioneDaTesto(nomeFile, testo){
   const parsed = parsaFileSevenLab(testo);
   const id = idDaNomeFile(nomeFile);
   const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
-    righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi};
+    righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali};
   const attuali = leggiSessioniSalvate();
   const idx = attuali.findIndex(s => s.id === id);
   if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
@@ -242,11 +289,16 @@ function classificaEventoSevenLab(tipoGrezzo){
   if(/^gol$/.test(t)) return {type:"GOAL", outcome:null}; // "Gol subito" è dell'avversario (Team B), già escluso a monte
   return null; // Assist, Parata, Gol subito, ecc: fuori dal vocabolario dell'algoritmo, ignorati qui
 }
-/** Stessa logica di classificaEventoSevenLab ma per una riga del formato nuovo (colonne one-hot). Un gol
- *  segnato su rigore/punizione/corner NON accende anche la colonna generica "Gol" (verificato sui dati
- *  reali del 25/08/2026): li trattiamo comunque come GOAL ai fini del possesso, per chiudere la sequenza
- *  come previsto dalla specifica (closeOnGoal) — da riconfermare quando arriverà un gol "normale" su azione
- *  aperta, che nei file visti finora non è ancora comparso con la colonna "Gol" valorizzata. */
+/** Stessa logica di classificaEventoSevenLab ma per una riga del formato nuovo (colonne one-hot).
+ *  Aggiornato il 03/09/2026 sul primo file di partita reale con avversario vero (partita_2.csv): la vecchia
+ *  nota qui sotto ("un gol su rigore/punizione/corner NON accende anche Gol", dedotta dai dati del
+ *  25/08/2026) si è rivelata sbagliata — un gol da rigore ha acceso ENTRAMBI i flag, su due righe distinte
+ *  della timeline a pochi secondi di distanza (confermato: 5 "Gol fatti" dichiarati nei metadati = esattamente
+ *  5 righe con "Gol"=1 nel file, la sesta era la riga "Rigore segnato" separata per lo stesso gol). La
+ *  colonna "Gol" generica si è quindi vista accendersi correttamente anche su gol da azione aperta (i 4
+ *  senza flag rigore/punizione/corner) — la domanda aperta del punto 11 del playbook è risolta. Il flag
+ *  rigore/punizione/corner resta comunque qui come rete di sicurezza per file dove "Gol" non si accendesse;
+ *  la deduplica del doppio conteggio che ne risulta è gestita più sotto, in eventiPossessoDaSessione(). */
 function classificaEventoRigaNuovoFormato(riga){
   const f = k => riga[k] === "1";
   if(f("Passaggio corretto")) return {type:"PASS", outcome:"SUCCESS"};
@@ -355,11 +407,20 @@ function calcolaRecuperiSevenLab(periodi){
  *  solo gli eventi della nostra squadra (Team "A") e solo i tipi che l'algoritmo sa interpretare, in
  *  qualunque dei due formati Seven Lab si trovino (vedi normalizzaEventiSevenLab). Se viene rilevata una
  *  pausa, inserisce anche i marcatori PERIOD_END/PERIOD_START che il motore usa per non far proseguire un
- *  possesso aperto oltre l'intervallo. */
+ *  possesso aperto oltre l'intervallo.
+ *  Bug scoperto sul primo file di partita reale con avversario vero (partita_2.csv, 03/09/2026): un gol
+ *  segnato su rigore/punizione/corner accende SIA il flag specifico (es. "Rigore segnato") SIA, su una riga
+ *  distinta della timeline pochi secondi dopo, il flag generico "Gol" — le due righe sono lo stesso gol reale
+ *  ma classificaEventoRigaNuovoFormato() le classifica indipendentemente, producendo due eventi GOAL invece
+ *  di uno solo (confermato: 6 GOAL classificati contro 5 "Gol fatti" dichiarati nei metadati del file).
+ *  Senza deduplica, l'algoritmo di possesso conta un "possesso" fantasma in più (chiude una sequenza sul
+ *  primo GOAL, poi ne apre e richiude una seconda di durata zero sul secondo GOAL pochi secondi dopo),
+ *  gonfiando "Possessi rilevati" nel Report Partita. Dedup: per lo stesso giocatore, tiene solo il primo
+ *  evento GOAL entro una finestra di 15 secondi, scarta gli altri. */
 function eventiPossessoDaSessione(sessione){
   if(!sessione || !Array.isArray(sessione.eventi)) return [];
   const {eventi, periodi} = normalizzaEventiSevenLab(sessione);
-  const base = eventi
+  const grezzi = eventi
     .filter(e => String(e.raw.Team||"").trim().toUpperCase() === "A")
     .map(e => {
       const cls = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
@@ -368,6 +429,16 @@ function eventiPossessoDaSessione(sessione){
         outcome: cls.outcome, teamId:"noi", playerId: e.raw.Giocatore || null, period: e.periodo};
     })
     .filter(Boolean);
+  const FINESTRA_DEDUP_GOAL_SEC = 15;
+  const base = [];
+  grezzi.forEach(e => {
+    if(e.type === "GOAL"){
+      const doppione = base.find(x => x.type === "GOAL" && x.playerId === e.playerId &&
+        Math.abs(x.timestampSec - e.timestampSec) <= FINESTRA_DEDUP_GOAL_SEC);
+      if(doppione) return; // stesso gol già contato una volta
+    }
+    base.push(e);
+  });
   if(!periodi.haPausa || periodi.tempo1FineSec===null) return base; // tempo unico: comportamento invariato
   return [...base,
     {id: sessione.id+"-fine-t1", timestampSec: periodi.tempo1FineSec, type:"PERIOD_END", outcome:null, teamId:"noi", playerId:null, period:1},
@@ -379,6 +450,247 @@ function eventiPossessoDaSessione(sessione){
 function analizzaEventiPartitaSevenLab(sessione){
   const {periodi} = normalizzaEventiSevenLab(sessione);
   return {eventiSquadra: eventiPossessoDaSessione(sessione), periodi, recuperi: calcolaRecuperiSevenLab(periodi)};
+}
+
+/* =====================================================================
+   ZONE DI RECUPERO E PALLA PERSA (coordinate X/Y sul campo, 02/09/2026)
+   Richiesta esplicita dell'utente, su indicazione del mister: sapere IN QUALE ZONA del campo avvengono i
+   recuperi e le palle perse, sia in partita sia in allenamento (partitelle) — non solo quanti sono.
+   FORMATO CONFERMATO su un file reale (allenamento_3.csv, ricevuto il 02/09/2026) — corregge l'assunzione
+   iniziale (colonne "X"/"Y" dentro la timeline eventi), rivelatasi sbagliata. Seven Lab scrive invece una
+   sezione tutta a sé, "DATI SPAZIALI" (parsata in parsaFileSevenLab, vedi sopra), con una riga per ogni
+   evento di Recupero/Palla persa che ha una posizione: colonne "Tipo evento" ("Recupero"/"Palla persa"),
+   "Giocatore", "Team" (A/B), "X metri"/"Y metri" (coordinate in metri — confermato un campo 50×30, come
+   già assunto), più "X %"/"Y %" (le stesse coordinate già convertite in percentuale, non usate qui),
+   "Terzo campo" (difensivo/centrale/offensivo) e "Fascia" (sinistra/centro/destra) — Seven Lab stessa
+   calcola già una griglia 3×3 equivalente alla nostra, utile come controllo incrociato ma non necessaria:
+   ricalcoliamo la zona dalle coordinate in metri, così restiamo coerenti anche se in futuro cambiassero
+   queste etichette. "Evento collegato"/"Nessun recupero" (id di abbinamento fra una palla persa e il
+   recupero avversario corrispondente) non sono ancora usati — utile spunto per un'analisi futura sulle
+   transizioni, non richiesta oggi. Se Seven Lab cambierà ancora nomi di colonna o unità di misura, basta
+   aggiornare estraiEventiZonaDaSessione qui sotto: il resto (calcolo zone, disegno, dashboard, report)
+   resta valido. */
+const CAMPO_LUNGHEZZA_M = 50, CAMPO_LARGHEZZA_M = 30;
+function coordinataValida(v){
+  if(v===null || v===undefined || v==="") return null;
+  const n = parseFloat(String(v).replace(",", "."));
+  return Number.isFinite(n) ? n : null;
+}
+/** Estrae, dalla sezione "DATI SPAZIALI" di una sessione (partita o allenamento), i punti
+ *  {tipo, x, y, giocatore} di Recupero/Palla persa con coordinate valide. `soloSquadraA`: per le partite
+ *  tiene solo gli eventi della propria squadra (Team "A", stesso filtro usato dal possesso, vedi
+ *  eventiPossessoDaSessione) — la squadra "B" nei file partita è l'avversario, i suoi recuperi/palle perse
+ *  non sono nostri dati da graficare. Per gli allenamenti (partitelle 7 contro 7 interne — Team A/B sono
+ *  due squadre interne, entrambe sue, vedi punto 11 del playbook) NON filtra per squadra: contano i
+ *  recuperi/palle perse di ogni giocatore. */
+/** Come estraiEventiZonaDaSessione, ma senza filtro squadra e con `team` incluso in ogni punto — usata solo
+ *  da estraiEventiZonaDaSessione stessa e da assegnaPeriodoEventiZona (più sotto), che ha bisogno di sapere
+ *  la squadra per costruire la chiave di abbinamento con la TIMELINE EVENTI. Tenuta separata per non
+ *  cambiare la forma dei punti restituiti da estraiEventiZonaDaSessione (usata ovunque altro), evitando
+ *  ogni rischio di regressione sulle zone/heatmap già in produzione. */
+function estraiEventiZonaGrezzi(sessione){
+  const righe = (sessione && Array.isArray(sessione.datiSpaziali)) ? sessione.datiSpaziali : [];
+  const punti = [];
+  righe.forEach(r => {
+    const tipoEvento = String(r["Tipo evento"]||"").trim().toLowerCase();
+    let tipo = null;
+    if(tipoEvento === "recupero") tipo = "recupero";
+    else if(tipoEvento === "palla persa") tipo = "persa";
+    else return;
+    // Nomi colonna X/Y: "normalizzati" (0=porta propria del giocatore che compie l'azione, 50=porta
+    // avversaria — coerente con "Terzo campo"/"Fascia" che Seven Lab scrive nello stesso file, verificato di
+    // nuovo su allenamento_4.csv) è il nome usato dal 03/09/2026 in poi; "X metri"/"Y metri" (senza
+    // "normalizzati") resta come ripiego per non rompere il primo file reale visto (allenamento_3.csv,
+    // punto 24), che usava ancora quel nome. "X/Y campo fisica" (stesso file, coordinate sullo stesso
+    // riferimento fisico per entrambe le squadre, utile in futuro per un'unica vista di campo con A e B
+    // insieme) non è ancora usato qui.
+    const xGrezza = r["X metri normalizzati"] !== undefined ? r["X metri normalizzati"] : r["X metri"];
+    const yGrezza = r["Y metri normalizzati"] !== undefined ? r["Y metri normalizzati"] : r["Y metri"];
+    const x = coordinataValida(xGrezza), y = coordinataValida(yGrezza);
+    if(x===null || y===null) return;
+    punti.push({tipo, x, y, giocatore: r["Giocatore"] || null, team: String(r["Team"]||"").trim().toUpperCase()});
+  });
+  return punti;
+}
+function estraiEventiZonaDaSessione(sessione, soloSquadraA){
+  return estraiEventiZonaGrezzi(sessione)
+    .filter(p => !(soloSquadraA && p.team === "B"))
+    .map(p => ({tipo:p.tipo, x:p.x, y:p.y, giocatore:p.giocatore}));
+}
+/** Abbina ogni punto di zona (DATI SPAZIALI: ha la posizione ma non il tempo) al periodo (1° o 2° tempo)
+ *  del suo evento corrispondente nella TIMELINE EVENTI (ha il tempo ma non la posizione) — richiesta
+ *  dell'utente del 03/09/2026 (vedi playbook punto 25) per vedere se il baricentro di recupero si sposta
+ *  col passare della partita. Non esiste un identificativo comune fra le due sezioni: l'abbinamento è per
+ *  giocatore + squadra + tipo evento, nello stesso ordine di comparizione in ciascuna sezione (assunto lo
+ *  stesso ordine cronologico in entrambe, ragionevole perché Seven Lab scrive entrambe le sezioni mano a
+ *  mano che gli eventi accadono dal vivo) — un abbinamento per posizione in coda, non per un id preciso, che
+ *  può quindi sbagliare in rari casi limite (es. la stessa coppia giocatore/squadra/tipo capita più volte
+ *  molto ravvicinata e le due sezioni la registrano in un ordine leggermente diverso). Ritorna gli stessi
+ *  punti di estraiEventiZonaGrezzi con in più `periodo` (1, 2, o null se non abbinabile — sessione senza
+ *  timeline/pausa individuata). */
+function assegnaPeriodoEventiZona(sessione){
+  const punti = estraiEventiZonaGrezzi(sessione);
+  if(!punti.length) return punti;
+  const norm = normalizzaEventiSevenLab(sessione);
+  if(!norm.periodi.haPausa || norm.formato === "nessuno")
+    return punti.map(p => Object.assign({}, p, {periodo:null}));
+  const codiceTipo = tipo => tipo === "recupero" ? "RECOVERY" : "BALL_LOST";
+  const code = new Map();
+  norm.eventi.forEach(e => {
+    const cl = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
+    if(!cl || (cl.type !== "RECOVERY" && cl.type !== "BALL_LOST")) return;
+    const chiave = String(e.raw["Giocatore"]||"").trim()+"|"+String(e.raw["Team"]||"").trim().toUpperCase()+"|"+cl.type;
+    if(!code.has(chiave)) code.set(chiave, []);
+    code.get(chiave).push(e.periodo);
+  });
+  return punti.map(p => {
+    const chiave = String(p.giocatore||"").trim()+"|"+p.team+"|"+codiceTipo(p.tipo);
+    const coda = code.get(chiave);
+    return Object.assign({}, p, {periodo: (coda && coda.length) ? coda.shift() : null});
+  });
+}
+/** Baricentro di recupero (solo Team A) diviso tra 1° e 2° tempo, su un elenco di sessioni partita —
+ *  richiesta dell'utente del 03/09/2026 per capire se si alza/abbassa col passare della gara (vedi
+ *  calcolaBaricentroMetri per i limiti dichiarati sul concetto di "baricentro"). Solo partite: gli
+ *  allenamenti restano fuori per ora anche se i dati di prova mostrano che possono avere anch'essi una
+ *  struttura a tempi — da valutare se estendere in futuro. Torna null se non c'è nessun recupero abbinabile
+ *  a un periodo in nessuna delle sessioni passate. */
+function calcolaBaricentroPerTempo(sessioniPartita){
+  const p1 = [], p2 = [];
+  (sessioniPartita||[]).forEach(s => {
+    assegnaPeriodoEventiZona({datiSpaziali:s.DatiSpaziali, eventi:s.Eventi, riepilogoTempi:s.RiepilogoTempi}).forEach(p => {
+      if(p.tipo !== "recupero" || p.team === "B") return;
+      if(p.periodo === 1) p1.push(p); else if(p.periodo === 2) p2.push(p);
+    });
+  });
+  const baricentro1 = calcolaBaricentroMetri(p1), baricentro2 = calcolaBaricentroMetri(p2);
+  if(baricentro1===null && baricentro2===null) return null;
+  return {baricentro1, n1:p1.length, baricentro2, n2:p2.length};
+}
+/** Raggruppa in due liste separate (recupero/persa) i punti di zona da un elenco di sessioni (partite o
+ *  allenamenti, ciascuna con `.EventiZona` già calcolato in assemblaDataset). */
+function raccogliEventiZona(sessioni){
+  const recupero = [], persa = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => (p.tipo==="recupero"?recupero:persa).push(p)));
+  return {recupero, persa};
+}
+/** "Baricentro stimato" (03/09/2026, richiesta dell'utente): la posizione media in metri (asse X, 0=propria
+ *  porta → 50=porta avversaria, stesso riferimento usato per le zone) di un elenco di eventi di
+ *  recupero/palla persa con coordinate. Deliberatamente NON un baricentro squadra vero (richiederebbe le
+ *  posizioni di tutte le azioni o un tracciamento GPS/posizionale, che non abbiamo — l'utente stessa ha
+ *  concordato di non inseguire quella metrica, vedi playbook): è solo la media delle posizioni dei recuperi
+ *  (o delle palle perse), un indicatore più stretto ma corretto al 100% con i dati disponibili. Torna null
+ *  se non ci sono punti con coordinate. */
+function calcolaBaricentroMetri(punti){
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x));
+  if(!validi.length) return null;
+  return validi.reduce((somma,p) => somma+p.x, 0) / validi.length;
+}
+/** Divide il campo (50×30) in una griglia 3×3 (terzi di lunghezza × terzi di larghezza) e calcola, per un
+ *  elenco di punti, quanti cadono in ciascuna delle 9 zone e la percentuale sul totale di punti con
+ *  coordinate valide. Celle in ordine riga per riga (Y crescente) da sinistra (X crescente) a destra. */
+function calcolaZoneCampo(punti){
+  const celle = Array.from({length:9}, () => 0);
+  let totale = 0;
+  (punti||[]).forEach(p => {
+    if(!Number.isFinite(p.x) || !Number.isFinite(p.y)) return;
+    const col = Math.min(2, Math.max(0, Math.floor((p.x / CAMPO_LUNGHEZZA_M) * 3)));
+    const riga = Math.min(2, Math.max(0, Math.floor((p.y / CAMPO_LARGHEZZA_M) * 3)));
+    celle[riga*3+col]++; totale++;
+  });
+  return {celle: celle.map(c => ({conteggio:c, pct: totale ? (c/totale*100) : 0})), totale};
+}
+function hexToRgbArr(hex){
+  const h = String(hex||"#888888").replace("#","").trim();
+  const norm = h.length===3 ? h.split("").map(c=>c+c).join("") : h;
+  const n = parseInt(norm, 16);
+  const v = Number.isFinite(n) ? n : 0x888888;
+  return [(v>>16)&255, (v>>8)&255, v&255];
+}
+function hexRgba(hex, alpha){ const [r,g,b] = hexToRgbArr(hex); return `rgba(${r},${g},${b},${alpha})`; }
+/** Sagoma essenziale di un campo da calcio a 7 (contorno, linea di metà campo, cerchio di centrocampo,
+ *  due aree di porta stilizzate), disegnata sopra il livello colorato per dare un riferimento visivo. */
+function disegnaSagomaCampo(ctx, w, h, coloreLinee){
+  ctx.save();
+  ctx.strokeStyle = coloreLinee; ctx.lineWidth = Math.max(1.5, w*0.004);
+  ctx.strokeRect(ctx.lineWidth/2, ctx.lineWidth/2, w-ctx.lineWidth, h-ctx.lineWidth);
+  ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+  ctx.beginPath(); ctx.arc(w/2, h/2, h*0.16, 0, Math.PI*2); ctx.stroke();
+  const areaW = w*0.10, areaH = h*0.5;
+  ctx.strokeRect(ctx.lineWidth, (h-areaH)/2, areaW, areaH);
+  ctx.strokeRect(w-areaW-ctx.lineWidth, (h-areaH)/2, areaW, areaH);
+  ctx.restore();
+}
+/** Grafico a 9 zone (griglia 3×3) con la percentuale di eventi in ciascuna, colorata dal più chiaro (zona
+ *  fredda) al colore pieno (zona con più eventi in proporzione alle altre). `opts`: {sfondo, lineaCampo,
+ *  testo, testoChiaro, colore} — `colore` è l'hex della scala usata per questo grafico. */
+function disegnaCampoZone(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  const {celle, totale} = calcolaZoneCampo(punti);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const maxPct = Math.max(1, ...celle.map(c=>c.pct));
+  celle.forEach((c,i) => {
+    const riga = Math.floor(i/3), col = i%3;
+    const x = col*(w/3), y = riga*(h/3), cw = w/3, ch = h/3;
+    const intensita = totale ? (c.pct / maxPct) : 0;
+    ctx.fillStyle = hexRgba(opts.colore, 0.10 + intensita*0.72);
+    ctx.fillRect(x, y, cw, ch);
+    ctx.fillStyle = intensita > 0.5 ? opts.testoChiaro : opts.testo;
+    ctx.font = `700 ${Math.round(h*0.1)}px Satoshi, system-ui, sans-serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(totale ? nf0(c.pct)+"%" : "—", x+cw/2, y+ch/2);
+  });
+  ctx.strokeStyle = hexRgba(opts.lineaCampo, 0.35); ctx.lineWidth = Math.max(1, w*0.003);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(i*w/3,0); ctx.lineTo(i*w/3,h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i*h/3); ctx.lineTo(w,i*h/3); ctx.stroke();
+  }
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+}
+/** Heatmap vera e propria (non solo la griglia a zone): ogni evento disegna un alone sfumato sul campo
+ *  su un canvas offscreen, che si accumula dove più eventi cadono vicini; l'intensità accumulata viene poi
+ *  ricolorata con una scala freddo→caldo (`opts.rampa`, tappe [stop 0-1, [r,g,b]] crescenti) — il colore
+ *  stesso cambia con la densità, non solo l'opacità di un unico colore, per essere una heatmap vera. */
+function disegnaCampoHeatmap(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+  if(validi.length){
+    const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
+    const bctx = buf.getContext("2d");
+    const raggio = Math.max(w,h) * 0.11;
+    validi.forEach(p => {
+      const px = Math.min(w, Math.max(0, (p.x / CAMPO_LUNGHEZZA_M) * w));
+      const py = Math.min(h, Math.max(0, (p.y / CAMPO_LARGHEZZA_M) * h));
+      const grad = bctx.createRadialGradient(px,py,0,px,py,raggio);
+      grad.addColorStop(0, "rgba(0,0,0,0.4)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      bctx.fillStyle = grad;
+      bctx.beginPath(); bctx.arc(px,py,raggio,0,Math.PI*2); bctx.fill();
+    });
+    const img = bctx.getImageData(0,0,w,h);
+    const out = ctx.getImageData(0,0,w,h);
+    const rampa = opts.rampa;
+    for(let i=0;i<img.data.length;i+=4){
+      const t = Math.min(1, img.data[i+3] / 200);
+      if(t <= 0.03) continue;
+      let segA = rampa[0], segB = rampa[rampa.length-1], frac = 1;
+      for(let s=0; s<rampa.length-1; s++){
+        if(t >= rampa[s][0] && t <= rampa[s+1][0]){ segA = rampa[s]; segB = rampa[s+1];
+          frac = (t-segA[0])/((segB[0]-segA[0])||1); break; }
+      }
+      const r = Math.round(segA[1][0] + (segB[1][0]-segA[1][0])*frac);
+      const g = Math.round(segA[1][1] + (segB[1][1]-segA[1][1])*frac);
+      const b = Math.round(segA[1][2] + (segB[1][2]-segA[1][2])*frac);
+      out.data[i]=r; out.data[i+1]=g; out.data[i+2]=b; out.data[i+3] = Math.round(Math.min(1, 0.3+t*0.7)*255);
+    }
+    ctx.putImageData(out, 0, 0);
+  }
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
 }
 
 /* =====================================================================
@@ -606,11 +918,13 @@ function assemblaDataset(grezzo){
     Gol_Fatti: N(r.Gol_Fatti), Gol_Subiti: N(r.Gol_Subiti), Durata_Minuti: N(r.Durata_Minuti),
     Modulo: String(r.Modulo ?? "").trim() || "Non indicato",
     Forza_Avversario: r.Forza_Avversario ?? null,
-    Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null
+    Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
+    DatiSpaziali: r.DatiSpaziali ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
   partite.forEach((p,i) => { p.Ordine = i+1; p.Mese = meseKey(p.Data);
-    p.Etichetta = dataCorta(p.Data)+" "+p.Avversario; p.Risultato = p.Gol_Fatti+"-"+p.Gol_Subiti; });
+    p.Etichetta = dataCorta(p.Data)+" "+p.Avversario; p.Risultato = p.Gol_Fatti+"-"+p.Gol_Subiti;
+    p.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:p.DatiSpaziali}, true); });
 
   const mappaPartite = new Map(partite.map(p => [p.Match_ID, p]));
 
@@ -641,9 +955,11 @@ function assemblaDataset(grezzo){
   const allenamenti = (grezzo.Allenamenti || []).filter(r => !rigaVuota(r) && !isEsempio(r)).map(r => ({
     Sessione_ID: String(r.Sessione_ID ?? "").trim(), Data: toDate(r.Data),
     Tipo_Allenamento: String(r.Tipo_Allenamento ?? "").trim() || "Non indicato",
-    Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? ""
+    Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
+    DatiSpaziali: r.DatiSpaziali ?? null
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
-  allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento; });
+  allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
+    a.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:a.DatiSpaziali}, false); });
   const mappaSessioni = new Map(allenamenti.map(a => [a.Sessione_ID, a]));
 
   // Statistiche "da partita" (gol, tiri, passaggi, dribbling, recuperi, parate) registrate per giocatore
@@ -688,7 +1004,8 @@ function assemblaDataset(grezzo){
     haAllenamenti: allenamenti.length>0 && presenze.length>0,
     haRPE: presenze.some(p => p.RPE !== null),
     haStatAllenamento: statAllenamento.length>0,
-    haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null)};
+    haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
+    haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0)};
 }
 
 /** Percorso di ingresso "Seven Lab": costruisce il dataset a partire dalle sessioni accumulate
@@ -705,7 +1022,8 @@ function costruisciDatasetDaSessioni(sessioni){
         Avversario: (s.meta["Avversario"]||"").trim() || "Avversario non indicato",
         Competizione: "", Gol_Fatti: N(s.meta["Gol fatti"]), Gol_Subiti: N(s.meta["Gol subiti"]),
         Durata_Minuti: N(s.meta["Durata minuti"]), Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
-        Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null
+        Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
+        DatiSpaziali: s.datiSpaziali || null
       });
       (s.righe||[]).forEach(r => {
         const tiriTot = N(r["Tiri"]), tiriPorta = N(r["Tiri in porta"]);
@@ -737,13 +1055,24 @@ function costruisciDatasetDaSessioni(sessioni){
       allenamentiRaw.push({
         Sessione_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
         Tipo_Allenamento: (s.meta["Formato"]||"").trim() || "Allenamento",
-        Durata_Minuti_Sessione: N(s.meta["Durata minuti"]), Note: ""
+        Durata_Minuti_Sessione: N(s.meta["Durata minuti"]), Note: "", Eventi: s.eventi || null,
+        DatiSpaziali: s.datiSpaziali || null
       });
+      // RPE (03/09/2026): da questa consegna Seven Lab può esportare un voto di durezza 1-10 assegnato
+      // dallo staff per l'intera sessione (chiave "RPE" nel blocco metadati, confermato sul primo file di
+      // prova reale con questo campo) — un solo numero per sessione, non uno per giocatore. Applicato a ogni
+      // giocatore presente con lo stesso minutaggio già usato altrove (Carico = minuti × RPE di sessione),
+      // esattamente il metodo session-RPE standard quando il voto è dato dallo staff invece che dal singolo
+      // giocatore. Assente/vuoto → null, non 0, per non attivare per errore il carico con un dato finto (N()
+      // da solo non basta perché restituisce 0 per l'assenza del campo, indistinguibile da un vero "0").
+      const rpeMetaGrezzo = s.meta["RPE"];
+      const rpeSessioneAssente = rpeMetaGrezzo === undefined || rpeMetaGrezzo === null || String(rpeMetaGrezzo).trim() === "";
+      const rpeSessione = rpeSessioneAssente ? null : N(rpeMetaGrezzo);
       (s.righe||[]).forEach(r => {
         presenzeRaw.push({
           Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(),
           Presente: "Sì", // ogni riga nel file = giocatore convocato/presente a quella sessione
-          Minuti_Allenamento: N(r["Minuti giocati"]), RPE: null, Note: ""
+          Minuti_Allenamento: N(r["Minuti giocati"]), RPE: rpeSessione, Note: ""
         });
         // Seven Lab registra, nelle partitelle di allenamento (7 contro 7 interno), le stesse colonne "da
         // partita" per ogni giocatore (gol, tiri, passaggi, dribbling, recuperi, parate): per molte squadre
@@ -983,6 +1312,55 @@ function caricoGiocatoreMese(presenze){
   return map;
 }
 
+/** Tutti i mesi (chiave "YYYY-MM") in cui esiste almeno una sessione di allenamento, in ordine
+ *  cronologico — usati per popolare i selettori "Da mese/A mese" della Dashboard Allenamento. */
+function mesiConAllenamento(){
+  return Array.from(new Set((stato.ds.allenamenti||[]).map(a=>a.Mese).filter(Boolean))).sort();
+}
+
+/** Equivalente di datiFiltrati() ma per un intervallo di mesi arbitrario (da/a incluso, entrambi null =
+ *  tutta la stagione) invece del singolo mese/tutto del filtro periodo generale in alto: usato dalla
+ *  sezione "Carico di allenamento e stanchezza stimata" (05) e dai report PDF allenamenti, che devono
+ *  poter coprire un arco di più mesi indipendente dal filtro periodo che governa il resto della dashboard. */
+function datiAllenamentoIntervallo(da, a){
+  const ds = stato.ds;
+  const allenamenti = ds.allenamenti.filter(x => meseNelPeriodo(x.Mese, da, a));
+  const idSess = new Set(allenamenti.map(x=>x.Sessione_ID));
+  return {
+    allenamenti,
+    presenze: ds.presenze.filter(p => idSess.has(p.Sessione_ID)),
+    statAllenamento: ds.statAllenamento.filter(g => idSess.has(g.Sessione_ID))
+  };
+}
+
+/** Stima un indice di carico/stanchezza SENZA un vero dato RPE (che oggi non è disponibile, vedi
+ *  ds.haRPE): combina quanto spesso un giocatore è presente agli allenamenti con quanti minuti gioca
+ *  davvero nelle partitelle (l'unico dato di volume/intensità reale che i file contengono oggi). È un
+ *  PROXY dichiarato, non un vero carico sRPE — due giocatori con lo stesso minutaggio risultano con lo
+ *  stesso indice anche se uno si allena più intensamente. Peso maggiore (70%) al volume di minuti
+ *  giocati, che è il segnale più diretto di carico fisico reale; peso minore (30%) alla sola frequenza
+ *  di presenza, che conta come esposizione ma non misura l'intensità. */
+function stimaCaricoStanchezza(righeAllenamento, statAllenamentoPeriodo){
+  const minutiPerGiocatore = new Map();
+  statAllenamentoPeriodo.forEach(r => {
+    minutiPerGiocatore.set(r.Giocatore, (minutiPerGiocatore.get(r.Giocatore)||0) + N(r.Minuti_Giocati));
+  });
+  const righe = righeAllenamento.map(r => ({
+    Giocatore: r.Giocatore, Sessioni_Presenti: r.Sessioni_Presenti, Sessioni_Totali: r.Sessioni_Totali,
+    Tasso_Presenza_pct: r.Tasso_Presenza_pct, Minuti_Partitelle: minutiPerGiocatore.get(r.Giocatore) || 0
+  }));
+  const maxMinuti = Math.max(1, ...righe.map(r=>r.Minuti_Partitelle));
+  righe.forEach(r => {
+    const normMinuti = (r.Minuti_Partitelle / maxMinuti) * 100;
+    r.Indice_Stanchezza = Math.round(normMinuti*0.7 + (r.Tasso_Presenza_pct??0)*0.3);
+  });
+  const mediaIndice = righe.length ? righe.reduce((a,r)=>a+r.Indice_Stanchezza,0)/righe.length : 0;
+  righe.forEach(r => {
+    r.Livello_Stanchezza = mediaIndice<=0 ? "n/d" : (r.Indice_Stanchezza >= mediaIndice*1.2 ? "Alto" : r.Indice_Stanchezza <= mediaIndice*0.8 ? "Basso" : "Medio");
+  });
+  return righe.sort((a,b)=>b.Indice_Stanchezza - a.Indice_Stanchezza);
+}
+
 /** Indice prestazione medio di un giocatore in un dato mese, sulle sole partite di quel mese. */
 function indiceMedioGiocatoreMese(giocatori, mese){
   const righe = giocatori.filter(g => g.Mese === mese);
@@ -1109,7 +1487,10 @@ function validaDati(ds){
    STATO E RENDER
    ===================================================================== */
 const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Prestazione_Tot", dir:-1},
-  ordinaAllenamento:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null};
+  ordinaAllenamento:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null,
+  // Periodo proprio della sezione "Carico di allenamento e stanchezza stimata" (05): indipendente dal
+  // filtro periodo generale in alto, null/null = tutta la stagione. Vedi datiAllenamentoIntervallo.
+  allenamentoDashDa:null, allenamentoDashA:null};
 
 function colore(nome){ return getComputedStyle(document.documentElement).getPropertyValue("--"+nome).trim(); }
 function distruggiGrafici(){ Object.values(stato.grafici).forEach(c => { try{ c.destroy(); }catch(e){} }); stato.grafici = {}; }
@@ -2067,21 +2448,23 @@ function renderConfronto(f){
 }
 
 /* --------- 8. Allenamenti --------- */
-function renderAllenamenti(f){
+function renderAllenamenti(){
   const cont = $("#contenuto-allenamenti");
   if(!stato.ds.haAllenamenti){
     cont.innerHTML = `<div class="vuoto"><strong>Non hai ancora caricato nessun file allenamento.</strong><br>
-      Carica almeno un file <code>allenamento_*.csv</code> esportato da Seven Lab per vedere presenze e carico di lavoro. Il resto della dashboard funziona comunque.</div>`;
+      Carica almeno un file <code>allenamento_*.csv</code> esportato da Seven Lab per vedere carico di lavoro e presenze (queste ultime solo nel Report PDF). Il resto della dashboard funziona comunque.</div>`;
     return;
   }
+  // Sezione con un periodo proprio (selettori "Da/A" qui sopra), indipendente dal filtro periodo generale
+  // in alto: così si può guardare un arco di mesi diverso da quello del resto della dashboard.
+  const f = datiAllenamentoIntervallo(stato.allenamentoDashDa, stato.allenamentoDashA);
   if(f.allenamenti.length === 0 || f.presenze.length === 0){
-    cont.innerHTML = `<div class="vuoto"><strong>Nessuna sessione di allenamento nel periodo selezionato.</strong> Scegli un altro periodo dal filtro in alto.</div>`;
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna sessione di allenamento nel periodo scelto.</strong> Cambia il periodo con i selettori Da/A qui sopra.</div>`;
     return;
   }
   const haRPE = stato.ds.haRPE;
   const {totSess, righe} = aggregaAllenamenti(f.allenamenti, f.presenze);
   const mensile = haRPE ? caricoMensile(stato.ds.allenamenti, stato.ds.presenze) : [];
-  const sottoSoglia = righe.filter(r => r.Tasso_Presenza_pct !== null && r.Tasso_Presenza_pct < 60);
   const cgm = haRPE ? caricoGiocatoreMese(stato.ds.presenze) : new Map();
   const mesiOrd = Array.from(new Set(stato.ds.presenze.map(p=>p.Mese).filter(Boolean))).sort();
   const picchi = [];
@@ -2093,53 +2476,58 @@ function renderAllenamenti(f){
         picchi.push({g:r.Giocatore, da:mesiOrd[i-1], a:mesiOrd[i], rapporto:curr/prec, prec, curr});
     }
   });
+  // Carico di stanchezza stimato senza RPE reale (presenza + minuti nelle partitelle): vedi
+  // stimaCaricoStanchezza per i dettagli del calcolo e i limiti dichiarati.
+  const stanchezza = stimaCaricoStanchezza(righe, f.statAllenamento);
+  const classeLivello = l => l==="Alto" ? "neg" : l==="Basso" ? "pos" : "neu";
+
   const avvisi = [];
-  sottoSoglia.forEach(r => avvisi.push({tipo:"attenzione",
-    testo:`<strong>${esc(r.Giocatore)}</strong> è al ${pctTxt(r.Tasso_Presenza_pct,0)} di presenza (${nf0(r.Sessioni_Presenti)} sessioni su ${nf0(r.Sessioni_Totali)}): sotto la soglia consigliata del 60%. Con questo minutaggio di allenamento è difficile chiedergli continuità in partita.`}));
+  stanchezza.filter(r => r.Livello_Stanchezza === "Alto").forEach(r => avvisi.push({tipo:"attenzione",
+    testo:`<strong>${esc(r.Giocatore)}</strong> ha un carico di stanchezza stimato alto in questo periodo: frequenza di presenza e minuti nelle partitelle sopra la media della squadra.`}));
   picchi.forEach(p => avvisi.push({tipo:"attenzione",
     testo:`Carico di <strong>${esc(p.g)}</strong>: da ${nf0(p.prec)} a ${nf0(p.curr)} unità sRPE tra ${meseBreve(p.da)} e ${meseBreve(p.a)}, cioè ${nf(p.rapporto,1)} volte tanto.`}));
   if(avvisi.length === 0) avvisi.push({tipo:"ok", testo: haRPE
-    ? "Presenze sopra il 60% per tutti e nessun salto di carico pari o superiore a 1,5 volte tra un mese e l'altro."
-    : "Presenze sopra il 60% per tutti."});
+    ? "Nessun carico di stanchezza stimato alto e nessun salto di carico sRPE pari o superiore a 1,5 volte tra un mese e l'altro."
+    : "Nessun carico di stanchezza stimato alto in questo periodo."});
 
   cont.innerHTML = `
     <div class="griglia g-kpi" style="margin-bottom:16px">
-      <div class="kpi"><div class="kpi-eti">Sessioni nel periodo</div><div class="kpi-valore">${nf0(totSess)}</div><div class="kpi-nota">${esc(Array.from(new Set(f.allenamenti.map(a=>a.Tipo_Allenamento))).join(", "))}</div></div>
+      <div class="kpi"><div class="kpi-eti">Allenamenti nel periodo</div><div class="kpi-valore">${nf0(totSess)}</div><div class="kpi-nota">${esc(Array.from(new Set(f.allenamenti.map(a=>a.Tipo_Allenamento))).join(", "))}</div></div>
       ${haRPE ? `<div class="kpi"><div class="kpi-eti">Carico totale squadra</div><div class="kpi-valore">${nf0(righe.reduce((a,r)=>a+r.Carico_Tot,0))}</div><div class="kpi-nota">Unità sRPE (minuti × RPE)</div></div>` : ""}
-      <div class="kpi"><div class="kpi-eti">Presenza media</div><div class="kpi-valore">${pctTxt(media(righe.map(r=>r.Tasso_Presenza_pct)),0)}</div><div class="kpi-nota">${sottoSoglia.length===1 ? "1 giocatore sotto il 60%" : nf0(sottoSoglia.length)+" giocatori sotto il 60%"}</div></div>
+      <div class="kpi"><div class="kpi-eti">Giocatori a carico stimato alto</div><div class="kpi-valore">${nf0(stanchezza.filter(r=>r.Livello_Stanchezza==="Alto").length)}</div><div class="kpi-nota">su ${nf0(stanchezza.length)} giocatori nel periodo</div></div>
     </div>
     <div class="griglia g-2" style="margin-bottom:16px">
-      <div class="card"><div class="grafico-titolo">Tasso di presenza per giocatore</div>
-        <div class="grafico-sub">In rosso mattone chi è sotto il 60%; la linea tratteggiata è la soglia consigliata.</div>
-        <div class="grafico-wrap alto"><canvas id="gr-presenze"></canvas></div></div>
+      <div class="card">
+        <div class="grafico-titolo">Carico di stanchezza stimato</div>
+        <div class="grafico-sub">${stato.ds.haStatAllenamento ? "Incrocia frequenza di presenza e minuti giocati nelle partitelle: non è un vero dato RPE, vedi la nota sotto la tabella." : "Basato solo sulla presenza: non hai ancora caricato statistiche di gioco nelle partitelle, quindi il minutaggio qui sotto resta a 0 per tutti."}</div>
+        <div class="tabella-scroll"><table>
+          <thead><tr><th scope="col">Giocatore</th><th scope="col">Presenze</th><th scope="col">Minuti in partitelle</th><th scope="col">Carico stimato</th></tr></thead>
+          <tbody>${stanchezza.map(r => `<tr>
+            <td>${esc(r.Giocatore)}</td>
+            <td>${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}</td>
+            <td>${nf0(r.Minuti_Partitelle)}'</td>
+            <td><span class="pill ${classeLivello(r.Livello_Stanchezza)}">${esc(r.Livello_Stanchezza)}</span></td>
+          </tr>`).join("")}</tbody>
+        </table></div>
+        <p class="nota-piccola" style="margin-top:10px">${haRPE
+          ? "Proxy da presenza e minutaggio, utile come confronto rapido senza bisogno del voto RPE — ma ora che hai un RPE reale nei file caricati, guarda soprattutto il «Carico di allenamento per giocatore» qui a fianco (minuti × RPE): è più preciso, perché tiene conto di quanto è stato duro davvero l'allenamento e non solo di quanto hai giocato."
+          : "Proxy senza un vero RPE (sforzo percepito 1-10 a fine seduta), che i file caricati non includono: due giocatori con lo stesso minutaggio risultano con lo stesso carico anche se uno si allena più intensamente. Per una stima più precisa: (1) verifica se Seven Lab permette di registrare una valutazione di sforzo per sessione che non hai ancora attivato o esportato; (2) fatti dare da giocatori o staff un numero da 1 a 10 a fine allenamento, anche solo su carta, da aggiungere poi ai dati; (3) la colonna «Voto»/«Punti» già esportata da Seven Lab per ogni giocatore potrebbe aiutare, ma valuta la prestazione, non la fatica percepita, quindi il legame con il carico reale non è garantito."}</p>
+      </div>
       ${haRPE ? `<div class="card"><div class="grafico-titolo">Carico di allenamento per giocatore</div>
         <div class="grafico-sub">Unità sRPE accumulate nel periodo (minuti × RPE, carico 0 se assente).</div>
         <div class="grafico-wrap alto"><canvas id="gr-carico"></canvas></div></div>
       <div class="card"><div class="grafico-titolo">Carico medio di squadra mese per mese</div>
         <div class="grafico-sub">Media delle unità sRPE per presenza registrata. Serve a vedere se il carico cresce troppo in fretta.</div>
-        <div class="grafico-wrap"><canvas id="gr-carico-mese"></canvas></div></div>` : `<div class="card"><div class="grafico-titolo">Carico di allenamento</div>
-        <div class="vuoto" style="margin:0">Non disponibile: i file caricati non includono l'RPE percepito (fatica 1-10). Presenze e minuti restano comunque calcolati sopra.</div></div>`}
+        <div class="grafico-wrap"><canvas id="gr-carico-mese"></canvas></div></div>` : `<div class="card"><div class="grafico-titolo">Carico di allenamento (sRPE)</div>
+        <div class="vuoto" style="margin:0">Non disponibile: i file caricati non includono l'RPE percepito (fatica 1-10). Il carico stimato qui a fianco resta comunque calcolato.</div></div>`}
     </div>
     <div class="card">
       <div class="grafico-titolo">Segnali da valutare con lo staff</div>
-      <div class="grafico-sub">Presenze sotto il 60%${haRPE ? " e aumenti di carico pari o superiori a 1,5 volte da un mese all'altro." : "."}</div>
+      <div class="grafico-sub">Carico di stanchezza stimato alto${haRPE ? " e aumenti di carico sRPE pari o superiori a 1,5 volte da un mese all'altro." : "."}</div>
       <div class="griglia-avvisi">${avvisi.map(a=>`<div class="avviso ${a.tipo}"><span class="ic" aria-hidden="true">${a.tipo==="ok"?"✓":"!"}</span><span>${a.testo}</span></div>`).join("")}</div>
       ${picchi.length ? `<p class="nota-piccola">Un salto rapido del carico (concetto di rapporto carico acuto/cronico) è un segnale da valutare con lo staff, non una diagnosi: se possibile distribuisci il carico più gradualmente nelle settimane successive.</p>` : ""}
     </div>`;
 
-  const ordPres = righe.slice().sort((a,b)=>(b.Tasso_Presenza_pct??0)-(a.Tasso_Presenza_pct??0));
-  creaGrafico("gr-presenze", {
-    type:"bar",
-    data:{labels:ordPres.map(r=>r.Giocatore), datasets:[
-      {label:"Tasso di presenza", data:ordPres.map(r=>r.Tasso_Presenza_pct),
-       backgroundColor:ordPres.map(r=>(r.Tasso_Presenza_pct??100)<60?colore("danger"):colore("c1")), borderRadius:4, maxBarThickness:26},
-      {type:"line", label:"Soglia 60%", data:ordPres.map(()=>60), borderColor:colore("faint"), borderDash:[6,5], borderWidth:1.8, pointRadius:0}
-    ]},
-    options:baseOpzioni({indexAxis:"y", scales:{
-      x:{min:0, max:100, ticks:{color:colore("muted"), font:{size:11}, callback:v=>v+"%"}, grid:{color:colore("grid")}, border:{color:colore("grid")}},
-      y:{ticks:{color:colore("muted"), font:{size:11}}, grid:{display:false}, border:{color:colore("grid")}}
-    }})
-  });
   if(haRPE){
   const ordCarico = righe.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot);
   creaGrafico("gr-carico", {
@@ -2182,7 +2570,7 @@ function renderIncroci(){
     return;
   }
   if(!stato.ds.haRPE){
-    cont.innerHTML = `<div class="vuoto"><strong>Questa sezione richiede il carico di allenamento (sRPE)</strong>, quindi il dato RPE percepito (fatica 1-10). I file caricati finora non lo includono: presenze e minuti restano disponibili nella sezione Allenamenti, ma qui non c'è ancora nulla da incrociare.</div>`;
+    cont.innerHTML = `<div class="vuoto"><strong>Questa sezione richiede il carico di allenamento (sRPE)</strong>, quindi il dato RPE percepito (fatica 1-10). I file caricati finora non lo includono: il carico di stanchezza stimato resta disponibile nella sezione «Carico di allenamento e stanchezza stimata», ma qui non c'è ancora nulla da incrociare.</div>`;
     return;
   }
   const incroci = incrociCaricoRendimento(stato.ds);
@@ -2203,6 +2591,80 @@ function renderIncroci(){
     </div>`;
   }).join("") + `</div>
   <p class="kpi-nota" style="margin-top:14px">Sono correlazioni tra due cluster di dati che raccogli separatamente, non nessi causa-effetto: il modo giusto di usarle è come punto di partenza per una conversazione con lo staff, non come conclusione.</p>`;
+}
+
+/* --------- 8d/7e. Zone di recupero e palla persa (dashboard) --------- */
+/** Sezione condivisa da Dashboard Partita e Dashboard Allenamento: 2 grafici a zone (griglia 3×3, %) più
+ *  2 heatmap vere (recupero/palla persa), calcolati dalle coordinate X/Y degli eventi (vedi il motore più
+ *  sopra, "ZONE DI RECUPERO E PALLA PERSA"). `idContenitore` distingue i due usi (id diversi per i canvas,
+ *  altrimenti le due dashboard, entrambe sempre nel DOM, andrebbero in conflitto sugli stessi id). Gating
+ *  esplicito, non un grafico vuoto: finché nessun file caricato include le coordinate, la sezione lo dice
+ *  chiaramente invece di mostrare percentuali a zero che sembrerebbero un dato vero. */
+function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haCoordinateZona){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate X/Y degli eventi di recupero e palla persa nei file caricati — un dato che Seven Lab non esporta ancora oggi. Quando i tuoi export le includeranno, questa sezione si popola da sola, sia in partita sia in allenamento.</div>`;
+    return;
+  }
+  const {recupero, persa} = raccogliEventiZona(sessioni);
+  if(!recupero.length && !persa.length){
+    cont.innerHTML = `<div class="vuoto">Nessun evento con posizione registrata nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const baricentroRecupero = calcolaBaricentroMetri(recupero), baricentroPersa = calcolaBaricentroMetri(persa);
+  const idp = "zc-"+idContenitore;
+  cont.innerHTML = `
+    <div class="griglia g-2">
+      <div class="card">
+        <div class="grafico-titolo">Zone di recupero (%)</div>
+        <div class="grafico-sub">${nf0(recupero.length)} recuperi con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).${baricentroRecupero!==null ? ` Baricentro di recupero stimato: <strong>${nf(baricentroRecupero,1)} m</strong> dalla propria porta (campo lungo 50 m).` : ""}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Zone di palla persa (%)</div>
+        <div class="grafico-sub">${nf0(persa.length)} palle perse con posizione nel periodo scelto.${baricentroPersa!==null ? ` Baricentro di perdita palla stimato: <strong>${nf(baricentroPersa,1)} m</strong> dalla propria porta.` : ""}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap recuperi</div>
+        <div class="grafico-sub">Densità reale dei recuperi sul campo: colore più caldo dove se ne concentrano di più.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-recupero" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap palle perse</div>
+        <div class="grafico-sub">Densità reale delle palle perse sul campo.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-persa" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    ${((recupero.length && recupero.length<5) || (persa.length && persa.length<5)) ? `<p class="nota-piccola">Campione ridotto (meno di 5 eventi con posizione in una delle due categorie): le percentuali per zona sono indicative.</p>` : ""}
+    ${(baricentroRecupero!==null || baricentroPersa!==null) ? `<p class="nota-piccola">Il baricentro stimato è calcolato solo dagli eventi di recupero/palla persa con posizione, non da tutte le azioni della partita: non rappresenta il posizionamento generale della squadra sul campo, solo dove tende a recuperare/perdere palla.</p>` : ""}`;
+  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  disegnaCampoZone($("#"+idp+"-zona-recupero"), recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+  disegnaCampoZone($("#"+idp+"-zona-persa"), persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat-recupero"), recupero, optsBase);
+  disegnaCampoHeatmap($("#"+idp+"-heat-persa"), persa, optsBase);
+  if(sessioniPartitaPerTempo){
+    const bt = calcolaBaricentroPerTempo(sessioniPartitaPerTempo);
+    if(bt){
+      const cardTempo = document.createElement("div");
+      cardTempo.className = "card"; cardTempo.style.marginTop = "12px";
+      const t1 = bt.baricentro1!==null ? `${nf(bt.baricentro1,1)} m (${nf0(bt.n1)} recuperi)` : "non disponibile";
+      const t2 = bt.baricentro2!==null ? `${nf(bt.baricentro2,1)} m (${nf0(bt.n2)} recuperi)` : "non disponibile";
+      let confronto = "";
+      if(bt.baricentro1!==null && bt.baricentro2!==null){
+        const delta = bt.baricentro2 - bt.baricentro1;
+        confronto = Math.abs(delta) < 1
+          ? "Sostanzialmente stabile tra i due tempi."
+          : `${delta>0?"Più alto":"Più basso"} nel 2° tempo di ${nf(Math.abs(delta),1)} m rispetto al 1°${delta<0?" — un possibile segnale di calo di intensità/stanchezza da verificare con lo staff":""}.`;
+      }
+      cardTempo.innerHTML = `<div class="grafico-titolo">Baricentro di recupero per tempo</div>
+        <div class="grafico-sub">1° tempo: <strong>${t1}</strong> dalla propria porta · 2° tempo: <strong>${t2}</strong> dalla propria porta. ${confronto}</div>
+        <p class="nota-piccola" style="margin-top:8px">Abbinamento tra posizione ed evento fatto per giocatore/squadra/tipo evento in ordine di successione (non c'è un identificativo comune tra le due sezioni del file Seven Lab): in rari casi limite può risultare impreciso.</p>`;
+      cont.appendChild(cardTempo);
+    }
+  }
 }
 
 /* --------- 9. Qualità dati --------- */
@@ -2239,8 +2701,10 @@ function render(){
   renderAndamentoIndividuale();
   renderGiocatore(f);
   renderConfronto(f);
-  renderAllenamenti(f);
+  renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
+  renderAllenamenti();
   renderIncroci();
+  renderZoneCampo("contenuto-zone-allenamento", f.allenamenti);
   renderQualita();
   aggiornaSelettoriReport();
 }
@@ -2406,10 +2870,28 @@ function aggiornaSelettoriReport(){
   const selP = $("#rp-sel-partita");
   selP.innerHTML = stato.ds.partite.slice().reverse().map(p =>
     `<option value="${esc(p.Match_ID)}">${dataLabel(p.Data)} · vs ${esc(p.Avversario)} (${p.Risultato})</option>`).join("");
-  const selM = $("#rp-sel-mese");
-  const mesiConDati = stato.ds.mesi;
-  selM.innerHTML = mesiConDati.map(m => `<option value="${m}">${meseLabel(m)}</option>`).join("");
-  if(mesiConDati.length) selM.value = mesiConDati[mesiConDati.length-1];
+  popolaSelettoriPeriodoAllenamento();
+}
+
+/** Riempie i due selettori "Da mese/A mese" della sezione 05 (a schermo) e i due del report PDF
+ *  allenamenti: stessa lista di mesi (solo quelli con almeno una sessione di allenamento), opzione vuota
+ *  = "inizio/fine stagione". Chiamata da aggiornaSelettoriReport() ogni volta che il dataset cambia, e
+ *  anche direttamente quando serve solo ripopolare senza toccare il selettore Partita. */
+function popolaSelettoriPeriodoAllenamento(){
+  if(!stato.ds) return;
+  const mesi = mesiConAllenamento();
+  const opzioniMesi = mesi.map(m => `<option value="${m}">${meseLabel(m)}</option>`).join("");
+  [["#sel-all-da","Inizio stagione", () => stato.allenamentoDashDa],
+   ["#sel-all-a","Fine stagione", () => stato.allenamentoDashA],
+   ["#rp-sel-all-da","Inizio stagione", () => ""],
+   ["#rp-sel-all-a","Fine stagione", () => ""]
+  ].forEach(([sel, etichettaVuota, valoreCorrente]) => {
+    const el = $(sel);
+    if(!el) return;
+    const valore = valoreCorrente() || "";
+    el.innerHTML = `<option value="">${etichettaVuota}</option>` + opzioniMesi;
+    el.value = mesi.includes(valore) ? valore : "";
+  });
 }
 
 /** Trova l'elemento di stato per idEl; se index.html non è aggiornato (versione disallineata rispetto
@@ -2556,20 +3038,20 @@ function kpiRowReport(pagina, kpis){
  *  prec.") e "tipo" (up/down/flat) da colorare. `soglia` è la variazione minima sotto la quale si
  *  considera "stabile"; `invert:true` per le metriche dove un aumento è un segnale negativo (es. numero
  *  di giocatori sotto la soglia di presenza). Ritorna null se manca uno dei due valori da confrontare. */
-function deltaKpi(delta, formatta, soglia=0, invert=false){
+function deltaKpi(delta, formatta, soglia=0, invert=false, etichetta="vs mese prec."){
   if(delta===null || delta===undefined || Number.isNaN(delta)) return null;
   let tipo = "flat";
   if(delta > soglia) tipo = invert ? "down" : "up";
   else if(delta < -soglia) tipo = invert ? "up" : "down";
   const segno = delta > 0 ? "+" : "";
-  return {testo:`${segno}${formatta(delta)} vs mese prec.`, tipo};
+  return {testo:`${segno}${formatta(delta)} ${etichetta}`, tipo};
 }
 
 /** Elenco di giocatori con una variazione degna di nota rispetto al mese precedente (presenza e, se
  *  disponibile, carico di allenamento), da mostrare come righe con badge IN MIGLIORAMENTO/IN CALO/DA
  *  MONITORARE — la richiesta esplicita dell'utente di vedere "tendenze in calo o in miglioramento" nel
  *  Report Mensile Allenamenti, non solo i numeri assoluti del mese. */
-function tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE){
+function tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE, etichettaPeriodoPrec="il periodo precedente"){
   const precByName = new Map(righeAllenPrec.map(r => [r.Giocatore, r]));
   const risultati = [];
   righeAllen.forEach(r => {
@@ -2579,11 +3061,11 @@ function tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE){
     let tipo = null, testo = null;
     if(haRPE && prec.Carico_Tot){
       const rapporto = r.Carico_Tot / prec.Carico_Tot;
-      if(rapporto >= 1.5){ tipo = "watch"; testo = `carico di allenamento in forte aumento (${nf(rapporto,1)}× rispetto al mese scorso)`; }
+      if(rapporto >= 1.5){ tipo = "watch"; testo = `carico di allenamento in forte aumento (${nf(rapporto,1)}× rispetto a ${etichettaPeriodoPrec})`; }
     }
     if(!tipo && deltaPres !== null){
-      if(deltaPres >= 12){ tipo = "up"; testo = `presenza in crescita (+${nf0(deltaPres)} punti rispetto al mese scorso)`; }
-      else if(deltaPres <= -12){ tipo = "down"; testo = `presenza in calo (${nf0(deltaPres)} punti rispetto al mese scorso)`; }
+      if(deltaPres >= 12){ tipo = "up"; testo = `presenza in crescita (+${nf0(deltaPres)} punti rispetto a ${etichettaPeriodoPrec})`; }
+      else if(deltaPres <= -12){ tipo = "down"; testo = `presenza in calo (${nf0(deltaPres)} punti rispetto a ${etichettaPeriodoPrec})`; }
     }
     if(tipo) risultati.push({giocatore:r.Giocatore, tipo, testo});
   });
@@ -2669,6 +3151,54 @@ function opzioniGraficoReport(extra={}){
       y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{color:PALETTE_REPORT.grid}, border:{color:PALETTE_REPORT.grid}}
     }
   }, extra);
+}
+
+/** Sezione "Zone di recupero e palla persa" per un report (Partita, Stagionale, o allenamenti per
+ *  periodo/stagionale): 2 grafici a zone (recupero/persa) + 2 heatmap vere, dalle stesse coordinate X/Y
+ *  usate a schermo (vedi motore "ZONE DI RECUPERO E PALLA PERSA" più sopra, incluso l'avviso che il nome
+ *  delle colonne X/Y è un'assunzione provvisoria). Non aggiunge nulla al report se non ci sono eventi con
+ *  coordinate valide nel periodo — stesso criterio già usato per il possesso palla (vedi playbook punto 9):
+ *  niente sezione vuota o "non disponibile" a stampa, semplicemente non compare finché non c'è il dato. */
+function zoneCampoReport(pagina, sessioni, perTempo){
+  const {recupero, persa} = raccogliEventiZona(sessioni);
+  if(!recupero.length && !persa.length) return;
+  titoloSezioneReport(pagina, "Zone di recupero e palla persa");
+  const baricentroRecupero = calcolaBaricentroMetri(recupero), baricentroPersa = calcolaBaricentroMetri(persa);
+  const bulletsBaricentro = [];
+  if(baricentroRecupero!==null) bulletsBaricentro.push(`Baricentro di recupero stimato: ${nf(baricentroRecupero,1)} m dalla propria porta (solo dagli eventi di recupero con posizione, non un baricentro squadra completo).`);
+  if(baricentroPersa!==null) bulletsBaricentro.push(`Baricentro di perdita palla stimato: ${nf(baricentroPersa,1)} m dalla propria porta.`);
+  // Baricentro di recupero per tempo (solo partite, richiesta dell'utente 03/09/2026, vedi playbook punto 25).
+  const bt = perTempo ? calcolaBaricentroPerTempo(sessioni) : null;
+  if(bt && bt.baricentro1!==null && bt.baricentro2!==null){
+    const delta = bt.baricentro2 - bt.baricentro1;
+    const confronto = Math.abs(delta) < 1 ? "sostanzialmente stabile tra i due tempi"
+      : `${delta>0?"più alto":"più basso"} nel 2° tempo di ${nf(Math.abs(delta),1)} m rispetto al 1°${delta<0?" — possibile calo di intensità/stanchezza":""}`;
+    bulletsBaricentro.push(`Baricentro di recupero per tempo: 1° tempo ${nf(bt.baricentro1,1)} m, 2° tempo ${nf(bt.baricentro2,1)} m — ${confronto}.`);
+  }
+  bulletsReport(pagina, [
+    `${nf0(recupero.length)} recuperi e ${nf0(persa.length)} palle perse con posizione registrata in questo report.`,
+    "Griglia a 9 zone (terzi di campo): percentuale sul totale eventi con posizione. Heatmap: densità reale, colore più caldo dove gli eventi si concentrano di più.",
+    ...bulletsBaricentro
+  ]);
+  const rampa = [[0,hexToRgbArr(PALETTE_REPORT.c1)],[0.4,hexToRgbArr(PALETTE_REPORT.c4)],[0.7,hexToRgbArr(PALETTE_REPORT.c6)],[1,hexToRgbArr(PALETTE_REPORT.c2)]];
+  const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
+  const griglia = document.createElement("div");
+  griglia.className = "rp-campo-griglia";
+  pagina.corpo.appendChild(griglia);
+  const aggiungiCampo = (titolo, disegnaFn, punti, extraOpts) => {
+    const cella = document.createElement("div");
+    const etichetta = document.createElement("div");
+    etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+    cella.appendChild(etichetta);
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+    wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
+    disegnaFn(cv, punti, extraOpts);
+  };
+  aggiungiCampo("Zone di recupero (%)", disegnaCampoZone, recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+  aggiungiCampo("Zone di palla persa (%)", disegnaCampoZone, persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+  aggiungiCampo("Heatmap recuperi", disegnaCampoHeatmap, recupero, optsBase);
+  aggiungiCampo("Heatmap palle perse", disegnaCampoHeatmap, persa, optsBase);
 }
 
 const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
@@ -2993,6 +3523,7 @@ async function generaReportPartita(matchId){
           `Punizioni: ${nf0(disciplinaGaraTot.punizione.ok)} realizzate su ${nf0(disciplinaGaraTot.punizione.tentati)} battute · Rigori: ${nf0(disciplinaGaraTot.rigore.ok)} realizzati su ${nf0(disciplinaGaraTot.rigore.tentati)} battuti.`
         ]);
       }
+      zoneCampoReport(pag, [partita], true);
       titoloSezioneReport(pag, "Cosa dicono i dati");
       const bullet = [];
       if(mvp) bullet.push(`<b>${esc(mvp.Giocatore)}</b> ha guidato la squadra con un indice prestazione di ${nf(mvp.Indice_Prestazione_Tot,1)} (${nf0(mvp.Gol)} gol, ${nf0(mvp.Assist)} assist).`);
@@ -3034,37 +3565,62 @@ async function generaReportPartita(matchId){
 }
 
 /* ---- Report Mensile Allenamenti ---- */
-async function generaReportMensile(mese){
+/** Frase di apertura naturale per un periodo allenamenti ("Nel corso della stagione", "In aprile 2026",
+ *  "Tra gennaio 2026 e marzo 2026") — diversa da etichettaPeriodoAllenamento(), pensata per un titolo o
+ *  un'etichetta, non per l'inizio di una frase discorsiva. */
+function fraseInizialePeriodo(da, a){
+  if(!da && !a) return "Nel corso della stagione";
+  if(da === a) return `In ${meseLabel(da)}`;
+  return `Tra ${meseLabel(da)} e ${meseLabel(a)}`;
+}
+
+/** Genera il report allenamenti per un periodo a scelta: un mese singolo (da===a), un arco di più mesi
+ *  (da/a diversi), o tutta la stagione (da e a entrambi null/vuoti — usato dal pulsante "Report
+ *  Stagionale"). Un solo generatore per tutti e tre i casi: il periodo precedente "equivalente" (stessa
+ *  durata in mesi di calendario, calcolato da periodoAllenamentoPrecedente) usato per i confronti è null
+ *  per "tutta la stagione" o quando non c'è abbastanza storico prima dell'inizio scelto — in quel caso le
+ *  sezioni di confronto mostrano semplicemente "non disponibile", esattamente come già accadeva per il
+ *  primo mese in assoluto nella vecchia versione mese-per-mese di questo report. */
+async function generaReportAllenamentoPeriodo(da, a){
   const ds = stato.ds;
   const haRPE = ds.haRPE;
-  if(!mese){ statoReport("Seleziona un mese valido.", false, "#rp-stato-allenamento"); return; }
-  const dMese = datiMese(mese);
-  const mPrec = mesePrecedenteConDati(mese);
-  const dPrec = mPrec ? datiMese(mPrec) : null;
-  const {totSess, righe: righeAllen} = ds.haAllenamenti ? aggregaAllenamenti(dMese.allenamenti, dMese.presenze) : {totSess:0, righe:[]};
+  if(da && a && da > a){ statoReport("L'inizio del periodo deve essere prima della fine.", false, "#rp-stato-allenamento"); return; }
+  const isStagionale = !da && !a;
+  const etichetta = etichettaPeriodoAllenamento(da, a);
+  const periodoCorr = datiAllenamentoIntervallo(da, a);
+  const prevRange = periodoAllenamentoPrecedente(da, a);
+  const periodoPrec = prevRange ? datiAllenamentoIntervallo(prevRange.da, prevRange.a) : {allenamenti:[], presenze:[], statAllenamento:[]};
+  const etichettaPrec = prevRange ? etichettaPeriodoAllenamento(prevRange.da, prevRange.a) : null;
+
+  const {totSess, righe: righeAllen} = ds.haAllenamenti ? aggregaAllenamenti(periodoCorr.allenamenti, periodoCorr.presenze) : {totSess:0, righe:[]};
   const sottoSoglia = righeAllen.filter(r => r.Tasso_Presenza_pct !== null && r.Tasso_Presenza_pct < 60);
-  const mensile = (ds.haAllenamenti && haRPE) ? caricoMensile(ds.allenamenti, ds.presenze) : [];
-  const caricoMeseCorr = mensile.find(m=>m.Mese===mese);
-  const caricoMesePrec = mPrec ? mensile.find(m=>m.Mese===mPrec) : null;
-  const rapportoCarico = (caricoMeseCorr && caricoMesePrec && caricoMesePrec.Carico_Medio) ? caricoMeseCorr.Carico_Medio/caricoMesePrec.Carico_Medio : null;
-  const incrociMese = haRPE ? incrociCaricoRendimento(ds).filter(x => x.meseCorr === mese) : [];
-  // "da tenere d'occhio": chi ha il carico più alto se abbiamo l'RPE, altrimenti chi ha la presenza più bassa
+  const caricoValoriCorr = periodoCorr.presenze.map(p=>p.Carico).filter(c=>c!==null);
+  const caricoMedioCorr = caricoValoriCorr.length ? media(caricoValoriCorr) : null;
+  const caricoValoriPrec = periodoPrec.presenze.map(p=>p.Carico).filter(c=>c!==null);
+  const caricoMedioPrec = caricoValoriPrec.length ? media(caricoValoriPrec) : null;
+  const rapportoCarico = (caricoMedioCorr!==null && caricoMedioPrec) ? caricoMedioCorr/caricoMedioPrec : null;
+  const incrociMese = haRPE ? incrociCaricoRendimento(ds).filter(x => meseNelPeriodo(x.meseCorr, da, a)) : [];
+  // Carico di stanchezza stimato (presenza + minuti in partitelle, senza RPE reale): vedi
+  // stimaCaricoStanchezza. Usato anche come criterio "da tenere d'occhio" quando l'RPE non c'è, al posto
+  // della semplice presenza più bassa usata in una versione precedente di questo report.
+  const stanchezza = stimaCaricoStanchezza(righeAllen, periodoCorr.statAllenamento);
+  const livelloStanchezzaDi = new Map(stanchezza.map(r => [r.Giocatore, r.Livello_Stanchezza]));
   const piuCaricoGiocatore = haRPE
     ? righeAllen.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot)[0]
-    : righeAllen.filter(r=>r.Tasso_Presenza_pct!==null).slice().sort((a,b)=>a.Tasso_Presenza_pct-b.Tasso_Presenza_pct)[0];
+    : stanchezza[0];
   const ruoloDi = nome => ds.giocatori.find(g=>g.Giocatore===nome)?.Ruolo || "";
-  const aggAllenPrec = (dPrec && ds.haAllenamenti) ? aggregaAllenamenti(dPrec.allenamenti, dPrec.presenze) : {totSess:0, righe:[]};
+  const aggAllenPrec = (prevRange && ds.haAllenamenti) ? aggregaAllenamenti(periodoPrec.allenamenti, periodoPrec.presenze) : {totSess:0, righe:[]};
   const righeAllenPrec = aggAllenPrec.righe;
-  const caricoPrecGiocatore = piuCaricoGiocatore ? righeAllenPrec.find(r => r.Giocatore === piuCaricoGiocatore.Giocatore) : null;
+  const caricoPrecGiocatore = (haRPE && piuCaricoGiocatore) ? righeAllenPrec.find(r => r.Giocatore === piuCaricoGiocatore.Giocatore) : null;
   const variazioneGiocatore = (haRPE && piuCaricoGiocatore && caricoPrecGiocatore && caricoPrecGiocatore.Carico_Tot) ? piuCaricoGiocatore.Carico_Tot/caricoPrecGiocatore.Carico_Tot : null;
 
-  // Confronto col mese precedente: quello che l'utente ha chiesto esplicitamente di vedere ("percentuali
-  // medie, dello scorso mese e del mese terminato" + "tendenze in calo o in miglioramento"), non solo i
-  // numeri assoluti del mese corrente.
+  // Confronto col periodo precedente equivalente: quello che l'utente ha chiesto esplicitamente di vedere
+  // ("percentuali medie, dello scorso mese e del mese terminato" + "tendenze in calo o in miglioramento"),
+  // non solo i numeri assoluti del periodo corrente.
   const presenzaMedia = media(righeAllen.map(r=>r.Tasso_Presenza_pct));
   const presenzaMediaPrec = righeAllenPrec.length ? media(righeAllenPrec.map(r=>r.Tasso_Presenza_pct)) : null;
   const deltaPresenza = (presenzaMedia!=null && presenzaMediaPrec!=null) ? presenzaMedia - presenzaMediaPrec : null;
-  const deltaSessioni = dPrec ? totSess - aggAllenPrec.totSess : null;
+  const deltaSessioni = prevRange ? totSess - aggAllenPrec.totSess : null;
   const minutiTot = righeAllen.reduce((a,r)=>a+r.Minuti_Tot,0);
   const minutiTotPrec = righeAllenPrec.length ? righeAllenPrec.reduce((a,r)=>a+r.Minuti_Tot,0) : null;
   const deltaMinuti = minutiTotPrec!=null ? minutiTot - minutiTotPrec : null;
@@ -3073,85 +3629,89 @@ async function generaReportMensile(mese){
   const rpeSquadra = haRPE ? media(righeAllen.map(r=>r.RPE_Medio)) : null;
   const rpeSquadraPrec = (haRPE && righeAllenPrec.length) ? media(righeAllenPrec.map(r=>r.RPE_Medio)) : null;
   const deltaRpe = (rpeSquadra!=null && rpeSquadraPrec!=null) ? rpeSquadra - rpeSquadraPrec : null;
-  const dSess = deltaKpi(deltaSessioni, v=>nf0(v));
-  const dPres = deltaKpi(deltaPresenza, v=>nf0(v)+"pt", 2);
-  const dCarico = rapportoCarico!==null ? {testo:`${rapportoCarico>=1?"+":""}${nf0((rapportoCarico-1)*100)}% vs mese prec.`, tipo: rapportoCarico>=1.15 ? "up" : rapportoCarico<=0.85 ? "down" : "flat"} : null;
-  const dMinuti = deltaKpi(deltaMinuti, v=>nf0(v));
-  const dSottoSoglia = deltaKpi(deltaSottoSoglia, v=>nf0(v), 0, true);
-  const dRpe = deltaKpi(deltaRpe, v=>nf(v,1), 0.3);
-  const tendenzeMese = righeAllenPrec.length ? tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE) : [];
+  const dSess = deltaKpi(deltaSessioni, v=>nf0(v), 0, false, "vs periodo prec.");
+  const dPres = deltaKpi(deltaPresenza, v=>nf0(v)+"pt", 2, false, "vs periodo prec.");
+  const dCarico = rapportoCarico!==null ? {testo:`${rapportoCarico>=1?"+":""}${nf0((rapportoCarico-1)*100)}% vs periodo prec.`, tipo: rapportoCarico>=1.15 ? "up" : rapportoCarico<=0.85 ? "down" : "flat"} : null;
+  const dMinuti = deltaKpi(deltaMinuti, v=>nf0(v), 0, false, "vs periodo prec.");
+  const dSottoSoglia = deltaKpi(deltaSottoSoglia, v=>nf0(v), 0, true, "vs periodo prec.");
+  const dRpe = deltaKpi(deltaRpe, v=>nf(v,1), 0.3, false, "vs periodo prec.");
+  const tendenzeMese = righeAllenPrec.length ? tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE, etichettaPrec) : [];
 
-  statoReport("Genero il Report Mensile…", true, "#rp-stato-allenamento");
-  await generaEScarica(nomeFileData("Report_Mensile_"+mese.replace("-",""), new Date()), [
+  const titoloReport = isStagionale ? "Report Stagionale Allenamenti" : (da===a ? "Report Mensile Allenamenti" : "Report Periodo Allenamenti");
+  const prefissoFile = isStagionale ? "Report_Stagionale_Allenamenti" : `Report_Allenamenti_${(da||"inizio").replace("-","")}_${(a||"fine").replace("-","")}`;
+
+  statoReport(`Genero il ${titoloReport}…`, true, "#rp-stato-allenamento");
+  await generaEScarica(nomeFileData(prefissoFile, new Date()), [
     async (pag) => {
-      bandaReport(pag, "Report Mensile Allenamenti", meseLabel(mese), mPrec ? `confronto con ${meseLabel(mPrec)}` : "");
+      bandaReport(pag, titoloReport, etichetta, prevRange ? `confronto con ${etichettaPrec}` : "");
       sidebarReport(pag, {
         eyebrow:"Da tenere d'occhio", nome:piuCaricoGiocatore?.Giocatore,
         ruolo: piuCaricoGiocatore ? ruoloDi(piuCaricoGiocatore.Giocatore) : "",
         colore:"#D8825F",
         gruppi: piuCaricoGiocatore ? (haRPE ? [
-          {titolo:`Carico di allenamento — ${meseBreve(mese)}`, barre:[
+          {titolo:`Carico di allenamento — ${etichetta}`, barre:[
             {label:"RPE medio (su 10)", valore:nf(piuCaricoGiocatore.RPE_Medio,1), pct:(piuCaricoGiocatore.RPE_Medio??0)*10, colore:"#D8825F"},
             {label:"Tasso di presenza", valore:pctTxt(piuCaricoGiocatore.Tasso_Presenza_pct,0), pct:piuCaricoGiocatore.Tasso_Presenza_pct??0, colore:"#5EC4CE"}
           ]},
           {titolo:"Carico totale (u.a.)", righe:[
-            ...(caricoPrecGiocatore ? [{label:meseBreve(mPrec), valore:nf0(caricoPrecGiocatore.Carico_Tot)}] : []),
-            {label:meseBreve(mese), valore:nf0(piuCaricoGiocatore.Carico_Tot), colore:"#D8825F"},
+            ...(caricoPrecGiocatore ? [{label:etichettaPrec, valore:nf0(caricoPrecGiocatore.Carico_Tot)}] : []),
+            {label:etichetta, valore:nf0(piuCaricoGiocatore.Carico_Tot), colore:"#D8825F"},
             ...(variazioneGiocatore!==null ? [{label:"Variazione", valore:(variazioneGiocatore>=1?"+":"")+nf0((variazioneGiocatore-1)*100)+"%", colore:"#D8825F"}] : [])
           ]}
         ] : [
-          {titolo:`Presenza più bassa — ${meseBreve(mese)}`, barre:[
-            {label:"Tasso di presenza", valore:pctTxt(piuCaricoGiocatore.Tasso_Presenza_pct,0), pct:piuCaricoGiocatore.Tasso_Presenza_pct??0, colore:"#D8825F"}
+          {titolo:`Carico di stanchezza stimato più alto — ${etichetta}`, barre:[
+            {label:"Livello stimato (proxy senza RPE)", valore:piuCaricoGiocatore.Livello_Stanchezza, pct:piuCaricoGiocatore.Indice_Stanchezza??0, colore:"#D8825F"}
           ], righe:[
-            {label:"Sessioni", valore:`${nf0(piuCaricoGiocatore.Sessioni_Presenti)}/${nf0(piuCaricoGiocatore.Sessioni_Totali)}`},
-            {label:"Minuti totali", valore:nf0(piuCaricoGiocatore.Minuti_Tot)}
+            {label:"Presenze", valore:`${nf0(piuCaricoGiocatore.Sessioni_Presenti)}/${nf0(piuCaricoGiocatore.Sessioni_Totali)}`},
+            {label:"Minuti in partitelle", valore:nf0(piuCaricoGiocatore.Minuti_Partitelle)}
           ]}
         ]) : []
       });
       kpiRowReport(pag, haRPE ? [
-        {l:"Sessioni nel mese", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Allenamenti nel periodo", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
         {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
-        {l:"Carico medio", v: caricoMeseCorr ? nf0(caricoMeseCorr.Carico_Medio) : "—", ...(dCarico?{d:dCarico.testo, dTipo:dCarico.tipo}:{})},
+        {l:"Carico medio", v: caricoMedioCorr!==null ? nf0(caricoMedioCorr) : "—", ...(dCarico?{d:dCarico.testo, dTipo:dCarico.tipo}:{})},
         {l:"RPE medio squadra", v: rpeSquadra!=null ? nf(rpeSquadra,1) : "—", ...(dRpe?{d:dRpe.testo, dTipo:dRpe.tipo}:{})}
       ] : [
-        {l:"Sessioni nel mese", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Allenamenti nel periodo", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
         {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
         {l:"Minuti tot. squadra", v:nf0(minutiTot), ...(dMinuti?{d:dMinuti.testo, dTipo:dMinuti.tipo}:{})},
         {l:"Sotto il 60% di presenza", v:nf0(sottoSoglia.length), ...(dSottoSoglia?{d:dSottoSoglia.testo, dTipo:dSottoSoglia.tipo}:{})}
       ]);
-      titoloSezioneReport(pag, "Cosa dicono i dati questo mese");
+      titoloSezioneReport(pag, "Cosa dicono i dati");
       const bullet = [];
-      bullet.push(`In ${meseLabel(mese)} la squadra ha svolto ${nf0(totSess)} sessioni di allenamento con una presenza media del ${pctTxt(presenzaMedia,0)}${presenzaMediaPrec!=null?` (${pctTxt(presenzaMediaPrec,0)} il mese precedente)`:""}.`);
-      if(haRPE && caricoMeseCorr) bullet.push(`Il carico medio di allenamento (sRPE) è stato di ${nf0(caricoMeseCorr.Carico_Medio)} unità a presenza${caricoMesePrec?`, contro ${nf0(caricoMesePrec.Carico_Medio)} del mese precedente`:""}.`);
-      if(haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha accumulato il carico più alto del mese (${nf0(piuCaricoGiocatore.Carico_Tot)} u.a.).`);
-      if(!haRPE) bullet.push("Il carico di allenamento (sRPE) non è disponibile: i file caricati non includono l'RPE percepito.");
+      bullet.push(`${fraseInizialePeriodo(da,a)} la squadra ha svolto ${nf0(totSess)} allenamenti con una presenza media del ${pctTxt(presenzaMedia,0)}${presenzaMediaPrec!=null?` (${pctTxt(presenzaMediaPrec,0)} nel periodo precedente)`:""}.`);
+      if(haRPE && caricoMedioCorr!==null) bullet.push(`Il carico medio di allenamento (sRPE) è stato di ${nf0(caricoMedioCorr)} unità a presenza${caricoMedioPrec!==null?`, contro ${nf0(caricoMedioPrec)} del periodo precedente`:""}.`);
+      if(haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha accumulato il carico più alto del periodo (${nf0(piuCaricoGiocatore.Carico_Tot)} u.a.).`);
+      if(!haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha il carico di stanchezza stimato più alto del periodo (proxy da presenza e minuti nelle partitelle, non un vero RPE).`);
       bulletsReport(pag, bullet);
-      titoloSezioneReport(pag, "Tendenze rispetto al mese scorso");
+      titoloSezioneReport(pag, "Tendenze rispetto al periodo precedente");
       if(!righeAllenPrec.length){
-        bulletsReport(pag, [`Non disponibile: manca un mese precedente con dati di allenamento da confrontare con ${meseLabel(mese)}.`]);
+        bulletsReport(pag, [prevRange ? `Non disponibile: manca un periodo precedente con dati di allenamento da confrontare con ${etichetta}.` : "Non disponibile per un report su tutta la stagione: non c'è un periodo precedente con cui confrontarla."]);
       } else if(!tendenzeMese.length){
-        bulletsReport(pag, ["Nessuna variazione degna di nota rispetto al mese scorso: presenza e carico sono rimasti stabili per tutti i giocatori."]);
+        bulletsReport(pag, ["Nessuna variazione degna di nota rispetto al periodo precedente: presenza e carico sono rimasti stabili per tutti i giocatori."]);
       } else {
         flagGiocatoriReport(pag, tendenzeMese);
       }
       titoloSezioneReport(pag, "Segnali da monitorare");
       const avvisi = [];
       sottoSoglia.forEach(r => avvisi.push(`<b>${esc(r.Giocatore)}</b>: presenza del ${pctTxt(r.Tasso_Presenza_pct,0)}, sotto la soglia consigliata del 60%.`));
-      if(haRPE && rapportoCarico !== null && rapportoCarico >= 1.5) avvisi.push(`Il carico medio di squadra è aumentato del ${nf0((rapportoCarico-1)*100)}% rispetto al mese precedente: un salto così rapido è un segnale da monitorare con lo staff.`);
+      if(haRPE && rapportoCarico !== null && rapportoCarico >= 1.5) avvisi.push(`Il carico medio di squadra è aumentato del ${nf0((rapportoCarico-1)*100)}% rispetto al periodo precedente: un salto così rapido è un segnale da monitorare con lo staff.`);
       incrociMese.filter(x=>x.tipo==="affaticamento").forEach(x => avvisi.push(`<b>${esc(x.Giocatore)}</b>: carico in aumento (${nf(x.rapportoCarico,1)}×) insieme a un calo di rendimento in partita — possibile affaticamento.`));
-      bulletsReport(pag, avvisi.length ? avvisi : ["Nessun segnale particolare da monitorare questo mese."]);
+      bulletsReport(pag, avvisi.length ? avvisi : ["Nessun segnale particolare da monitorare in questo periodo."]);
       titoloSezioneReport(pag, "Presenza per giocatore");
       graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
         {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
       ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}}}})});
+      zoneCampoReport(pag, periodoCorr.allenamenti);
     },
     Object.assign(async (pag) => {
-      bandaReport(pag, "Report Mensile Allenamenti", "Dettaglio per giocatore", `${meseLabel(mese)} — tutti i giocatori, tutte le voci raccolte`);
+      bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
       if(righeAllen.length){
         titoloSezioneReport(pag, "Presenze e carico di allenamento");
         const intestazioni = haRPE
-          ? ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza mese prec.","Carico tot. (sRPE)","RPE medio","Tendenza"]
-          : ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza mese prec.","Minuti tot.","Tendenza"];
+          ? ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza periodo prec.","Carico tot. (sRPE)","RPE medio","Carico stimato","Tendenza"]
+          : ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza periodo prec.","Minuti tot.","Carico stimato","Tendenza"];
         tabellaReport(pag, intestazioni,
           righeAllen.map(r => {
             const prec = righeAllenPrec.find(p => p.Giocatore === r.Giocatore);
@@ -3162,11 +3722,12 @@ async function generaReportMensile(mese){
               : deltaPres<=-8 ? `<span class="rp-flag down">▼ ${nf0(Math.abs(deltaPres))}pt</span>`
               : `<span class="rp-flag flat">stabile</span>`;
             const base = [esc(r.Giocatore), esc(ruoloDi(r.Giocatore)), `${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}`, pctTxt(r.Tasso_Presenza_pct,0), presenzaPrecTxt];
-            return haRPE ? [...base, nf0(r.Carico_Tot), nf(r.RPE_Medio,1), tendenzaTxt] : [...base, nf0(r.Minuti_Tot), tendenzaTxt];
+            const carico = esc(livelloStanchezzaDi.get(r.Giocatore) || "—");
+            return haRPE ? [...base, nf0(r.Carico_Tot), nf(r.RPE_Medio,1), carico, tendenzaTxt] : [...base, nf0(r.Minuti_Tot), carico, tendenzaTxt];
           }));
-        if(!haRPE) bulletsReport(pag, ["Carico di allenamento (sRPE) non disponibile: i file caricati non includono l'RPE percepito."]);
+        if(!haRPE) bulletsReport(pag, ["Carico di allenamento (sRPE) non disponibile: i file caricati non includono l'RPE percepito. La colonna «Carico stimato» è una proxy da presenza e minuti nelle partitelle, non un vero dato RPE."]);
       } else {
-        bulletsReport(pag, ["Nessun dato di allenamento disponibile per questo mese."]);
+        bulletsReport(pag, ["Nessun dato di allenamento disponibile per questo periodo."]);
       }
     }, {piena:true})
   ], "#rp-stato-allenamento");
@@ -3262,6 +3823,7 @@ async function generaReportStagionale(){
       } else {
         bulletsReport(pag, ["Non disponibile: nei file caricati non ci sono ancora cartellini, angoli, punizioni o rigori."]);
       }
+      zoneCampoReport(pag, ds.partite, true);
     },
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Stagionale", "Statistiche dettagliate", "Tutti i giocatori, tutte le voci raccolte in stagione");
@@ -3623,6 +4185,8 @@ document.addEventListener("DOMContentLoaded", () => {
   dz.addEventListener("drop", e => { const f = e.dataTransfer?.files; if(f && f.length) gestisciFileSelezionati(f); });
 
   $("#sel-periodo").addEventListener("change", e => { stato.periodo = e.target.value; distruggiGrafici(); render(); });
+  $("#sel-all-da").addEventListener("change", e => { stato.allenamentoDashDa = e.target.value || null; renderAllenamenti(); });
+  $("#sel-all-a").addEventListener("change", e => { stato.allenamentoDashA = e.target.value || null; renderAllenamenti(); });
   $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); });
   $("#cf-sel-a").addEventListener("change", e => { stato.confrontoA = e.target.value; renderConfronto(datiFiltrati()); });
   $("#cf-sel-b").addEventListener("change", e => { stato.confrontoB = e.target.value; renderConfronto(datiFiltrati()); });
@@ -3641,10 +4205,17 @@ document.addEventListener("DOMContentLoaded", () => {
     catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
     finally{ btn.disabled = false; }
   });
-  $("#rp-btn-mensile").addEventListener("click", async () => {
+  $("#rp-btn-periodo-allenamento").addEventListener("click", async () => {
     if(!stato.ds) return;
-    const btn = $("#rp-btn-mensile"); btn.disabled = true;
-    try{ await generaReportMensile($("#rp-sel-mese").value); }
+    const btn = $("#rp-btn-periodo-allenamento"); btn.disabled = true;
+    try{ await generaReportAllenamentoPeriodo($("#rp-sel-all-da").value || null, $("#rp-sel-all-a").value || null); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
+    finally{ btn.disabled = false; }
+  });
+  $("#rp-btn-stagionale-allenamento").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#rp-btn-stagionale-allenamento"); btn.disabled = true;
+    try{ await generaReportAllenamentoPeriodo(null, null); }
     catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
     finally{ btn.disabled = false; }
   });
