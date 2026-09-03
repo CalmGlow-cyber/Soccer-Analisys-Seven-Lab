@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.18.0",
+  numero: "1.19.1",
   data: "2026-09-03",
-  note: "Tre novità dal primo file di prova con un vero RPE (03/09/2026): (1) il carico di allenamento sRPE (minuti × RPE) ora si attiva davvero quando Seven Lab esporta un voto di durezza 1-10 per la sessione (chiave «RPE» nei metadati del file, assegnato dallo staff, non dal singolo giocatore) — applicato a ogni giocatore presente con lo stesso minutaggio già in uso; (2) corretto il nome delle colonne X/Y di «DATI SPAZIALI» (ora «X/Y metri normalizzati», cambiate da Seven Lab rispetto al primo file visto in v1.16.0), con ripiego automatico sul nome vecchio per non rompere i file già caricati; (3) aggiunto un «baricentro di recupero/palla persa stimato» (posizione media in metri) nella sezione Zone di recupero e palla persa, più un confronto 1°/2° tempo per le partite — dichiarato esplicitamente come proxy dai soli eventi di recupero, non un vero baricentro squadra (richiederebbe dati che non abbiamo, tracciamento posizionale completo o GPS). Corretta anche una nota della Dashboard Allenamento che continuava a dire \"i file caricati non includono l'RPE\" anche quando ora è disponibile. Verificato end-to-end nell'app vera con un file di prova reale (13 recuperi/13 palle perse con posizione, RPE=3): carico sRPE corretto per tutti i giocatori presenti, zone/heatmap invariate nei conteggi, baricentro e nota per-tempo mostrati correttamente, report allenamento generato senza errori. Trovato e corretto anche un bug scoperto sul primo file di partita reale con avversario vero: un gol segnato su rigore/punizione/corner accendeva sia il flag specifico sia, su una riga distinta pochi secondi dopo, il flag generico \"Gol\" — la stessa rete veniva quindi contata due volte dal motore di possesso, gonfiando di uno il numero di \"Possessi rilevati\" nel Report Partita; corretto deduplicando i gol troppo ravvicinati dello stesso giocatore. Verificato anche, sullo stesso file, che un gol da azione aperta (senza rigore/punizione/corner) valorizza correttamente la colonna Gol come atteso, e che il baricentro di recupero per tempo funziona anche su una vera partita con avversario (14/14 punti abbinati, nessuna discordanza nel controllo incrociato). Corrette anche due segnalazioni sulla Dashboard Allenamento: (1) l'indice di carico di stanchezza stimato risultava \"Alto\" per quasi tutta la rosa dopo un solo allenamento — non tarato per un campione così piccolo; ora richiede almeno 4 allenamenti con statistiche di gioco nel periodo scelto e almeno 2 per il singolo giocatore prima di classificare Alto/Medio/Basso, mostrando \"n/d\" con una nota esplicita quando il campione non basta; (2) aggiunta un'etichetta \"Porta propria\"/\"Porta avversaria\" su tutti i grafici a campo (zone e heatmap, dashboard e report): la porta avversaria è sempre a destra, sia in partita sia in allenamento con due squadre interne, perché le coordinate sono già normalizzate dal punto di vista di chi compie l'azione. Aggiunta, nella Dashboard e nel Report Allenamenti (Periodo/Mensile/Stagionale), una vista \u00abper squadra\u00bb dei grafici di recupero/palla persa: oltre al grafico con la totalit\u00e0 (A+B insieme, che resta il dato pi\u00f9 importante per capire la tendenza generale, come richiesto esplicitamente), quattro riquadri pi\u00f9 piccoli mostrano Recuperi e Palle perse separatamente per Squadra A e Squadra B, con lo stesso orientamento (porta propria a sinistra, avversaria a destra). Compare solo quando l'allenamento ha eventi con posizione per entrambe le squadre interne; non si applica alle partite, dove il dato \u00e8 gi\u00e0 a un'unica direzione. Verificato con un file di allenamento reale con eventi Team A e Team B (allenamento_4.csv): la Dashboard mostra i quattro riquadri con le etichette porta corrette, il Report Periodo Allenamenti li include nella pagina generata, nessun errore JS in nessuno dei due casi."
+  note: "Rivista, su feedback diretto dell'utente, la vista \"tiri subiti\" del portiere aggiunta in v1.19.0 (sezione STATISTICHE PORTIERI GAME): l'utente ha chiarito di voler vedere \"tiri subiti totali\" come cifra principale, con parate e gol totali subiti come dettaglio — non più le due letture affiancate (formula tiro-subito-più-parata dell'utente vs. totale di Seven Lab) della prima versione. Semplificato quindi: sia nella vista Giocatore (KPI \"Tiri subiti totali\" = Totale tiri affrontati di Seven Lab, con parate e gol subiti nella nota) sia nella tabella \"Tiri subiti dal portiere\" del Report Partita (colonne Portiere/Tiri subiti totali/Parate/Gol subiti, tolte le due colonne della versione precedente). Confermato anche dall'utente, con la sua stessa spiegazione, che i dati geografici dei gol che cadono sempre in metà campo avversaria (coordinata sull'asse lunghezza tipicamente Y>25) sono l'esito atteso e non un segnale di un errore di lettura degli assi — la deduzione fatta in v1.19.0 sullo scambio di assi in DETTAGLIO GOL GAME è quindi confermata dall'utente, non più solo un'ipotesi dai valori numerici. Confermato inoltre esplicitamente che l'utente NON vuole gli stessi grafici di gol/assist anche per l'allenamento: nessuna modifica necessaria, la sezione era già solo per le partite. Verificato con test Node sul file reale partita_3.csv e test end-to-end nell'app vera: il KPI e la tabella mostrano i valori corretti (4 tiri subiti totali, 1 parata, 1 gol subito), nessun errore JS, generati senza errori anche gli altri tre report."
 };
 
 /* =====================================================================
@@ -233,7 +233,44 @@ function parsaFileSevenLab(testo){
     });
   }
 
-  return {tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali};
+  // Sezione "STATISTICHE PORTIERI GAME" (comparsa per la prima volta il 03/09/2026, partita_3.csv): tiri
+  // affrontati da ciascun portiere, già suddivisi da Seven Lab in tre esiti DISTINTI e disgiunti — verificato
+  // sui dati reali: "Tiri subiti" + "Parate" + "Gol subiti" = "Totale tiri affrontati" (es. 2+1+1=4), quindi
+  // non due categorie che si sovrappongono ma tre conteggi separati dello stesso evento "tiro verso la
+  // nostra porta". "Tiri subiti" qui è quindi un terzo esito (né parato né gol, es. fuori misura o bloccato
+  // da un difensore) — diverso dalla stima che l'app faceva finora in mancanza di questo dato reale (parate
+  // + gol subiti, vedi renderGiocatore/parateTxt). Include una riga "TOTALE SQUADRA": lasciata nei dati
+  // grezzi, filtrata in statistichePortieriDaSessione più sotto.
+  let statistichePortieriGame = null;
+  const titoloPortieriGame = Object.keys(sezioni).find(t => /statistiche.*portier/i.test(t));
+  if(titoloPortieriGame && sezioni[titoloPortieriGame].length){
+    const [intPortieri, ...righePortieri] = sezioni[titoloPortieriGame];
+    statistichePortieriGame = righePortieri.map(campi => {
+      const obj = {}; intPortieri.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  // Sezione "DETTAGLIO GOL GAME" (stessa comparsa, partita_3.csv): una riga per ogni gol FATTO dalla nostra
+  // squadra (non i subiti — nel file di prova "Gol subiti"=1 ma qui compaiono solo le 8 righe corrispondenti
+  // a "Gol fatti"=8), con le coordinate del tiro e, quando c'è, dell'assist. ATTENZIONE assi: qui sono
+  // SCAMBIATI rispetto a "DATI SPAZIALI" (dove X 0-50 è la lunghezza del campo, 0=porta propria→50=porta
+  // avversaria, e Y 0-30 è la larghezza — verificato al punto 24 del playbook). Qui invece "Tiro X m"/
+  // "Assist X m" cadono sempre nel range 0-30 (quindi sono la LARGHEZZA) e "Tiro Y m"/"Assist Y m" nel range
+  // 0-50, quasi sempre 40-48 cioè vicino alla porta avversaria a 50 (quindi sono la LUNGHEZZA) — coerente
+  // con "Zona mappa"="metà campo avversaria" su ogni riga solo se Y è la lunghezza. A differenza di DATI
+  // SPAZIALI, qui non c'è nessuna colonna descrittiva di Seven Lab (tipo "Terzo campo") per un controllo
+  // incrociato: è una deduzione dai valori numerici del primo file reale visto, non una certezza verificata
+  // — va ricontrollata se un file futuro mostrasse pattern diversi (vedi estraiPuntiGolGameDaSessione).
+  let dettaglioGolGame = null;
+  const titoloGolGame = Object.keys(sezioni).find(t => /dettaglio.*gol/i.test(t));
+  if(titoloGolGame && sezioni[titoloGolGame].length){
+    const [intGolGame, ...righeGolGame] = sezioni[titoloGolGame];
+    dettaglioGolGame = righeGolGame.map(campi => {
+      const obj = {}; intGolGame.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  return {tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame};
 }
 
 /** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
@@ -256,7 +293,8 @@ function aggiungiSessioneDaTesto(nomeFile, testo){
   const parsed = parsaFileSevenLab(testo);
   const id = idDaNomeFile(nomeFile);
   const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
-    righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali};
+    righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali,
+    statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame};
   const attuali = leggiSessioniSalvate();
   const idx = attuali.findIndex(s => s.id === id);
   if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
@@ -548,6 +586,67 @@ function assegnaPeriodoEventiZona(sessione){
     const coda = code.get(chiave);
     return Object.assign({}, p, {periodo: (coda && coda.length) ? coda.shift() : null});
   });
+}
+
+/* =====================================================================
+   GOL GAME: ZONE DI TIRO E DI ASSIST (coordinate X/Y sul campo, sezione "DETTAGLIO GOL GAME", 03/09/2026)
+   Richiesta esplicita dell'utente: sapere da dove si segna di più e da dove arrivano di più gli assist che
+   portano al gol, sullo stesso campo 50×30 già usato per le zone di recupero/palla persa. Vedi la nota su
+   parsaFileSevenLab per l'evidenza dello scambio di assi rispetto a DATI SPAZIALI.
+   ===================================================================== */
+/** Estrae dalla sezione "DETTAGLIO GOL GAME" di una sessione (solo partite: i gol fatti sono sempre nostri)
+ *  i punti {x,y} nello stesso riferimento usato altrove nell'app (X 0-50 = lunghezza, 0=porta propria→50=
+ *  porta avversaria; Y 0-30 = larghezza) — qui i nomi di colonna hanno gli assi scambiati, quindi si
+ *  rimappa "Y m" (lunghezza reale) su x e "X m" (larghezza reale) su y. `tipo`: "gol" usa Tiro X/Y m (una
+ *  riga per gol, sempre presente); "assist" usa Assist X/Y m e scarta le righe senza assist (gol non
+ *  assistiti, colonne vuote in quel caso). */
+function estraiPuntiGolGameDaSessione(sessione, tipo){
+  const righe = (sessione && Array.isArray(sessione.DettaglioGolGame)) ? sessione.DettaglioGolGame : [];
+  const campoX = tipo === "assist" ? "Assist X m" : "Tiro X m";
+  const campoY = tipo === "assist" ? "Assist Y m" : "Tiro Y m";
+  const punti = [];
+  righe.forEach(r => {
+    const xGrezza = coordinataValida(r[campoX]), yGrezza = coordinataValida(r[campoY]);
+    if(xGrezza === null || yGrezza === null) return; // gol senza assist, o riga incompleta
+    punti.push({x: yGrezza, y: xGrezza, marcatore: r["Marcatore"] || null, assist: r["Assist"] || null, secondo: N(r["Secondo"])});
+  });
+  return punti;
+}
+
+/* =====================================================================
+   STATISTICHE PORTIERI GAME (sezione "STATISTICHE PORTIERI GAME", 03/09/2026)
+   ===================================================================== */
+/** Righe di "STATISTICHE PORTIERI GAME" di una sessione, normalizzate a numeri, con la somma "tiri subiti"
+ *  secondo la definizione esplicita dell'utente (tiro subito + parata, ESCLUSI i gol subiti) accanto al
+ *  "Totale tiri affrontati" che calcola Seven Lab stesso (che invece include anche i gol subiti) — le due
+ *  letture sono legittimamente diverse (una misura i tiri neutralizzati, l'altra tutti i tiri affrontati) e
+ *  vengono entrambe mostrate, mai una al posto dell'altra. Esclude dall'elenco portieri la riga di riepilogo
+ *  "TOTALE SQUADRA", restituita a parte in `totaleSquadra`. */
+function statistichePortieriDaSessione(sessione){
+  const righe = (sessione && Array.isArray(sessione.StatistichePortieriGame)) ? sessione.StatistichePortieriGame : [];
+  const mappa = r => ({
+    portiere: String(r["Portiere"] || "").trim(),
+    tiriSubiti: N(r["Tiri subiti"]), parate: N(r["Parate"]), golSubiti: N(r["Gol subiti"]),
+    totaleAffrontati: N(r["Totale tiri affrontati"]),
+    tiriSubitiSommaUtente: N(r["Tiri subiti"]) + N(r["Parate"])
+  });
+  const portieri = righe.filter(r => String(r["Portiere"]||"").trim().toUpperCase() !== "TOTALE SQUADRA").map(mappa);
+  const rigaTotale = righe.find(r => String(r["Portiere"]||"").trim().toUpperCase() === "TOTALE SQUADRA");
+  return {portieri, totaleSquadra: rigaTotale ? mappa(rigaTotale) : null};
+}
+/** Aggrega "STATISTICHE PORTIERI GAME" di più partite per portiere (somma su tutte le sessioni passate). */
+function aggregaPortieriGame(sessioni){
+  const mappa = new Map();
+  (sessioni||[]).forEach(s => {
+    statistichePortieriDaSessione(s).portieri.forEach(p => {
+      if(!p.portiere) return;
+      const acc = mappa.get(p.portiere) || {portiere:p.portiere, tiriSubiti:0, parate:0, golSubiti:0, totaleAffrontati:0, partite:0};
+      acc.tiriSubiti += p.tiriSubiti; acc.parate += p.parate; acc.golSubiti += p.golSubiti;
+      acc.totaleAffrontati += p.totaleAffrontati; acc.partite++;
+      mappa.set(p.portiere, acc);
+    });
+  });
+  return Array.from(mappa.values()).map(a => Object.assign(a, {tiriSubitiSommaUtente: a.tiriSubiti + a.parate}));
 }
 /** Baricentro di recupero (solo Team A) diviso tra 1° e 2° tempo, su un elenco di sessioni partita —
  *  richiesta dell'utente del 03/09/2026 per capire se si alza/abbassa col passare della gara (vedi
@@ -957,12 +1056,15 @@ function assemblaDataset(grezzo){
     Modulo: String(r.Modulo ?? "").trim() || "Non indicato",
     Forza_Avversario: r.Forza_Avversario ?? null,
     Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
-    DatiSpaziali: r.DatiSpaziali ?? null
+    DatiSpaziali: r.DatiSpaziali ?? null,
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
   partite.forEach((p,i) => { p.Ordine = i+1; p.Mese = meseKey(p.Data);
     p.Etichetta = dataCorta(p.Data)+" "+p.Avversario; p.Risultato = p.Gol_Fatti+"-"+p.Gol_Subiti;
-    p.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:p.DatiSpaziali}, true); });
+    p.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:p.DatiSpaziali}, true);
+    p.PuntiGol = estraiPuntiGolGameDaSessione(p, "gol");
+    p.PuntiAssistGol = estraiPuntiGolGameDaSessione(p, "assist"); });
 
   const mappaPartite = new Map(partite.map(p => [p.Match_ID, p]));
 
@@ -976,6 +1078,7 @@ function assemblaDataset(grezzo){
       Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
       Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
       Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: r.Note ?? "",
+      Tiri_Subiti_Rilevati: r.Tiri_Subiti_Rilevati ?? null,
       Cartellini_Gialli: r.Cartellini_Gialli ?? null, Cartellini_Rossi: r.Cartellini_Rossi ?? null,
       Angoli_Tentati: r.Angoli_Tentati ?? null, Angoli_Gol: r.Angoli_Gol ?? null,
       Punizioni_Tentate: r.Punizioni_Tentate ?? null, Punizioni_Realizzate: r.Punizioni_Realizzate ?? null,
@@ -994,10 +1097,13 @@ function assemblaDataset(grezzo){
     Sessione_ID: String(r.Sessione_ID ?? "").trim(), Data: toDate(r.Data),
     Tipo_Allenamento: String(r.Tipo_Allenamento ?? "").trim() || "Non indicato",
     Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
-    DatiSpaziali: r.DatiSpaziali ?? null
+    DatiSpaziali: r.DatiSpaziali ?? null,
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
   allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
-    a.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:a.DatiSpaziali}, false); });
+    a.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:a.DatiSpaziali}, false);
+    a.PuntiGol = estraiPuntiGolGameDaSessione(a, "gol");
+    a.PuntiAssistGol = estraiPuntiGolGameDaSessione(a, "assist"); });
   const mappaSessioni = new Map(allenamenti.map(a => [a.Sessione_ID, a]));
 
   // Statistiche "da partita" (gol, tiri, passaggi, dribbling, recuperi, parate) registrate per giocatore
@@ -1043,7 +1149,9 @@ function assemblaDataset(grezzo){
     haRPE: presenze.some(p => p.RPE !== null),
     haStatAllenamento: statAllenamento.length>0,
     haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
-    haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0)};
+    haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0),
+    haDatiGolGame: partite.some(p=>p.PuntiGol.length>0) || allenamenti.some(a=>a.PuntiGol.length>0),
+    haStatistichePortieriGame: partite.some(p=>p.StatistichePortieriGame) || allenamenti.some(a=>a.StatistichePortieriGame)};
 }
 
 /** Percorso di ingresso "Seven Lab": costruisce il dataset a partire dalle sessioni accumulate
@@ -1061,7 +1169,8 @@ function costruisciDatasetDaSessioni(sessioni){
         Competizione: "", Gol_Fatti: N(s.meta["Gol fatti"]), Gol_Subiti: N(s.meta["Gol subiti"]),
         Durata_Minuti: N(s.meta["Durata minuti"]), Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
         Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
-        DatiSpaziali: s.datiSpaziali || null
+        DatiSpaziali: s.datiSpaziali || null,
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null
       });
       (s.righe||[]).forEach(r => {
         const tiriTot = N(r["Tiri"]), tiriPorta = N(r["Tiri in porta"]);
@@ -1072,6 +1181,9 @@ function costruisciDatasetDaSessioni(sessioni){
         // (nota: "goal", non "gol", in questa tabella) sono l'unico esito che Seven Lab dà per i corner,
         // quindi qui non esiste un concetto di "precisione" separato dalla realizzazione.
         const haDisciplina = r["Cartellini gialli"] !== undefined;
+        // "Tiri subiti rilevati" (03/09/2026, partita_3.csv): conteggio per giocatore dell'evento "Tiro
+        // subito" nella timeline — in pratica valorizzato solo per il portiere in campo. Assente negli export
+        // più vecchi: null (non 0), per non far sembrare un dato vero un semplice "non disponibile".
         giocatoriRaw.push({
           Match_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
           Minuti_Giocati: N(r["Minuti giocati"]), Gol: N(r["Gol"]), Assist: N(r["Assist"]),
@@ -1079,6 +1191,7 @@ function costruisciDatasetDaSessioni(sessioni){
           Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
           Dribbling_Tentati: dribRiusciti + dribFalliti, Dribbling_Falliti: dribFalliti,
           Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"]), Note: "",
+          Tiri_Subiti_Rilevati: r["Tiri subiti rilevati"] !== undefined ? N(r["Tiri subiti rilevati"]) : null,
           Cartellini_Gialli: haDisciplina ? N(r["Cartellini gialli"]) : null,
           Cartellini_Rossi: haDisciplina ? N(r["Cartellini rossi"]) : null,
           Angoli_Tentati: haDisciplina ? N(r["Calci angolo"]) : null,
@@ -1094,7 +1207,8 @@ function costruisciDatasetDaSessioni(sessioni){
         Sessione_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
         Tipo_Allenamento: (s.meta["Formato"]||"").trim() || "Allenamento",
         Durata_Minuti_Sessione: N(s.meta["Durata minuti"]), Note: "", Eventi: s.eventi || null,
-        DatiSpaziali: s.datiSpaziali || null
+        DatiSpaziali: s.datiSpaziali || null,
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null
       });
       // RPE (03/09/2026): da questa consegna Seven Lab può esportare un voto di durezza 1-10 assegnato
       // dallo staff per l'intera sessione (chiave "RPE" nel blocco metadati, confermato sul primo file di
@@ -2312,8 +2426,21 @@ function renderGiocatore(f){
     ["Efficacia realizzativa", mio.Efficacia_Realizzativa_pct, perc(confronto.gol_giocatori, confronto.tiri_totali)],
     ["Affidabilità (100 − tasso errore)", mio.Tasso_Errore_pct===null?null:100-mio.Tasso_Errore_pct, confronto.tasso_errore===null?null:100-confronto.tasso_errore]
   ];
+  // "Tiri subiti" (03/09/2026, rivista il 03/09/2026 su richiesta esplicita dell'utente): quando i file
+  // caricati includono "STATISTICHE PORTIERI GAME" per questo portiere, mostriamo il dato reale di Seven Lab
+  // invece della vecchia stima (parate + gol subiti, l'unica possibile prima di avere questo dato) — vedi
+  // statistichePortieriDaSessione/aggregaPortieriGame per la definizione. L'utente ha chiesto esplicitamente
+  // "tiri subiti totali" come cifra principale, con parate e gol subiti come dettaglio: usiamo quindi il
+  // "Totale tiri affrontati" di Seven Lab (tiri subiti + parate + gol subiti) come valore del KPI, non più la
+  // formula tiro-subito-più-parata usata in un primo tentativo (che escludeva i gol e non corrispondeva a
+  // cosa l'utente intendeva davvero per "totali").
+  const portieriGameAgg = aggregaPortieriGame(f.partite);
+  const mioPortiereGame = portieriGameAgg.find(p => p.portiere === nome);
   const parateTxt = /portier/i.test(mio.Ruolo)
-    ? `<div class="kpi"><div class="kpi-eti">Parate</div><div class="kpi-valore">${nf0(mio.Parate)}</div><div class="kpi-nota">Stima di parate riuscite: ${pctTxt(perc(mio.Parate, mio.Parate + squadra.gol_subiti),0)} dei tiri subiti stimati (parate + gol subiti)</div></div>` : "";
+    ? (mioPortiereGame
+      ? `<div class="kpi"><div class="kpi-eti">Tiri subiti totali</div><div class="kpi-valore">${nf0(mioPortiereGame.totaleAffrontati)}</div><div class="kpi-nota">${nf0(mioPortiereGame.parate)} parati (${pctTxt(perc(mioPortiereGame.parate, mioPortiereGame.totaleAffrontati),0)}) · ${nf0(mioPortiereGame.golSubiti)} gol subiti</div></div>`
+      : `<div class="kpi"><div class="kpi-eti">Parate</div><div class="kpi-valore">${nf0(mio.Parate)}</div><div class="kpi-nota">Stima di parate riuscite: ${pctTxt(perc(mio.Parate, mio.Parate + squadra.gol_subiti),0)} dei tiri subiti stimati (parate + gol subiti) — stima indicativa, non ancora il dato reale di Seven Lab</div></div>`)
+    : "";
   cont.innerHTML = `
     <div class="griglia g-kpi" style="margin-bottom:16px">
       <div class="kpi"><div class="kpi-eti">Partite · minuti</div><div class="kpi-valore">${nf0(mio.Partite_Giocate)} · ${nf0(mio.Minuti_Totali)}'</div><div class="kpi-nota">${esc(mio.Ruolo)}</div></div>
@@ -2768,6 +2895,60 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
   }
 }
 
+/** Sezione "Dove si segna di più" / "Da dove arrivano gli assist" — richiesta esplicita dell'utente
+ *  (03/09/2026): usa le coordinate della sezione "DETTAGLIO GOL GAME" (vedi estraiPuntiGolGameDaSessione),
+ *  con lo stesso stile a doppia vista (griglia a zone % + heatmap) di renderZoneCampo qui sopra, per
+ *  coerenza visiva. Solo partite: i gol fatti sono sempre "nostri", un equivalente per l'allenamento (dove
+ *  A/B sono due squadre interne) non ha lo stesso significato ed è già coperto dalla classifica marcatori.
+ *  Gating esplicito come per le zone di recupero: finché nessun file caricato include questa sezione, lo
+ *  dice chiaramente invece di un grafico vuoto. */
+function renderGolGameCampo(idContenitore, sessioni){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haDatiGolGame){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate di tiro e assist dei gol nei file caricati (sezione «DETTAGLIO GOL GAME») — un dato che Seven Lab non esporta ancora in tutti gli export. Quando i tuoi file la includeranno, questa sezione si popola da sola.</div>`;
+    return;
+  }
+  const gol = [], assist = [];
+  (sessioni||[]).forEach(s => { (s.PuntiGol||[]).forEach(p=>gol.push(p)); (s.PuntiAssistGol||[]).forEach(p=>assist.push(p)); });
+  if(!gol.length){
+    cont.innerHTML = `<div class="vuoto">Nessun gol con posizione registrata nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const idp = "gg-"+idContenitore;
+  cont.innerHTML = `
+    <div class="griglia g-2">
+      <div class="card">
+        <div class="grafico-titolo">Zone di tiro dei gol (%)</div>
+        <div class="grafico-sub">${nf0(gol.length)} gol con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-gol" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Zone di partenza degli assist (%)</div>
+        <div class="grafico-sub">${assist.length ? nf0(assist.length)+" assist con posizione nel periodo scelto." : "Nessun gol assistito con posizione nel periodo scelto (i gol senza assist restano esclusi qui)."}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-assist" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap tiri vincenti</div>
+        <div class="grafico-sub">Densità reale dei punti da cui si è segnato: colore più caldo dove si concentrano di più i gol.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-gol" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap origine assist</div>
+        <div class="grafico-sub">Densità reale da dove arrivano più spesso gli assist vincenti.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-assist" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    ${gol.length<5 ? `<p class="nota-piccola">Campione ridotto (meno di 5 gol con posizione): le percentuali per zona sono indicative.</p>` : ""}
+    <p class="nota-piccola" style="margin-top:8px">Assi dedotti dai valori delle coordinate nel file (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): se un file futuro mostrasse dati incoerenti con "porta avversaria a destra", segnalacelo così verifichiamo.</p>`;
+  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  disegnaCampoZone($("#"+idp+"-zona-gol"), gol, Object.assign({}, optsBase, {colore:colore("c1")}));
+  disegnaCampoZone($("#"+idp+"-zona-assist"), assist, Object.assign({}, optsBase, {colore:colore("c4")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat-gol"), gol, optsBase);
+  disegnaCampoHeatmap($("#"+idp+"-heat-assist"), assist, optsBase);
+}
+
 /* --------- 9. Qualità dati --------- */
 function renderQualita(){
   const cont = $("#contenuto-qualita");
@@ -2803,6 +2984,7 @@ function render(){
   renderGiocatore(f);
   renderConfronto(f);
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
+  renderGolGameCampo("contenuto-golgame-partita", f.partite);
   renderAllenamenti();
   renderIncroci();
   renderZoneCampo("contenuto-zone-allenamento", f.allenamenti, null, true);
@@ -3191,6 +3373,64 @@ function bulletsReport(pagina, righeHtml){
   ul.innerHTML = righeHtml.map(t => `<li>${t}</li>`).join("");
   pagina.corpo.appendChild(ul);
 }
+/** Sblocca l'entità HTML minime che `esc()` introduce (&amp; &lt; &gt; &quot; &#39;), solo per misurare i
+ *  caratteri VERI di un nome (es. "D'Angelo" non deve misurare "&#39;" invece di un apostrofo solo). Non è
+ *  un unescape completo, copre solo i 5 caratteri che `esc()` può produrre. */
+function unescConteggio(s){
+  return String(s).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+}
+/** Larghezza in pixel del testo dato, nello stesso font (famiglia/peso/dimensione) davvero applicato
+ *  all'elemento passato — letto dal browser con getComputedStyle, non stimato. Usa un unico canvas
+ *  riutilizzato tra le chiamate (measureText non disegna nulla, serve solo la metrica). */
+function larghezzaTestoPx(testo, elementoStile){
+  const cs = getComputedStyle(elementoStile);
+  if(!larghezzaTestoPx._ctx) larghezzaTestoPx._ctx = document.createElement("canvas").getContext("2d");
+  const ctx = larghezzaTestoPx._ctx;
+  ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  return ctx.measureText(testo).width;
+}
+/** Adatta la larghezza di OGNI colonna di una tabella `.rp-table` GIÀ inserita nel DOM al contenuto che
+ *  porta davvero, al posto delle percentuali fisse della regola CSS di base (22% sulla prima colonna,
+ *  resto diviso a metà tra le altre da table-layout:fixed) — richiesta esplicita dell'utente (03/09/2026):
+ *  "fai la colonna [dei nomi] larga quanto il nome più lungo in rosa e basta, in modo che si possano vedere
+ *  anche i dati presenti in tutte le altre colonne". Restringere solo la prima colonna non bastava: liberava
+ *  spazio ma quello in più finiva diviso a caso tra le altre, e una come "Ruolo" (con valori lunghi tipo
+ *  "Centrocampista") tornava comunque a andare a capo male — quindi la larghezza si misura per TUTTE le
+ *  colonne, non solo la prima.
+ *  Misura il vero rendering del browser (font, peso — incluso il grassetto della prima colonna, voluto — e
+ *  dimensione realmente applicati in QUESTO contesto: pagina intera o la colonna più stretta di un report
+ *  stile "CV", dove `.rp2-body`/`.rp3-body` rimpiccioliscono il testo delle tabelle) invece di stimare in
+ *  caratteri: con un font non monospace come quello dei report, contare i caratteri è impreciso e ha infatti
+ *  prodotto, in un primo tentativo, testo comunque tagliato a capo. Se la somma delle larghezze necessarie
+ *  entra nella tabella, lo spazio in più viene distribuito in proporzione (la tabella resta larga al 100%,
+ *  nessuno spazio vuoto); se invece serve più spazio di quanto ce ne sia (tabella con molte colonne larghe),
+ *  tutte le colonne vengono ridotte in proporzione alla loro necessità, così nessuna sparisce del tutto e
+ *  nessuna monopolizza lo spazio a scapito delle altre. Deve girare DOPO che la tabella è nel DOM (altrimenti
+ *  getComputedStyle non vede il contesto giusto) e prima di qualunque cattura html2canvas della pagina. */
+function adattaLarghezzeColonneReport(tbl){
+  const intestazioni = Array.from(tbl.querySelectorAll("thead th"));
+  if(!intestazioni.length) return;
+  const righe = Array.from(tbl.querySelectorAll("tbody tr"));
+  const necessarie = intestazioni.map((th, i) => {
+    const cs = getComputedStyle(th);
+    const pad = parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+    let larghezza = larghezzaTestoPx(unescConteggio(th.textContent), th) + pad;
+    righe.forEach(tr => {
+      const td = tr.children[i];
+      if(!td) return;
+      const csTd = getComputedStyle(td);
+      const padTd = parseFloat(csTd.paddingLeft)+parseFloat(csTd.paddingRight);
+      larghezza = Math.max(larghezza, larghezzaTestoPx(unescConteggio(td.textContent), td) + padTd);
+    });
+    return larghezza + 2; // piccolo margine di sicurezza per l'arrotondamento del canvas
+  });
+  const totaleNecessario = necessarie.reduce((a,b)=>a+b, 0);
+  const larghezzaTabella = tbl.getBoundingClientRect().width || totaleNecessario;
+  if(totaleNecessario <= 0) return;
+  const fattore = larghezzaTabella / totaleNecessario; // >1 se c'è spazio in più da distribuire, <1 se va tutto ridotto in proporzione
+  intestazioni.forEach((th, i) => { th.style.width = Math.round(necessarie[i]*fattore)+"px"; });
+}
+/** Tabella generica dei report PDF, sempre con "Giocatore" (o comunque un nome) in prima colonna. */
 function tabellaReport(pagina, intestazioni, righe){
   const tbl = document.createElement("table");
   tbl.className = "rp-table";
@@ -3198,6 +3438,7 @@ function tabellaReport(pagina, intestazioni, righe){
     righe.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")
   }</tbody></table>`;
   pagina.corpo.appendChild(tbl);
+  adattaLarghezzeColonneReport(tbl);
 }
 function graficoReport(pagina, id, config){
   const wrap = document.createElement("div");
@@ -3329,6 +3570,41 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
       aggiungiCampoSquadra("Palle perse — Squadra B", perSquadra.B.persa, Object.assign({}, optsBase, {colore:"#A13544"}));
     }
   }
+}
+
+/** Come zoneCampoReport, ma per i punti di tiro/assist dei gol fatti (sezione "DETTAGLIO GOL GAME") —
+ *  richiesta esplicita dell'utente (03/09/2026). Solo partite. Non aggiunge nessuna sezione al PDF se la
+ *  sessione passata non ha gol con posizione: del tutto normale con i file Seven Lab che non includono
+ *  ancora questa sezione, non un errore. */
+function golGameCampoReport(pagina, sessioni){
+  const gol = [], assist = [];
+  (sessioni||[]).forEach(s => { (s.PuntiGol||[]).forEach(p=>gol.push(p)); (s.PuntiAssistGol||[]).forEach(p=>assist.push(p)); });
+  if(!gol.length) return;
+  titoloSezioneReport(pagina, "Zone di tiro e assist dei gol");
+  bulletsReport(pagina, [
+    `${nf0(gol.length)} gol con posizione registrata in questo report${assist.length ? ` (di cui ${nf0(assist.length)} assistiti con posizione)` : ""}.`,
+    "Griglia a 9 zone (terzi di campo): percentuale sul totale gol con posizione. Heatmap: densità reale, colore più caldo dove si concentrano di più i punti di tiro/assist.",
+    "Assi dedotti dai valori delle coordinate della sezione «DETTAGLIO GOL GAME» (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): da verificare se un file futuro mostrasse un pattern diverso."
+  ]);
+  const rampa = [[0,hexToRgbArr(PALETTE_REPORT.c1)],[0.4,hexToRgbArr(PALETTE_REPORT.c4)],[0.7,hexToRgbArr(PALETTE_REPORT.c6)],[1,hexToRgbArr(PALETTE_REPORT.c2)]];
+  const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
+  const griglia = document.createElement("div");
+  griglia.className = "rp-campo-griglia";
+  pagina.corpo.appendChild(griglia);
+  const aggiungiCampo = (titolo, disegnaFn, punti, extraOpts) => {
+    const cella = document.createElement("div");
+    const etichetta = document.createElement("div");
+    etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+    cella.appendChild(etichetta);
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+    wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
+    disegnaFn(cv, punti, extraOpts);
+  };
+  aggiungiCampo("Zone di tiro dei gol (%)", disegnaCampoZone, gol, Object.assign({}, optsBase, {colore:PALETTE_REPORT.c1}));
+  aggiungiCampo("Zone di partenza assist (%)", disegnaCampoZone, assist, Object.assign({}, optsBase, {colore:PALETTE_REPORT.c4}));
+  aggiungiCampo("Heatmap tiri vincenti", disegnaCampoHeatmap, gol, optsBase);
+  aggiungiCampo("Heatmap origine assist", disegnaCampoHeatmap, assist, optsBase);
 }
 
 const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
@@ -3587,6 +3863,12 @@ async function generaReportPartita(matchId){
     };
   }
 
+  // Tiri subiti dal/dai portiere/i di questa partita: dalla sezione "STATISTICHE PORTIERI GAME" (03/09/2026).
+  // Mostriamo "Totale tiri affrontati" di Seven Lab come "Tiri subiti totali" (richiesta esplicita
+  // dell'utente il 03/09/2026, dopo una prima versione basata sulla sua formula tiro-subito-più-parata) con
+  // parate e gol subiti come dettaglio — vedi statistichePortieriDaSessione per la definizione dei campi.
+  const portieriGaraGame = statistichePortieriDaSessione(partita);
+
   statoReport("Genero il Report Partita…", true, "#rp-stato-partita");
   await generaEScarica(nomeFileData("Report_Partita_"+matchId, partita.Data), [
     async (pag) => {
@@ -3653,7 +3935,14 @@ async function generaReportPartita(matchId){
           `Punizioni: ${nf0(disciplinaGaraTot.punizione.ok)} realizzate su ${nf0(disciplinaGaraTot.punizione.tentati)} battute · Rigori: ${nf0(disciplinaGaraTot.rigore.ok)} realizzati su ${nf0(disciplinaGaraTot.rigore.tentati)} battuti.`
         ]);
       }
+      if(portieriGaraGame.portieri.length){
+        titoloSezioneReport(pag, "Tiri subiti dal portiere");
+        tabellaReport(pag, ["Portiere","Tiri subiti totali","Parate","Gol subiti"],
+          portieriGaraGame.portieri.map(p => [esc(p.portiere), nf0(p.totaleAffrontati), nf0(p.parate), nf0(p.golSubiti)]));
+        bulletsReport(pag, [`"Tiri subiti totali" è il totale dei tiri affrontati dal portiere in questa partita (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
+      }
       zoneCampoReport(pag, [partita], true);
+      golGameCampoReport(pag, [partita]);
       titoloSezioneReport(pag, "Cosa dicono i dati");
       const bullet = [];
       if(mvp) bullet.push(`<b>${esc(mvp.Giocatore)}</b> ha guidato la squadra con un indice prestazione di ${nf(mvp.Indice_Prestazione_Tot,1)} (${nf0(mvp.Gol)} gol, ${nf0(mvp.Assist)} assist).`);
