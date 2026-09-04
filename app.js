@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.19.1",
-  data: "2026-09-03",
-  note: "Rivista, su feedback diretto dell'utente, la vista \"tiri subiti\" del portiere aggiunta in v1.19.0 (sezione STATISTICHE PORTIERI GAME): l'utente ha chiarito di voler vedere \"tiri subiti totali\" come cifra principale, con parate e gol totali subiti come dettaglio — non più le due letture affiancate (formula tiro-subito-più-parata dell'utente vs. totale di Seven Lab) della prima versione. Semplificato quindi: sia nella vista Giocatore (KPI \"Tiri subiti totali\" = Totale tiri affrontati di Seven Lab, con parate e gol subiti nella nota) sia nella tabella \"Tiri subiti dal portiere\" del Report Partita (colonne Portiere/Tiri subiti totali/Parate/Gol subiti, tolte le due colonne della versione precedente). Confermato anche dall'utente, con la sua stessa spiegazione, che i dati geografici dei gol che cadono sempre in metà campo avversaria (coordinata sull'asse lunghezza tipicamente Y>25) sono l'esito atteso e non un segnale di un errore di lettura degli assi — la deduzione fatta in v1.19.0 sullo scambio di assi in DETTAGLIO GOL GAME è quindi confermata dall'utente, non più solo un'ipotesi dai valori numerici. Confermato inoltre esplicitamente che l'utente NON vuole gli stessi grafici di gol/assist anche per l'allenamento: nessuna modifica necessaria, la sezione era già solo per le partite. Verificato con test Node sul file reale partita_3.csv e test end-to-end nell'app vera: il KPI e la tabella mostrano i valori corretti (4 tiri subiti totali, 1 parata, 1 gol subito), nessun errore JS, generati senza errori anche gli altri tre report."
+  numero: "1.20.0",
+  data: "2026-09-04",
+  note: "Revisione di leggibilità su tutta l'app, con audit a schermo e sui PDF, più il radar diverso per ruolo chiesto dall'utente (04/09/2026). RADAR PER RUOLO: nella vista Giocatore il radar ora cambia assi in base al ruolo. Portiere: parate, tiri subiti, parate %, gol subiti, passaggi riusciti e precisione passaggi — con tiri e gol subiti presi dalla sezione «STATISTICHE PORTIERI GAME» dove c'è e, dove manca, stimati partita per partita come parate del portiere più gol incassati dalla squadra in quella gara (il calcolo «live» descritto dall'utente). Giocatore di movimento: nove assi — tiri, % tiri in porta, % realizzazione, % passaggi riusciti, numero di passaggi riusciti, palle perse, recuperi, % dribbling (con riusciti/tentati) e tasso di errore sui passaggi. Poiché quegli assi mescolano conteggi e percentuali, il raggio disegnato è un punteggio relativo (100 = miglior valore della rosa nel periodo) e accanto al grafico compare una tabella con i NUMERI VERI di ogni asse, giocatore e media del gruppo di confronto; gli assi in cui meno è meglio (palle perse, errori, gol subiti) sono marcati con ↓ e hanno il punteggio ribaltato, così area più grande vuol sempre dire meglio. Mappata finalmente la colonna «Palle perse» per giocatore, presente negli export ma mai usata (l'asse compare solo quando il dato c'è davvero). LEGGIBILITÀ A SCHERMO: la barra in alto restava fissa tutta intera occupando 246px su desktop (27% dello schermo) e nascondeva sotto di sé le intestazioni delle tabelle e il titolo della sezione a cui si saltava dall'indice — ora resta fissa solo la parte utile (filtri, schede, indice), 159px, e le sezioni atterrano sotto la barra invece che dietro; le tabelle non superano mai lo spazio che resta libero sullo schermo; aggiunta l'ombra laterale che segnala quando una tabella continua oltre il bordo su telefono; i riquadri con i campi vanno sempre a due colonne (prima a schermo largo restavano 3 + 1 orfano, più piccoli del necessario); aggiunta nell'indice la voce mancante «Zone tiro e assist gol». IMPAGINAZIONE DEI REPORT PDF: nel Report Partita e nel Report Allenamenti il contenuto restava largo 564px invece di 794 per tutte le pagine generate dalla pagina di copertina — cioè una striscia bianca vuota di 230px a sinistra per due pagine intere, con i grafici a campo schiacciati e illeggibili; ora la copertina occupa esattamente una pagina e zone, tabelle e sintesi vanno su pagine a piena larghezza, con i campetti grandi il doppio. Corretto anche il calcolo della larghezza delle colonne, che non teneva conto del maiuscolo e della spaziatura applicati via CSS alle intestazioni e le spezzava a metà parola («PARAT E», «INDIC E»), con una larghezza minima per colonna e una precedenza alla colonna dei nomi; cifre incolonnate (tabular-nums); i giocatori non scesi in campo restano nelle tabelle ma attenuati, così si trova subito chi ha giocato. Corretto infine un dato impossibile nelle tendenze: la retta di interpolazione veniva prolungata senza limiti e i report annunciavano cali «a -7%» di tasso di errore — ora gli estremi restano dentro i valori che la metrica può assumere. Verificato con test Node sulle nuove funzioni (28 controlli: assi per ruolo, medie del gruppo, normalizzazione e inversione degli assi, coerenza tra parate/tiri subiti/gol subiti del portiere) e con prove end-to-end nell'app vera sui file reali di Elisa: nessun errore JavaScript su desktop e telefono, in tema chiaro e scuro, su tutte le schede, tutti i giocatori, tutti i periodi, tutti e quattro i report e anche con i dati di esempio."
 };
 
 /* =====================================================================
@@ -1078,6 +1078,7 @@ function assemblaDataset(grezzo){
       Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
       Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
       Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: r.Note ?? "",
+      Palle_Perse: r.Palle_Perse ?? null,
       Tiri_Subiti_Rilevati: r.Tiri_Subiti_Rilevati ?? null,
       Cartellini_Gialli: r.Cartellini_Gialli ?? null, Cartellini_Rossi: r.Cartellini_Rossi ?? null,
       Angoli_Tentati: r.Angoli_Tentati ?? null, Angoli_Gol: r.Angoli_Gol ?? null,
@@ -1121,6 +1122,7 @@ function assemblaDataset(grezzo){
       Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
       Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
       Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: "",
+      Palle_Perse: r.Palle_Perse ?? null,
       Cartellini_Gialli: null, Cartellini_Rossi: null, Angoli_Tentati: null, Angoli_Gol: null,
       Punizioni_Tentate: null, Punizioni_Realizzate: null, Rigori_Tentati: null, Rigori_Realizzati: null
     };
@@ -1151,6 +1153,9 @@ function assemblaDataset(grezzo){
     haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
     haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0),
     haDatiGolGame: partite.some(p=>p.PuntiGol.length>0) || allenamenti.some(a=>a.PuntiGol.length>0),
+    // le palle perse per giocatore ci sono negli export Seven Lab ma non nei dati demo né in un vecchio
+    // Excel: senza questa distinzione l'asse del radar mostrerebbe "0 per tutti" come se fosse un dato vero
+    haPallePerse: giocatori.some(g => g.Palle_Perse !== null && g.Palle_Perse !== undefined),
     haStatistichePortieriGame: partite.some(p=>p.StatistichePortieriGame) || allenamenti.some(a=>a.StatistichePortieriGame)};
 }
 
@@ -1191,6 +1196,9 @@ function costruisciDatasetDaSessioni(sessioni){
           Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
           Dribbling_Tentati: dribRiusciti + dribFalliti, Dribbling_Falliti: dribFalliti,
           Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"]), Note: "",
+          // "Palle perse" per giocatore (04/09/2026): colonna sempre presente nell'export Seven Lab ma
+          // rimasta finora non mappata (gap del punto 25 del playbook) — serve come asse del radar nuovo.
+          Palle_Perse: r["Palle perse"] !== undefined ? N(r["Palle perse"]) : null,
           Tiri_Subiti_Rilevati: r["Tiri subiti rilevati"] !== undefined ? N(r["Tiri subiti rilevati"]) : null,
           Cartellini_Gialli: haDisciplina ? N(r["Cartellini gialli"]) : null,
           Cartellini_Rossi: haDisciplina ? N(r["Cartellini rossi"]) : null,
@@ -1244,7 +1252,8 @@ function costruisciDatasetDaSessioni(sessioni){
             Tiri_In_Porta: tiriPortaAll, Tiri_Fuori: Math.max(0, tiriTotAll - tiriPortaAll),
             Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
             Dribbling_Tentati: dribRiuscitiAll + dribFallitiAll, Dribbling_Falliti: dribFallitiAll,
-            Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"])
+            Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"]),
+            Palle_Perse: r["Palle perse"] !== undefined ? N(r["Palle perse"]) : null
           });
         }
       });
@@ -1267,6 +1276,10 @@ function derivaRiga(g, partita){
   g.Errori_Totali = g.Passaggi_Sbagliati + g.Dribbling_Falliti;
   g.Azioni_Totali = g.Passaggi_Totali + g.Dribbling_Tentati + g.Tiri_Totali;
   g.Tasso_Errore_pct = perc(g.Errori_Totali, g.Azioni_Totali);
+  // Tasso di errore calcolato SOLO sui passaggi (sbagliati / tentati) — definizione chiesta esplicitamente
+  // dall'utente per il radar (04/09/2026), diversa da Tasso_Errore_pct qui sopra che è più ampio (include
+  // anche i dribbling falliti e mette a denominatore tutte le azioni). Le due convivono di proposito.
+  g.Tasso_Errore_Passaggi_pct = perc(g.Passaggi_Sbagliati, g.Passaggi_Totali);
   g.Cartellini_Totali = g.Cartellini_Gialli!==null ? N(g.Cartellini_Gialli)+N(g.Cartellini_Rossi) : null;
   g.Angoli_Realizzazione_pct = g.Angoli_Tentati!==null ? perc(g.Angoli_Gol, g.Angoli_Tentati) : null;
   g.Realizzazione_Punizioni_pct = g.Punizioni_Tentate!==null ? perc(g.Punizioni_Realizzate, g.Punizioni_Tentate) : null;
@@ -1297,7 +1310,7 @@ function aggregaGiocatori(righe){
       Tiri_In_Porta:somma(rs,"Tiri_In_Porta"), Tiri_Fuori:somma(rs,"Tiri_Fuori"),
       Passaggi_Corretti:somma(rs,"Passaggi_Corretti"), Passaggi_Sbagliati:somma(rs,"Passaggi_Sbagliati"),
       Dribbling_Tentati:somma(rs,"Dribbling_Tentati"), Dribbling_Falliti:somma(rs,"Dribbling_Falliti"),
-      Recuperi:somma(rs,"Recuperi"), Parate:somma(rs,"Parate"),
+      Recuperi:somma(rs,"Recuperi"), Parate:somma(rs,"Parate"), Palle_Perse:somma(rs,"Palle_Perse"),
       Cartellini_Gialli:somma(rs,"Cartellini_Gialli"), Cartellini_Rossi:somma(rs,"Cartellini_Rossi"),
       Angoli_Tentati:somma(rs,"Angoli_Tentati"), Angoli_Gol:somma(rs,"Angoli_Gol"),
       Punizioni_Tentate:somma(rs,"Punizioni_Tentate"), Punizioni_Realizzate:somma(rs,"Punizioni_Realizzate"),
@@ -1316,6 +1329,7 @@ function aggregaGiocatori(righe){
     a.Precisione_Passaggi_pct = perc(a.Passaggi_Corretti, a.Passaggi_Totali);
     a.Successo_Dribbling_pct = perc(a.Dribbling_Riusciti, a.Dribbling_Tentati);
     a.Tasso_Errore_pct = perc(a.Errori_Totali, a.Azioni_Totali);
+    a.Tasso_Errore_Passaggi_pct = perc(a.Passaggi_Sbagliati, a.Passaggi_Totali); // vedi derivaRiga
     a.Cartellini_Totali = a.Cartellini_Gialli + a.Cartellini_Rossi;
     a.Angoli_Realizzazione_pct = perc(a.Angoli_Gol, a.Angoli_Tentati);
     a.Realizzazione_Punizioni_pct = perc(a.Punizioni_Realizzate, a.Punizioni_Tentate);
@@ -1323,6 +1337,148 @@ function aggregaGiocatori(righe){
     a.Indice_Prestazione_Medio = a.Partite_Giocate>0 ? a.Indice_Prestazione_Tot/a.Partite_Giocate : null;
     return a;
   }).sort((x,y)=> y.Indice_Prestazione_Tot - x.Indice_Prestazione_Tot);
+}
+
+/* =====================================================================
+   RADAR PER RUOLO (04/09/2026, richiesta esplicita dell'utente)
+   Un portiere e un attaccante non si leggono con gli stessi assi: il radar della vista Giocatore cambia
+   quindi in base al ruolo. Ogni asse dichiara come si estrae il valore VERO, come si scrive, e se "meno è
+   meglio" (`invertito`, marcato con ↓ nell'etichetta).
+   Perché normalizziamo: gli assi chiesti mescolano conteggi (tiri, passaggi, recuperi) e percentuali, che su
+   un unico radar 0-100 non sarebbero confrontabili (3 recuperi e 3% starebbero allo stesso raggio). Il raggio
+   disegnato è quindi sempre un punteggio 0-100 relativo — 100 = miglior valore della rosa nel periodo su
+   quell'asse — mentre i numeri veri restano nella tabella sotto il radar, che è ciò che si legge davvero.
+   ===================================================================== */
+function ruoloPortiere(ruolo){ return /portier/i.test(String(ruolo||"")); }
+
+/** Assi del radar per un ruolo. `val(riga, statPortiere)` legge il valore vero da una riga aggregata
+ *  (aggregaGiocatori) o dalla riga "pool" del gruppo di confronto; `fmt` lo scrive per la tabella. */
+function assiRadarPerRuolo(ruolo){
+  if(ruoloPortiere(ruolo)) return [
+    // le parate arrivano dallo stesso conteggio dei tiri subiti, così i quattro numeri del portiere
+    // (tiri subiti = parate + gol subiti + eventuali tiri né parati né entrati) sono sempre coerenti
+    {k:"parate",    et:"Parate",         conteggio:true,
+     val:(r,g)=> g ? g.parate : N(r.Parate),                                                       fmt:v=>nf0(v)},
+    {k:"tiriSubiti",et:"Tiri subiti",    conteggio:true, volume:true,
+     val:(r,g)=> g ? g.tiriSubitiTotali : null,                                                    fmt:v=>v===null?"—":nf0(v)},
+    {k:"paratePct", et:"Parate %",       pct:true,
+     val:(r,g)=> g ? perc(N(r.Parate), g.tiriSubitiTotali) : null,                                 fmt:v=>pctTxt(v,0)},
+    {k:"golSubiti", et:"Gol subiti ↓",   conteggio:true, invertito:true,
+     val:(r,g)=> g ? g.golSubiti : null,                                                           fmt:v=>v===null?"—":nf0(v)},
+    {k:"passOk",    et:"Passaggi OK",    conteggio:true, val:r=>N(r.Passaggi_Corretti),            fmt:v=>nf0(v)},
+    {k:"passPct",   et:"Passaggi %",     pct:true, val:r=>r.Precisione_Passaggi_pct,               fmt:v=>pctTxt(v,0)}
+  ];
+  return [
+    {k:"tiri",      et:"Tiri",           conteggio:true, val:r=>N(r.Tiri_Totali),                  fmt:v=>nf0(v)},
+    {k:"tiriPorta", et:"Tiri in porta %",pct:true, val:r=>r.Precisione_Tiro_pct,                   fmt:v=>pctTxt(v,0)},
+    {k:"realizz",   et:"Realizzazione %",pct:true, val:r=>r.Efficacia_Realizzativa_pct,            fmt:v=>pctTxt(v,0)},
+    {k:"passPct",   et:"Passaggi %",     pct:true, val:r=>r.Precisione_Passaggi_pct,               fmt:v=>pctTxt(v,0)},
+    {k:"passOk",    et:"N. passaggi OK", conteggio:true, val:r=>N(r.Passaggi_Corretti),            fmt:v=>nf0(v)},
+    {k:"perse",     et:"Palle perse ↓",  conteggio:true, invertito:true, val:r=>N(r.Palle_Perse),  fmt:v=>nf0(v)},
+    {k:"recuperi",  et:"Recuperi",       conteggio:true, val:r=>N(r.Recuperi),                     fmt:v=>nf0(v)},
+    {k:"dribbling", et:"Dribbling %",    pct:true, val:r=>r.Successo_Dribbling_pct,
+     fmt:(v,r)=> r ? `${pctTxt(v,0)} (${nf0(r.Dribbling_Riusciti)}/${nf0(r.Dribbling_Tentati)})` : pctTxt(v,0)},
+    {k:"errore",    et:"Errore pass. ↓", pct:true, invertito:true, val:r=>r.Tasso_Errore_Passaggi_pct,
+     fmt:v=>pctTxt(v,0)}
+  ];
+}
+
+/** Fonde più righe aggregate (aggregaGiocatori) in un'unica riga "pool" che rappresenta il gruppo di
+ *  confronto: i conteggi diventano la MEDIA per giocatore del gruppo (non la somma, che confrontata col
+ *  singolo sarebbe sempre schiacciante), le percentuali si ricalcolano sui totali sommati (non come media
+ *  di percentuali, che darebbe più peso a chi ha giocato meno). Torna null se il gruppo è vuoto. */
+function poolGiocatori(righeAgg){
+  const righe = righeAgg || [];
+  if(!righe.length) return null;
+  const n = righe.length;
+  const s = c => righe.reduce((t,r)=>t+N(r[c]),0);
+  const somme = {
+    Gol:s("Gol"), Assist:s("Assist"), Tiri_In_Porta:s("Tiri_In_Porta"), Tiri_Fuori:s("Tiri_Fuori"),
+    Passaggi_Corretti:s("Passaggi_Corretti"), Passaggi_Sbagliati:s("Passaggi_Sbagliati"),
+    Dribbling_Tentati:s("Dribbling_Tentati"), Dribbling_Falliti:s("Dribbling_Falliti"),
+    Recuperi:s("Recuperi"), Parate:s("Parate"), Palle_Perse:s("Palle_Perse"), Minuti_Totali:s("Minuti_Totali")
+  };
+  const p = {nGiocatori:n};
+  // conteggi → media per giocatore del gruppo
+  ["Gol","Assist","Recuperi","Parate","Palle_Perse","Passaggi_Corretti","Minuti_Totali"].forEach(c => p[c] = somme[c]/n);
+  p.Tiri_Totali = (somme.Tiri_In_Porta + somme.Tiri_Fuori)/n;
+  p.Dribbling_Riusciti = (somme.Dribbling_Tentati - somme.Dribbling_Falliti)/n;
+  p.Dribbling_Tentati = somme.Dribbling_Tentati/n;
+  // percentuali → ricalcolate sui totali sommati del gruppo
+  p.Precisione_Tiro_pct = perc(somme.Tiri_In_Porta, somme.Tiri_In_Porta + somme.Tiri_Fuori);
+  p.Efficacia_Realizzativa_pct = perc(somme.Gol, somme.Tiri_In_Porta + somme.Tiri_Fuori);
+  p.Precisione_Passaggi_pct = perc(somme.Passaggi_Corretti, somme.Passaggi_Corretti + somme.Passaggi_Sbagliati);
+  p.Successo_Dribbling_pct = perc(somme.Dribbling_Tentati - somme.Dribbling_Falliti, somme.Dribbling_Tentati);
+  p.Tasso_Errore_Passaggi_pct = perc(somme.Passaggi_Sbagliati, somme.Passaggi_Corretti + somme.Passaggi_Sbagliati);
+  return p;
+}
+
+/** Statistiche portiere sull'intero periodo, calcolate partita per partita, così parate / tiri subiti /
+ *  gol subiti coprono sempre LO STESSO insieme di gare (bug trovato nell'audit del 04/09/2026: prima le
+ *  parate arrivavano dalla tabella giocatori — tutte le partite — mentre i tiri subiti dalla sola sezione
+ *  «STATISTICHE PORTIERI GAME», presente in un file solo, e i due numeri non tornavano tra loro: 4 parate
+ *  su 4 tiri subiti ma anche 1 gol subito).
+ *  Per ogni partita: se il file ha la sezione dedicata si usa il dato rilevato; altrimenti si stima come
+ *  descritto dall'utente per la modalità live — le parate del portiere più i gol che la squadra ha subito
+ *  in quella gara. Se in una partita hanno giocato due portieri i gol subiti vanno a chi ha giocato più
+ *  minuti (approssimazione dichiarata: i file non dicono quale gol ha incassato quale portiere).
+ *  Torna una mappa nome → {tiriSubitiTotali, parate, golSubiti, stimato}. */
+function statistichePortieriPeriodo(partite, righeGiocatori){
+  const perNome = new Map();
+  const aggiungi = (nome, dati, stimato) => {
+    if(!nome) return;
+    const a = perNome.get(nome) || {tiriSubitiTotali:0, parate:0, golSubiti:0, stimato:false};
+    a.tiriSubitiTotali += N(dati.tiriSubitiTotali); a.parate += N(dati.parate); a.golSubiti += N(dati.golSubiti);
+    a.stimato = a.stimato || stimato;
+    perNome.set(nome, a);
+  };
+  (partite||[]).forEach(p => {
+    const daSezione = statistichePortieriDaSessione(p).portieri;
+    if(daSezione.length){
+      daSezione.forEach(r => aggiungi(r.portiere, {tiriSubitiTotali:r.totaleAffrontati, parate:r.parate, golSubiti:r.golSubiti}, false));
+      return;
+    }
+    const portieriInGara = (righeGiocatori||[])
+      .filter(g => g.Match_ID === p.Match_ID && ruoloPortiere(g.Ruolo))
+      .sort((a,b) => N(b.Minuti_Giocati) - N(a.Minuti_Giocati));
+    portieriInGara.forEach((g, i) => {
+      const gol = i === 0 ? N(p.Gol_Subiti) : 0; // solo al portiere con più minuti, vedi nota sopra
+      const parate = N(g.Parate);
+      if(parate === 0 && gol === 0) return;
+      aggiungi(g.Giocatore, {tiriSubitiTotali: parate + gol, parate, golSubiti: gol}, true);
+    });
+  });
+  return perNome;
+}
+
+/** Calcola i punti del radar: per ogni asse il valore vero del giocatore, quello del gruppo di confronto e
+ *  i due punteggi 0-100 normalizzati sul miglior valore della rosa (`righeRosa`) su quell'asse. Gli assi
+ *  `invertito` (meno è meglio) hanno il punteggio ribaltato, così "area più grande = meglio" resta vero su
+ *  tutto il grafico. Gli assi per cui nessuno della rosa ha un dato vengono scartati. */
+function datiRadarGiocatore(rigaGiocatore, rigaConfronto, righeRosa, ctxPortiere){
+  const assi = assiRadarPerRuolo(rigaGiocatore.Ruolo);
+  const statDi = riga => ctxPortiere ? ctxPortiere(riga) : null;
+  const out = [];
+  assi.forEach(asse => {
+    const vGioc = asse.val(rigaGiocatore, statDi(rigaGiocatore));
+    const vConf = rigaConfronto ? asse.val(rigaConfronto, statDi(rigaConfronto)) : null;
+    const valoriRosa = (righeRosa||[]).map(r => asse.val(r, statDi(r))).filter(v => v !== null && Number.isFinite(v));
+    if(vGioc === null && vConf === null && !valoriRosa.length) return; // nessuno ha questo dato: asse inutile
+    const max = valoriRosa.length ? Math.max(...valoriRosa) : 0;
+    const punteggio = v => {
+      if(v === null || !Number.isFinite(v)) return 0;
+      const quota = max > 0 ? Math.min(1, v/max) : 0;
+      return asse.invertito ? Math.round((1-quota)*100) : Math.round(quota*100);
+    };
+    out.push({
+      chiave: asse.k, etichetta: asse.et, invertito: !!asse.invertito, volume: !!asse.volume,
+      valore: vGioc, valoreConfronto: vConf,
+      testo: vGioc===null ? "—" : asse.fmt(vGioc, rigaGiocatore),
+      testoConfronto: (vConf===null || !rigaConfronto) ? "—" : asse.fmt(vConf, rigaConfronto),
+      punteggio: punteggio(vGioc), punteggioConfronto: punteggio(vConf)
+    });
+  });
+  return out;
 }
 
 function riepilogoSquadra(righe, partite){
@@ -1367,14 +1523,32 @@ function regressione(xs, ys){
   return {n, slope, intercept, r, xmin, xmax, valore_iniziale:vi, valore_finale:vf, delta_totale:vf-vi};
 }
 
+/* `limiti` [min, max] delimita i valori che la metrica può davvero assumere. Serve perché la retta di
+   interpolazione, prolungata fino alla prima e all'ultima partita, può uscire dal mondo reale: nell'audit
+   del 04/09/2026 un report annunciava un tasso di errore sceso "a -7%", che non esiste. I due estremi
+   vengono quindi riportati dentro i limiti e la variazione ricalcolata su quelli, così la frase resta
+   coerente con i numeri che mostra. max null = nessun limite superiore. */
 const CONFIG_TREND = {
-  Tasso_Errore_pct:   {label:"Tasso di errore", unit:"%", soglia:6, dec:0, meglioAlto:false,
+  Tasso_Errore_pct:   {label:"Tasso di errore", unit:"%", soglia:6, dec:0, meglioAlto:false, limiti:[0,100],
     desc:"Palloni persi (passaggi sbagliati + dribbling falliti) sul totale delle azioni. Scendere è positivo."},
-  Precisione_Tiro_pct:{label:"Precisione al tiro", unit:"%", soglia:8, dec:0, meglioAlto:true,
+  Precisione_Tiro_pct:{label:"Precisione al tiro", unit:"%", soglia:8, dec:0, meglioAlto:true, limiti:[0,100],
     desc:"Tiri in porta sul totale dei tiri. Salire è positivo."},
-  Minuti_Giocati:     {label:"Minuti giocati", unit:"'", soglia:10, dec:0, meglioAlto:null,
+  Minuti_Giocati:     {label:"Minuti giocati", unit:"'", soglia:10, dec:0, meglioAlto:null, limiti:[0,null],
     desc:"Minutaggio a partita. Non è né buono né cattivo in sé: dice come sta cambiando il ruolo del giocatore nella rosa."}
 };
+/** Riporta dentro i limiti dichiarati i due estremi di una retta di tendenza e ricalcola la variazione. */
+function limitaTendenza(fit, limiti){
+  if(!limiti) return fit;
+  const [min, max] = limiti;
+  const dentro = v => {
+    let x = v;
+    if(min !== null && min !== undefined) x = Math.max(min, x);
+    if(max !== null && max !== undefined) x = Math.min(max, x);
+    return x;
+  };
+  const vi = dentro(fit.valore_iniziale), vf = dentro(fit.valore_finale);
+  return Object.assign({}, fit, {valore_iniziale:vi, valore_finale:vf, delta_totale:vf-vi});
+}
 
 function calcolaTendenze(righe){
   const perG = new Map();
@@ -1389,8 +1563,9 @@ function calcolaTendenze(righe){
       const cfg = CONFIG_TREND[metrica];
       const punti = rs.filter(r => r[metrica] !== null && r[metrica] !== undefined && isFinite(r[metrica]));
       if(punti.length < 3) return;
-      const fit = regressione(punti.map(r=>r.__ord), punti.map(r=>r[metrica]));
-      if(!fit) return;
+      const fitGrezzo = regressione(punti.map(r=>r.__ord), punti.map(r=>r[metrica]));
+      if(!fitGrezzo) return;
+      const fit = limitaTendenza(fitGrezzo, cfg.limiti);
       const rilevante = Math.abs(fit.delta_totale) >= cfg.soglia && Math.abs(fit.r) >= 0.35;
       const direzione = Math.abs(fit.delta_totale) < cfg.soglia*0.3 ? "stabile" : (fit.slope>0 ? "in aumento" : "in calo");
       let giudizio = "neutro";
@@ -1681,9 +1856,13 @@ function creaGrafico(id, config, root=document){
   return chart;
 }
 
+/** Opzioni comuni a tutti i grafici Chart.js. Nota sul merge (04/09/2026): Object.assign è superficiale,
+ *  quindi chi passa un proprio ramo `plugins` perderebbe legenda e stile del tooltip di base — quel solo
+ *  ramo viene quindi fuso a mano, un livello per plugin. `scales` resta invece a sostituzione piena: i
+ *  grafici radar dichiarano una scala `r` che non deve convivere con le `x`/`y` di base. */
 function baseOpzioni(extra={}){
   const testo = colore("muted"), griglia = colore("grid");
-  return Object.assign({
+  const base = {
     responsive:true, maintainAspectRatio:false,
     animation: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? false : {duration:600},
     interaction:{mode:"nearest", intersect:false},
@@ -1695,7 +1874,15 @@ function baseOpzioni(extra={}){
       x:{ticks:{color:testo, font:{size:11}, maxRotation:0, autoSkipPadding:12}, grid:{color:griglia, drawTicks:false}, border:{color:griglia}},
       y:{ticks:{color:testo, font:{size:11}}, grid:{color:griglia, drawTicks:false}, border:{color:griglia}}
     }
-  }, extra);
+  };
+  const opz = Object.assign({}, base, extra);
+  if(extra.plugins){
+    opz.plugins = Object.assign({}, base.plugins);
+    Object.keys(extra.plugins).forEach(k => {
+      opz.plugins[k] = Object.assign({}, base.plugins[k] || {}, extra.plugins[k]);
+    });
+  }
+  return opz;
 }
 
 function datiFiltrati(){
@@ -2419,13 +2606,32 @@ function renderGiocatore(f){
   const confronto = haPariRuolo ? riepilogoSquadra(righeStessoRuolo, []) : squadra;
   const etichettaConfronto = haPariRuolo ? `Media pari ruolo (${mio.Ruolo})` : "Media squadra";
   const numPariRuolo = new Set(righeStessoRuolo.map(g=>g.Giocatore)).size;
-  const metriche = [
-    ["Precisione passaggi", mio.Precisione_Passaggi_pct, confronto.precisione_passaggi],
-    ["Precisione al tiro", mio.Precisione_Tiro_pct, confronto.precisione_tiro],
-    ["Successo dribbling", mio.Successo_Dribbling_pct, confronto.successo_dribbling],
-    ["Efficacia realizzativa", mio.Efficacia_Realizzativa_pct, perc(confronto.gol_giocatori, confronto.tiri_totali)],
-    ["Affidabilità (100 − tasso errore)", mio.Tasso_Errore_pct===null?null:100-mio.Tasso_Errore_pct, confronto.tasso_errore===null?null:100-confronto.tasso_errore]
-  ];
+  // Radar per ruolo (04/09/2026): assi diversi per portiere e giocatore di movimento — vedi il blocco
+  // "RADAR PER RUOLO" nel motore di calcolo per la definizione degli assi e della normalizzazione.
+  const portieriGameAgg = aggregaPortieriGame(f.partite);
+  const statPortieriPeriodo = statistichePortieriPeriodo(f.partite, f.giocatori);
+  const statPortiereDi = riga => {
+    if(riga && riga._statPortiere !== undefined) return riga._statPortiere;
+    return statPortieriPeriodo.get(riga.Giocatore) || null;
+  };
+  const pariRuoloAgg = aggregaGiocatori(righeStessoRuolo);
+  const rigaConfronto = haPariRuolo ? poolGiocatori(pariRuoloAgg) : poolGiocatori(aggTutti.filter(a=>a.Giocatore!==nome));
+  if(rigaConfronto){
+    const statPeer = (haPariRuolo ? pariRuoloAgg : aggTutti.filter(a=>a.Giocatore!==nome))
+      .map(r => statPortieriPeriodo.get(r.Giocatore)).filter(Boolean);
+    rigaConfronto._statPortiere = statPeer.length ? {
+      tiriSubitiTotali: statPeer.reduce((t,x)=>t+x.tiriSubitiTotali,0)/statPeer.length,
+      parate: statPeer.reduce((t,x)=>t+x.parate,0)/statPeer.length,
+      golSubiti: statPeer.reduce((t,x)=>t+x.golSubiti,0)/statPeer.length,
+      stimato: statPeer.some(x=>x.stimato)
+    } : null;
+    rigaConfronto.Ruolo = mio.Ruolo;
+  }
+  const datiRadar = datiRadarGiocatore(mio, rigaConfronto, aggTutti, statPortiereDi)
+    .filter(d => d.chiave !== "perse" || stato.ds.haPallePerse); // vedi haPallePerse in assemblaDataset
+  const statMioPortiere = statPortiereDi(mio);
+  const haAssiInvertiti = datiRadar.some(d => d.invertito);
+  const haAssiVolume = datiRadar.some(d => d.volume);
   // "Tiri subiti" (03/09/2026, rivista il 03/09/2026 su richiesta esplicita dell'utente): quando i file
   // caricati includono "STATISTICHE PORTIERI GAME" per questo portiere, mostriamo il dato reale di Seven Lab
   // invece della vecchia stima (parate + gol subiti, l'unica possibile prima di avere questo dato) — vedi
@@ -2434,8 +2640,7 @@ function renderGiocatore(f){
   // "Totale tiri affrontati" di Seven Lab (tiri subiti + parate + gol subiti) come valore del KPI, non più la
   // formula tiro-subito-più-parata usata in un primo tentativo (che escludeva i gol e non corrispondeva a
   // cosa l'utente intendeva davvero per "totali").
-  const portieriGameAgg = aggregaPortieriGame(f.partite);
-  const mioPortiereGame = portieriGameAgg.find(p => p.portiere === nome);
+  const mioPortiereGame = portieriGameAgg.find(p => p.portiere === nome); // aggregato già calcolato sopra
   const parateTxt = /portier/i.test(mio.Ruolo)
     ? (mioPortiereGame
       ? `<div class="kpi"><div class="kpi-eti">Tiri subiti totali</div><div class="kpi-valore">${nf0(mioPortiereGame.totaleAffrontati)}</div><div class="kpi-nota">${nf0(mioPortiereGame.parate)} parati (${pctTxt(perc(mioPortiereGame.parate, mioPortiereGame.totaleAffrontati),0)}) · ${nf0(mioPortiereGame.golSubiti)} gol subiti</div></div>`
@@ -2450,9 +2655,27 @@ function renderGiocatore(f){
       ${parateTxt}
     </div>
     <div class="griglia g-2">
-      <div class="card"><div class="grafico-titolo">Profilo di ${esc(nome)} vs ${haPariRuolo?`pari ruolo (${esc(mio.Ruolo)})`:"media di squadra"}</div>
-        <div class="grafico-sub">Percentuali ricalcolate sui totali del periodo. Più l'area è esterna, meglio è.${haPariRuolo?` Confronto con ${nf0(numPariRuolo)} altro/i giocatore/i nello stesso ruolo.`:" Nessun altro giocatore nello stesso ruolo nel periodo: confronto con la media di squadra (valore indicativo, non un benchmark di ruolo)."}</div>
-        <div class="grafico-wrap alto"><canvas id="gr-radar"></canvas></div></div>
+      <div class="card card-radar"><div class="grafico-titolo">Profilo ${ruoloPortiere(mio.Ruolo)?"da portiere":"da giocatore di movimento"} di ${esc(nome)} vs ${haPariRuolo?`pari ruolo (${esc(mio.Ruolo)})`:"resto della rosa"}</div>
+        <div class="grafico-sub">Assi scelti in base al ruolo. Il raggio è un punteggio relativo: <strong>100 = miglior valore della rosa</strong> nel periodo su quell'asse, così conteggi e percentuali stanno sullo stesso grafico. I numeri veri sono nella tabella qui sotto.${haPariRuolo?` Confronto con ${nf0(numPariRuolo)} altro/i giocatore/i nello stesso ruolo.`:" Nessun altro giocatore nello stesso ruolo nel periodo: confronto con la media del resto della rosa (valore indicativo, non un benchmark di ruolo)."}</div>
+        <div class="radar-affianco">
+        <div class="grafico-wrap alto"><canvas id="gr-radar"></canvas></div>
+        <div class="tabella-radar">
+          <table>
+            <caption class="solo-sr">Valori reali degli assi del radar: giocatore e gruppo di confronto</caption>
+            <thead><tr><th scope="col">Indicatore</th><th scope="col">${esc(nome)}</th><th scope="col">${esc(haPariRuolo?"Media pari ruolo":"Media rosa")}</th></tr></thead>
+            <tbody>${datiRadar.map(d => `<tr>
+              <td>${esc(d.etichetta)}</td>
+              <td class="num forte">${esc(d.testo)}</td>
+              <td class="num">${esc(d.testoConfronto)}</td>
+            </tr>`).join("")}</tbody>
+          </table>
+        </div>
+        </div>
+        <p class="nota-piccola">${[
+          haAssiInvertiti ? "Gli assi con <strong>↓</strong> sono quelli in cui meno è meglio: sul grafico il punteggio è già ribaltato (area più grande = meno palle perse/errori), mentre in tabella resta il numero vero." : "",
+          haAssiVolume ? "«Tiri subiti» è un dato di volume (quanto lavoro ha avuto il portiere), non un merito: va letto insieme a «Parate %»." : "",
+          (statMioPortiere && statMioPortiere.stimato) ? "Per le partite i cui file non hanno la sezione «STATISTICHE PORTIERI GAME», tiri e gol subiti sono <strong>stimati</strong> come le sue parate più i gol incassati dalla squadra in quella gara; dove la sezione c'è si usa il dato rilevato." : ""
+        ].filter(Boolean).join(" ")}</p></div>
       <div class="card"><div class="grafico-titolo">Andamento partita per partita</div>
         <div class="grafico-sub">Precisione al tiro, precisione passaggi e tasso di errore nelle sue partite.</div>
         <div class="grafico-wrap alto"><canvas id="gr-gioc-linee"></canvas></div></div>
@@ -2466,17 +2689,27 @@ function renderGiocatore(f){
 
   creaGrafico("gr-radar", {
     type:"radar",
-    data:{labels:metriche.map(m=>m[0]), datasets:[
-      {label:nome, data:metriche.map(m=>m[1]===null?0:m[1]), borderColor:colore("c1"),
+    data:{labels:datiRadar.map(d=>d.etichetta), datasets:[
+      {label:nome, data:datiRadar.map(d=>d.punteggio), borderColor:colore("c1"),
        backgroundColor:colore("c1")+"33", pointBackgroundColor:colore("c1"), borderWidth:2.4},
-      {label:etichettaConfronto, data:metriche.map(m=>m[2]===null?0:m[2]), borderColor:colore("c2"),
+      {label:etichettaConfronto, data:datiRadar.map(d=>d.punteggioConfronto), borderColor:colore("c2"),
        backgroundColor:"transparent", pointBackgroundColor:colore("c2"), borderWidth:2, borderDash:[6,4]}
     ]},
-    options:baseOpzioni({scales:{r:{
-      min:0, max:100, ticks:{stepSize:25, color:colore("faint"), font:{size:10}, backdropColor:"transparent", callback:v=>v+"%"},
-      grid:{color:colore("grid")}, angleLines:{color:colore("grid")},
-      pointLabels:{color:colore("muted"), font:{size:10.5}}
-    }}})
+    // Nel tooltip mostriamo il valore VERO (non il punteggio normalizzato), altrimenti il grafico direbbe
+    // solo "quanto sei vicino al migliore" senza mai dire quanto hai fatto davvero.
+    options:baseOpzioni({
+      plugins:{tooltip:{callbacks:{label:(ctx)=>{
+        const d = datiRadar[ctx.dataIndex];
+        if(!d) return "";
+        const vero = ctx.datasetIndex === 0 ? d.testo : d.testoConfronto;
+        return `${ctx.dataset.label}: ${vero} (punteggio ${nf0(ctx.parsed.r)}/100)`;
+      }}}},
+      scales:{r:{
+        min:0, max:100, ticks:{stepSize:25, color:colore("faint"), font:{size:10}, backdropColor:"transparent", callback:v=>v},
+        grid:{color:colore("grid")}, angleLines:{color:colore("grid")},
+        pointLabels:{color:colore("muted"), font:{size:10.5}, padding:6}
+      }}
+    })
   });
   const et = righe.map(r=>r.EtichettaPartita);
   creaGrafico("gr-gioc-linee", {
@@ -2809,7 +3042,7 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
   const baricentroRecupero = calcolaBaricentroMetri(recupero), baricentroPersa = calcolaBaricentroMetri(persa);
   const idp = "zc-"+idContenitore;
   cont.innerHTML = `
-    <div class="griglia g-2">
+    <div class="griglia g-2 g-campi">
       <div class="card">
         <div class="grafico-titolo">Zone di recupero (%)</div>
         <div class="grafico-sub">${nf0(recupero.length)} recuperi con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).${baricentroRecupero!==null ? ` Baricentro di recupero stimato: <strong>${nf(baricentroRecupero,1)} m</strong> dalla propria porta (campo lungo 50 m).` : ""}</div>
@@ -2871,7 +3104,7 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
       const blocco = document.createElement("div");
       blocco.style.marginTop = "16px";
       blocco.innerHTML = `<div class="grafico-titolo" style="margin-bottom:10px">Recuperi e palle perse per squadra</div>
-        <div class="griglia g-2">
+        <div class="griglia g-2 g-campi">
           <div class="card"><div class="grafico-titolo">Recuperi — Squadra A</div>
             <div class="grafico-sub">${nf0(perSquadra.A.recupero.length)} con posizione.</div>
             <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero-a" width="480" height="288"></canvas></div></div>
@@ -2917,7 +3150,7 @@ function renderGolGameCampo(idContenitore, sessioni){
   }
   const idp = "gg-"+idContenitore;
   cont.innerHTML = `
-    <div class="griglia g-2">
+    <div class="griglia g-2 g-campi">
       <div class="card">
         <div class="grafico-titolo">Zone di tiro dei gol (%)</div>
         <div class="grafico-sub">${nf0(gol.length)} gol con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).</div>
@@ -2947,6 +3180,20 @@ function renderGolGameCampo(idContenitore, sessioni){
   disegnaCampoZone($("#"+idp+"-zona-assist"), assist, Object.assign({}, optsBase, {colore:colore("c4")}));
   disegnaCampoHeatmap($("#"+idp+"-heat-gol"), gol, optsBase);
   disegnaCampoHeatmap($("#"+idp+"-heat-assist"), assist, optsBase);
+}
+
+/** Misura quanto è alta davvero la barra che resta fissa in cima (filtri + schede + indice sezioni) e la
+ *  scrive nella variabile CSS --altezza-fissa. La usano due regole in index.html: lo scroll-margin delle
+ *  sezioni (senza, cliccando una voce dell'indice la sezione finiva NASCOSTA dietro la barra) e l'altezza
+ *  massima delle tabelle scorrevoli (senza, su schermi bassi la tabella non ci stava mai tutta sotto la
+ *  barra). Quando la barra non è fissa — su telefono torna a scorrere via con la pagina — vale 0.
+ *  Chiamata all'avvio, al ridimensionamento e ogni volta che la barra cambia contenuto/visibilità. */
+function aggiornaAltezzaBarraFissa(){
+  const barra = $(".topbar-pinned");
+  if(!barra) return;
+  const fissa = getComputedStyle(barra).position === "sticky";
+  const h = fissa ? Math.round(barra.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty("--altezza-fissa", h + "px");
 }
 
 /* --------- 9. Qualità dati --------- */
@@ -3014,6 +3261,7 @@ function attivaDashboard(ds, etichettaOrigine){
   b.classList.remove("nascosto");
   b.textContent = etichettaOrigine;
   render();
+  aggiornaAltezzaBarraFissa(); // la barra fissa ora mostra filtri/schede/indice: è cambiata di altezza
   window.scrollTo({top:0, behavior:"auto"});
 }
 
@@ -3387,7 +3635,19 @@ function larghezzaTestoPx(testo, elementoStile){
   if(!larghezzaTestoPx._ctx) larghezzaTestoPx._ctx = document.createElement("canvas").getContext("2d");
   const ctx = larghezzaTestoPx._ctx;
   ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-  return ctx.measureText(testo).width;
+  // Il testo va misurato COME VIENE DISEGNATO, non com'è nell'HTML (bug trovato nell'audit del
+  // 04/09/2026): le intestazioni delle tabelle dei report sono rese in maiuscolo e spaziate via CSS
+  // (text-transform:uppercase + letter-spacing), quindi occupano parecchio più della stringa originale.
+  // Misurando la stringa così com'era, quelle colonne risultavano troppo strette e intestazioni come
+  // "Parate" o "Indice" andavano a capo spezzate in mezzo alla parola ("PARAT E", "INDIC E").
+  let t = String(testo);
+  const trasforma = cs.textTransform;
+  if(trasforma === "uppercase") t = t.toUpperCase();
+  else if(trasforma === "lowercase") t = t.toLowerCase();
+  else if(trasforma === "capitalize") t = t.replace(/\b\p{L}/gu, c => c.toUpperCase());
+  const spaziatura = parseFloat(cs.letterSpacing);
+  const extra = Number.isFinite(spaziatura) ? spaziatura * t.length : 0;
+  return ctx.measureText(t).width + extra;
 }
 /** Adatta la larghezza di OGNI colonna di una tabella `.rp-table` GIÀ inserita nel DOM al contenuto che
  *  porta davvero, al posto delle percentuali fisse della regola CSS di base (22% sulla prima colonna,
@@ -3424,18 +3684,55 @@ function adattaLarghezzeColonneReport(tbl){
     });
     return larghezza + 2; // piccolo margine di sicurezza per l'arrotondamento del canvas
   });
+  // Larghezza MINIMA di ogni colonna: la parola singola più lunga che vi compare (intestazione compresa).
+  // Sotto questa soglia il browser è costretto a spezzare una parola a metà, che è esattamente il difetto
+  // trovato nell'audit del 04/09/2026 ("PARAT E", "INDIC E"). Quando lo spazio non basta per tutti, si
+  // riduce in proporzione ma mai sotto questo minimo.
+  const minime = intestazioni.map((th, i) => {
+    const cs = getComputedStyle(th);
+    const pad = parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+    const parolePiuLunga = (el) => unescConteggio(el.textContent).split(/\s+/)
+      .reduce((max, parola) => Math.max(max, larghezzaTestoPx(parola, el)), 0);
+    let min = parolePiuLunga(th) + pad;
+    righe.forEach(tr => {
+      const td = tr.children[i];
+      if(!td) return;
+      const csTd = getComputedStyle(td);
+      min = Math.max(min, parolePiuLunga(td) + parseFloat(csTd.paddingLeft) + parseFloat(csTd.paddingRight));
+    });
+    return min + 2;
+  });
+  // La prima colonna (i nomi) ha una precedenza in più: finché sta dentro il 30% della tabella non viene
+  // ristretta sotto la sua larghezza naturale, così i nomi restano su una riga sola anche nelle tabelle con
+  // molte colonne — era la richiesta originale dell'utente ("larga quanto il nome più lungo in rosa").
+  const larghezzaDisponibile = tbl.getBoundingClientRect().width || 0;
+  if(minime.length) minime[0] = Math.max(minime[0], Math.min(necessarie[0], larghezzaDisponibile*0.30));
   const totaleNecessario = necessarie.reduce((a,b)=>a+b, 0);
   const larghezzaTabella = tbl.getBoundingClientRect().width || totaleNecessario;
   if(totaleNecessario <= 0) return;
   const fattore = larghezzaTabella / totaleNecessario; // >1 se c'è spazio in più da distribuire, <1 se va tutto ridotto in proporzione
-  intestazioni.forEach((th, i) => { th.style.width = Math.round(necessarie[i]*fattore)+"px"; });
+  const finali = necessarie.map((n, i) => Math.max(n*fattore, minime[i]));
+  // Se i minimi hanno fatto sforare la larghezza disponibile, si toglie il di più solo alle colonne che
+  // stanno sopra il proprio minimo, in proporzione al margine che hanno.
+  const totaleFinale = finali.reduce((a,b)=>a+b, 0);
+  if(totaleFinale > larghezzaTabella){
+    const eccesso = totaleFinale - larghezzaTabella;
+    const margini = finali.map((v,i) => Math.max(0, v - minime[i]));
+    const margineTotale = margini.reduce((a,b)=>a+b, 0);
+    if(margineTotale > 0) finali.forEach((v,i) => { finali[i] = v - eccesso*(margini[i]/margineTotale); });
+  }
+  intestazioni.forEach((th, i) => { th.style.width = Math.round(finali[i])+"px"; });
 }
 /** Tabella generica dei report PDF, sempre con "Giocatore" (o comunque un nome) in prima colonna. */
-function tabellaReport(pagina, intestazioni, righe){
+/** `righeSpente` (facoltativo, uno booleano per riga) attenua le righe che non portano informazione — in
+ *  pratica i giocatori che quella partita non sono scesi in campo, che riempiono le tabelle di zeri e
+ *  rendono più faticoso trovare chi ha davvero giocato (audit del 04/09/2026). Restano visibili, ma in
+ *  secondo piano: nessun dato viene tolto dal report. */
+function tabellaReport(pagina, intestazioni, righe, righeSpente){
   const tbl = document.createElement("table");
   tbl.className = "rp-table";
   tbl.innerHTML = `<thead><tr>${intestazioni.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${
-    righe.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")
+    righe.map((r,i)=>`<tr${(righeSpente && righeSpente[i]) ? ' class="rp-riga-spenta"' : ""}>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")
   }</tbody></table>`;
   pagina.corpo.appendChild(tbl);
   adattaLarghezzeColonneReport(tbl);
@@ -3466,20 +3763,23 @@ function statisticheSquadraReport(pagina, colonneRighe){
  *  andare più a fondo del riepilogo. Divisa in due tabelle per restare leggibile su una pagina a piena larghezza.
  *  `righeAgg` è nel formato prodotto da aggregaGiocatori() — usata sia per una singola partita sia per la stagione. */
 function tabelleDettaglioGiocatori(pagina, righeAgg, haEventiDisciplinari){
+  // Chi non è sceso in campo riempie queste tabelle di righe a zero: restano (il report deve poter dire
+  // "non ha giocato"), ma attenuate, così si trova subito chi ha giocato davvero — audit del 04/09/2026.
+  const spente = righeAgg.map(a => N(a.Minuti_Totali) <= 0);
   titoloSezioneReport(pagina, "Fase offensiva");
   tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri (in porta)","Prec. tiro","Effic. realizz."],
     righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
-      `${nf0(a.Tiri_Totali)} (${nf0(a.Tiri_In_Porta)})`, pctTxt(a.Precisione_Tiro_pct,0), pctTxt(a.Efficacia_Realizzativa_pct,0)]));
+      `${nf0(a.Tiri_Totali)} (${nf0(a.Tiri_In_Porta)})`, pctTxt(a.Precisione_Tiro_pct,0), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
   titoloSezioneReport(pagina, "Passaggi, dribbling e fase difensiva");
   tabellaReport(pagina, ["Giocatore","Passaggi (corr. / tot.)","Prec. pass.","Dribbling (riusc. / tent.)","Succ. drib.","Recuperi","Parate","Tasso errore","Indice"],
     righeAgg.map(a => [esc(a.Giocatore), `${nf0(a.Passaggi_Corretti)}/${nf0(a.Passaggi_Totali)}`, pctTxt(a.Precisione_Passaggi_pct,0),
-      `${nf0(a.Dribbling_Riusciti)}/${nf0(a.Dribbling_Tentati)}`, pctTxt(a.Successo_Dribbling_pct,0), nf0(a.Recuperi), nf0(a.Parate), pctTxt(a.Tasso_Errore_pct,0), nf(a.Indice_Prestazione_Tot,1)]));
+      `${nf0(a.Dribbling_Riusciti)}/${nf0(a.Dribbling_Tentati)}`, pctTxt(a.Successo_Dribbling_pct,0), nf0(a.Recuperi), nf0(a.Parate), pctTxt(a.Tasso_Errore_pct,0), nf(a.Indice_Prestazione_Tot,1)]), spente);
   if(haEventiDisciplinari){
     titoloSezioneReport(pagina, "Disciplina e calci piazzati");
     tabellaReport(pagina, ["Giocatore","Gialli","Rossi","Angoli (con gol)","Punizioni (realizz.)","Rigori (realizz.)"],
       righeAgg.map(a => [esc(a.Giocatore), nf0(a.Cartellini_Gialli), nf0(a.Cartellini_Rossi),
         `${nf0(a.Angoli_Tentati)} (${nf0(a.Angoli_Gol)})`, `${nf0(a.Punizioni_Tentate)} (${nf0(a.Punizioni_Realizzate)})`,
-        `${nf0(a.Rigori_Tentati)} (${nf0(a.Rigori_Realizzati)})`]));
+        `${nf0(a.Rigori_Tentati)} (${nf0(a.Rigori_Realizzati)})`]), spente);
   }
 }
 
@@ -3923,6 +4223,15 @@ async function generaReportPartita(matchId){
           "Possesso palla stimato da eventi (non possesso ufficiale): calcolato solo dai tuoi eventi di partita, senza i dati dell'avversario. Un passaggio o un dribbling sbagliato non fanno perdere il possesso da soli — solo una «palla persa» esplicita lo assegna all'avversario."
         ]);
       }
+    },
+    // Da qui in poi PAGINE A PIENA LARGHEZZA (04/09/2026). Prima tutto questo stava attaccato alla pagina
+    // di copertina, che ha la colonna laterale scura: la colonna è alta solo quanto il suo contenuto, ma il
+    // corpo restava comunque largo 564px invece di 794 per TUTTE le pagine fisiche generate da quella
+    // pagina logica — cioè una striscia bianca vuota di 230px a sinistra per due pagine intere di PDF, con
+    // i campetti e le tabelle schiacciati in mezza pagina. Separandole, i grafici a campo raddoppiano di
+    // dimensione e le tabelle respirano; la copertina resta corta e piena.
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Partita", "Zone di gioco e dettagli", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)}`);
       if(disciplinaGaraTot){
         titoloSezioneReport(pag, "Disciplina e calci piazzati");
         kpiRowReport(pag, [
@@ -3943,6 +4252,9 @@ async function generaReportPartita(matchId){
       }
       zoneCampoReport(pag, [partita], true);
       golGameCampoReport(pag, [partita]);
+    }, {piena:true}),
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Partita", "Lettura della gara", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — sintesi e contributo dei giocatori`);
       titoloSezioneReport(pag, "Cosa dicono i dati");
       const bullet = [];
       if(mvp) bullet.push(`<b>${esc(mvp.Giocatore)}</b> ha guidato la squadra con un indice prestazione di ${nf(mvp.Indice_Prestazione_Tot,1)} (${nf0(mvp.Gol)} gol, ${nf0(mvp.Assist)} assist).`);
@@ -3953,8 +4265,9 @@ async function generaReportPartita(matchId){
       bulletsReport(pag, bullet);
       titoloSezioneReport(pag, "Contributo dei giocatori");
       tabellaReport(pag, ["Giocatore","Ruolo","Min","Gol","Ast","Prec. pass.","Indice"],
-        aggGara.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]));
-    },
+        aggGara.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]),
+        aggGara.map(a => a.Minuti_Totali <= 0));
+    }, {piena:true}),
     async (pag) => {
       bandaReport(pag, "Report Partita", "Stagione fin qui", `${partiteFinQui.length} partite disputate — si aggiorna a ogni gara`);
       sidebarReport(pag, {
@@ -4122,8 +4435,14 @@ async function generaReportAllenamentoPeriodo(da, a){
       graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
         {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
       ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}}}})});
-      zoneCampoReport(pag, periodoCorr.allenamenti, false, true);
     },
+    // Pagina a piena larghezza per i grafici a campo (04/09/2026): attaccati alla pagina con la colonna
+    // laterale restavano larghi poco più di mezza pagina, con le percentuali dentro le zone illeggibili e
+    // una striscia bianca vuota di 230px a sinistra su tutta la seconda pagina fisica.
+    Object.assign(async (pag) => {
+      bandaReport(pag, titoloReport, "Zone di recupero e palla persa", etichetta);
+      zoneCampoReport(pag, periodoCorr.allenamenti, false, true);
+    }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
       if(righeAllen.length){
@@ -4561,6 +4880,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   initTema();
+  aggiornaAltezzaBarraFissa();
+  window.addEventListener("resize", aggiornaAltezzaBarraFissa);
   Chart.defaults.font.family = "Satoshi, system-ui, sans-serif";
   Chart.defaults.font.size = 12;
 
@@ -4693,6 +5014,7 @@ document.addEventListener("DOMContentLoaded", () => {
       a.classList.toggle("nascosto", a.dataset.tab !== tab);
     });
     if(localOk()) memoriaScrivi("calcio7-tab-dashboard", tab);
+    aggiornaAltezzaBarraFissa(); // cambiando scheda l'indice mostra voci diverse: la barra può cambiare altezza
   }
   document.querySelectorAll(".tab-btn").forEach(b => {
     b.addEventListener("click", () => impostaTabDashboard(b.dataset.tab));
