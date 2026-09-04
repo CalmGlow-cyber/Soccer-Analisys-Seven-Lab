@@ -20,7 +20,10 @@
   --c1:#20808D; --c2:#A84B2F; --c3:#1B474D; --c4:#8FC5CD; --c5:#944454; --c6:#C99400;
   --grid:rgba(40,37,29,.10);
   --r:12px; --shadow:0 1px 2px rgba(40,37,29,.06), 0 6px 18px rgba(40,37,29,.05);
-  --maxw:1240px;
+  /* Su schermi grandi 1240px lasciavano centinaia di pixel inutilizzati ai lati mentre le tabelle
+     scorrevano in orizzontale: ora il contenuto si allarga fino a 1600px (audit 04/09/2026). I testi
+     lunghi restano comunque limitati a ~80 caratteri dalle loro regole, quindi non diventano illeggibili. */
+  --maxw:min(1600px, 94vw);
 }
 html[data-tema="scuro"]{
   --bg:#171614; --surface:#1C1B19; --surface-alt:#201F1D; --border:#393836;
@@ -169,10 +172,13 @@ section[id]{scroll-margin-top:calc(var(--altezza-fissa, 0px) + 14px)}
   background-position:left center, right center, left center, right center;
   background-repeat:no-repeat; background-size:36px 100%, 36px 100%, 14px 100%, 14px 100%;
   background-attachment:local, local, scroll, scroll}
-table{border-collapse:separate; border-spacing:0; width:100%; min-width:940px; font-size:13.5px}
+/* min-width più basso e table-layout fisso: le larghezze delle colonne vengono decise da
+   adattaLarghezzeColonneSchermo() sul contenuto reale, invece di essere dettate dall'intestazione più
+   lunga (era il motivo per cui colonne con dentro "83,3%" erano larghe 144px). */
+table{border-collapse:separate; border-spacing:0; width:100%; min-width:680px; font-size:13.5px; table-layout:fixed}
 thead th{position:sticky; top:0; z-index:2; background:var(--surface-alt); border-bottom:1px solid var(--border);
   padding:10px 10px; text-align:right; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
-  color:var(--muted); cursor:pointer; white-space:nowrap}
+  color:var(--muted); cursor:pointer; white-space:normal; overflow-wrap:normal; word-break:keep-all; vertical-align:bottom}
 thead th:first-child, tbody td:first-child{text-align:left; position:sticky; left:0; z-index:1; background:var(--surface-alt); max-width:190px; white-space:normal}
 thead th:first-child{z-index:3}
 tbody td:first-child{background:var(--surface); font-weight:600}
@@ -282,7 +288,15 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
    dell'app: nei report va tolta entrambe le cose, perché il report è statico, sempre a sfondo bianco, e in
    certi contesti di cattura un'intestazione "sticky" può finire disegnata fuori posto invece che in cima alla
    tabella. Il grassetto della prima colonna (font-weight, ereditato dalla stessa regola) resta invece voluto. */
-.rp-table th, .rp-table td:first-child{position:static; top:auto; left:auto; z-index:auto; background:transparent}
+/* !important perché il selettore da battere, "thead th:first-child", è più specifico di ".rp-table th":
+   fino alla v1.20.0 la correzione qui sotto NON si applicava proprio alla prima intestazione di ogni
+   tabella dei report, che restava "sticky". html2canvas la disegnava allora in un punto sbagliato — la
+   parola "GIOCATORE"/"PORTIERE" finiva sopra un'altra intestazione e l'ultima colonna restava senza
+   titolo (visibile in ogni tabella dei PDF reali di Elisa, 04/09/2026; è anche la spiegazione del
+   riquadro scuro "GIOCATORE" segnalato il 03/09 e non riproducibile in test, perché nei test html2canvas
+   è sostituito da uno stub che ignora "sticky"). */
+.rp-table th, .rp-table td{position:static !important; top:auto !important; left:auto !important; z-index:auto !important}
+.rp-table th, .rp-table td:first-child{background:transparent !important}
 /* dentro la colonna principale del report stile "CV" c'è meno spazio orizzontale: tabelle un po' più compatte,
    ma restano leggibili — prima erano troppo piccole (9.5px/8px) ed è stato segnalato come "schiacciato" */
 .rp2-body .rp-table, .rp3-body .rp-table{font-size:10.5px}
@@ -296,6 +310,9 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-flag-list{margin-bottom:6px}
 .rp-flag-riga{font-size:12.5px; color:#28251D; padding:7px 0; border-bottom:1px solid #EDEBE4; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .rp-flag-riga:last-child{border-bottom:none}
+/* La "bozza" che il generatore riempie prima dell'impaginazione: stessa larghezza e stesso stile della
+   pagina finale (così le misure delle tabelle sono già quelle definitive) ma libera di crescere in altezza. */
+.rp-page.rp-doc{min-height:0}
 .rp-chart-wrap{width:100%; height:230px; position:relative; margin-bottom:6px}
 .rp-campo-griglia{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px}
 .rp-campo-etichetta{font-size:11px; font-weight:700; color:#28251D; margin-bottom:5px}
@@ -336,7 +353,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp3-body{padding:20px 22px 4px; flex:1; min-width:0; box-sizing:border-box}
 .rp3-page .rp-foot-b{margin-left:22px; margin-right:22px}
 .rp-table.rp-table-confronto th:first-child, .rp-table.rp-table-confronto td:first-child{width:46%}
-.rp-table td.rp-migliore{background:#E3F2EF; color:#01696F; font-weight:800}
+.rp-table td.rp-migliore{background:#E3F2EF !important; color:#01696F; font-weight:800} /* !important: deve battere la regola qui sopra che azzera gli sfondi ereditati */
 /* Righe di giocatori che non sono scesi in campo: restano nel report ma in secondo piano, così l'occhio
    trova subito chi ha giocato davvero invece di attraversare dieci righe di zeri (audit 04/09/2026). */
 .rp-table tr.rp-riga-spenta td{color:#9A9892}

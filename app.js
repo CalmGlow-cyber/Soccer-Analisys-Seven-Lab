@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.20.0",
+  numero: "1.22.0",
   data: "2026-09-04",
-  note: "Revisione di leggibilità su tutta l'app, con audit a schermo e sui PDF, più il radar diverso per ruolo chiesto dall'utente (04/09/2026). RADAR PER RUOLO: nella vista Giocatore il radar ora cambia assi in base al ruolo. Portiere: parate, tiri subiti, parate %, gol subiti, passaggi riusciti e precisione passaggi — con tiri e gol subiti presi dalla sezione «STATISTICHE PORTIERI GAME» dove c'è e, dove manca, stimati partita per partita come parate del portiere più gol incassati dalla squadra in quella gara (il calcolo «live» descritto dall'utente). Giocatore di movimento: nove assi — tiri, % tiri in porta, % realizzazione, % passaggi riusciti, numero di passaggi riusciti, palle perse, recuperi, % dribbling (con riusciti/tentati) e tasso di errore sui passaggi. Poiché quegli assi mescolano conteggi e percentuali, il raggio disegnato è un punteggio relativo (100 = miglior valore della rosa nel periodo) e accanto al grafico compare una tabella con i NUMERI VERI di ogni asse, giocatore e media del gruppo di confronto; gli assi in cui meno è meglio (palle perse, errori, gol subiti) sono marcati con ↓ e hanno il punteggio ribaltato, così area più grande vuol sempre dire meglio. Mappata finalmente la colonna «Palle perse» per giocatore, presente negli export ma mai usata (l'asse compare solo quando il dato c'è davvero). LEGGIBILITÀ A SCHERMO: la barra in alto restava fissa tutta intera occupando 246px su desktop (27% dello schermo) e nascondeva sotto di sé le intestazioni delle tabelle e il titolo della sezione a cui si saltava dall'indice — ora resta fissa solo la parte utile (filtri, schede, indice), 159px, e le sezioni atterrano sotto la barra invece che dietro; le tabelle non superano mai lo spazio che resta libero sullo schermo; aggiunta l'ombra laterale che segnala quando una tabella continua oltre il bordo su telefono; i riquadri con i campi vanno sempre a due colonne (prima a schermo largo restavano 3 + 1 orfano, più piccoli del necessario); aggiunta nell'indice la voce mancante «Zone tiro e assist gol». IMPAGINAZIONE DEI REPORT PDF: nel Report Partita e nel Report Allenamenti il contenuto restava largo 564px invece di 794 per tutte le pagine generate dalla pagina di copertina — cioè una striscia bianca vuota di 230px a sinistra per due pagine intere, con i grafici a campo schiacciati e illeggibili; ora la copertina occupa esattamente una pagina e zone, tabelle e sintesi vanno su pagine a piena larghezza, con i campetti grandi il doppio. Corretto anche il calcolo della larghezza delle colonne, che non teneva conto del maiuscolo e della spaziatura applicati via CSS alle intestazioni e le spezzava a metà parola («PARAT E», «INDIC E»), con una larghezza minima per colonna e una precedenza alla colonna dei nomi; cifre incolonnate (tabular-nums); i giocatori non scesi in campo restano nelle tabelle ma attenuati, così si trova subito chi ha giocato. Corretto infine un dato impossibile nelle tendenze: la retta di interpolazione veniva prolungata senza limiti e i report annunciavano cali «a -7%» di tasso di errore — ora gli estremi restano dentro i valori che la metrica può assumere. Verificato con test Node sulle nuove funzioni (28 controlli: assi per ruolo, medie del gruppo, normalizzazione e inversione degli assi, coerenza tra parate/tiri subiti/gol subiti del portiere) e con prove end-to-end nell'app vera sui file reali di Elisa: nessun errore JavaScript su desktop e telefono, in tema chiaro e scuro, su tutte le schede, tutti i giocatori, tutti i periodi, tutti e quattro i report e anche con i dati di esempio."
+  note: "Impaginazione dei report rifatta da zero e resa di stampa più professionale (04/09/2026). (1) PAGINE A4 VERE: prima ogni sezione del report era un unico riquadro lungo quanto serviva, catturato in un'immagine sola e poi TAGLIATO a fette alte quanto un A4 — da lì fogli bianchi, titoli separati dal contenuto e tabelle spezzate a metà riga. Ora il generatore riempie una bozza e un impaginatore distribuisce i blocchi su pagine A4 una per una, fermandosi quando la pagina è piena: una tabella troppo lunga continua sulla pagina dopo riportando la sua intestazione, un elenco puntato continua voce per voce, una griglia di campetti continua per riquadri, un titolo di sezione non resta mai da solo in fondo alla pagina e una pagina senza contenuto non viene creata. Controllo automatico su tutti e quattro i report: nessuna pagina sfora l'A4, nessuna è vuota, nessun titolo è orfano. Il Report Partita passa da 12 fogli (3 bianchi) a 6. (2) GRAFICI NITIDI: i grafici dei report venivano disegnati alla risoluzione dello schermo e poi ingranditi dalla cattura, che lavora a scala doppia — da lì l'aspetto sgranato, più evidente nel report giocatori. Ora Chart.js disegna a 3× e i campetti a 1280px di lato, così in stampa c'è più risoluzione di quanta ne serva. (3) LARGHEZZA DELLO SCHERMO E COLONNE: il contenuto era limitato a 1240px, lasciando centinaia di pixel vuoti ai lati sugli schermi grandi mentre le tabelle scorrevano in orizzontale; ora arriva a 1600px. Le intestazioni delle tabelle possono andare a capo tra le parole e ogni colonna viene dimensionata sul contenuto reale invece che sull'intestazione più lunga: colonne che erano larghe 144-152px per contenere \"83,3%\" si sono ristrette, lo spazio recuperato è andato ai nomi e alle colonne con le sparkline, che ora si allargano davvero (da 88px fissi fino a 360px) e mostrano l'andamento in modo leggibile. Verificato nell'app vera coi file reali a 1920, 1400 e 390px: nessun errore JavaScript, nessuna tabella che sfonda il contenitore, tutti e cinque i report generati correttamente (compreso il confronto tra due giocatori)."
 };
 
 /* =====================================================================
@@ -2092,12 +2092,21 @@ function renderClassifica(f){
   });
   $$("canvas.spark", cont).forEach(disegnaSpark);
 }
+/** La sparkline si adatta alla larghezza della cella invece di restare fissa a 88px: nella tabella
+ *  classifica quella colonna riceve lo spazio che avanza, e una linea di tendenza più larga si legge molto
+ *  meglio (04/09/2026). La funzione è scritta per poter essere richiamata più volte sullo stesso canvas
+ *  (succede dopo il ridimensionamento delle colonne): ricalcola sempre le dimensioni da zero. */
 function disegnaSpark(cv){
   const serie = cv.dataset.serie.split(",").map(Number).filter(v=>isFinite(v));
   const ctx = cv.getContext("2d");
   const dpr = window.devicePixelRatio || 1;
-  const w = cv.width, h = cv.height;
-  cv.width = w*dpr; cv.height = h*dpr; cv.style.width = w+"px"; cv.style.height = h+"px";
+  const cella = cv.parentElement;
+  const disponibile = cella ? cella.clientWidth - 20 : 0;
+  const w = Math.max(70, Math.min(360, Math.round(disponibile > 0 ? disponibile : 88)));
+  const h = 26;
+  cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+  cv.style.width = w+"px"; cv.style.height = h+"px";
+  ctx.setTransform(1,0,0,1,0,0);
   ctx.scale(dpr, dpr); ctx.clearRect(0,0,w,h);
   if(serie.length === 0) return;
   if(serie.length === 1){
@@ -3182,6 +3191,68 @@ function renderGolGameCampo(idContenitore, sessioni){
   disegnaCampoHeatmap($("#"+idp+"-heat-assist"), assist, optsBase);
 }
 
+/** Dà a ogni colonna delle tabelle a schermo la larghezza che le serve davvero, invece di quella dettata
+ *  dall'intestazione (audit del 04/09/2026: colonne larghe 144-152px per contenere valori come "83,3%",
+ *  solo perché l'intestazione "Prec. passaggi" stava su una riga sola). Le intestazioni ora possono andare
+ *  a capo tra una parola e l'altra, quindi a una colonna basta la sua parola più lunga; lo spazio che
+ *  avanza va alla colonna dei nomi e a quelle che contengono una barra o una sparkline, che dallo spazio
+ *  in più ci guadagnano davvero. Se invece il contenuto non ci sta, la tabella resta scorrevole come prima. */
+function adattaLarghezzeColonneSchermo(){
+  $$(".tabella-scroll table").forEach(tbl => {
+    const intestazioni = Array.from(tbl.querySelectorAll("thead th"));
+    if(!intestazioni.length) return;
+    const righe = Array.from(tbl.querySelectorAll("tbody tr")).slice(0, 40); // campione: basta per la larghezza
+    const larghe = [];   // colonne con barre/sparkline: hanno bisogno di respiro
+    const necessarie = intestazioni.map((th, i) => {
+      const cs = getComputedStyle(th);
+      const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      // per l'intestazione basta la parola più lunga: il resto va a capo
+      let n = unescConteggio(th.textContent).split(/\s+/).reduce((m,w)=>Math.max(m, larghezzaTestoPx(w, th)), 0) + pad;
+      let conBarra = false;
+      righe.forEach(tr => {
+        const td = tr.children[i];
+        if(!td) return;
+        if(td.querySelector(".barra-wrap, svg, canvas")) conBarra = true;
+        const csTd = getComputedStyle(td);
+        const padTd = parseFloat(csTd.paddingLeft) + parseFloat(csTd.paddingRight);
+        const testo = Array.from(td.childNodes).filter(x=>x.nodeType===3).map(x=>x.textContent).join(" ").trim() || td.textContent;
+        n = Math.max(n, larghezzaTestoPx(unescConteggio(testo).slice(0,40), td) + padTd);
+      });
+      if(conBarra) larghe.push(i);
+      return Math.max(n + 4, conBarra ? 130 : 44);
+    });
+    const totale = necessarie.reduce((a,b)=>a+b, 0);
+    const contenitore = tbl.parentElement ? tbl.parentElement.clientWidth : 0;
+    if(!contenitore) return;
+    const finali = necessarie.slice();
+    if(totale < contenitore){
+      // lo spazio che avanza: metà alla prima colonna (i nomi), il resto alle colonne con barra, e se non
+      // ce ne sono si distribuisce in proporzione come prima
+      let avanzo = contenitore - totale - 2;
+      // le colonne con barra/sparkline crescono, ma fino a un tetto: oltre, una colonna larghissima con
+      // dentro una linea sottile sembra solo spazio sprecato
+      const TETTO_COLONNA_GRAFICA = 300;
+      larghe.forEach(i => {
+        const extra = Math.min(Math.floor(avanzo/larghe.length), Math.max(0, TETTO_COLONNA_GRAFICA - finali[i]));
+        finali[i] += extra; avanzo -= extra;
+      });
+      // poi la colonna dei nomi, anch'essa fino a un tetto (un nome e un ruolo non hanno bisogno di mezzo
+      // schermo); quel che resta si spalma in parti uguali su tutte, così la tabella riempie la riga senza
+      // che nessuna colonna diventi sproporzionata rispetto a quello che contiene
+      const TETTO_COLONNA_NOMI = 340;
+      const extraNomi = Math.min(avanzo, Math.max(0, TETTO_COLONNA_NOMI - finali[0]));
+      finali[0] += extraNomi; avanzo -= extraNomi;
+      if(avanzo > 0){ const quota = Math.floor(avanzo/finali.length); finali.forEach((v,i)=>{ finali[i] = v + quota; }); }
+    }
+    const larghezzaTabella = finali.reduce((a,b)=>a+b, 0);
+    tbl.style.width = (totale < contenitore ? "100%" : larghezzaTabella + "px");
+    tbl.style.minWidth = "0";
+    intestazioni.forEach((th,i) => { th.style.width = Math.round(finali[i]) + "px"; });
+  });
+  // le sparkline si ridisegnano sulla nuova larghezza della loro colonna
+  $$("canvas.spark").forEach(disegnaSpark);
+}
+
 /** Misura quanto è alta davvero la barra che resta fissa in cima (filtri + schede + indice sezioni) e la
  *  scrive nella variabile CSS --altezza-fissa. La usano due regole in index.html: lo scroll-margin delle
  *  sezioni (senza, cliccando una voce dell'indice la sezione finiva NASCOSTA dietro la barra) e l'altezza
@@ -3237,6 +3308,7 @@ function render(){
   renderZoneCampo("contenuto-zone-allenamento", f.allenamenti, null, true);
   renderQualita();
   aggiornaSelettoriReport();
+  adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
 }
 
 function attivaDashboard(ds, etichettaOrigine){
@@ -3463,6 +3535,162 @@ function nomeFileData(prefisso, d){
  *  dentro #report-stage (fuori schermo, A4 a 96dpi ≈ 794×1123px) e la restituisce.
  *  Con `conSidebar:false` costruisce una pagina a piena larghezza, senza colonna laterale: usata per le
  *  pagine di appendice con le statistiche dettagliate di tutti i giocatori, dove servono più colonne. */
+/* =====================================================================
+   IMPAGINAZIONE A4 DEI REPORT (04/09/2026)
+   Prima ogni "pagina logica" era un unico riquadro alto quanto serviva, catturato in una sola immagine e
+   poi TAGLIATO A FETTE alte quanto un A4. Da lì venivano i difetti segnalati da Elisa: fogli completamente
+   bianchi, titoli separati dal loro contenuto, elenchi e tabelle spezzati a metà riga.
+   Ora il flusso è quello di una vera relazione: il generatore riempie un "documento" (un contenitore che
+   cresce quanto vuole), e poi l'impaginatore distribuisce i suoi blocchi su pagine A4 VERE, una per una,
+   fermandosi quando la pagina è piena. Una tabella o un elenco troppo lunghi continuano sulla pagina dopo
+   (la tabella ci riporta la sua intestazione); un titolo di sezione non resta mai da solo in fondo a una
+   pagina; una pagina senza contenuto non viene proprio creata.
+   ===================================================================== */
+
+/** Contenitore in cui il generatore versa i suoi blocchi. Ha la stessa larghezza e lo stesso stile della
+ *  pagina finale (serve perché le misure delle tabelle siano già quelle giuste), ma può crescere in
+ *  altezza quanto vuole: non è una pagina, è la "bozza" da impaginare. */
+function nuovoDocumentoReport(conSidebar=true){
+  const doc = nuovaPaginaReport(conSidebar);
+  doc.classList.add("rp-doc");
+  doc.dataset.documento = "1";
+  return doc;
+}
+
+/** Blocchi che si possono spezzare tra due pagine, e come: le tabelle riga per riga (ripetendo
+ *  l'intestazione), gli elenchi puntati voce per voce. Tutto il resto è atomico e passa intero alla
+ *  pagina successiva. Sotto `minimoResiduo` pezzi non vale la pena spezzare: si sposta tutto. */
+function pezziDivisibili(blocco){
+  if(blocco.tagName === "TABLE" && blocco.classList.contains("rp-table")){
+    const righe = Array.from(blocco.querySelectorAll("tbody tr"));
+    return righe.length >= 6 ? {tipo:"tabella", pezzi:righe, minimoResiduo:3} : null;
+  }
+  if(blocco.tagName === "UL" && blocco.classList.contains("rp-bullets")){
+    const voci = Array.from(blocco.children);
+    return voci.length >= 4 ? {tipo:"elenco", pezzi:voci, minimoResiduo:2} : null;
+  }
+  // La griglia dei campetti si spezza per riquadri (due per riga): senza, un blocco da quattro campi che
+  // non entra nello spazio rimasto salta tutto alla pagina dopo, lasciandone una mezza vuota.
+  if(blocco.classList && blocco.classList.contains("rp-campo-griglia")){
+    const celle = Array.from(blocco.children);
+    return celle.length >= 4 ? {tipo:"campi", pezzi:celle, minimoResiduo:2} : null;
+  }
+  return null;
+}
+
+/** Crea la "seconda metà" di un blocco spezzato: per una tabella, una tabella nuova con la stessa
+ *  intestazione e le righe rimaste; per un elenco, un elenco con le voci rimaste. */
+function codaBlocco(blocco, pezziRimasti){
+  if(blocco.classList && blocco.classList.contains("rp-campo-griglia")){
+    const coda = document.createElement("div");
+    coda.className = blocco.className;
+    pezziRimasti.forEach(c => coda.appendChild(c));
+    return coda;
+  }
+  if(blocco.tagName === "TABLE"){
+    const coda = document.createElement("table");
+    coda.className = blocco.className;
+    const thead = blocco.querySelector("thead");
+    coda.innerHTML = (thead ? thead.outerHTML : "") + "<tbody></tbody>";
+    const corpoCoda = coda.querySelector("tbody");
+    pezziRimasti.forEach(tr => corpoCoda.appendChild(tr));
+    return coda;
+  }
+  const coda = document.createElement(blocco.tagName);
+  coda.className = blocco.className;
+  pezziRimasti.forEach(li => coda.appendChild(li));
+  return coda;
+}
+
+/** Distribuisce i blocchi di un documento su pagine A4 vere. Torna l'elenco delle pagine create. */
+function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
+  const banda = doc.centro.querySelector(".rp2-band");
+  const htmlLato = doc.lato ? doc.lato.innerHTML : null;
+  const blocchi = Array.from(doc.corpo.children);
+  const pagine = [];
+  let pagina = null;
+
+  const apriPagina = () => {
+    const prima = pagine.length === 0;
+    // solo la prima pagina di un documento porta fascia e colonna laterale: le pagine di continuazione
+    // usano tutta la larghezza del foglio invece di trascinarsi dietro una colonna vuota
+    const p = nuovaPaginaReport(prima && conSidebar);
+    if(prima && banda) p.centro.insertBefore(banda, p.corpo);
+    if(prima && conSidebar && htmlLato !== null) p.lato.innerHTML = htmlLato;
+    pagine.push(p);
+    pagina = p;
+    return p;
+  };
+  const entra = () => altezzaContenutoPagina(pagina) <= altezzaUtile;
+  const sistema = (blocco) => {
+    if(blocco.tagName === "TABLE" && blocco.classList.contains("rp-table")) adattaLarghezzeColonneReport(blocco);
+    const cv = blocco.querySelector && blocco.querySelector("canvas");
+    if(cv && typeof Chart !== "undefined" && Chart.getChart){
+      const grafico = Chart.getChart(cv);
+      if(grafico) try{ grafico.resize(); }catch(e){}
+    }
+  };
+
+  apriPagina();
+  for(const blocco of blocchi){
+    pagina.corpo.appendChild(blocco);
+    sistema(blocco);
+    if(entra()) continue;
+
+    // Non ci sta. Prima si prova a spezzarlo, se è di un tipo che si può spezzare.
+    pagina.corpo.removeChild(blocco);
+    const divisibile = pezziDivisibili(blocco);
+    let spezzato = false;
+    if(divisibile){
+      const contenitore = blocco.tagName === "TABLE" ? blocco.querySelector("tbody") : blocco;
+      const tutti = divisibile.pezzi.slice();
+      tutti.forEach(x => x.remove());
+      pagina.corpo.appendChild(blocco);
+      const tenuti = [];
+      for(const pezzo of tutti){
+        contenitore.appendChild(pezzo);
+        if(entra()){ tenuti.push(pezzo); continue; }
+        contenitore.removeChild(pezzo);
+        break;
+      }
+      const rimasti = tutti.slice(tenuti.length);
+      // vale la pena spezzare solo se resta abbastanza da una parte e dall'altra
+      if(tenuti.length >= divisibile.minimoResiduo && rimasti.length >= divisibile.minimoResiduo){
+        sistema(blocco);
+        const coda = codaBlocco(blocco, rimasti);
+        apriPagina();
+        pagina.corpo.appendChild(coda);
+        sistema(coda);
+        spezzato = true;
+      } else {
+        // rimettiamo tutto insieme e lo spostiamo intero
+        tutti.forEach(x => contenitore.appendChild(x));
+        pagina.corpo.removeChild(blocco);
+      }
+    }
+    if(spezzato) continue;
+
+    // Va tutto sulla pagina nuova. Un titolo di sezione rimasto da solo in fondo alla pagina precedente
+    // lo portiamo con noi: un titolo senza il suo contenuto sotto è il difetto più visibile in stampa.
+    const ultimo = pagina.corpo.lastElementChild;
+    const titoloOrfano = ultimo && ultimo.classList.contains("rp-section-title") ? ultimo : null;
+    apriPagina();
+    if(titoloOrfano) pagina.corpo.appendChild(titoloOrfano);
+    pagina.corpo.appendChild(blocco);
+    sistema(blocco);
+  }
+
+  // Una pagina che è rimasta senza contenuto non deve diventare un foglio bianco.
+  for(let i = pagine.length - 1; i >= 0; i--){
+    if(!pagine[i].corpo.children.length && !(pagine[i].lato && pagine[i].lato.innerHTML.trim())){
+      pagine[i].remove();
+      pagine.splice(i, 1);
+    }
+  }
+  doc.remove();
+  return pagine;
+}
+
 function nuovaPaginaReport(conSidebar=true){
   const stage = $("#report-stage");
   const pagina = document.createElement("div");
@@ -3784,9 +4012,18 @@ function tabelleDettaglioGiocatori(pagina, righeAgg, haEventiDisciplinari){
 }
 
 const PALETTE_REPORT = {primary:"#01696F", c1:"#20808D", c2:"#A84B2F", c3:"#1B474D", c4:"#8FC5CD", c5:"#944454", c6:"#C99400", muted:"#6E6D68", grid:"rgba(40,37,29,.12)", text:"#28251D"};
+/** devicePixelRatio alto (04/09/2026): i grafici dei report venivano disegnati alla risoluzione dello
+ *  schermo e poi INGRANDITI dalla cattura per il PDF, che lavora a scala 2 — da lì l'aspetto sgranato
+ *  segnalato da Elisa, più evidente nei grafici a barre orizzontali del report giocatori. Chiedendo a
+ *  Chart.js di disegnare a 3× la dimensione CSS, la cattura ha più pixel di quanti gliene servano e il
+ *  risultato in stampa è nitido. Vale solo per i report: a schermo resta il rapporto naturale. */
+const NITIDEZZA_GRAFICI_REPORT = 3;
+/** Stessa ragione per i campetti dei report (zone e heatmap), disegnati a mano su canvas: a 640px di lato
+ *  corto la cattura a scala 2 li ingrandiva appena, con percentuali ed etichette delle porte molli. */
+const LATO_CAMPO_REPORT_PX = 1280;
 function opzioniGraficoReport(extra={}){
   return Object.assign({
-    responsive:true, maintainAspectRatio:false, animation:false,
+    responsive:true, maintainAspectRatio:false, animation:false, devicePixelRatio:NITIDEZZA_GRAFICI_REPORT,
     plugins:{legend:{display:true, position:"bottom", labels:{color:PALETTE_REPORT.muted, boxWidth:11, boxHeight:11, font:{size:10}, usePointStyle:true, padding:10}}},
     scales:{
       x:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}, border:{color:PALETTE_REPORT.grid}},
@@ -3833,7 +4070,7 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
     etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
     cella.appendChild(etichetta);
     const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
-    const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
     wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
     disegnaFn(cv, punti, extraOpts);
   };
@@ -3860,7 +4097,7 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
         etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
         cella.appendChild(etichetta);
         const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
-        const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+        const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
         wrap.appendChild(cv); cella.appendChild(wrap); grigliaSquadra.appendChild(cella);
         disegnaCampoZone(cv, punti, extraOpts);
       };
@@ -3897,7 +4134,7 @@ function golGameCampoReport(pagina, sessioni){
     etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
     cella.appendChild(etichetta);
     const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
-    const cv = document.createElement("canvas"); cv.width = 640; cv.height = 384;
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
     wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
     disegnaFn(cv, punti, extraOpts);
   };
@@ -3983,10 +4220,34 @@ function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
  *  sia chi deve davvero AFFETTARE il canvas catturato (esportaPaginaAPdf) usano questa stessa funzione,
  *  così le due cose non possono più disallinearsi — prima di questa modifica, contarle con una formula a
  *  parte (interruzioni.length + 1) sottostimava il totale ogni volta che scattava la rete di sicurezza. */
+/** Altezza REALMENTE occupata dal contenuto: il fondo dell'ultimo blocco, non l'altezza del riquadro —
+ *  che è sempre almeno `min-height:1123px` e ha del padding in fondo. Senza questa distinzione una pagina
+ *  il cui contenuto sforava di pochi pixel il bordo di un foglio produceva un foglio PDF completamente
+ *  bianco: nei PDF reali di Elisa erano vuote 3 pagine su 12 (04/09/2026). Il piè di pagina non c'entra:
+ *  viene catturato a parte e sovrapposto a ogni foglio (vedi esportaPaginaAPdf), quindi tagliare qui lo
+ *  spazio vuoto non lo fa sparire. */
+function altezzaContenutoPagina(pagina){
+  const top = pagina.getBoundingClientRect().top;
+  const colonne = (pagina.latoA || pagina.latoB) ? [pagina.corpo, pagina.latoA, pagina.latoB] : [pagina.corpo, pagina.lato];
+  let fondo = 0;
+  colonne.filter(Boolean).forEach(c => Array.from(c.children).forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.height > 0) fondo = Math.max(fondo, r.bottom - top);
+  }));
+  return fondo;
+}
+
 function confiniFisiciPagina(pagina, altezzaPaginaCss){
   const interruzioni = puntiDiInterruzionePagina(pagina, altezzaPaginaCss);
-  const altezzaTotale = pagina.getBoundingClientRect().height;
-  const bordi = [...interruzioni, altezzaTotale];
+  const MARGINE_FONDO = 24; // un filo d'aria sotto l'ultimo blocco, per non tagliarne il bordo
+  const contenuto = altezzaContenutoPagina(pagina);
+  const altezzaRiquadro = pagina.getBoundingClientRect().height;
+  let altezzaTotale = contenuto > 0 ? Math.min(altezzaRiquadro, contenuto + MARGINE_FONDO) : altezzaRiquadro;
+  // Se il bordo dell'ultimo foglio intero cade DOPO la fine del contenuto vero, quello che resta è solo
+  // spazio vuoto: non vale un foglio in più. Il taglio avviene solo quando non c'è nulla da tagliare.
+  const bordoInteroPrecedente = Math.floor(altezzaTotale / altezzaPaginaCss) * altezzaPaginaCss;
+  if(bordoInteroPrecedente > 0 && bordoInteroPrecedente >= contenuto) altezzaTotale = bordoInteroPrecedente;
+  const bordi = [...interruzioni.filter(v => v < altezzaTotale - 0.01), altezzaTotale];
   const confini = [];
   let y = 0;
   for(const fine of bordi){
@@ -4093,17 +4354,28 @@ async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partit
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:"pt", format:"a4"});
   try{
-    const pagineDom = [];
+    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
+
+    // Ogni generatore riempie prima un "documento" che può crescere quanto vuole; solo dopo i suoi blocchi
+    // vengono distribuiti su pagine A4 vere (vedi impaginaDocumento). Prima invece ogni generatore
+    // produceva un unico riquadro lunghissimo che veniva poi tagliato a fette: da lì fogli bianchi,
+    // titoli staccati dal contenuto e tabelle spezzate a metà riga.
+    const documenti = [];
     for(const gen of paginaGeneratori){
-      const pagina = nuovaPaginaReport(!gen.piena);
-      await gen(pagina);
-      pagineDom.push(pagina);
+      const doc = nuovoDocumentoReport(!gen.piena);
+      await gen(doc);
+      documenti.push({doc, conSidebar: !gen.piena});
     }
     // Chart.js needs a frame to paint onto the offscreen canvases before capture
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
-    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
+    const pagineDom = [];
+    documenti.forEach(({doc, conSidebar}) => {
+      pagineDom.push(...impaginaDocumento(doc, {conSidebar, altezzaUtile: altezzaPaginaCss}));
+    });
+    // i grafici spostati su una pagina di larghezza diversa hanno bisogno di un altro frame per ridisegnarsi
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
     // Passata di conteggio: quante pagine fisiche del PDF servirà davvero ciascuna "pagina" logica —
     // serve PRIMA di disegnare qualunque piè di pagina, altrimenti il primo "Pagina 1 di N" scritto
@@ -4118,6 +4390,35 @@ async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partit
   } finally {
     stage.innerHTML = "";
   }
+}
+
+/** Possesso palla stimato sull'intera stagione: somma i secondi delle quattro categorie di TUTTE le
+ *  partite che hanno gli eventi, poi riapplica le stesse identiche formule di analyzePossession — non è
+ *  quindi una media di percentuali (che darebbe lo stesso peso a una partita di 5' e a una di 50'), ma il
+ *  calcolo vero fatto su tutti i minuti della stagione messi insieme. Torna null se nessuna partita ha
+ *  eventi utilizzabili. Richiesta di Elisa del 04/09/2026: il report stagionale deve dare le stesse
+ *  informazioni di quello di partita, riferite alla stagione. */
+function possessoStagionale(partite){
+  const tot = {ourCertainSec:0, opponentEstimatedSec:0, contestedSec:0, unknownSec:0};
+  let possessi = 0, recuperi = 0, palleParse = 0, partiteUsate = 0;
+  (partite||[]).forEach(p => {
+    const analisi = analizzaEventiPartitaSevenLab({id:p.Match_ID, eventi:p.Eventi, riepilogoTempi:p.RiepilogoTempi});
+    if(!analisi.eventiSquadra.length) return;
+    const pos = analyzePossession(analisi.eventiSquadra);
+    if(!pos || pos.confidencePct === null) return;
+    tot.ourCertainSec += pos.ourCertainSec; tot.opponentEstimatedSec += pos.opponentEstimatedSec;
+    tot.contestedSec += pos.contestedSec; tot.unknownSec += pos.unknownSec;
+    const kpi = calcolaPossessionKpis(pos.sequences, analisi.eventiSquadra);
+    possessi += kpi.possessi; recuperi += kpi.recuperi; palleParse += kpi.palleParse;
+    partiteUsate++;
+  });
+  if(!partiteUsate) return null;
+  const classificato = tot.ourCertainSec + tot.opponentEstimatedSec + tot.contestedSec;
+  return Object.assign({}, tot, {
+    partiteUsate, possessi, recuperi, palleParse,
+    ourPossessionWeightedPct: percPossesso(tot.ourCertainSec + POSSESSION_CONFIG_DEFAULT.contestedWeightForUs*tot.contestedSec, classificato),
+    confidencePct: percPossesso(classificato, classificato + tot.unknownSec)
+  });
 }
 
 /* ---- Report Partita ---- */
@@ -4268,27 +4569,10 @@ async function generaReportPartita(matchId){
         aggGara.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]),
         aggGara.map(a => a.Minuti_Totali <= 0));
     }, {piena:true}),
-    async (pag) => {
-      bandaReport(pag, "Report Partita", "Stagione fin qui", `${partiteFinQui.length} partite disputate — si aggiorna a ogni gara`);
-      sidebarReport(pag, {
-        eyebrow:"Classifica indice", nome:aggStagione[0]?.Giocatore, ruolo:aggStagione[0]?.Ruolo, colore:"#C99400",
-        gruppi: aggStagione[0] ? [{titolo:"Al comando della stagione", righe:aggStagione.slice(0,5).map(a=>({label:a.Giocatore, valore:nf(a.Indice_Prestazione_Tot,1)}))}] : []
-      });
-      titoloSezioneReport(pag, "Tendenze rilevanti della stagione");
-      if(tendenze.length){
-        bulletsReport(pag, tendenze.map(t => fraseTendenza(t).replace(t.Giocatore, `<b>${esc(t.Giocatore)}</b>`)));
-      } else {
-        bulletsReport(pag, ["Non ci sono ancora abbastanza partite per tendenze statisticamente rilevanti (servono almeno 3 partite per giocatore)."]);
-      }
-      titoloSezioneReport(pag, "Classifica stagionale per indice prestazione");
-      tabellaReport(pag, ["Giocatore","Ruolo","Partite","Gol","Assist","Indice tot."],
-        aggStagione.slice(0,8).map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Partite_Giocate), nf0(a.Gol), nf0(a.Assist), nf(a.Indice_Prestazione_Tot,1)]));
-      titoloSezioneReport(pag, "Andamento gol nella stagione");
-      graficoReport(pag, "rp-chart-gol", {type:"bar", data:{labels:partiteFinQui.map(p=>p.Etichetta), datasets:[
-        {label:"Gol fatti", data:partiteFinQui.map(p=>p.Gol_Fatti), backgroundColor:PALETTE_REPORT.c1, borderRadius:3},
-        {label:"Gol subiti", data:partiteFinQui.map(p=>p.Gol_Subiti), backgroundColor:PALETTE_REPORT.c2, borderRadius:3}
-      ]}, options: opzioniGraficoReport()});
-    },
+    // La pagina "Stagione fin qui" (tendenze, classifica stagionale, andamento gol) è stata TOLTA da qui il
+    // 04/09/2026 su richiesta esplicita di Elisa: un report di partita deve parlare solo di quella partita,
+    // e le stesse informazioni riferite alla stagione stanno nel Report Stagionale, che è stato riscritto
+    // per rispecchiare sezione per sezione questo report.
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Partita", "Statistiche dettagliate", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — tutti i giocatori, tutte le voci raccolte`);
       tabelleDettaglioGiocatori(pag, aggGara, !!disciplinaGaraTot);
@@ -4480,6 +4764,14 @@ async function generaReportStagionale(){
   const incroci = ds.haRPE ? incrociCaricoRendimento(ds).slice(0,6) : [];
   const qualita = validaDati(ds);
   const leader = agg[0];
+  // Dati che servono alle sezioni "gemelle" di quelle del report di partita (04/09/2026)
+  const possessoStag = possessoStagionale(ds.partite);
+  const portieriStagione = Array.from(statistichePortieriPeriodo(ds.partite, ds.giocatori).entries())
+    .map(([nome, v]) => Object.assign({nome}, v))
+    .sort((a,b) => b.tiriSubitiTotali - a.tiriSubitiTotali);
+  const vinteStag = ds.partite.filter(p=>p.Gol_Fatti>p.Gol_Subiti).length;
+  const pareggiateStag = ds.partite.filter(p=>p.Gol_Fatti===p.Gol_Subiti).length;
+  const perseStag = ds.partite.filter(p=>p.Gol_Fatti<p.Gol_Subiti).length;
   const andamentoLeader = leader ? ds.giocatori.filter(g => g.Giocatore === leader.Giocatore)
     .slice().sort((a,b)=>(a.Data?+a.Data:0)-(b.Data?+b.Data:0))
     .map(r => ({label:r.EtichettaPartita, valore:nf(r.Indice_Prestazione,1)})) : [];
@@ -4499,12 +4791,9 @@ async function generaReportStagionale(){
           ...(andamentoLeader.length ? [{titolo:"Andamento indice, partita per partita", righe:andamentoLeader}] : [])
         ] : []
       });
-      const vinte = ds.partite.filter(p=>p.Gol_Fatti>p.Gol_Subiti).length;
-      const pareggiate = ds.partite.filter(p=>p.Gol_Fatti===p.Gol_Subiti).length;
-      const perse = ds.partite.filter(p=>p.Gol_Fatti<p.Gol_Subiti).length;
       kpiRowReport(pag, [
         {l:"Partite giocate", v:nf0(ds.partite.length)},
-        {l:"Vittorie / Pareggi / Sconfitte", v:`${nf0(vinte)} / ${nf0(pareggiate)} / ${nf0(perse)}`},
+        {l:"Vittorie / Pareggi / Sconfitte", v:`${nf0(vinteStag)} / ${nf0(pareggiateStag)} / ${nf0(perseStag)}`},
         {l:"Precisione passaggi", v:pctTxt(sq.precisione_passaggi)},
         {l:"Tasso di errore", v:pctTxt(sq.tasso_errore)}
       ]);
@@ -4523,18 +4812,82 @@ async function generaReportStagionale(){
           {label:"Parate", valore:nf0(sq.parate)}
         ]
       ]);
-      titoloSezioneReport(pag, "Classifica stagionale per indice prestazione");
-      tabellaReport(pag, ["Giocatore","Ruolo","Partite","Gol","Assist","Prec. pass.","Indice tot."],
-        agg.slice(0,10).map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Partite_Giocate), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]));
+      // Possesso palla stimato sull'intera stagione: stessa sezione del report di partita, stessi numeri,
+      // riferiti a tutte le gare (vedi possessoStagionale) — richiesta di Elisa del 04/09/2026.
+      if(possessoStag){
+        titoloSezioneReport(pag, "Possesso palla stimato");
+        kpiRowReport(pag, [
+          {l:"Possesso stimato", v:pctTxt(possessoStag.ourPossessionWeightedPct,1)},
+          {l:"Copertura del dato", v:pctTxt(possessoStag.confidencePct,0)},
+          {l:"Affidabilità", v:getConfidenceLabelPossesso(possessoStag.confidencePct)},
+          {l:"Possessi rilevati", v:nf0(possessoStag.possessi)}
+        ]);
+        bulletsReport(pag, [
+          `Possesso certo nostro: ${mmss(possessoStag.ourCertainSec)} · avversario stimato: ${mmss(possessoStag.opponentEstimatedSec)} · palla contesa: ${mmss(possessoStag.contestedSec)} · non classificabile: ${mmss(possessoStag.unknownSec)}.`,
+          possessoStag.palleParse>0 ? `Rapporto recuperi/palle perse: ${nf(possessoStag.recuperi/possessoStag.palleParse,2)} (${nf0(possessoStag.recuperi)} recuperi, ${nf0(possessoStag.palleParse)} palle perse).` : `${nf0(possessoStag.recuperi)} recuperi registrati, nessuna palla persa.`,
+          `Calcolato su ${nf0(possessoStag.partiteUsate)} partite su ${nf0(ds.partite.length)}: le altre non hanno la sezione eventi nei file caricati.`,
+          "Possesso palla stimato da eventi (non possesso ufficiale): calcolato solo dai tuoi eventi di partita, senza i dati dell'avversario. Un passaggio o un dribbling sbagliato non fanno perdere il possesso da soli — solo una «palla persa» esplicita lo assegna all'avversario."
+        ]);
+      }
     },
-    async (pag) => {
+    // Stesse sezioni del Report Partita, a piena larghezza, riferite alla stagione.
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Zone di gioco e dettagli", `${ds.partite.length} partite · aggiornato al ${dataLabel(new Date())}`);
+      if(ds.haEventiDisciplinari){
+        const somma = c => ds.giocatori.reduce((t,g)=>t+N(g[c]),0);
+        titoloSezioneReport(pag, "Disciplina e calci piazzati");
+        kpiRowReport(pag, [
+          {l:"Cartellini gialli", v:nf0(somma("Cartellini_Gialli"))},
+          {l:"Cartellini rossi", v:nf0(somma("Cartellini_Rossi"))},
+          {l:"Angoli (con gol)", v:`${nf0(somma("Angoli_Tentati"))} (${nf0(somma("Angoli_Gol"))})`},
+          {l:"Punizioni/rigori realizzati", v:`${nf0(somma("Punizioni_Realizzate"))}/${nf0(somma("Rigori_Realizzati"))}`}
+        ]);
+        const fallosi = agg.filter(a=>a.Cartellini_Totali>0).slice().sort((a,b)=>(b.Cartellini_Rossi*2+b.Cartellini_Gialli)-(a.Cartellini_Rossi*2+a.Cartellini_Gialli)).slice(0,5);
+        const angoli = agg.filter(a=>a.Angoli_Tentati>=2).slice().sort((a,b)=>b.Angoli_Realizzazione_pct-a.Angoli_Realizzazione_pct).slice(0,3);
+        const punizioni = agg.filter(a=>a.Punizioni_Tentate>=2).slice().sort((a,b)=>b.Realizzazione_Punizioni_pct-a.Realizzazione_Punizioni_pct).slice(0,3);
+        const rigori = agg.filter(a=>a.Rigori_Tentati>=1).slice().sort((a,b)=>b.Realizzazione_Rigori_pct-a.Realizzazione_Rigori_pct).slice(0,3);
+        const testiDisciplina = [];
+        if(fallosi.length) testiDisciplina.push("Più fallosi: "+fallosi.map(a=>`<b>${esc(a.Giocatore)}</b> (${nf0(a.Cartellini_Gialli)} gialli, ${nf0(a.Cartellini_Rossi)} rossi)`).join(", ")+".");
+        if(angoli.length) testiDisciplina.push("Miglior realizzazione sui calci d'angolo: "+angoli.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Angoli_Realizzazione_pct,0)}`).join(", ")+".");
+        if(punizioni.length) testiDisciplina.push("Miglior realizzazione su punizione: "+punizioni.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Punizioni_pct,0)}`).join(", ")+".");
+        if(rigori.length) testiDisciplina.push("Miglior realizzazione su rigore: "+rigori.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Rigori_pct,0)}`).join(", ")+".");
+        if(testiDisciplina.length) bulletsReport(pag, testiDisciplina);
+      }
+      if(portieriStagione.length){
+        titoloSezioneReport(pag, "Tiri subiti dal portiere");
+        tabellaReport(pag, ["Portiere","Tiri subiti totali","Parate","Gol subiti"],
+          portieriStagione.map(p => [esc(p.nome), nf0(p.tiriSubitiTotali), nf0(p.parate), nf0(p.golSubiti)]));
+        bulletsReport(pag, [portieriStagione.some(p=>p.stimato)
+          ? `"Tiri subiti totali" è il totale dei tiri affrontati in stagione; dove il file della partita non ha la sezione «STATISTICHE PORTIERI GAME» il dato è stimato come parate del portiere più gol incassati dalla squadra in quella gara.`
+          : `"Tiri subiti totali" è il totale dei tiri affrontati in stagione (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
+      }
+      zoneCampoReport(pag, ds.partite, true);
+      golGameCampoReport(pag, ds.partite);
+    }, {piena:true}),
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Lettura della stagione", `${ds.partite.length} partite — sintesi e contributo dei giocatori`);
+      titoloSezioneReport(pag, "Cosa dicono i dati");
+      const bulletStag = [];
+      if(leader) bulletStag.push(`<b>${esc(leader.Giocatore)}</b> ha guidato la stagione con un indice prestazione di ${nf(leader.Indice_Prestazione_Tot,1)} (${nf0(leader.Gol)} gol, ${nf0(leader.Assist)} assist in ${nf0(leader.Partite_Giocate)} partite).`);
+      bulletStag.push(`La squadra ha passato con il ${pctTxt(sq.precisione_passaggi,0)} di precisione e un tasso di errore del ${pctTxt(sq.tasso_errore,0)}.`);
+      bulletStag.push(`${nf0(sq.tiri_totali)} tiri totali in stagione, ${pctTxt(sq.efficacia_realizzativa ?? perc(sq.gol_giocatori, sq.tiri_totali),0)} trasformati in gol.`);
+      const migliorRecuperoStag = agg.slice().sort((a,b)=>b.Recuperi-a.Recuperi)[0];
+      if(migliorRecuperoStag) bulletStag.push(`<b>${esc(migliorRecuperoStag.Giocatore)}</b> ha guidato la fase di non possesso con ${nf0(migliorRecuperoStag.Recuperi)} palloni recuperati.`);
+      bulletStag.push(`Bilancio: ${nf0(vinteStag)} vittorie, ${nf0(pareggiateStag)} pareggi, ${nf0(perseStag)} sconfitte · ${nf0(sq.gol_fatti)} gol fatti e ${nf0(sq.gol_subiti)} subiti.`);
+      bulletsReport(pag, bulletStag);
+      titoloSezioneReport(pag, "Contributo dei giocatori in stagione");
+      tabellaReport(pag, ["Giocatore","Ruolo","Partite","Min","Gol","Ast","Prec. pass.","Indice tot."],
+        agg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Partite_Giocate), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]),
+        agg.map(a => a.Minuti_Totali <= 0));
+      titoloSezioneReport(pag, "Andamento gol nella stagione");
+      graficoReport(pag, "rp-chart-gol-stag", {type:"bar", data:{labels:ds.partite.map(p=>p.Etichetta), datasets:[
+        {label:"Gol fatti", data:ds.partite.map(p=>p.Gol_Fatti), backgroundColor:PALETTE_REPORT.c1, borderRadius:3},
+        {label:"Gol subiti", data:ds.partite.map(p=>p.Gol_Subiti), backgroundColor:PALETTE_REPORT.c2, borderRadius:3}
+      ]}, options: opzioniGraficoReport()});
+    }, {piena:true}),
+    // Sezioni che esistono solo qui: hanno senso sulla stagione, non su una singola gara.
+    Object.assign(async (pag) => {
       bandaReport(pag, "Report Stagionale", "Tendenze e segnali incrociati", "Vista d'insieme su partite e allenamenti");
-      sidebarReport(pag, {eyebrow:"Qualità dei dati", gruppi:[
-        {titolo:"Riepilogo controlli", righe:[
-          {label:"Righe da correggere", valore:nf0(qualita.filter(a=>a.tipo==="errore").length)},
-          {label:"Righe da verificare", valore:nf0(qualita.filter(a=>a.tipo==="attenzione").length)}
-        ]}
-      ]});
       titoloSezioneReport(pag, "Tendenze individuali rilevanti");
       bulletsReport(pag, tendenze.length ? tendenze.map(t => fraseTendenza(t).replace(t.Giocatore, `<b>${esc(t.Giocatore)}</b>`)) : ["Nessuna tendenza statisticamente rilevante al momento."]);
       titoloSezioneReport(pag, "Segnali incrociati carico ↔ rendimento");
@@ -4546,23 +4899,7 @@ async function generaReportStagionale(){
       bulletsReport(pag, testi.length ? testi : [ds.haRPE ? "Nessun segnale incrociato ancora disponibile: servono almeno due mesi consecutivi con partite e allenamenti." : "Non disponibile: richiede il carico di allenamento (sRPE), non presente nei file caricati."]);
       titoloSezioneReport(pag, "Qualità dei dati");
       bulletsReport(pag, [qualita.length ? `${qualita.filter(a=>a.tipo==="errore").length} righe da correggere, ${qualita.filter(a=>a.tipo==="attenzione").length} da verificare (dettaglio nella dashboard).` : "Nessuna anomalia rilevata nei dati inseriti per questa stagione."]);
-      titoloSezioneReport(pag, "Disciplina e calci piazzati");
-      if(ds.haEventiDisciplinari){
-        const fallosi = agg.filter(a=>a.Cartellini_Totali>0).slice().sort((a,b)=>(b.Cartellini_Rossi*2+b.Cartellini_Gialli)-(a.Cartellini_Rossi*2+a.Cartellini_Gialli)).slice(0,5);
-        const angoli = agg.filter(a=>a.Angoli_Tentati>=2).slice().sort((a,b)=>b.Angoli_Realizzazione_pct-a.Angoli_Realizzazione_pct).slice(0,3);
-        const punizioni = agg.filter(a=>a.Punizioni_Tentate>=2).slice().sort((a,b)=>b.Realizzazione_Punizioni_pct-a.Realizzazione_Punizioni_pct).slice(0,3);
-        const rigori = agg.filter(a=>a.Rigori_Tentati>=1).slice().sort((a,b)=>b.Realizzazione_Rigori_pct-a.Realizzazione_Rigori_pct).slice(0,3);
-        const testiDisciplina = [];
-        if(fallosi.length) testiDisciplina.push("Più fallosi: "+fallosi.map(a=>`<b>${esc(a.Giocatore)}</b> (${nf0(a.Cartellini_Gialli)} gialli, ${nf0(a.Cartellini_Rossi)} rossi)`).join(", ")+".");
-        if(angoli.length) testiDisciplina.push("Miglior realizzazione sui calci d'angolo: "+angoli.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Angoli_Realizzazione_pct,0)}`).join(", ")+".");
-        if(punizioni.length) testiDisciplina.push("Miglior realizzazione su punizione: "+punizioni.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Punizioni_pct,0)}`).join(", ")+".");
-        if(rigori.length) testiDisciplina.push("Miglior realizzazione su rigore: "+rigori.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Rigori_pct,0)}`).join(", ")+".");
-        bulletsReport(pag, testiDisciplina.length ? testiDisciplina : ["Nessun cartellino o calcio piazzato ancora registrato in stagione."]);
-      } else {
-        bulletsReport(pag, ["Non disponibile: nei file caricati non ci sono ancora cartellini, angoli, punizioni o rigori."]);
-      }
-      zoneCampoReport(pag, ds.partite, true);
-    },
+    }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Stagionale", "Statistiche dettagliate", "Tutti i giocatori, tutte le voci raccolte in stagione");
       tabelleDettaglioGiocatori(pag, agg, ds.haEventiDisciplinari);
