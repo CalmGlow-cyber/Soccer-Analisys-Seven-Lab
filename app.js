@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.22.0",
+  numero: "1.23.1",
   data: "2026-09-04",
-  note: "Impaginazione dei report rifatta da zero e resa di stampa più professionale (04/09/2026). (1) PAGINE A4 VERE: prima ogni sezione del report era un unico riquadro lungo quanto serviva, catturato in un'immagine sola e poi TAGLIATO a fette alte quanto un A4 — da lì fogli bianchi, titoli separati dal contenuto e tabelle spezzate a metà riga. Ora il generatore riempie una bozza e un impaginatore distribuisce i blocchi su pagine A4 una per una, fermandosi quando la pagina è piena: una tabella troppo lunga continua sulla pagina dopo riportando la sua intestazione, un elenco puntato continua voce per voce, una griglia di campetti continua per riquadri, un titolo di sezione non resta mai da solo in fondo alla pagina e una pagina senza contenuto non viene creata. Controllo automatico su tutti e quattro i report: nessuna pagina sfora l'A4, nessuna è vuota, nessun titolo è orfano. Il Report Partita passa da 12 fogli (3 bianchi) a 6. (2) GRAFICI NITIDI: i grafici dei report venivano disegnati alla risoluzione dello schermo e poi ingranditi dalla cattura, che lavora a scala doppia — da lì l'aspetto sgranato, più evidente nel report giocatori. Ora Chart.js disegna a 3× e i campetti a 1280px di lato, così in stampa c'è più risoluzione di quanta ne serva. (3) LARGHEZZA DELLO SCHERMO E COLONNE: il contenuto era limitato a 1240px, lasciando centinaia di pixel vuoti ai lati sugli schermi grandi mentre le tabelle scorrevano in orizzontale; ora arriva a 1600px. Le intestazioni delle tabelle possono andare a capo tra le parole e ogni colonna viene dimensionata sul contenuto reale invece che sull'intestazione più lunga: colonne che erano larghe 144-152px per contenere \"83,3%\" si sono ristrette, lo spazio recuperato è andato ai nomi e alle colonne con le sparkline, che ora si allargano davvero (da 88px fissi fino a 360px) e mostrano l'andamento in modo leggibile. Verificato nell'app vera coi file reali a 1920, 1400 e 390px: nessun errore JavaScript, nessuna tabella che sfonda il contenitore, tutti e cinque i report generati correttamente (compreso il confronto tra due giocatori)."
+  note: "Zone di tiro e assist dei gol nei report, sezione sempre visibile (04/09/2026). (0) I grafici delle zone di tiro e di partenza degli assist erano già inclusi sia nel Report Partita (relativi alla singola partita scelta) sia nel Report Stagionale (su tutte le partite della stagione), ma sparivano senza dire niente quando nessun gol del periodo aveva le coordinate: chi stampava il report non poteva sapere se mancasse un dato o una funzione. Ora la sezione c'è sempre e, quando è vuota, spiega perché — distinguendo il caso \"i file caricati non hanno la sezione DETTAGLIO GOL GAME\" dal caso \"nessun gol con posizione in questo periodo\". Inoltre, quando un blocco di campetti o di grafici continua sulla pagina successiva, la seconda metà ora porta sopra l'intestazione della sua sezione con l'indicazione \"(segue)\": prima arrivavano due heatmap in cima a un foglio senza nessun titolo che dicesse di cosa parlassero. Report Confronto rifatto e nuova sezione \"Impatto dei subentrati\" (04/09/2026). (1) REPORT CONFRONTO: era rimasto l'unico report ancora sul vecchio percorso di impaginazione, con pagine tagliate male e — soprattutto — due colonne che non mostravano le stesse voci a sinistra e a destra, perché ogni lato elencava solo i dati disponibili per quel giocatore. Ora le due schede sono costruite dalla stessa lista di righe: le voci sono identiche e nello stesso ordine da entrambi i lati, con un trattino dove il dato manca, e il confronto dei punti di forza è simmetrico (con una frase esplicita quando nessuno dei due ha un vantaggio netto). Il report passa sullo stesso impaginatore A4 degli altri quattro, a piena larghezza di pagina. (2) IMPATTO DEI SUBENTRATI: nuova sezione 08 nella Dashboard Partita che incrocia convocazioni, minuti giocati e minuto di ingresso letto dalla timeline eventi (\"Cambio entra\") per capire quali giocatori, entrando a partita in corso, rendono meglio e pesano di più. Per ogni giocatore: partite da subentrato e da titolare a confronto, minuto medio di ingresso, gol e assist da subentrato, indice prestazione nei due ruoli, e un ordinamento per impatto assoluto (contributo diretto prima, indice poi) invece che per sola media. I valori per 90 minuti compaiono solo sopra i 10 minuti giocati: sotto quella soglia una proiezione è solo un numero grande senza significato, e viene mostrato un trattino. La sezione si spegne da sola con un messaggio se nei file caricati non c'è nessun cambio registrato. (3) DALLA VERSIONE PRECEDENTE, ancora valido: impaginazione dei report rifatta da zero e resa di stampa più professionale. (a) PAGINE A4 VERE: prima ogni sezione del report era un unico riquadro lungo quanto serviva, catturato in un'immagine sola e poi TAGLIATO a fette alte quanto un A4 — da lì fogli bianchi, titoli separati dal contenuto e tabelle spezzate a metà riga. Ora il generatore riempie una bozza e un impaginatore distribuisce i blocchi su pagine A4 una per una, fermandosi quando la pagina è piena: una tabella troppo lunga continua sulla pagina dopo riportando la sua intestazione, un elenco puntato continua voce per voce, una griglia di campetti continua per riquadri, un titolo di sezione non resta mai da solo in fondo alla pagina e una pagina senza contenuto non viene creata. Controllo automatico su tutti e quattro i report: nessuna pagina sfora l'A4, nessuna è vuota, nessun titolo è orfano. Il Report Partita passa da 12 fogli (3 bianchi) a 6. (b) GRAFICI NITIDI: i grafici dei report venivano disegnati alla risoluzione dello schermo e poi ingranditi dalla cattura, che lavora a scala doppia — da lì l'aspetto sgranato, più evidente nel report giocatori. Ora Chart.js disegna a 3× e i campetti a 1280px di lato, così in stampa c'è più risoluzione di quanta ne serva. (c) LARGHEZZA DELLO SCHERMO E COLONNE: il contenuto era limitato a 1240px, lasciando centinaia di pixel vuoti ai lati sugli schermi grandi mentre le tabelle scorrevano in orizzontale; ora arriva a 1600px. Le intestazioni delle tabelle possono andare a capo tra le parole e ogni colonna viene dimensionata sul contenuto reale invece che sull'intestazione più lunga: colonne che erano larghe 144-152px per contenere \"83,3%\" si sono ristrette, lo spazio recuperato è andato ai nomi e alle colonne con le sparkline, che ora si allargano davvero (da 88px fissi fino a 360px) e mostrano l'andamento in modo leggibile. Verificato nell'app vera coi file reali a 1920, 1400 e 390px: nessun errore JavaScript, nessuna tabella che sfonda il contenitore, tutti e cinque i report generati correttamente (compreso il confronto tra due giocatori)."
 };
 
 /* =====================================================================
@@ -1479,6 +1479,83 @@ function datiRadarGiocatore(rigaGiocatore, rigaConfronto, righeRosa, ctxPortiere
     });
   });
   return out;
+}
+
+/* =====================================================================
+   IMPATTO DEI SUBENTRATI (04/09/2026, richiesta esplicita dell'utente)
+   "Quali sono i giocatori che da subentrati non solo rendono meglio, ma hanno maggiore impatto."
+   Il dato che rende possibile la domanda è la colonna "Cambio entra" della TIMELINE EVENTI, che Seven Lab
+   valorizza a 1 sulla riga dell'ingresso in campo, con il minuto in "Secondo totale": da lì si sa CHI è
+   entrato a partita in corso e QUANDO. Chi ha giocato senza avere un ingresso registrato è considerato
+   titolare. Poiché tutto quello che un subentrato fa in quella gara lo fa dopo essere entrato, le sue
+   statistiche di quella partita sono per intero "da subentrato": non serve spezzare i dati per tempo.
+   ===================================================================== */
+/** Minuti minimi perché una media "per 90 minuti" venga calcolata e mostrata. */
+const MINUTI_MINIMI_PER_90 = 10;
+
+/** Mappa nome → secondo di ingresso, per una partita. Vuota se il file non ha la timeline o la colonna. */
+function ingressiDaTimeline(partita){
+  const mappa = new Map();
+  const eventi = (partita && Array.isArray(partita.Eventi)) ? partita.Eventi : [];
+  eventi.forEach(e => {
+    if(e["Cambio entra"] !== "1") return;
+    const nome = String(e["Giocatore"]||"").trim();
+    if(!nome) return;
+    const sec = N(e["Secondo totale"]);
+    // se un giocatore entra più volte (uscito e rientrato) conta il primo ingresso
+    if(!mappa.has(nome)) mappa.set(nome, sec);
+  });
+  return mappa;
+}
+
+/** Per ogni giocatore: quanto ha giocato e reso da subentrato, quanto da titolare, e quante volte è stato
+ *  in distinta senza entrare. `impatto` è il criterio di ordinamento: prima il contributo ASSOLUTO ai gol
+ *  da subentrato (gol + assist), poi l'indice accumulato, poi i minuti — di proposito NON una media per 90
+ *  minuti, che su spezzoni di pochi minuti si gonfia a dismisura e metterebbe in cima chi ha giocato meno.
+ *  Le medie per 90' restano nella tabella come dato di lettura, con l'avvertenza sul campione. */
+function analizzaSubentrati(partite, righeGiocatori){
+  const perPartita = new Map();
+  (partite||[]).forEach(p => perPartita.set(p.Match_ID, ingressiDaTimeline(p)));
+  const conIngressi = Array.from(perPartita.values()).filter(m => m.size > 0).length;
+  const perGiocatore = new Map();
+  const vuoto = () => ({partite:0, minuti:0, gol:0, assist:0, indice:0});
+  (righeGiocatori||[]).forEach(g => {
+    const ingressi = perPartita.get(g.Match_ID);
+    if(!ingressi) return;
+    if(!perGiocatore.has(g.Giocatore))
+      perGiocatore.set(g.Giocatore, {Giocatore:g.Giocatore, Ruolo:g.Ruolo, convocazioni:0, panchinaSenzaEntrare:0,
+        subentrato:vuoto(), titolare:vuoto(), minutiIngresso:[]});
+    const a = perGiocatore.get(g.Giocatore);
+    a.convocazioni++;
+    const minuti = N(g.Minuti_Giocati);
+    const secIngresso = ingressi.get(g.Giocatore);
+    if(minuti <= 0){ a.panchinaSenzaEntrare++; return; }
+    const dove = secIngresso !== undefined ? a.subentrato : a.titolare;
+    dove.partite++; dove.minuti += minuti; dove.gol += N(g.Gol); dove.assist += N(g.Assist);
+    dove.indice += N(g.Indice_Prestazione);
+    if(secIngresso !== undefined) a.minutiIngresso.push(secIngresso/60);
+  });
+  // Una media "per 90 minuti" ricavata da due o tre minuti giocati non è un dato: è quel numero moltiplicato
+  // per trenta. Sotto questa soglia non la calcoliamo proprio, invece di stampare cose come "648,7 per 90'"
+  // (visto davvero sui dati di prova). Le colonne assolute — ingressi, minuti, gol+assist, indice — restano
+  // sempre visibili: sono quelle che reggono anche con pochi minuti.
+  const per90 = (valore, minuti) => minuti >= MINUTI_MINIMI_PER_90 ? (valore/minuti)*90 : null;
+  const elenco = Array.from(perGiocatore.values())
+    .filter(a => a.subentrato.partite > 0)
+    .map(a => {
+      const s = a.subentrato, t = a.titolare;
+      const contributo = s.gol + s.assist;
+      return Object.assign(a, {
+        contributoSubentrato: contributo,
+        minutoMedioIngresso: a.minutiIngresso.length ? a.minutiIngresso.reduce((x,y)=>x+y,0)/a.minutiIngresso.length : null,
+        indicePer90Subentrato: per90(s.indice, s.minuti),
+        indicePer90Titolare: t.partite ? per90(t.indice, t.minuti) : null,
+        contributoPer90Subentrato: per90(contributo, s.minuti),
+        impatto: contributo*1000 + s.indice
+      });
+    })
+    .sort((x,y) => y.impatto - x.impatto || y.subentrato.minuti - x.subentrato.minuti);
+  return {elenco, partiteConIngressi: conIngressi, partiteTotali: (partite||[]).length};
 }
 
 function riepilogoSquadra(righe, partite){
@@ -3267,6 +3344,54 @@ function aggiornaAltezzaBarraFissa(){
   document.documentElement.style.setProperty("--altezza-fissa", h + "px");
 }
 
+/** Sezione "Impatto dei subentrati" della Dashboard Partita (04/09/2026). Mostra chi, entrando a gara in
+ *  corso, incide di più. Gating esplicito: se nei file non c'è nemmeno un ingresso registrato lo dice,
+ *  invece di mostrare una tabella vuota che sembrerebbe "nessuno rende bene". */
+function renderSubentrati(f){
+  const cont = $("#contenuto-subentrati");
+  if(!cont) return;
+  const {elenco, partiteConIngressi, partiteTotali} = analizzaSubentrati(f.partite, f.giocatori);
+  if(!partiteConIngressi){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Nei file caricati non c'è nessun cambio registrato: serve la colonna «Cambio entra» nella timeline eventi, che Seven Lab valorizza quando un giocatore entra a partita in corso. Finché le partite si giocano senza sostituzioni registrate, questa sezione resta vuota.</div>`;
+    return;
+  }
+  if(!elenco.length){
+    cont.innerHTML = `<div class="vuoto">Nel periodo scelto nessun giocatore è entrato a partita in corso (${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} con cambi registrati).</div>`;
+    return;
+  }
+  const CAMPIONE_MINIMO_MIN = 5; // sotto questa soglia le medie per 90' non sono da prendere sul serio
+  const righe = elenco.map(a => {
+    const s = a.subentrato;
+    const ridotto = s.minuti < CAMPIONE_MINIMO_MIN;
+    const confronto = (a.indicePer90Titolare !== null && a.indicePer90Subentrato !== null)
+      ? a.indicePer90Subentrato - a.indicePer90Titolare : null;
+    return `<tr${ridotto ? ' class="riga-attenuata"' : ''}>
+      <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
+      <td>${nf0(s.partite)}</td>
+      <td>${nf(s.minuti,1)}'</td>
+      <td>${a.minutoMedioIngresso!==null ? nf(a.minutoMedioIngresso,1)+"'" : "—"}</td>
+      <td>${nf0(a.contributoSubentrato)}</td>
+      <td>${nf(s.indice,1)}</td>
+      <td>${a.indicePer90Subentrato!==null ? nf(a.indicePer90Subentrato,1) : "—"}</td>
+      <td>${a.indicePer90Titolare!==null ? nf(a.indicePer90Titolare,1) : "—"}</td>
+      <td>${confronto===null ? "—" : `<span class="rp-flag ${confronto>0?"up":(confronto<0?"down":"flat")}">${confronto>0?"▲ +":"▼ "}${nf(Math.abs(confronto),1)}</span>`}</td>
+      <td>${nf0(a.panchinaSenzaEntrare)}</td>
+    </tr>`;
+  }).join("");
+  const conCampioneRidotto = elenco.filter(a => a.subentrato.minuti < CAMPIONE_MINIMO_MIN).length;
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+      <caption class="solo-sr">Rendimento e impatto dei giocatori entrati a partita in corso</caption>
+      <thead><tr>
+        <th scope="col">Giocatore</th><th scope="col">Ingressi</th><th scope="col">Minuti da subentrato</th>
+        <th scope="col">Minuto medio d'ingresso</th><th scope="col">Gol + assist</th><th scope="col">Indice accumulato</th>
+        <th scope="col">Indice per 90' da subentrato</th><th scope="col">Indice per 90' da titolare</th>
+        <th scope="col">Differenza</th><th scope="col">In distinta senza entrare</th>
+      </tr></thead><tbody>${righe}</tbody></table></div>
+    <p class="nota-piccola">Ordinati per impatto: prima il contributo ai gol da subentrato (gol + assist), poi l'indice accumulato. Volutamente <strong>non</strong> per media a 90 minuti: su spezzoni di pochi minuti quella media si gonfia e metterebbe in cima proprio chi ha giocato meno.</p>
+    <p class="nota-piccola">Le due colonne "per 90'" servono a confrontare il rendimento del giocatore con sé stesso — quanto rende entrando rispetto a quando parte titolare — non a confrontare giocatori con minutaggi molto diversi. Restano vuote ("—") quando i minuti giocati in quella veste sono meno di ${nf0(MINUTI_MINIMI_PER_90)}: una media a 90 minuti ricavata da due o tre minuti in campo non è un dato, è quel numero moltiplicato per trenta.${conCampioneRidotto ? ` ${conCampioneRidotto===1?"Una riga è attenuata":`${nf0(conCampioneRidotto)} righe sono attenuate`} perché sotto i ${nf0(CAMPIONE_MINIMO_MIN)} minuti complessivi da subentrato.` : ""}</p>
+    <p class="nota-piccola">Chi è entrato a partita in corso si riconosce dall'evento «Cambio entra» nella timeline; chi ha giocato senza averne uno è considerato titolare. ${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} nel periodo ${partiteConIngressi===1?"ha":"hanno"} almeno un cambio registrato.</p>`;
+}
+
 /* --------- 9. Qualità dati --------- */
 function renderQualita(){
   const cont = $("#contenuto-qualita");
@@ -3303,6 +3428,7 @@ function render(){
   renderConfronto(f);
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
   renderGolGameCampo("contenuto-golgame-partita", f.partite);
+  renderSubentrati(f);
   renderAllenamenti();
   renderIncroci();
   renderZoneCampo("contenuto-zone-allenamento", f.allenamenti, null, true);
@@ -3571,6 +3697,10 @@ function pezziDivisibili(blocco){
   }
   // La griglia dei campetti si spezza per riquadri (due per riga): senza, un blocco da quattro campi che
   // non entra nello spazio rimasto salta tutto alla pagina dopo, lasciandone una mezza vuota.
+  // Soglia tenuta a 2 dopo una prova diretta (04/09/2026): impedendo di spezzare le griglie da quattro
+  // campetti il Report Partita passava da 6 a 7 fogli e il riempimento medio scendeva (88% → 66%). Il
+  // difetto vero non era lo spezzare, era che la seconda metà arrivava senza titolo: ora l'impaginatore
+  // le mette sopra l'intestazione "(segue)", quindi conviene spezzare e stampare meno fogli.
   if(blocco.classList && blocco.classList.contains("rp-campo-griglia")){
     const celle = Array.from(blocco.children);
     return celle.length >= 4 ? {tipo:"campi", pezzi:celle, minimoResiduo:2} : null;
@@ -3622,6 +3752,16 @@ function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
     return p;
   };
   const entra = () => altezzaContenutoPagina(pagina) <= altezzaUtile;
+  // Quando un blocco si spezza tra due pagine, la sua seconda metà arriva sulla pagina dopo senza più il
+  // titolo di sezione, che è rimasto indietro: chi legge il foglio si trova due heatmap (o mezza tabella)
+  // senza sapere di cosa parlano. Ci portiamo dietro il titolo, marcato "(segue)".
+  const intestazioneContinuazione = (titolo) => {
+    if(!titolo) return null;
+    const cont = document.createElement("div");
+    cont.className = "rp-section-title rp-continua";
+    cont.textContent = titolo.textContent.trim() + " (segue)";
+    return cont;
+  };
   const sistema = (blocco) => {
     if(blocco.tagName === "TABLE" && blocco.classList.contains("rp-table")) adattaLarghezzeColonneReport(blocco);
     const cv = blocco.querySelector && blocco.querySelector("canvas");
@@ -3632,7 +3772,9 @@ function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
   };
 
   apriPagina();
+  let titoloCorrente = null; // ultimo titolo di sezione incontrato: serve per l'intestazione "(segue)"
   for(const blocco of blocchi){
+    if(blocco.classList && blocco.classList.contains("rp-section-title")) titoloCorrente = blocco;
     pagina.corpo.appendChild(blocco);
     sistema(blocco);
     if(entra()) continue;
@@ -3659,6 +3801,10 @@ function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
         sistema(blocco);
         const coda = codaBlocco(blocco, rimasti);
         apriPagina();
+        // una tabella si riporta già dietro la sua intestazione: lì il "(segue)" servirebbe meno, ma per
+        // campetti ed elenchi è l'unico modo di sapere a quale sezione appartiene quello che si sta leggendo
+        const cont = divisibile.tipo === "tabella" ? null : intestazioneContinuazione(titoloCorrente);
+        if(cont) pagina.corpo.appendChild(cont);
         pagina.corpo.appendChild(coda);
         sistema(coda);
         spezzato = true;
@@ -3676,6 +3822,12 @@ function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
     const titoloOrfano = ultimo && ultimo.classList.contains("rp-section-title") ? ultimo : null;
     apriPagina();
     if(titoloOrfano) pagina.corpo.appendChild(titoloOrfano);
+    else if(blocco.querySelector && blocco.querySelector("canvas")){
+      // Un blocco di grafici o campetti che scivola da solo sulla pagina dopo (col titolo rimasto indietro
+      // perché seguito dal suo testo introduttivo) è illeggibile: quattro campi senza sapere di che parlano.
+      const cont = intestazioneContinuazione(titoloCorrente);
+      if(cont) pagina.corpo.appendChild(cont);
+    }
     pagina.corpo.appendChild(blocco);
     sistema(blocco);
   }
@@ -3965,9 +4117,12 @@ function tabellaReport(pagina, intestazioni, righe, righeSpente){
   pagina.corpo.appendChild(tbl);
   adattaLarghezzeColonneReport(tbl);
 }
-function graficoReport(pagina, id, config){
+/** `altezzaPx` (facoltativa) per i grafici che hanno bisogno di più spazio dei 230px di default — il radar
+ *  del confronto, per esempio, con cinque etichette attorno alla circonferenza. */
+function graficoReport(pagina, id, config, altezzaPx){
   const wrap = document.createElement("div");
   wrap.className = "rp-chart-wrap";
+  if(altezzaPx) wrap.style.height = altezzaPx + "px";
   const cv = document.createElement("canvas");
   cv.id = id;
   wrap.appendChild(cv);
@@ -4116,7 +4271,16 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
 function golGameCampoReport(pagina, sessioni){
   const gol = [], assist = [];
   (sessioni||[]).forEach(s => { (s.PuntiGol||[]).forEach(p=>gol.push(p)); (s.PuntiAssistGol||[]).forEach(p=>assist.push(p)); });
-  if(!gol.length) return;
+  // Senza gol georeferenziati la sezione prima spariva e basta: chi stampava il report non capiva se
+  // mancasse un dato o una funzione. Ora la sezione c'è comunque e dice perché è vuota (04/09/2026).
+  if(!gol.length){
+    titoloSezioneReport(pagina, "Zone di tiro e assist dei gol");
+    const conDati = (typeof stato !== "undefined" && stato.ds && stato.ds.haDatiGolGame);
+    bulletsReport(pagina, [conDati
+      ? "Nessun gol con posizione registrata in questo report: i file inclusi non contengono coordinate di tiro per i gol segnati (o non ci sono gol nel periodo scelto)."
+      : "Dato non disponibile: serve la sezione «DETTAGLIO GOL GAME» nell'export Seven Lab, con le coordinate del punto di tiro e di partenza dell'assist. Nessuno dei file caricati la contiene: appena i tuoi export la includeranno, questa sezione si popola da sola."]);
+    return;
+  }
   titoloSezioneReport(pagina, "Zone di tiro e assist dei gol");
   bulletsReport(pagina, [
     `${nf0(gol.length)} gol con posizione registrata in questo report${assist.length ? ` (di cui ${nf0(assist.length)} assistiti con posizione)` : ""}.`,
@@ -5012,36 +5176,66 @@ async function chiediIA(){
 
 /* ---- Report Confronto tra due giocatori ---- */
 
-/** Pagina di report a tre colonne: colonna scura a sinistra (giocatore A), colonna centrale chiara
- *  (grafico radar + tabella completa), colonna scura a destra (giocatore B). A differenza di
- *  nuovaPaginaReport (una sola colonna laterale) qui servono due "lato", quindi la struttura è costruita
- *  a mano invece di riusare quella funzione. `pagina.corpo` punta comunque al contenuto della colonna
- *  centrale, cosicché puntiDiInterruzionePagina() ed esportaPaginaAPdf() funzionino come per le altre pagine. */
-function nuovaPaginaReportConfronto(){
-  const stage = $("#report-stage");
-  const pagina = document.createElement("div");
-  pagina.className = "rp-page rp3-page";
-  const latoA = document.createElement("div");
-  latoA.className = "rp2-side rp3-side";
-  const centro = document.createElement("div");
-  centro.className = "rp3-center";
-  const corpo = document.createElement("div");
-  corpo.className = "rp3-body";
-  centro.appendChild(corpo);
-  const latoB = document.createElement("div");
-  latoB.className = "rp2-side rp3-side";
-  pagina.appendChild(latoA);
-  pagina.appendChild(centro);
-  pagina.appendChild(latoB);
-  stage.appendChild(pagina);
-  pagina.latoA = latoA; pagina.latoB = latoB; pagina.centro = centro; pagina.corpo = corpo;
-  return pagina;
-}
+/* La vecchia pagina a tre colonne (nuovaPaginaReportConfronto: colonna scura a sinistra, contenuto in
+   mezzo, colonna scura a destra) è stata rimossa il 04/09/2026. Le due colonne laterali erano alte quanto
+   tutta la pagina e sbordavano sul foglio successivo, e mostravano cose diverse a destra e a sinistra
+   perché ciascuna elencava solo i punti di forza trovati per il proprio giocatore. Ora il Report Confronto
+   usa lo stesso motore a pagine A4 degli altri report, con due schede simmetriche dentro il corpo pagina
+   (vedi schedeConfrontoReport). */
 
 /** Tabella "Indicatore / Giocatore A / Giocatore B" per la colonna centrale del report, con la stessa
  *  logica di evidenziazione del migliore usata a schermo (RIGHE_CONFRONTO + classeMiglior), ma con una
  *  classe CSS a sé (rp-migliore) perché il report usa una tavolozza di colori fissa, non le variabili
  *  CSS del tema chiaro/scuro dell'app. */
+/** Le due schede dei giocatori a confronto, affiancate nel corpo della pagina. Prima erano due colonne
+ *  laterali alte quanto tutta la pagina: sballavano l'impaginazione (quella di destra sbordava sul foglio
+ *  successivo) e soprattutto mostravano COSE DIVERSE a sinistra e a destra, perché ogni colonna elencava
+ *  solo i "punti di forza" trovati per quel giocatore — se uno non ne aveva, il suo lato restava mezzo
+ *  vuoto. Segnalato da Elisa il 04/09/2026: «non mostra gli stessi dati da dx a sx». Ora le due schede
+ *  hanno per costruzione le STESSE righe, e dove un valore non c'è si scrive "—". */
+function schedeConfrontoReport(pagina, a, b, rankA, rankB){
+  const righe = (g, rank) => [
+    ["Partite · minuti", `${nf0(g.Partite_Giocate)} · ${nf0(g.Minuti_Totali)}'`],
+    ["Indice prestazione", `${nf(g.Indice_Prestazione_Tot,1)} · ${rank}° in squadra`],
+    ["Gol · assist", `${nf0(g.Gol)} · ${nf0(g.Assist)}`],
+    ["Precisione passaggi", pctTxt(g.Precisione_Passaggi_pct,0)],
+    ["Precisione al tiro", pctTxt(g.Precisione_Tiro_pct,0)],
+    ["Successo dribbling", pctTxt(g.Successo_Dribbling_pct,0)],
+    ["Tasso di errore", pctTxt(g.Tasso_Errore_pct,0)]
+  ];
+  const scheda = (g, rank, colore, etichetta) => `
+    <div class="rp-cf-scheda">
+      <div class="rp-cf-eyebrow">${esc(etichetta)}</div>
+      <div class="rp-cf-testa">
+        <div class="rp-cf-avatar" style="border-color:${colore}">${esc(iniziali(g.Giocatore))}</div>
+        <div><div class="rp-cf-nome">${esc(g.Giocatore)}</div><div class="rp-cf-ruolo">${esc(g.Ruolo)}</div></div>
+      </div>
+      ${righe(g, rank).map(([l,v]) => `<div class="rp-cf-riga"><span>${esc(l)}</span><b>${esc(v)}</b></div>`).join("")}
+    </div>`;
+  const blocco = document.createElement("div");
+  blocco.className = "rp-cf-schede";
+  blocco.innerHTML = scheda(a, rankA, "#C99400", "Giocatore A") + scheda(b, rankB, "#5EC4CE", "Giocatore B");
+  pagina.corpo.appendChild(blocco);
+}
+
+/** Punti di forza dell'uno sull'altro, affiancati e simmetrici: ogni colonna dice sempre qualcosa, anche
+ *  quando un giocatore non ha nessun vantaggio netto (in quel caso lo dichiara, invece di restare vuota). */
+function puntiForzaConfrontoReport(pagina, a, b){
+  const colonna = (mio, altro) => {
+    const punti = insightConfrontoLato(mio, altro);
+    return `<div class="rp-cf-forza">
+      <div class="rp-cf-forza-tit">${esc(mio.Giocatore)}, dove è avanti</div>
+      ${punti.length
+        ? `<ul class="rp-bullets">${punti.map(x=>`<li>${esc(x.label)}: <b>${esc(x.valore)}</b></li>`).join("")}</ul>`
+        : `<p class="rp-cf-nessuno">Nessun vantaggio netto su ${esc(altro.Giocatore)} tra gli indicatori confrontati.</p>`}
+    </div>`;
+  };
+  const blocco = document.createElement("div");
+  blocco.className = "rp-cf-forze";
+  blocco.innerHTML = colonna(a, b) + colonna(b, a);
+  pagina.corpo.appendChild(blocco);
+}
+
 function tabellaConfrontoReport(pagina, a, b, righe){
   const tbl = document.createElement("table");
   tbl.className = "rp-table rp-table-confronto";
@@ -5111,80 +5305,50 @@ async function generaReportConfronto(nomeA, nomeB){
   const righeStat = ds.haEventiDisciplinari ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
 
   statoReport("Genero il Report Confronto…", true, "#cf-rp-stato");
-  const stage = $("#report-stage");
-  stage.innerHTML = "";
-  try{
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({unit:"pt", format:"a4"});
-    const pagina = nuovaPaginaReportConfronto();
-
-    bandaReport(pagina, "Report Confronto", `${a.Giocatore} vs ${b.Giocatore}`,
-      `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}`);
-
-    pagina.lato = pagina.latoA;
-    sidebarReport(pagina, {
-      eyebrow:"Giocatore A", nome:a.Giocatore, ruolo:a.Ruolo, colore:"#C99400",
-      gruppi:[
-        {titolo:"In sintesi", righe:[
-          {label:"Partite · minuti", valore:`${nf0(a.Partite_Giocate)} · ${nf0(a.Minuti_Totali)}'`},
-          {label:"Indice prestazione", valore:`${nf(a.Indice_Prestazione_Tot,1)} (${rankA}° in squadra)`}
-        ]},
-        ...(insightConfrontoLato(a,b).length ? [{titolo:`Punti di forza su ${b.Giocatore}`, righe:insightConfrontoLato(a,b)}] : []),
-        ...(!stessoRuolo && compatibilitaRuoloReport(a, b.Ruolo, f.giocatori) ? [{titolo:`Compatibilità ruolo ${b.Ruolo}`, righe:compatibilitaRuoloReport(a, b.Ruolo, f.giocatori)}] : [])
-      ]
-    });
-
-    titoloSezioneReport(pagina, "Confronto diretto");
-    const metricheRadar = [
-      ["Precisione passaggi", a.Precisione_Passaggi_pct, b.Precisione_Passaggi_pct],
-      ["Precisione al tiro", a.Precisione_Tiro_pct, b.Precisione_Tiro_pct],
-      ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
-      ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
-      ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
-    ];
-    graficoReport(pagina, "rp-cf-radar", {
-      type:"radar",
-      data:{labels:metricheRadar.map(m=>m[0]), datasets:[
-        {label:a.Giocatore, data:metricheRadar.map(m=>m[1]===null?0:m[1]), borderColor:PALETTE_REPORT.c1, backgroundColor:PALETTE_REPORT.c1+"33", pointBackgroundColor:PALETTE_REPORT.c1, borderWidth:2.4},
-        {label:b.Giocatore, data:metricheRadar.map(m=>m[2]===null?0:m[2]), borderColor:PALETTE_REPORT.c2, backgroundColor:PALETTE_REPORT.c2+"33", pointBackgroundColor:PALETTE_REPORT.c2, borderWidth:2.4}
-      ]},
-      options:{
-        responsive:true, maintainAspectRatio:false, animation:false,
-        plugins:{legend:{display:true, position:"bottom", labels:{color:PALETTE_REPORT.muted, boxWidth:11, boxHeight:11, font:{size:10}, usePointStyle:true, padding:10}}},
-        scales:{r:{min:0, max:100, ticks:{stepSize:25, color:PALETTE_REPORT.muted, font:{size:9}, backdropColor:"transparent", callback:v=>v+"%"},
-          grid:{color:PALETTE_REPORT.grid}, angleLines:{color:PALETTE_REPORT.grid}, pointLabels:{color:PALETTE_REPORT.text, font:{size:9.5}}}}
+  // Dalla v1.23.0 passa dallo stesso motore degli altri report (generaEScarica + impaginaDocumento): pagine
+  // A4 vere a piena larghezza, invece della vecchia pagina a tre colonne che sbordava sul foglio dopo.
+  const metricheRadar = [
+    ["Precisione passaggi", a.Precisione_Passaggi_pct, b.Precisione_Passaggi_pct],
+    ["Precisione al tiro", a.Precisione_Tiro_pct, b.Precisione_Tiro_pct],
+    ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
+    ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
+    ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
+  ];
+  await generaEScarica(nomeFileData(`Report_Confronto_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), [
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Confronto", `${a.Giocatore} vs ${b.Giocatore}`,
+        `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}`);
+      schedeConfrontoReport(pag, a, b, rankA, rankB);
+      titoloSezioneReport(pag, "Punti di forza a confronto");
+      puntiForzaConfrontoReport(pag, a, b);
+      if(!stessoRuolo){
+        const compA = compatibilitaRuoloReport(a, b.Ruolo, f.giocatori);
+        const compB = compatibilitaRuoloReport(b, a.Ruolo, f.giocatori);
+        if(compA || compB){
+          titoloSezioneReport(pag, "Compatibilità con il ruolo dell'altro");
+          bulletsReport(pag, [
+            `<b>${esc(a.Giocatore)}</b> nel ruolo di ${esc(b.Ruolo)}: ${compA ? compA.map(r=>`${esc(r.label)} ${esc(r.valore)}`).join(" · ") : "dati insufficienti"}.`,
+            `<b>${esc(b.Giocatore)}</b> nel ruolo di ${esc(a.Ruolo)}: ${compB ? compB.map(r=>`${esc(r.label)} ${esc(r.valore)}`).join(" · ") : "dati insufficienti"}.`
+          ]);
+        }
       }
-    });
-    titoloSezioneReport(pagina, "Tutti gli indicatori");
-    tabellaConfrontoReport(pagina, a, b, righeStat);
-    bulletsReport(pagina, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]);
-
-    pagina.lato = pagina.latoB;
-    sidebarReport(pagina, {
-      eyebrow:"Giocatore B", nome:b.Giocatore, ruolo:b.Ruolo, colore:"#5EC4CE",
-      gruppi:[
-        {titolo:"In sintesi", righe:[
-          {label:"Partite · minuti", valore:`${nf0(b.Partite_Giocate)} · ${nf0(b.Minuti_Totali)}'`},
-          {label:"Indice prestazione", valore:`${nf(b.Indice_Prestazione_Tot,1)} (${rankB}° in squadra)`}
+      titoloSezioneReport(pag, "Confronto diretto");
+      graficoReport(pag, "rp-cf-radar", {
+        type:"radar",
+        data:{labels:metricheRadar.map(m=>m[0]), datasets:[
+          {label:a.Giocatore, data:metricheRadar.map(m=>m[1]===null?0:m[1]), borderColor:PALETTE_REPORT.c1, backgroundColor:PALETTE_REPORT.c1+"33", pointBackgroundColor:PALETTE_REPORT.c1, borderWidth:2.4},
+          {label:b.Giocatore, data:metricheRadar.map(m=>m[2]===null?0:m[2]), borderColor:PALETTE_REPORT.c2, backgroundColor:PALETTE_REPORT.c2+"33", pointBackgroundColor:PALETTE_REPORT.c2, borderWidth:2.4}
         ]},
-        ...(insightConfrontoLato(b,a).length ? [{titolo:`Punti di forza su ${a.Giocatore}`, righe:insightConfrontoLato(b,a)}] : []),
-        ...(!stessoRuolo && compatibilitaRuoloReport(b, a.Ruolo, f.giocatori) ? [{titolo:`Compatibilità ruolo ${a.Ruolo}`, righe:compatibilitaRuoloReport(b, a.Ruolo, f.giocatori)}] : [])
-      ]
-    });
-
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-    // Come in generaEScarica: il numero di pagine PDF fisiche non è noto finché non si calcolano i salti
-    // di pagina — con molte righe di confronto (dati disciplinari inclusi) o colonne laterali ricche,
-    // questa singola "pagina" del DOM può finire su più pagine fisiche del PDF.
-    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
-    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
-    const totalePagine = confiniFisiciPagina(pagina, altezzaPaginaCss).length;
-    await esportaPaginaAPdf(pdf, pagina, true, 1, totalePagine, altezzaPaginaCss);
-    scaricaPdfRobusto(pdf, nomeFileData(`Report_Confronto_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), "#cf-rp-stato");
-  } finally {
-    stage.innerHTML = "";
-  }
+        options: opzioniGraficoReport({
+          scales:{r:{min:0, max:100, ticks:{stepSize:25, color:PALETTE_REPORT.muted, font:{size:9}, backdropColor:"transparent", callback:v=>v+"%"},
+            grid:{color:PALETTE_REPORT.grid}, angleLines:{color:PALETTE_REPORT.grid}, pointLabels:{color:PALETTE_REPORT.text, font:{size:10}}}}
+        })
+      }, 380);
+      titoloSezioneReport(pag, "Tutti gli indicatori");
+      tabellaConfrontoReport(pag, a, b, righeStat);
+      bulletsReport(pag, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]);
+    }, {piena:true})
+  ], "#cf-rp-stato");
 }
 
 /* =====================================================================

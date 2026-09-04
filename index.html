@@ -222,6 +222,8 @@ td.conf-migliore{font-weight:800; color:var(--primary); background:var(--primary
 .griglia-avvisi .avviso{margin-bottom:0}
 /* max-width: una riga di testo lunga quanto tutto lo schermo è faticosa da seguire (si perde il rigo
    tornando a capo). Le note restano larghe al massimo ~80 caratteri, come già faceva .sez-desc. */
+/* righe con campione troppo piccolo per essere lette come un segnale: restano, ma in secondo piano */
+tbody tr.riga-attenuata td{opacity:.6}
 .nota-piccola{font-size:12.5px; color:var(--muted); margin:12px 0 0; line-height:1.5; max-width:80ch}
 .pill{font-size:11px; font-weight:700; padding:2px 7px; border-radius:99px; text-transform:uppercase; letter-spacing:.05em}
 .pill.pos{background:color-mix(in srgb, var(--success) 16%, transparent); color:var(--success)}
@@ -273,6 +275,9 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-kpi .d.down{color:#A13544}
 .rp-kpi .d.flat{color:#6E6D68; font-weight:600}
 .rp-section-title{font-size:14.5px; font-weight:800; color:#171614; margin:22px 0 10px; padding-bottom:6px; border-bottom:1px solid #D4D1CA}
+/* Ripresa di una sezione che continua sulla pagina successiva: stessa gerarchia, tono più leggero, così si
+   distingue da un titolo nuovo senza far perdere il riferimento a cosa si sta leggendo. */
+.rp-section-title.rp-continua{margin-top:0; color:#5A574E; font-weight:700; font-style:italic; border-bottom-style:dashed}
 .rp-bullets{margin:0; padding-left:18px; font-size:13px; color:#28251D; line-height:1.6}
 .rp-bullets li{margin-bottom:7px}
 .rp-bullets li b{color:#01696F}
@@ -353,6 +358,26 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp3-body{padding:20px 22px 4px; flex:1; min-width:0; box-sizing:border-box}
 .rp3-page .rp-foot-b{margin-left:22px; margin-right:22px}
 .rp-table.rp-table-confronto th:first-child, .rp-table.rp-table-confronto td:first-child{width:46%}
+
+/* --- Report Confronto: due schede affiancate dentro la pagina (04/09/2026). Prima erano due colonne
+   laterali alte quanto il foglio: sbordavano sulla pagina dopo e mostravano contenuti diversi a destra e a
+   sinistra. Le schede hanno per costruzione le stesse righe, quindi si leggono davvero a confronto. --- */
+.rp-cf-schede{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:2px 0 14px}
+.rp-cf-scheda{background:#152A28; color:#EFEBE0; border-radius:12px; padding:16px 18px 14px}
+.rp-cf-eyebrow{font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; color:#A9CFC9; font-weight:700; margin-bottom:10px}
+.rp-cf-testa{display:flex; align-items:center; gap:12px; margin-bottom:12px}
+.rp-cf-avatar{width:46px; height:46px; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; color:#152A28; background:#EFEBE0; border:3px solid #C99400}
+.rp-cf-nome{font-size:15px; font-weight:900; line-height:1.2}
+.rp-cf-ruolo{font-size:11.5px; color:#B9C9C4}
+.rp-cf-riga{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:11.5px;
+  padding:5px 0; border-top:1px solid rgba(239,235,224,.14)}
+.rp-cf-riga span{color:#D6D2C6}
+.rp-cf-riga b{color:#fff; font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums}
+.rp-cf-forze{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:6px}
+.rp-cf-forza-tit{font-size:12px; font-weight:800; color:#28251D; margin-bottom:4px}
+.rp-cf-forza .rp-bullets{margin:0}
+.rp-cf-nessuno{font-size:12px; color:#6E6D68; margin:2px 0 0}
 .rp-table td.rp-migliore{background:#E3F2EF !important; color:#01696F; font-weight:800} /* !important: deve battere la regola qui sopra che azzera gli sfondi ereditati */
 /* Righe di giocatori che non sono scesi in campo: restano nel report ma in secondo piano, così l'occhio
    trova subito chi ha giocato davvero invece di attraversare dieci righe di zeri (audit 04/09/2026). */
@@ -455,6 +480,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
     <a href="#sez-zone-partita" data-tab="partita">Zone recupero/palla persa</a>
     <a href="#sez-golgame-partita" data-tab="partita">Zone tiro e assist gol</a>
+    <a href="#sez-subentrati" data-tab="partita">Impatto dei subentrati</a>
     <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
@@ -561,6 +587,13 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di tiro e assist dei gol</h2></div>
       <p class="sez-desc">Su richiesta del mister: da dove si segna di più e da dove arrivano di più gli assist che portano al gol, sul periodo selezionato in alto. Richiede che i file caricati includano la sezione «DETTAGLIO GOL GAME» — un dato che Seven Lab non esporta ancora in tutti gli export.</p>
       <div id="contenuto-golgame-partita"></div>
+    </section>
+
+    <!-- 6b4. IMPATTO DEI SUBENTRATI -->
+    <section id="sez-subentrati" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Impatto dei subentrati</h2></div>
+      <p class="sez-desc">Chi, entrando a partita in corso, non solo rende bene ma sposta davvero la gara. Incrocia il minuto d'ingresso (dall'evento «Cambio entra» della timeline), i minuti giocati da subentrato, le convocazioni e il contributo ai gol, e mette a confronto il rendimento del giocatore quando entra con quello che ha quando parte titolare.</p>
+      <div id="contenuto-subentrati"></div>
     </section>
 
     <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) -->
