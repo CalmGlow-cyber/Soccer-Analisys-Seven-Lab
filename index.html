@@ -495,10 +495,12 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-incroci" data-tab="allenamento">Segnali incrociati</a>
     <a href="#sez-zone-allenamento" data-tab="allenamento">Zone recupero/palla persa</a>
     <a href="#sez-confronto-allenamento" data-tab="allenamento">Confronto giocatori</a>
+    <a href="#sez-persa-giocatore-allenamento" data-tab="allenamento">Dove perde palla</a>
     <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
     <a href="#sez-confronto" data-tab="giocatori">Confronto giocatori</a>
+    <a href="#sez-persa-giocatore-partita" data-tab="giocatori">Dove perde palla</a>
     <a href="#sez-qualita">Qualità dei dati</a>
     <a href="#sez-metodo">Metodologia</a>
     <a href="#sez-ia">Assistente IA</a>
@@ -705,6 +707,17 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div id="contenuto-confronto-allenamento"></div>
     </section>
 
+    <!-- 8b4. DOVE PERDE PALLA UN GIOCATORE (allenamento) -->
+    <section id="sez-persa-giocatore-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Dove perde palla un giocatore (allenamento)</h2></div>
+      <p class="sez-desc">Scegli un giocatore e vedi in quali zone del campo perde più palloni, sul totale delle partitelle del periodo selezionato in alto. Stessa doppia vista delle altre sezioni di campo: griglia a nove zone con le percentuali e heatmap della densità reale, più l'elenco delle zone in numeri assoluti — che su un singolo giocatore è la lettura più solida.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pg-sel-giocatore">Giocatore</label>
+          <select id="pg-sel-giocatore"></select></div>
+      </div>
+      <div id="contenuto-persa-giocatore-allenamento"></div>
+    </section>
+
     <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
     <section id="sez-report-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><h2>Report PDF: allenamenti</h2></div>
@@ -760,6 +773,17 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
         <div class="report-status" id="cf-rp-stato">Il report mette le due schede giocatore affiancate con le stesse voci, i punti di forza dell'uno sull'altro, il radar di confronto e la tabella completa di tutti gli indicatori.</div>
       </div>
       <div id="contenuto-confronto"></div>
+    </section>
+
+    <!-- 9d. DOVE PERDE PALLA (partite) -->
+    <section id="sez-persa-giocatore-partita" data-tab-sezione="giocatori">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Dove perde palla</h2></div>
+      <p class="sez-desc">Le zone in cui il giocatore scelto in alto perde più palloni nelle partite: puoi guardare tutta la stagione oppure una singola partita. Griglia a nove zone, heatmap della densità reale ed elenco delle zone in numeri assoluti.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pgp-sel-ambito">Ambito</label>
+          <select id="pgp-sel-ambito"></select></div>
+      </div>
+      <div id="contenuto-persa-giocatore-partita"></div>
     </section>
 
     <!-- ===================== SEZIONI COMUNI (visibili in ogni scheda) ===================== -->

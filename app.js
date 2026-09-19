@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.25.0",
+  numero: "1.26.0",
   data: "2026-09-19",
-  note: "Allenamenti: medie non falsate dalle presenze, confronto tra giocatori, squadre A/B solo sulla singola sessione, numeri dietro le percentuali (19/09/2026). (1) PRESENZE DIVERSE: agli allenamenti non c'e sempre la rosa al completo, e i totali premiavano chi c'era di piu a prescindere da come giocava. Sotto ogni totale (gol, assist, minuti, indice) ora compare il valore a sessione EFFETTIVAMENTE FREQUENTATA da quel giocatore, la colonna Sessioni dice su quante possibili e stato presente, e le righe sotto il 30% di presenze sono attenuate. Tra i KPI di squadra e stato aggiunto Giocatori per sessione con l'intervallo min-max: una sessione in otto e una in quattordici producono quantita molto diverse, e prima quella disparita restava nascosta dentro i totali. (2) CONFRONTO SUGLI ALLENAMENTI: nuova sezione 08 nella Dashboard Allenamento, gemella di quella delle partite ma costruita sulle partitelle, con report PDF dedicato. Serve per i giocatori che in stagione giocano poco o niente: in allenamento i dati ci sono comunque, ed e l'unico modo di valutarli prima di una convocazione. E la stessa funzione a disegnare entrambi i confronti, cosi non divergono nel tempo. (3) SQUADRE A/B: il confronto tra le due squadre interne compare solo su una singola sessione, con un nuovo selettore di sessione nella sezione zone. Le squadre vengono rifatte a ogni allenamento, quindi sommarle su piu sessioni produceva un grafico che sembrava parlare di una squadra e non parlava di nessuno. (4) NUMERI DIETRO LE PERCENTUALI: nelle due classifiche giocatori ci sono ora le colonne con i valori assoluti (passaggi riusciti/tentati, dribbling riusciti/tentati, errori/azioni), ordinabili come le altre, con un interruttore per nasconderle. Un 60% di dribbling da 12 tentativi su 20 racconta un giocatore che osa; lo stesso 60% da 3 su 5 non racconta niente, e la sola percentuale faceva sembrare peggiore proprio chi prova di piu. (5) ATTENDIBILITA DELLE ZONE: dall'analisi dei file grezzi risulta che nessuno dei 73 eventi posizionati e mai caduto nel quinto esterno della larghezza del campo, quindi le fasce laterali coprono molta meno superficie raggiungibile di quella centrale e la concentrazione al centro e in gran parte un effetto dell'area toccabile. I grafici di zona portano ora questa avvertenza, a schermo e nei PDF, insieme a un avviso graduato sul campione (sotto 10 eventi le percentuali non vanno lette, sotto 40 sono solo indicative): la vecchia soglia di 5 era troppo bassa."
+  note: "Dove perde palla un giocatore: due nuove sezioni (19/09/2026). Scegliendo un giocatore si vedono le zone del campo in cui perde piu palloni, con la stessa doppia vista delle altre sezioni di campo (griglia a nove zone in percentuale + heatmap della densita reale). Nella Dashboard Allenamento la sezione 09 lavora sul totale delle partitelle del periodo scelto; nella Dashboard Giocatori la sezione 04 segue il giocatore gia selezionato in alto e aggiunge un selettore di ambito che permette di guardare tutta la stagione oppure una singola partita. Nessun dato nuovo da raccogliere: il nome del giocatore era gia presente su ogni punto della sezione DATI SPAZIALI, quindi e un filtro su quello che c'e. IMPORTANTE, sul come leggerla: per un singolo giocatore il campione e molto piu piccolo di quello gia piccolo della squadra. Nei file reali visti finora il giocatore con piu palle perse georeferenziate ne aveva 7 in tutta la stagione, la mediana era 2, e in una singola partita si arriva a uno o due. Per questo sotto i grafici c'e l'elenco delle zone in NUMERI ASSOLUTI, ordinato per frequenza, con una frase che dice qual e la zona peggiore e su quanti palloni in tutto: e la lettura che il dato regge davvero oggi, mentre le percentuali su tre palloni cambiano completamente per un evento in piu o in meno. Restano anche gli avvisi graduati sul campione e l avvertenza sulle fasce laterali introdotti nella 1.25.0. I grafici ci sono comunque perche con una stagione intera di dati diventeranno la vista giusta."
 };
 
 /* =====================================================================
@@ -1932,6 +1932,9 @@ const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Pre
   // Sessione singola scelta nella sezione "Zone di recupero e palla persa (allenamento)": "" = tutte.
   // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
   zoneSessione:"",
+  // Sezioni "Dove perde palla": giocatore scelto in allenamento, e ambito (stagione o singola partita)
+  // nella scheda Giocatori (19/09/2026).
+  persaGiocatoreAll:"", persaAmbitoPartita:"",
   // Confronto tra due giocatori sui dati di ALLENAMENTO (19/09/2026), gemello di confrontoA/confrontoB
   confrontoAllA:null, confrontoAllB:null};
 
@@ -3246,6 +3249,38 @@ function renderIncroci(){
  *  altrimenti le due dashboard, entrambe sempre nel DOM, andrebbero in conflitto sugli stessi id). Gating
  *  esplicito, non un grafico vuoto: finché nessun file caricato include le coordinate, la sezione lo dice
  *  chiaramente invece di mostrare percentuali a zero che sembrerebbero un dato vero. */
+/** Palle perse con posizione di UN solo giocatore (19/09/2026, richiesta di Elisa). I punti di zona
+ *  portano già il nome del giocatore da estraiEventiZonaDaSessione, quindi non serve nessun dato nuovo:
+ *  è un filtro su quello che c'è. `soloSquadraA` non serve qui — il filtro sul nome è più stretto. */
+function persePerGiocatore(sessioni, nome){
+  const out = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    if(p.tipo === "persa" && p.giocatore === nome) out.push(p);
+  }));
+  return out;
+}
+function recuperiPerGiocatore(sessioni, nome){
+  const out = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    if(p.tipo === "recupero" && p.giocatore === nome) out.push(p);
+  }));
+  return out;
+}
+
+const ETICHETTE_ZONA_LUNGHEZZA = ["difensivo", "centrale", "offensivo"];
+const ETICHETTE_ZONA_FASCIA = ["sinistra", "centro", "destra"];
+
+/** Elenco delle zone in cui un giocatore ha perso palla, in numeri ASSOLUTI e ordinato per frequenza.
+ *  Su campioni piccoli — ed è la norma per un singolo giocatore — "2 palle perse nel terzo difensivo a
+ *  destra" è un'informazione onesta, mentre "66,7%" è la stessa cosa travestita da misura. */
+function elencoZonePerse(punti){
+  const z = calcolaZoneCampo(punti);
+  return z.celle.map((c, i) => ({
+    riga: Math.floor(i/3), col: i%3, conteggio: c.conteggio, pct: c.pct,
+    etichetta: `terzo ${ETICHETTE_ZONA_LUNGHEZZA[i%3]}, ${ETICHETTE_ZONA_FASCIA[Math.floor(i/3)]}`
+  })).filter(c => c.conteggio > 0).sort((a,b) => b.conteggio - a.conteggio);
+}
+
 /* Avvisi sull'attendibilità dei grafici di zona (19/09/2026, dopo l'analisi dei file grezzi).
    Due limiti misurati sui dati veri, che il grafico da solo non comunica:
    (1) CAMPIONE. Una griglia a 9 zone ha bisogno dell'ordine del centinaio di eventi perché ogni casella
@@ -3569,6 +3604,66 @@ function renderSubentrati(f){
     <p class="nota-piccola">Chi è entrato a partita in corso si riconosce dall'evento «Cambio entra» nella timeline; chi ha giocato senza averne uno è considerato titolare. ${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} nel periodo ${partiteConIngressi===1?"ha":"hanno"} almeno un cambio registrato.</p>`;
 }
 
+/** Sezione "Dove perde palla" per un singolo giocatore (19/09/2026, richiesta di Elisa). Usata identica
+ *  in due posti: nella Dashboard Allenamento (totale del periodo, sulle sole partitelle) e nella Dashboard
+ *  Giocatori (dove si può scegliere tutta la stagione oppure una singola partita).
+ *  Nota di onestà sui numeri, da non togliere: per un singolo giocatore il campione è molto più piccolo di
+ *  quello già piccolo della squadra. Nei file reali visti finora il giocatore con più palle perse
+ *  georeferenziate ne aveva 7 in tutta la stagione, la mediana era 2, e in una singola partita si arriva a
+ *  1-2. Per questo l'elenco in numeri assoluti sta SOTTO i grafici ma prima di ogni percentuale: è quello
+ *  che si può davvero leggere oggi. I grafici restano perché con una stagione intera di dati diventeranno
+ *  la vista giusta. */
+function renderPersaGiocatore(idContenitore, sessioni, nome, contesto){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haCoordinateZona){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate X/Y degli eventi di palla persa nei file caricati (sezione «DATI SPAZIALI» dell'export Seven Lab). Quando i tuoi file la includeranno, questa sezione si popola da sola.</div>`;
+    return;
+  }
+  if(!nome){
+    cont.innerHTML = `<div class="vuoto">Scegli un giocatore per vedere dove perde palla.</div>`;
+    return;
+  }
+  const perse = persePerGiocatore(sessioni, nome);
+  const recuperi = recuperiPerGiocatore(sessioni, nome);
+  if(!perse.length){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna palla persa con posizione per ${esc(nome)}</strong> ${esc(contesto)}.${recuperi.length ? ` Ha invece ${nf0(recuperi.length)} ${recuperi.length===1?"recupero":"recuperi"} con posizione nello stesso arco.` : ""} Cambia periodo o scegli un altro giocatore.</div>`;
+    return;
+  }
+  const zone = elencoZonePerse(perse);
+  const top = zone[0];
+  const idp = "pg-"+idContenitore;
+  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  const avviso = avvisoCampioneZone(perse.length, `per ${nome} ${contesto}`);
+  cont.innerHTML = `
+    <div class="griglia g-2 g-campi">
+      <div class="card">
+        <div class="grafico-titolo">Zone di palla persa — ${esc(nome)} (%)</div>
+        <div class="grafico-sub">${nf0(perse.length)} ${perse.length===1?"palla persa":"palle perse"} con posizione ${esc(contesto)}, su una griglia 3×3 del campo (dalla propria porta all'attacco).</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap palle perse — ${esc(nome)}</div>
+        <div class="grafico-sub">Densità reale dei punti in cui ha perso il pallone: colore più caldo dove si concentrano di più.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="grafico-titolo">Dove ha perso palla, in numeri</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Palle perse di ${esc(nome)} per zona di campo</caption>
+        <thead><tr><th scope="col">Zona</th><th scope="col">Palle perse</th><th scope="col">Quota</th></tr></thead>
+        <tbody>${zone.map(z => `<tr><td>${esc(z.etichetta)}</td><td>${nf0(z.conteggio)}</td><td>${pctTxt(z.pct,0)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">La zona in cui perde più palloni è <strong>${esc(top.etichetta)}</strong>, con ${nf0(top.conteggio)} ${top.conteggio===1?"pallone":"palloni"} su ${nf0(perse.length)}.${recuperi.length ? ` Per contesto: nello stesso arco ha ${nf0(recuperi.length)} ${recuperi.length===1?"recupero":"recuperi"} con posizione.` : ""} I numeri assoluti sono la lettura da usare finché il campione resta piccolo: la colonna della quota, su pochi palloni, cambia moltissimo per un evento in più o in meno.</p>
+    </div>
+    ${avviso ? `<p class="nota-piccola">${avviso}</p>` : ""}
+    <p class="nota-piccola">${NOTA_BORDI_CAMPO}</p>`;
+  disegnaCampoZone($("#"+idp+"-zona"), perse, Object.assign({}, optsBase, {colore:colore("danger")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat"), perse, optsBase);
+}
+
 /** Sezione zone di allenamento con selettore di sessione (19/09/2026). Il selettore serve a una cosa
  *  precisa: il confronto tra Squadra A e Squadra B viene mostrato solo su una sessione singola, perché le
  *  due squadre vengono rifatte a ogni allenamento (vedi renderZoneCampo). Senza un modo per isolare una
@@ -3587,6 +3682,45 @@ function renderZoneAllenamento(f){
     ? (f.allenamenti||[]).filter(a => a.Sessione_ID === stato.zoneSessione)
     : (f.allenamenti||[]);
   renderZoneCampo("contenuto-zone-allenamento", scelte, null, true);
+}
+
+/** Dashboard Allenamento: dove perde palla un giocatore, sul totale delle partitelle del periodo. */
+function renderPersaGiocatoreAllenamento(f){
+  const sel = $("#pg-sel-giocatore");
+  const sessioni = f.allenamenti || [];
+  if(sel){
+    const nomi = Array.from(new Set(sessioni.flatMap(s => (s.EventiZona||[]).filter(p=>p.tipo==="persa").map(p=>p.giocatore)).filter(Boolean)))
+      .sort((a,b)=>a.localeCompare(b,"it"));
+    const prec = stato.persaGiocatoreAll;
+    sel.innerHTML = nomi.length
+      ? nomi.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("")
+      : `<option value="">Nessun giocatore con palle perse georeferenziate</option>`;
+    if(prec && nomi.includes(prec)) sel.value = prec;
+    else stato.persaGiocatoreAll = nomi[0] || "";
+    sel.value = stato.persaGiocatoreAll;
+  }
+  const periodo = stato.periodo === "tutto" ? "in tutta la stagione (allenamenti)" : `negli allenamenti di ${meseLabel(stato.periodo)}`;
+  renderPersaGiocatore("contenuto-persa-giocatore-allenamento", sessioni, stato.persaGiocatoreAll, periodo);
+}
+
+/** Dashboard Giocatori: stesso grafico per il giocatore già scelto in alto, con la possibilità di
+ *  restringere a una singola partita invece di tutta la stagione. */
+function renderPersaGiocatorePartita(f){
+  const sel = $("#pgp-sel-ambito");
+  const partite = f.partite || [];
+  if(sel){
+    const prec = stato.persaAmbitoPartita;
+    sel.innerHTML = `<option value="">Tutta la stagione (partite)</option>`
+      + partite.slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0))
+          .map(p => `<option value="${esc(p.Match_ID)}">${esc(dataLabel(p.Data))} · ${esc(p.Avversario)}</option>`).join("");
+    if(prec && partite.some(p => p.Match_ID === prec)) sel.value = prec;
+    else { sel.value = ""; stato.persaAmbitoPartita = ""; }
+  }
+  const scelte = stato.persaAmbitoPartita ? partite.filter(p => p.Match_ID === stato.persaAmbitoPartita) : partite;
+  const contesto = stato.persaAmbitoPartita
+    ? (() => { const p = partite.find(x => x.Match_ID === stato.persaAmbitoPartita); return p ? `nella partita del ${dataLabel(p.Data)} contro ${p.Avversario}` : "nella partita scelta"; })()
+    : (stato.periodo === "tutto" ? "in tutte le partite della stagione" : `nelle partite di ${meseLabel(stato.periodo)}`);
+  renderPersaGiocatore("contenuto-persa-giocatore-partita", scelte, stato.giocatore, contesto);
 }
 
 /* --------- 9. Qualità dati --------- */
@@ -3623,12 +3757,14 @@ function render(){
   renderAndamentoIndividuale();
   renderGiocatore(f);
   renderConfronto(f);
+  renderPersaGiocatorePartita(f);
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
   renderGolGameCampo("contenuto-golgame-partita", f.partite);
   renderSubentrati(f);
   renderAllenamenti();
   renderIncroci();
   renderZoneAllenamento(f);
+  renderPersaGiocatoreAllenamento(f);
   renderConfrontoAllenamento(f);
   renderQualita();
   aggiornaSelettoriReport();
@@ -5639,7 +5775,11 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#sel-periodo").addEventListener("change", e => { stato.periodo = e.target.value; distruggiGrafici(); render(); });
   $("#sel-all-da").addEventListener("change", e => { stato.allenamentoDashDa = e.target.value || null; renderAllenamenti(); });
   $("#sel-all-a").addEventListener("change", e => { stato.allenamentoDashA = e.target.value || null; renderAllenamenti(); });
-  $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); });
+  $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); renderPersaGiocatorePartita(datiFiltrati()); });
+  const selPG = $("#pg-sel-giocatore");
+  if(selPG) selPG.addEventListener("change", e => { stato.persaGiocatoreAll = e.target.value; renderPersaGiocatoreAllenamento(datiFiltrati()); });
+  const selPGP = $("#pgp-sel-ambito");
+  if(selPGP) selPGP.addEventListener("change", e => { stato.persaAmbitoPartita = e.target.value; renderPersaGiocatorePartita(datiFiltrati()); });
   const selZone = $("#zn-sel-sessione");
   if(selZone) selZone.addEventListener("change", e => { stato.zoneSessione = e.target.value; renderZoneAllenamento(datiFiltrati()); });
   const cfaA = $("#cfa-sel-a"), cfaB = $("#cfa-sel-b"), cfaBtn = $("#cfa-btn-report");
