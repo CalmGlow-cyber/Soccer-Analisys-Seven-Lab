@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.23.1",
-  data: "2026-09-04",
-  note: "Zone di tiro e assist dei gol nei report, sezione sempre visibile (04/09/2026). (0) I grafici delle zone di tiro e di partenza degli assist erano già inclusi sia nel Report Partita (relativi alla singola partita scelta) sia nel Report Stagionale (su tutte le partite della stagione), ma sparivano senza dire niente quando nessun gol del periodo aveva le coordinate: chi stampava il report non poteva sapere se mancasse un dato o una funzione. Ora la sezione c'è sempre e, quando è vuota, spiega perché — distinguendo il caso \"i file caricati non hanno la sezione DETTAGLIO GOL GAME\" dal caso \"nessun gol con posizione in questo periodo\". Inoltre, quando un blocco di campetti o di grafici continua sulla pagina successiva, la seconda metà ora porta sopra l'intestazione della sua sezione con l'indicazione \"(segue)\": prima arrivavano due heatmap in cima a un foglio senza nessun titolo che dicesse di cosa parlassero. Report Confronto rifatto e nuova sezione \"Impatto dei subentrati\" (04/09/2026). (1) REPORT CONFRONTO: era rimasto l'unico report ancora sul vecchio percorso di impaginazione, con pagine tagliate male e — soprattutto — due colonne che non mostravano le stesse voci a sinistra e a destra, perché ogni lato elencava solo i dati disponibili per quel giocatore. Ora le due schede sono costruite dalla stessa lista di righe: le voci sono identiche e nello stesso ordine da entrambi i lati, con un trattino dove il dato manca, e il confronto dei punti di forza è simmetrico (con una frase esplicita quando nessuno dei due ha un vantaggio netto). Il report passa sullo stesso impaginatore A4 degli altri quattro, a piena larghezza di pagina. (2) IMPATTO DEI SUBENTRATI: nuova sezione 08 nella Dashboard Partita che incrocia convocazioni, minuti giocati e minuto di ingresso letto dalla timeline eventi (\"Cambio entra\") per capire quali giocatori, entrando a partita in corso, rendono meglio e pesano di più. Per ogni giocatore: partite da subentrato e da titolare a confronto, minuto medio di ingresso, gol e assist da subentrato, indice prestazione nei due ruoli, e un ordinamento per impatto assoluto (contributo diretto prima, indice poi) invece che per sola media. I valori per 90 minuti compaiono solo sopra i 10 minuti giocati: sotto quella soglia una proiezione è solo un numero grande senza significato, e viene mostrato un trattino. La sezione si spegne da sola con un messaggio se nei file caricati non c'è nessun cambio registrato. (3) DALLA VERSIONE PRECEDENTE, ancora valido: impaginazione dei report rifatta da zero e resa di stampa più professionale. (a) PAGINE A4 VERE: prima ogni sezione del report era un unico riquadro lungo quanto serviva, catturato in un'immagine sola e poi TAGLIATO a fette alte quanto un A4 — da lì fogli bianchi, titoli separati dal contenuto e tabelle spezzate a metà riga. Ora il generatore riempie una bozza e un impaginatore distribuisce i blocchi su pagine A4 una per una, fermandosi quando la pagina è piena: una tabella troppo lunga continua sulla pagina dopo riportando la sua intestazione, un elenco puntato continua voce per voce, una griglia di campetti continua per riquadri, un titolo di sezione non resta mai da solo in fondo alla pagina e una pagina senza contenuto non viene creata. Controllo automatico su tutti e quattro i report: nessuna pagina sfora l'A4, nessuna è vuota, nessun titolo è orfano. Il Report Partita passa da 12 fogli (3 bianchi) a 6. (b) GRAFICI NITIDI: i grafici dei report venivano disegnati alla risoluzione dello schermo e poi ingranditi dalla cattura, che lavora a scala doppia — da lì l'aspetto sgranato, più evidente nel report giocatori. Ora Chart.js disegna a 3× e i campetti a 1280px di lato, così in stampa c'è più risoluzione di quanta ne serva. (c) LARGHEZZA DELLO SCHERMO E COLONNE: il contenuto era limitato a 1240px, lasciando centinaia di pixel vuoti ai lati sugli schermi grandi mentre le tabelle scorrevano in orizzontale; ora arriva a 1600px. Le intestazioni delle tabelle possono andare a capo tra le parole e ogni colonna viene dimensionata sul contenuto reale invece che sull'intestazione più lunga: colonne che erano larghe 144-152px per contenere \"83,3%\" si sono ristrette, lo spazio recuperato è andato ai nomi e alle colonne con le sparkline, che ora si allargano davvero (da 88px fissi fino a 360px) e mostrano l'andamento in modo leggibile. Verificato nell'app vera coi file reali a 1920, 1400 e 390px: nessun errore JavaScript, nessuna tabella che sfonda il contenitore, tutti e cinque i report generati correttamente (compreso il confronto tra due giocatori)."
+  numero: "1.25.0",
+  data: "2026-09-19",
+  note: "Allenamenti: medie non falsate dalle presenze, confronto tra giocatori, squadre A/B solo sulla singola sessione, numeri dietro le percentuali (19/09/2026). (1) PRESENZE DIVERSE: agli allenamenti non c'e sempre la rosa al completo, e i totali premiavano chi c'era di piu a prescindere da come giocava. Sotto ogni totale (gol, assist, minuti, indice) ora compare il valore a sessione EFFETTIVAMENTE FREQUENTATA da quel giocatore, la colonna Sessioni dice su quante possibili e stato presente, e le righe sotto il 30% di presenze sono attenuate. Tra i KPI di squadra e stato aggiunto Giocatori per sessione con l'intervallo min-max: una sessione in otto e una in quattordici producono quantita molto diverse, e prima quella disparita restava nascosta dentro i totali. (2) CONFRONTO SUGLI ALLENAMENTI: nuova sezione 08 nella Dashboard Allenamento, gemella di quella delle partite ma costruita sulle partitelle, con report PDF dedicato. Serve per i giocatori che in stagione giocano poco o niente: in allenamento i dati ci sono comunque, ed e l'unico modo di valutarli prima di una convocazione. E la stessa funzione a disegnare entrambi i confronti, cosi non divergono nel tempo. (3) SQUADRE A/B: il confronto tra le due squadre interne compare solo su una singola sessione, con un nuovo selettore di sessione nella sezione zone. Le squadre vengono rifatte a ogni allenamento, quindi sommarle su piu sessioni produceva un grafico che sembrava parlare di una squadra e non parlava di nessuno. (4) NUMERI DIETRO LE PERCENTUALI: nelle due classifiche giocatori ci sono ora le colonne con i valori assoluti (passaggi riusciti/tentati, dribbling riusciti/tentati, errori/azioni), ordinabili come le altre, con un interruttore per nasconderle. Un 60% di dribbling da 12 tentativi su 20 racconta un giocatore che osa; lo stesso 60% da 3 su 5 non racconta niente, e la sola percentuale faceva sembrare peggiore proprio chi prova di piu. (5) ATTENDIBILITA DELLE ZONE: dall'analisi dei file grezzi risulta che nessuno dei 73 eventi posizionati e mai caduto nel quinto esterno della larghezza del campo, quindi le fasce laterali coprono molta meno superficie raggiungibile di quella centrale e la concentrazione al centro e in gran parte un effetto dell'area toccabile. I grafici di zona portano ora questa avvertenza, a schermo e nei PDF, insieme a un avviso graduato sul campione (sotto 10 eventi le percentuali non vanno lette, sotto 40 sono solo indicative): la vecchia soglia di 5 era troppo bassa."
 };
 
 /* =====================================================================
@@ -1286,7 +1286,7 @@ function derivaRiga(g, partita){
   g.Realizzazione_Rigori_pct = g.Rigori_Tentati!==null ? perc(g.Rigori_Realizzati, g.Rigori_Tentati) : null;
   const m = g.Minuti_Giocati;
   ["Gol","Assist","Coinvolgimento_Gol","Recuperi","Tiri_Totali","Dribbling_Tentati","Errori_Totali"].forEach(c => {
-    g[c+"_per60"] = m > 0 ? g[c]/m*60 : null;
+    g[c+"_perPartita"] = m > 0 ? g[c]/m*MINUTI_PARTITA_INTERA : null;
   });
   g.Indice_Prestazione = indicePrestazione(g);
   g.Data = partita ? partita.Data : null;
@@ -1490,8 +1490,15 @@ function datiRadarGiocatore(rigaGiocatore, rigaConfronto, righeRosa, ctxPortiere
    titolare. Poiché tutto quello che un subentrato fa in quella gara lo fa dopo essere entrato, le sue
    statistiche di quella partita sono per intero "da subentrato": non serve spezzare i dati per tempo.
    ===================================================================== */
-/** Minuti minimi perché una media "per 90 minuti" venga calcolata e mostrata. */
-const MINUTI_MINIMI_PER_90 = 10;
+/** Durata di una partita intera di calcio a 7: due tempi da 25 minuti (04/09/2026, segnalato da Elisa —
+ *  prima era normalizzato "per 90'" come nel calcio a 11, un riferimento che qui non esiste e che gonfiava
+ *  ogni valore di quasi il doppio). Se il campionato dovesse cambiare formato basta cambiare questo numero:
+ *  è l'unico posto in cui la durata di riferimento è scritta. Il recupero non si conta: è variabile e non
+ *  è registrato nei file, e includerlo cambierebbe la scala da una partita all'altra. */
+const MINUTI_PARTITA_INTERA = (DURATA_TEMPO_REGOLAMENTARE_SEC/60)*2; // = 50: due tempi regolamentari
+/** Minuti minimi perché una media "per partita intera" venga calcolata e mostrata. Tenuta alla stessa
+ *  proporzione di prima (erano 10 minuti su 90, cioè un ottavo scarso di partita). */
+const MINUTI_MINIMI_NORMALIZZAZIONE = 6;
 
 /** Mappa nome → secondo di ingresso, per una partita. Vuota se il file non ha la timeline o la colonna. */
 function ingressiDaTimeline(partita){
@@ -1510,9 +1517,9 @@ function ingressiDaTimeline(partita){
 
 /** Per ogni giocatore: quanto ha giocato e reso da subentrato, quanto da titolare, e quante volte è stato
  *  in distinta senza entrare. `impatto` è il criterio di ordinamento: prima il contributo ASSOLUTO ai gol
- *  da subentrato (gol + assist), poi l'indice accumulato, poi i minuti — di proposito NON una media per 90
+ *  da subentrato (gol + assist), poi l'indice accumulato, poi i minuti — di proposito NON una media rapportata alla partita intera
  *  minuti, che su spezzoni di pochi minuti si gonfia a dismisura e metterebbe in cima chi ha giocato meno.
- *  Le medie per 90' restano nella tabella come dato di lettura, con l'avvertenza sul campione. */
+ *  Le medie rapportate alla partita intera restano nella tabella come dato di lettura, con l'avvertenza sul campione. */
 function analizzaSubentrati(partite, righeGiocatori){
   const perPartita = new Map();
   (partite||[]).forEach(p => perPartita.set(p.Match_ID, ingressiDaTimeline(p)));
@@ -1535,11 +1542,11 @@ function analizzaSubentrati(partite, righeGiocatori){
     dove.indice += N(g.Indice_Prestazione);
     if(secIngresso !== undefined) a.minutiIngresso.push(secIngresso/60);
   });
-  // Una media "per 90 minuti" ricavata da due o tre minuti giocati non è un dato: è quel numero moltiplicato
-  // per trenta. Sotto questa soglia non la calcoliamo proprio, invece di stampare cose come "648,7 per 90'"
-  // (visto davvero sui dati di prova). Le colonne assolute — ingressi, minuti, gol+assist, indice — restano
-  // sempre visibili: sono quelle che reggono anche con pochi minuti.
-  const per90 = (valore, minuti) => minuti >= MINUTI_MINIMI_PER_90 ? (valore/minuti)*90 : null;
+  // Una media "per partita intera" ricavata da due o tre minuti giocati non è un dato: è quel numero
+  // moltiplicato per venti. Sotto questa soglia non la calcoliamo proprio, invece di stampare cose come
+  // "360,4 per partita" (visto davvero sui dati di prova). Le colonne assolute — ingressi, minuti,
+  // gol+assist, indice — restano sempre visibili: sono quelle che reggono anche con pochi minuti.
+  const suPartitaIntera = (valore, minuti) => minuti >= MINUTI_MINIMI_NORMALIZZAZIONE ? (valore/minuti)*MINUTI_PARTITA_INTERA : null;
   const elenco = Array.from(perGiocatore.values())
     .filter(a => a.subentrato.partite > 0)
     .map(a => {
@@ -1548,9 +1555,9 @@ function analizzaSubentrati(partite, righeGiocatori){
       return Object.assign(a, {
         contributoSubentrato: contributo,
         minutoMedioIngresso: a.minutiIngresso.length ? a.minutiIngresso.reduce((x,y)=>x+y,0)/a.minutiIngresso.length : null,
-        indicePer90Subentrato: per90(s.indice, s.minuti),
-        indicePer90Titolare: t.partite ? per90(t.indice, t.minuti) : null,
-        contributoPer90Subentrato: per90(contributo, s.minuti),
+        indicePartitaSubentrato: suPartitaIntera(s.indice, s.minuti),
+        indicePartitaTitolare: t.partite ? suPartitaIntera(t.indice, t.minuti) : null,
+        contributoPartitaSubentrato: suPartitaIntera(contributo, s.minuti),
         impatto: contributo*1000 + s.indice
       });
     })
@@ -1826,7 +1833,9 @@ function incrociCaricoRendimento(ds){
   return out.sort((a,b)=> Math.abs(b.deltaIndice) - Math.abs(a.deltaIndice));
 }
 
-/** Classifica i giocatori per coinvolgimento nel gioco (azioni con palla ogni 90'), su tutta la stagione.
+/** Classifica i giocatori per coinvolgimento nel gioco (azioni con palla rapportate a una partita intera di
+ *  calcio a 7, MINUTI_PARTITA_INTERA), su tutta la stagione. Era normalizzato "ogni 90'" come nel calcio a
+ *  11: riferimento sbagliato per questo sport, corretto il 04/09/2026 su segnalazione di Elisa.
  *  Proxy costruita solo con azioni tentate dal giocatore stesso (passaggi, tiri, dribbling): non misura
  *  quanto un giocatore viene cercato dai compagni, perché i passaggi ricevuti non sono tra i dati raccolti. */
 function classificaCoinvolgimento(righe){
@@ -1834,10 +1843,10 @@ function classificaCoinvolgimento(righe){
     .map(a => ({
       Giocatore:a.Giocatore, Ruolo:a.Ruolo, Partite_Giocate:a.Partite_Giocate,
       Minuti_Totali:a.Minuti_Totali, Azioni_Totali:a.Azioni_Totali,
-      Coinvolgimento_90: a.Minuti_Totali > 0 ? (a.Azioni_Totali/a.Minuti_Totali)*90 : null
+      Coinvolgimento_Partita: a.Minuti_Totali > 0 ? (a.Azioni_Totali/a.Minuti_Totali)*MINUTI_PARTITA_INTERA : null
     }))
-    .filter(a => a.Coinvolgimento_90 !== null)
-    .sort((a,b) => b.Coinvolgimento_90 - a.Coinvolgimento_90);
+    .filter(a => a.Coinvolgimento_Partita !== null)
+    .sort((a,b) => b.Coinvolgimento_Partita - a.Coinvolgimento_Partita);
 }
 
 /** Rendimento di squadra aggregato per modulo tattico (colonna facoltativa Modulo nel foglio Partite).
@@ -1919,7 +1928,12 @@ const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Pre
   ordinaAllenamento:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null,
   // Periodo proprio della sezione "Carico di allenamento e stanchezza stimata" (05): indipendente dal
   // filtro periodo generale in alto, null/null = tutta la stagione. Vedi datiAllenamentoIntervallo.
-  allenamentoDashDa:null, allenamentoDashA:null};
+  allenamentoDashDa:null, allenamentoDashA:null,
+  // Sessione singola scelta nella sezione "Zone di recupero e palla persa (allenamento)": "" = tutte.
+  // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
+  zoneSessione:"",
+  // Confronto tra due giocatori sui dati di ALLENAMENTO (19/09/2026), gemello di confrontoA/confrontoB
+  confrontoAllA:null, confrontoAllB:null};
 
 function colore(nome){ return getComputedStyle(document.documentElement).getPropertyValue("--"+nome).trim(); }
 function distruggiGrafici(){ Object.values(stato.grafici).forEach(c => { try{ c.destroy(); }catch(e){} }); stato.grafici = {}; }
@@ -2106,14 +2120,27 @@ function renderAndamento(f){
 function media(arr){ const v = arr.filter(x=>x!==null && isFinite(x)); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; }
 
 /* --------- 5. Classifica --------- */
+/* Colonne della classifica giocatori.
+   19/09/2026, richiesta di Elisa: ogni percentuale deve poter essere "interrogata" nei numeri che la
+   generano. Il motivo è concreto e riguarda la lettura, non la curiosità: un 60% di dribbling riusciti
+   sembra un dato mediocre, ma se arriva da 12 tentativi su 20 racconta un giocatore che prova molto,
+   mentre lo stesso 60% da 3 su 5 non racconta niente. Senza i numeri sotto, la percentuale da sola può
+   far sembrare peggiore proprio chi osa di più. Le colonne marcate `assoluta:true` sono quelle aggiunte
+   per questo, e si possono nascondere con l'interruttore sopra la tabella (la scelta viene ricordata). */
 const COLONNE_TAB = [
   {k:"Giocatore", eti:"Giocatore", tipo:"testo"},
   {k:"Partite_Giocate", eti:"Partite", tipo:"num", dec:0},
   {k:"Minuti_Totali", eti:"Minuti", tipo:"num", dec:0},
   {k:"Gol", eti:"Gol", tipo:"num", dec:0},
   {k:"Assist", eti:"Assist", tipo:"num", dec:0},
+  {k:"Passaggi_Corretti", eti:"Passaggi riusciti", tipo:"num", dec:0, assoluta:true},
+  {k:"Passaggi_Totali", eti:"Passaggi tentati", tipo:"num", dec:0, assoluta:true},
   {k:"Precisione_Passaggi_pct", eti:"Prec. passaggi", tipo:"pct"},
+  {k:"Dribbling_Riusciti", eti:"Dribbling riusciti", tipo:"num", dec:0, assoluta:true},
+  {k:"Dribbling_Tentati", eti:"Dribbling tentati", tipo:"num", dec:0, assoluta:true},
   {k:"Successo_Dribbling_pct", eti:"Succ. dribbling", tipo:"pct"},
+  {k:"Errori_Totali", eti:"Errori", tipo:"num", dec:0, assoluta:true},
+  {k:"Azioni_Totali", eti:"Azioni totali", tipo:"num", dec:0, assoluta:true},
   {k:"Tasso_Errore_pct", eti:"Tasso errore", tipo:"pct"},
   {k:"Indice_Prestazione_Tot", eti:"Indice prest.", tipo:"num", dec:1},
   {k:"sparkline", eti:"Andamento indice", tipo:"spark"}
@@ -2122,6 +2149,32 @@ const COLONNE_TAB = [
  *  differenza, "Partite" diventa "Sessioni" perché qui si conta il numero di sessioni con dati, non di
  *  partite vere (il campo JS sottostante resta Partite_Giocate, riusato da aggregaGiocatori). */
 const COLONNE_TAB_ALLENAMENTO = COLONNE_TAB.map(c => c.k === "Partite_Giocate" ? {...c, eti:"Sessioni"} : {...c});
+
+/** Valore di una cella "assoluta" per la riga aggregata. Tenuto in un posto solo così l'ordinamento e la
+ *  cella mostrano sempre lo stesso numero. */
+function valoreColonna(a, k){ return a[k]; }
+
+/** Interruttore "numeri dietro le percentuali". Ricordato nel browser: è una preferenza di lettura, non
+ *  un dato, e riaprire l'app con la tabella diversa da come l'hai lasciata è fastidioso. */
+const CHIAVE_ASSOLUTI = "calcio7-mostra-assoluti";
+function mostraAssoluti(){
+  try{ const v = window[MEMORIA_CHIAVE].getItem(CHIAVE_ASSOLUTI); return v === null ? true : v === "1"; }
+  catch(e){ return true; }
+}
+function impostaMostraAssoluti(v){
+  try{ window[MEMORIA_CHIAVE].setItem(CHIAVE_ASSOLUTI, v ? "1" : "0"); }catch(e){}
+}
+function interruttoreAssoluti(idTabella){
+  return `<div class="riga-interruttore">
+    <label class="interruttore"><input type="checkbox" id="sw-assoluti-${idTabella}"${mostraAssoluti()?" checked":""}>
+    <span>Mostra i numeri dietro le percentuali</span></label>
+    <span class="nota-piccola">Es. il successo nel dribbling accanto ai dribbling riusciti e tentati: una percentuale bassa su molti tentativi è un'altra cosa rispetto alla stessa percentuale su pochi.</span>
+  </div>`;
+}
+function collegaInterruttoreAssoluti(cont, idTabella, ridisegna){
+  const sw = cont.querySelector("#sw-assoluti-"+idTabella);
+  if(sw) sw.addEventListener("change", e => { impostaMostraAssoluti(e.target.checked); ridisegna(); });
+}
 function renderClassifica(f){
   const cont = $("#contenuto-classifica");
   const agg = aggregaGiocatori(f.giocatori);
@@ -2137,25 +2190,24 @@ function renderClassifica(f){
     const nb = (vb===null||vb===undefined||!isFinite(vb)) ? -Infinity : vb;
     return dir === -1 ? nb - na : na - nb;
   });
-  const righe = agg.map(a => `<tr>
-    <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
-    <td>${nf0(a.Partite_Giocate)}</td>
-    <td>${nf0(a.Minuti_Totali)}'</td>
-    <td>${nf0(a.Gol)}</td>
-    <td>${nf0(a.Assist)}</td>
-    <td>${pctTxt(a.Precisione_Passaggi_pct)}</td>
-    <td>${pctTxt(a.Successo_Dribbling_pct)}</td>
-    <td>${pctTxt(a.Tasso_Errore_pct)}</td>
-    <td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a partita</span></td>
-    <td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)}"></canvas></td>
-  </tr>`).join("");
-  cont.innerHTML = `<div class="tabella-scroll"><table>
+  const colonne = COLONNE_TAB.filter(c => !c.assoluta || mostraAssoluti());
+  const cella = (a, c) => {
+    if(c.k === "Giocatore") return `<td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>`;
+    if(c.k === "sparkline") return `<td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)}"></canvas></td>`;
+    if(c.k === "Minuti_Totali") return `<td>${nf0(a.Minuti_Totali)}'</td>`;
+    if(c.k === "Indice_Prestazione_Tot") return `<td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a partita</span></td>`;
+    if(c.tipo === "pct") return `<td>${pctTxt(valoreColonna(a,c.k))}</td>`;
+    return `<td>${nf(valoreColonna(a,c.k), c.dec||0)}</td>`;
+  };
+  const righe = agg.map(a => `<tr>${colonne.map(c => cella(a,c)).join("")}</tr>`).join("");
+  cont.innerHTML = interruttoreAssoluti("partite") + `<div class="tabella-scroll"><table>
     <caption class="solo-sr">Classifica dei giocatori nel periodo selezionato</caption>
-    <thead><tr>${COLONNE_TAB.map(c => {
+    <thead><tr>${colonne.map(c => {
       const sort = c.k === col ? (dir===-1?"descending":"ascending") : "none";
       return `<th scope="col" data-col="${c.k}" ${c.tipo==="spark"?"":`aria-sort="${sort}" tabindex="0" role="columnheader"`}>${esc(c.eti)}</th>`;
     }).join("")}</tr></thead><tbody>${righe}</tbody></table></div>
     <p class="kpi-nota" style="margin-top:8px">L'indice prestazione è una somma pesata non ufficiale: utile per confrontare i giocatori della stessa squadra, non per confronti assoluti. Vedi la sezione Metodologia.</p>`;
+  collegaInterruttoreAssoluti(cont, "partite", () => renderClassifica(datiFiltrati()));
   $$("th[data-col]", cont).forEach(th => {
     if(th.dataset.col === "sparkline") return;
     const attiva = () => {
@@ -2307,6 +2359,16 @@ function renderKPIAllenamentoStat(f){
   }
   const s = riepilogoSquadra(f.statAllenamento, []);
   const nSessioni = new Set(f.statAllenamento.map(g=>g.Sessione_ID)).size;
+  const presenzaSess = (() => {
+    const perSessione = new Map();
+    f.statAllenamento.forEach(r => {
+      if(!perSessione.has(r.Sessione_ID)) perSessione.set(r.Sessione_ID, new Set());
+      if(N(r.Minuti_Giocati) > 0) perSessione.get(r.Sessione_ID).add(r.Giocatore);
+    });
+    const conteggi = Array.from(perSessione.values()).map(x => x.size).filter(x => x > 0);
+    if(!conteggi.length) return {media:null, min:null, max:null};
+    return {media: conteggi.reduce((a,b)=>a+b,0)/conteggi.length, min: Math.min(...conteggi), max: Math.max(...conteggi)};
+  })();
   const mCorr = meseCorrenteRiferimentoAllenamento(f.mese), mPrec = mesePrecedenteConDatiAllenamento(f.mese);
   let sPrec = null, sCorr = null;
   if(mPrec){
@@ -2316,6 +2378,13 @@ function renderKPIAllenamentoStat(f){
   }
   const kpi = [
     {eti:"Sessioni con statistiche", val:nf0(nSessioni), nota:"Partitelle di allenamento con dati per giocatore", raw:nSessioni, prevRaw:null, currRaw:null},
+    // 19/09/2026: senza questo numero i totali di squadra sono illeggibili. Una sessione in otto e una in
+    // quattordici producono quantità molto diverse di passaggi, tiri e gol, e sommandole si ottiene un
+    // totale che dipende da quanta gente si è presentata almeno quanto da come si è giocato. Mostrando la
+    // media e l'intervalllo min-max, la disparità si vede invece di restare nascosta dentro i totali.
+    {eti:"Giocatori per sessione", val:presenzaSess.media!==null?nf(presenzaSess.media,1):"—",
+      nota: presenzaSess.min===presenzaSess.max ? "Sempre lo stesso numero di presenti" : `Da ${nf0(presenzaSess.min)} a ${nf0(presenzaSess.max)} presenti: i totali qui sotto risentono di questa differenza`,
+      raw:presenzaSess.media, prevRaw:null, currRaw:null},
     {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist", raw:s.gol_giocatori,
       prevRaw: sPrec?sPrec.gol_giocatori:null, currRaw: sCorr?sCorr.gol_giocatori:null, meglio:"alto", dec:0, unit:""},
     {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
@@ -2416,25 +2485,43 @@ function renderClassificaAllenamentoStat(f){
     const nb = (vb===null||vb===undefined||!isFinite(vb)) ? -Infinity : vb;
     return dir === -1 ? nb - na : na - nb;
   });
-  const righe = agg.map(a => `<tr>
-    <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
-    <td>${nf0(a.Partite_Giocate)}</td>
-    <td>${nf0(a.Minuti_Totali)}'</td>
-    <td>${nf0(a.Gol)}</td>
-    <td>${nf0(a.Assist)}</td>
-    <td>${pctTxt(a.Precisione_Passaggi_pct)}</td>
-    <td>${pctTxt(a.Successo_Dribbling_pct)}</td>
-    <td>${pctTxt(a.Tasso_Errore_pct)}</td>
-    <td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a sessione</span></td>
-    <td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)} in allenamento"></canvas></td>
-  </tr>`).join("");
-  cont.innerHTML = `<div class="tabella-scroll"><table>
+  // 19/09/2026, richiesta di Elisa: agli allenamenti non c'è sempre la rosa al completo, e una sessione
+  // in otto non è confrontabile con una in quattordici. Due conseguenze, entrambe gestite qui:
+  //  (1) i totali (gol, minuti, indice) premiano chi c'è sempre a prescindere da come gioca — accanto a
+  //      ogni totale compare quindi il valore medio per sessione EFFETTIVAMENTE FREQUENTATA da quel
+  //      giocatore, che è il solo denominatore corretto per confrontarlo con un compagno;
+  //  (2) chi ha frequentato poche sessioni ha medie instabili: la sua riga viene attenuata e la colonna
+  //      delle presenze dice subito su quante sessioni possibili è stato presente.
+  const sessioniPeriodo = new Set(f.statAllenamento.map(r => r.Sessione_ID)).size;
+  const sogliaPresenze = Math.max(2, Math.ceil(sessioniPeriodo * 0.3));
+  const perSess = (v, n) => (n > 0 ? v / n : null);
+  const colonne = COLONNE_TAB_ALLENAMENTO.filter(c => !c.assoluta || mostraAssoluti());
+  const cella = (a, c) => {
+    const n = a.Partite_Giocate;
+    if(c.k === "Giocatore") return `<td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>`;
+    if(c.k === "sparkline") return `<td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)} in allenamento"></canvas></td>`;
+    if(c.k === "Partite_Giocate") return `<td>${nf0(n)}<span class="ruolo">su ${nf0(sessioniPeriodo)} · ${pctTxt(perc(n, sessioniPeriodo),0)}</span></td>`;
+    if(c.k === "Minuti_Totali") return `<td>${nf0(a.Minuti_Totali)}'<span class="ruolo">${nf(perSess(a.Minuti_Totali,n),1)}' a sessione</span></td>`;
+    if(c.k === "Gol") return `<td>${nf0(a.Gol)}<span class="ruolo">${nf(perSess(a.Gol,n),2)} a sessione</span></td>`;
+    if(c.k === "Assist") return `<td>${nf0(a.Assist)}<span class="ruolo">${nf(perSess(a.Assist,n),2)} a sessione</span></td>`;
+    if(c.k === "Indice_Prestazione_Tot") return `<td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a sessione</span></td>`;
+    if(c.tipo === "pct") return `<td>${pctTxt(valoreColonna(a,c.k))}</td>`;
+    return `<td>${nf(valoreColonna(a,c.k), c.dec||0)}</td>`;
+  };
+  const righe = agg.map(a => {
+    const poche = a.Partite_Giocate < sogliaPresenze;
+    return `<tr${poche ? ' class="riga-attenuata"' : ''}>${colonne.map(c => cella(a,c)).join("")}</tr>`;
+  }).join("");
+  const attenuate = agg.filter(a => a.Partite_Giocate < sogliaPresenze).length;
+  cont.innerHTML = interruttoreAssoluti("allenamento") + `<div class="tabella-scroll"><table>
     <caption class="solo-sr">Classifica dei giocatori nelle statistiche di allenamento del periodo selezionato</caption>
-    <thead><tr>${COLONNE_TAB_ALLENAMENTO.map(c => {
+    <thead><tr>${colonne.map(c => {
       const sort = c.k === col ? (dir===-1?"descending":"ascending") : "none";
       return `<th scope="col" data-col="${c.k}" ${c.tipo==="spark"?"":`aria-sort="${sort}" tabindex="0" role="columnheader"`}>${esc(c.eti)}</th>`;
     }).join("")}</tr></thead><tbody>${righe}</tbody></table></div>
-    <p class="kpi-nota" style="margin-top:8px">Statistiche accumulate nelle partitelle di allenamento, tenute separate dalle statistiche di partita vera. Stesso indice prestazione (somma pesata non ufficiale) usato per le partite, qui applicato ai dati di allenamento.</p>`;
+    <p class="kpi-nota" style="margin-top:8px">Statistiche accumulate nelle partitelle di allenamento, tenute separate dalle statistiche di partita vera. Stesso indice prestazione (somma pesata non ufficiale) usato per le partite, qui applicato ai dati di allenamento.</p>
+    <p class="nota-piccola">Agli allenamenti non c'è sempre la rosa al completo, quindi i <strong>totali</strong> (gol, minuti, indice) premiano anche solo il fatto di esserci stato di più. Sotto ogni totale c'è perciò il valore <strong>a sessione frequentata</strong>, calcolato sulle sole sessioni in cui quel giocatore era presente: è il numero da usare per confrontare due compagni con presenze diverse. Le presenze nel periodo sono ${nf0(sessioniPeriodo)}.${attenuate ? ` ${attenuate===1?"Una riga è attenuata":`${nf0(attenuate)} righe sono attenuate`} perché sotto le ${nf0(sogliaPresenze)} presenze: con così poche sessioni le medie oscillano troppo per essere lette come una tendenza.` : ""}</p>`;
+  collegaInterruttoreAssoluti(cont, "allenamento", () => renderClassificaAllenamentoStat(datiFiltrati()));
   $$("th[data-col]", cont).forEach(th => {
     if(th.dataset.col === "sparkline") return;
     const attiva = () => {
@@ -2614,17 +2701,20 @@ function renderCoinvolgimento(ds){
   const cont = $("#contenuto-coinvolgimento");
   const classifica = classificaCoinvolgimento(ds.giocatori).slice(0,10);
   if(!classifica.length){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per calcolare il coinvolgimento nel gioco.</div>`; return; }
-  const max = Math.max(...classifica.map(c=>c.Coinvolgimento_90));
+  const max = Math.max(...classifica.map(c=>c.Coinvolgimento_Partita));
+  const pochiMinuti = classifica.filter(c => c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE).length;
   cont.innerHTML = `<div class="tabella-scroll"><table>
     <caption class="solo-sr">Giocatori più coinvolti nel gioco, tutta la stagione</caption>
-    <thead><tr><th scope="col">Giocatore</th><th scope="col">Partite</th><th scope="col">Azioni tot.</th><th scope="col">Coinvolgimento ogni 90'</th></tr></thead>
-    <tbody>${classifica.map(c => `<tr>
+    <thead><tr><th scope="col">Giocatore</th><th scope="col">Partite</th><th scope="col">Minuti giocati</th><th scope="col">Azioni tot.</th><th scope="col">Azioni per partita intera</th></tr></thead>
+    <tbody>${classifica.map(c => `<tr${c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE ? ' class="riga-attenuata"' : ''}>
       <td>${esc(c.Giocatore)}<span class="ruolo">${esc(c.Ruolo)}</span></td>
       <td>${nf0(c.Partite_Giocate)}</td>
+      <td>${nf(c.Minuti_Totali,1)}'</td>
       <td>${nf0(c.Azioni_Totali)}</td>
-      <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(c.Coinvolgimento_90/max*100):0}%; background:var(--c1)"></div><span>${nf(c.Coinvolgimento_90,1)}</span></div></td>
+      <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(c.Coinvolgimento_Partita/max*100):0}%; background:var(--c1)"></div><span>${nf(c.Coinvolgimento_Partita,1)}</span></div></td>
     </tr>`).join("")}</tbody>
-  </table></div>`;
+  </table></div>
+  <p class="nota-piccola">"Azioni per partita intera" rapporta passaggi, tiri e dribbling tentati a una gara completa di calcio a 7 (${nf0(MINUTI_PARTITA_INTERA)} minuti, due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}): serve a mettere sullo stesso piano chi gioca tutta la partita e chi entra a mezz'ora. La colonna "Azioni tot." resta il dato grezzo di stagione, che dipende anche da quante partite ha giocato — <strong>per questo un giocatore con meno azioni totali può stare più in alto</strong>: ne ha fatte meno ma in molto meno tempo.${pochiMinuti ? ` ${pochiMinuti===1?"Una riga è attenuata":`${nf0(pochiMinuti)} righe sono attenuate`} perché sotto i ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)} minuti giocati in tutta la stagione: su un campione così piccolo il rapporto si gonfia e non è da prendere sul serio.` : ""}</p>`;
 }
 
 function renderFormazioni(ds){
@@ -2735,7 +2825,7 @@ function renderGiocatore(f){
   cont.innerHTML = `
     <div class="griglia g-kpi" style="margin-bottom:16px">
       <div class="kpi"><div class="kpi-eti">Partite · minuti</div><div class="kpi-valore">${nf0(mio.Partite_Giocate)} · ${nf0(mio.Minuti_Totali)}'</div><div class="kpi-nota">${esc(mio.Ruolo)}</div></div>
-      <div class="kpi"><div class="kpi-eti">Gol · assist</div><div class="kpi-valore">${nf0(mio.Gol)} · ${nf0(mio.Assist)}</div><div class="kpi-nota">${mio.Minuti_Totali>0?nf(mio.Coinvolgimento_Gol/mio.Minuti_Totali*60,2)+" partecipazioni ai gol per 60'":"—"}</div></div>
+      <div class="kpi"><div class="kpi-eti">Gol · assist</div><div class="kpi-valore">${nf0(mio.Gol)} · ${nf0(mio.Assist)}</div><div class="kpi-nota">${mio.Minuti_Totali>0?nf(mio.Coinvolgimento_Gol/mio.Minuti_Totali*MINUTI_PARTITA_INTERA,2)+" partecipazioni ai gol per partita intera":"—"}</div></div>
       <div class="kpi"><div class="kpi-eti">Indice prestazione</div><div class="kpi-valore">${nf(mio.Indice_Prestazione_Tot,1)}</div><div class="kpi-nota">${nf(mio.Indice_Prestazione_Medio,1)} a partita · ${nf0(aggTutti.findIndex(a=>a.Giocatore===nome)+1)}° in squadra</div></div>
       <div class="kpi"><div class="kpi-eti">Tasso di errore</div><div class="kpi-valore">${pctTxt(mio.Tasso_Errore_pct)}</div><div class="kpi-nota">Media squadra ${pctTxt(squadra.tasso_errore)}</div></div>
       ${parateTxt}
@@ -2864,6 +2954,20 @@ const RIGHE_CONFRONTO_DISCIPLINA = [
   {label:"Realizzazione rigori", get:a=>a.Realizzazione_Rigori_pct, tipo:"pct", meglio:"alto"}
 ];
 
+/** Le stesse righe di confronto, con l'etichetta dell'unità adattata: in allenamento non si contano
+ *  "partite giocate" ma "sessioni frequentate", e chiamarle partite confonderebbe (19/09/2026). */
+function righeConfrontoPer(unitaPl, a, b){
+  // I calci piazzati e i cartellini quasi mai vengono registrati in una partitella: includere sette righe
+  // tutte a zero renderebbe la tabella più lunga senza aggiungere nulla. Si mostrano solo se almeno uno dei
+  // due giocatori ha qualcosa da mostrare lì.
+  const conta = g => g ? (N(g.Cartellini_Totali)+N(g.Angoli_Tentati)+N(g.Punizioni_Tentate)+N(g.Rigori_Tentati)) : 0;
+  const haDisciplina = (stato.ds && stato.ds.haEventiDisciplinari) && (unitaPl === "Partite" || conta(a)+conta(b) > 0);
+  const base = haDisciplina ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  if(unitaPl === "Partite") return base;
+  return base.map(r => r.label === "Partite giocate" ? {...r, label:"Sessioni frequentate"}
+                     : (r.label === "Indice prestazione (tot. / medio)" ? {...r, label:"Indice prestazione (tot. / a sessione)"} : r));
+}
+
 function formattaValoreConfronto(riga, v){
   if(v===null || v===undefined) return "—";
   if(riga.tipo === "pct") return pctTxt(v);
@@ -2880,26 +2984,55 @@ function classeMiglior(riga, va, vb, perA, classe="conf-migliore"){
   return "";
 }
 
-function renderConfronto(f){
-  const cont = $("#contenuto-confronto");
-  const nomi = Array.from(new Set(f.giocatori.map(g=>g.Giocatore))).sort((a,b)=>a.localeCompare(b, "it"));
-  const selA = $("#cf-sel-a"), selB = $("#cf-sel-b");
+/* Configurazione dei due confronti tra giocatori: quello sulle partite (esistente) e quello sugli
+   allenamenti (19/09/2026). Elisa: «capiterà che ci siano giocatori che non giocheranno nemmeno nella
+   stagione» — per quei giocatori l'unica traccia di rendimento sono le partitelle di allenamento, e senza
+   un confronto su quei dati restano invisibili nel momento in cui si decide chi convocare. È la stessa
+   funzione che disegna entrambi: due confronti che divergono nel tempo sarebbero due modi diversi di
+   leggere lo stesso giocatore. */
+const CONFRONTO_PARTITE = {
+  idCont:"contenuto-confronto", idSelA:"cf-sel-a", idSelB:"cf-sel-b", idRadar:"gr-confronto-radar",
+  statoA:"confrontoA", statoB:"confrontoB", righeDa: f => f.giocatori,
+  unitaPl:"Partite", unita:"partita", contesto:"partite giocate"
+};
+const CONFRONTO_ALLENAMENTO = {
+  idCont:"contenuto-confronto-allenamento", idSelA:"cfa-sel-a", idSelB:"cfa-sel-b", idRadar:"gr-confronto-allenamento-radar",
+  statoA:"confrontoAllA", statoB:"confrontoAllB", righeDa: f => f.statAllenamento,
+  unitaPl:"Sessioni", unita:"sessione", contesto:"partitelle di allenamento"
+};
+function renderConfronto(f){ renderConfrontoGenerico(f, CONFRONTO_PARTITE); }
+function renderConfrontoAllenamento(f){
+  if(!stato.ds.haStatAllenamento){
+    const c = $("#"+CONFRONTO_ALLENAMENTO.idCont);
+    if(c) c.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore (gol, tiri, passaggi…), non solo presenze e minuti.</div>`;
+    const sa = $("#"+CONFRONTO_ALLENAMENTO.idSelA), sb = $("#"+CONFRONTO_ALLENAMENTO.idSelB);
+    if(sa) sa.innerHTML = ""; if(sb) sb.innerHTML = "";
+    return;
+  }
+  renderConfrontoGenerico(f, CONFRONTO_ALLENAMENTO);
+}
+function renderConfrontoGenerico(f, cfg){
+  const cont = $("#"+cfg.idCont);
+  if(!cont) return;
+  const sorgente = cfg.righeDa(f) || [];
+  const nomi = Array.from(new Set(sorgente.map(g=>g.Giocatore))).sort((a,b)=>a.localeCompare(b, "it"));
+  const selA = $("#"+cfg.idSelA), selB = $("#"+cfg.idSelB);
   if(nomi.length < 2){
     selA.innerHTML = ""; selB.innerHTML = "";
     cont.innerHTML = `<div class="vuoto"><strong>Servono almeno due giocatori con dati</strong> nel periodo scelto per fare un confronto. Cambia periodo dai filtri in alto.</div>`;
     return;
   }
-  if(!stato.confrontoA || !nomi.includes(stato.confrontoA)) stato.confrontoA = nomi[0];
-  if(!stato.confrontoB || !nomi.includes(stato.confrontoB) || stato.confrontoB === stato.confrontoA){
-    stato.confrontoB = nomi.find(n => n !== stato.confrontoA) || nomi[0];
+  if(!stato[cfg.statoA] || !nomi.includes(stato[cfg.statoA])) stato[cfg.statoA] = nomi[0];
+  if(!stato[cfg.statoB] || !nomi.includes(stato[cfg.statoB]) || stato[cfg.statoB] === stato[cfg.statoA]){
+    stato[cfg.statoB] = nomi.find(n => n !== stato[cfg.statoA]) || nomi[0];
   }
   const opzioni = nomi.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
-  selA.innerHTML = opzioni; selA.value = stato.confrontoA;
-  selB.innerHTML = opzioni; selB.value = stato.confrontoB;
+  selA.innerHTML = opzioni; selA.value = stato[cfg.statoA];
+  selB.innerHTML = opzioni; selB.value = stato[cfg.statoB];
 
-  const agg = aggregaGiocatori(f.giocatori);
-  const a = agg.find(x => x.Giocatore === stato.confrontoA);
-  const b = agg.find(x => x.Giocatore === stato.confrontoB);
+  const agg = aggregaGiocatori(sorgente);
+  const a = agg.find(x => x.Giocatore === stato[cfg.statoA]);
+  const b = agg.find(x => x.Giocatore === stato[cfg.statoB]);
   if(!a || !b){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per uno dei due giocatori nel periodo scelto.</div>`; return; }
 
   const metriche = [
@@ -2911,13 +3044,13 @@ function renderConfronto(f){
   ];
   const stessoRuolo = a.Ruolo === b.Ruolo;
 
-  const righe = stato.ds && stato.ds.haEventiDisciplinari ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  const righe = righeConfrontoPer(cfg.unitaPl, a, b);
 
   cont.innerHTML = `
     <div class="griglia g-2">
       <div class="card"><div class="grafico-titolo">${esc(a.Giocatore)} vs ${esc(b.Giocatore)}</div>
-        <div class="grafico-sub">${stessoRuolo ? "Stesso ruolo: " : "Ruoli diversi: "}confronto diretto sulle percentuali del periodo. Più l'area è esterna, meglio è.</div>
-        <div class="grafico-wrap alto"><canvas id="gr-confronto-radar"></canvas></div></div>
+        <div class="grafico-sub">${stessoRuolo ? "Stesso ruolo: " : "Ruoli diversi: "}confronto diretto sulle percentuali del periodo, sulle ${esc(cfg.contesto)}. Più l'area è esterna, meglio è.</div>
+        <div class="grafico-wrap alto"><canvas id="${cfg.idRadar}"></canvas></div></div>
       <div class="card" style="padding:0; overflow:hidden">
         <div class="conf-testata">
           <div><span class="nome">${esc(a.Giocatore)}</span> <span class="ruolo-badge">${esc(a.Ruolo)}</span></div>
@@ -2938,9 +3071,9 @@ function renderConfronto(f){
         </div>
       </div>
     </div>
-    <p class="kpi-nota" style="margin-top:8px">La cella evidenziata indica il valore migliore tra i due per quell'indicatore. Utile per capire, a parità o meno di ruolo, chi per statistiche è più adatto a coprire una determinata posizione.</p>`;
+    <p class="kpi-nota" style="margin-top:8px">La cella evidenziata indica il valore migliore tra i due per quell'indicatore, calcolato sulle ${esc(cfg.contesto)}. Utile per capire, a parità o meno di ruolo, chi per statistiche è più adatto a coprire una determinata posizione.${cfg.unitaPl==="Sessioni" ? " Attenzione ai minutaggi molto diversi: due giocatori con un numero di presenze lontano non sono pienamente confrontabili sui totali, e la riga «Sessioni frequentate» serve proprio a ricordarlo." : ""}</p>`;
 
-  creaGrafico("gr-confronto-radar", {
+  creaGrafico(cfg.idRadar, {
     type:"radar",
     data:{labels:metriche.map(m=>m[0]), datasets:[
       {label:a.Giocatore, data:metriche.map(m=>m[1]===null?0:m[1]), borderColor:colore("c1"),
@@ -3113,6 +3246,33 @@ function renderIncroci(){
  *  altrimenti le due dashboard, entrambe sempre nel DOM, andrebbero in conflitto sugli stessi id). Gating
  *  esplicito, non un grafico vuoto: finché nessun file caricato include le coordinate, la sezione lo dice
  *  chiaramente invece di mostrare percentuali a zero che sembrerebbero un dato vero. */
+/* Avvisi sull'attendibilità dei grafici di zona (19/09/2026, dopo l'analisi dei file grezzi).
+   Due limiti misurati sui dati veri, che il grafico da solo non comunica:
+   (1) CAMPIONE. Una griglia a 9 zone ha bisogno dell'ordine del centinaio di eventi perché ogni casella
+       abbia un numero stabile. Nei file esaminati il massimo era 31 eventi in una sessione: lì una casella
+       ne contiene tre o quattro, e un evento in più sposta la zona di tre punti percentuali. La soglia
+       precedente (5) era troppo bassa per dirlo davvero.
+   (2) BORDI. Su 73 eventi reali nessuno è mai caduto nel 20% esterno della larghezza: i tocchi si fermano
+       fra 6,3 e 23,7 metri su un campo largo 30. Le due fasce laterali hanno quindi poco più di un terzo
+       della superficie raggiungibile rispetto a quella centrale, e la concentrazione al centro che si vede
+       nel grafico è in larga parte un effetto di questo, non un tratto della squadra. La distorsione è però
+       costante, quindi il CONFRONTO fra una sessione e l'altra resta valido: è il valore assoluto per
+       fascia a non essere interpretabile. */
+const ZONE_CAMPIONE_SCARSO = 10;   // sotto: le percentuali non vanno lette
+const ZONE_CAMPIONE_LIMITATO = 40; // sotto: leggibili solo come indicazione
+
+function avvisoCampioneZone(n, cosa){
+  if(n <= 0) return "";
+  if(n < ZONE_CAMPIONE_SCARSO)
+    return `<strong>Campione troppo piccolo per leggere le percentuali:</strong> ${nf0(n)} ${n===1?"evento":"eventi"} con posizione ${esc(cosa)}. Con così pochi punti ogni zona vale un evento o due, e le percentuali qui sopra cambierebbero completamente con un solo evento in più. Usale solo come indicazione di dove si è giocato, non come misura.`;
+  if(n < ZONE_CAMPIONE_LIMITATO)
+    return `<strong>Campione limitato:</strong> ${nf0(n)} eventi con posizione ${esc(cosa)}. Per una griglia a nove zone servirebbe l'ordine del centinaio di eventi perché ogni casella sia stabile; qui un evento in più o in meno sposta una zona di qualche punto percentuale.`;
+  return "";
+}
+
+/** Avvertenza fissa sulla lettura laterale, misurata sui file reali: vedi il commento qui sopra. */
+const NOTA_BORDI_CAMPO = `Sulle <strong>fasce laterali</strong> il dato va letto con cautela: nei file esaminati nessun evento è mai stato registrato nel quinto esterno della larghezza del campo, quindi le zone laterali coprono di fatto molta meno superficie raggiungibile di quella centrale e la concentrazione al centro risulta amplificata. Il <strong>confronto tra una sessione e l'altra</strong> resta valido — la distorsione è sempre la stessa — mentre il valore assoluto per fascia non è interpretabile finché l'area toccabile in Seven Lab non copre tutta la larghezza.`;
+
 function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostraPerSquadra){
   const cont = $("#"+idContenitore);
   if(!cont) return;
@@ -3150,7 +3310,11 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
         <div class="grafico-wrap-campo"><canvas id="${idp}-heat-persa" width="640" height="384"></canvas></div>
       </div>
     </div>
-    ${((recupero.length && recupero.length<5) || (persa.length && persa.length<5)) ? `<p class="nota-piccola">Campione ridotto (meno di 5 eventi con posizione in una delle due categorie): le percentuali per zona sono indicative.</p>` : ""}
+    ${(() => {
+      const n = Math.max(recupero.length, persa.length);
+      const av = avvisoCampioneZone(n, "nel periodo scelto");
+      return (av ? `<p class="nota-piccola">${av}</p>` : "") + `<p class="nota-piccola">${NOTA_BORDI_CAMPO}</p>`;
+    })()}
     ${(baricentroRecupero!==null || baricentroPersa!==null) ? `<p class="nota-piccola">Il baricentro stimato è calcolato solo dagli eventi di recupero/palla persa con posizione, non da tutte le azioni della partita: non rappresenta il posizionamento generale della squadra sul campo, solo dove tende a recuperare/perdere palla.</p>` : ""}`;
   const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
   const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
@@ -3182,7 +3346,20 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
   // il grafico "totalità" qui sopra (A+B insieme) resta il dato più importante — vedi il commento su
   // raccogliEventiZonaPerSquadra — questi quattro grafici più piccoli aggiungono la vista per singola
   // squadra, utile per confrontare la tendenza di una partitella con l'altra.
-  if(mostraPerSquadra){
+  // 19/09/2026, su segnalazione di Elisa: le squadre A e B vengono rifatte a ogni allenamento, quindi
+  // "Squadra A" di martedì e "Squadra A" di giovedì non sono lo stesso gruppo di persone. Sommare più
+  // sessioni in un unico grafico per squadra produce un dato che sembra parlare di una squadra e invece
+  // non parla di nessuno. Da qui in poi il confronto A/B compare SOLO quando in gioco c'è una sessione
+  // sola: lì le due squadre sono davvero due gruppi reali e confrontarle ha senso.
+  const unaSolaSessione = (sessioni||[]).length === 1;
+  if(mostraPerSquadra && !unaSolaSessione && (sessioni||[]).length > 1){
+    const avviso = document.createElement("p");
+    avviso.className = "nota-piccola";
+    avviso.style.marginTop = "12px";
+    avviso.innerHTML = `Il confronto <strong>Squadra A contro Squadra B</strong> non viene mostrato su più sessioni insieme: le squadre vengono rifatte a ogni allenamento, quindi "Squadra A" di una sessione non è lo stesso gruppo di un'altra e sommarle darebbe un dato senza significato. Scegli una singola sessione qui sopra per vederlo.`;
+    cont.appendChild(avviso);
+  }
+  if(mostraPerSquadra && unaSolaSessione){
     const perSquadra = raccogliEventiZonaPerSquadra(sessioni);
     const haEntrambe = (perSquadra.A.recupero.length || perSquadra.A.persa.length) &&
                         (perSquadra.B.recupero.length || perSquadra.B.persa.length);
@@ -3258,7 +3435,7 @@ function renderGolGameCampo(idContenitore, sessioni){
         <div class="grafico-wrap-campo"><canvas id="${idp}-heat-assist" width="640" height="384"></canvas></div>
       </div>
     </div>
-    ${gol.length<5 ? `<p class="nota-piccola">Campione ridotto (meno di 5 gol con posizione): le percentuali per zona sono indicative.</p>` : ""}
+    ${(() => { const av = avvisoCampioneZone(gol.length, "nel periodo scelto"); return av ? `<p class="nota-piccola">${av}</p>` : ""; })()}
     <p class="nota-piccola" style="margin-top:8px">Assi dedotti dai valori delle coordinate nel file (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): se un file futuro mostrasse dati incoerenti con "porta avversaria a destra", segnalacelo così verifichiamo.</p>`;
   const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
   const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
@@ -3359,12 +3536,12 @@ function renderSubentrati(f){
     cont.innerHTML = `<div class="vuoto">Nel periodo scelto nessun giocatore è entrato a partita in corso (${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} con cambi registrati).</div>`;
     return;
   }
-  const CAMPIONE_MINIMO_MIN = 5; // sotto questa soglia le medie per 90' non sono da prendere sul serio
+  const CAMPIONE_MINIMO_MIN = 5; // sotto questa soglia le medie per partita non sono da prendere sul serio
   const righe = elenco.map(a => {
     const s = a.subentrato;
     const ridotto = s.minuti < CAMPIONE_MINIMO_MIN;
-    const confronto = (a.indicePer90Titolare !== null && a.indicePer90Subentrato !== null)
-      ? a.indicePer90Subentrato - a.indicePer90Titolare : null;
+    const confronto = (a.indicePartitaTitolare !== null && a.indicePartitaSubentrato !== null)
+      ? a.indicePartitaSubentrato - a.indicePartitaTitolare : null;
     return `<tr${ridotto ? ' class="riga-attenuata"' : ''}>
       <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
       <td>${nf0(s.partite)}</td>
@@ -3372,8 +3549,8 @@ function renderSubentrati(f){
       <td>${a.minutoMedioIngresso!==null ? nf(a.minutoMedioIngresso,1)+"'" : "—"}</td>
       <td>${nf0(a.contributoSubentrato)}</td>
       <td>${nf(s.indice,1)}</td>
-      <td>${a.indicePer90Subentrato!==null ? nf(a.indicePer90Subentrato,1) : "—"}</td>
-      <td>${a.indicePer90Titolare!==null ? nf(a.indicePer90Titolare,1) : "—"}</td>
+      <td>${a.indicePartitaSubentrato!==null ? nf(a.indicePartitaSubentrato,1) : "—"}</td>
+      <td>${a.indicePartitaTitolare!==null ? nf(a.indicePartitaTitolare,1) : "—"}</td>
       <td>${confronto===null ? "—" : `<span class="rp-flag ${confronto>0?"up":(confronto<0?"down":"flat")}">${confronto>0?"▲ +":"▼ "}${nf(Math.abs(confronto),1)}</span>`}</td>
       <td>${nf0(a.panchinaSenzaEntrare)}</td>
     </tr>`;
@@ -3384,12 +3561,32 @@ function renderSubentrati(f){
       <thead><tr>
         <th scope="col">Giocatore</th><th scope="col">Ingressi</th><th scope="col">Minuti da subentrato</th>
         <th scope="col">Minuto medio d'ingresso</th><th scope="col">Gol + assist</th><th scope="col">Indice accumulato</th>
-        <th scope="col">Indice per 90' da subentrato</th><th scope="col">Indice per 90' da titolare</th>
+        <th scope="col">Indice per partita intera da subentrato</th><th scope="col">Indice per partita intera da titolare</th>
         <th scope="col">Differenza</th><th scope="col">In distinta senza entrare</th>
       </tr></thead><tbody>${righe}</tbody></table></div>
-    <p class="nota-piccola">Ordinati per impatto: prima il contributo ai gol da subentrato (gol + assist), poi l'indice accumulato. Volutamente <strong>non</strong> per media a 90 minuti: su spezzoni di pochi minuti quella media si gonfia e metterebbe in cima proprio chi ha giocato meno.</p>
-    <p class="nota-piccola">Le due colonne "per 90'" servono a confrontare il rendimento del giocatore con sé stesso — quanto rende entrando rispetto a quando parte titolare — non a confrontare giocatori con minutaggi molto diversi. Restano vuote ("—") quando i minuti giocati in quella veste sono meno di ${nf0(MINUTI_MINIMI_PER_90)}: una media a 90 minuti ricavata da due o tre minuti in campo non è un dato, è quel numero moltiplicato per trenta.${conCampioneRidotto ? ` ${conCampioneRidotto===1?"Una riga è attenuata":`${nf0(conCampioneRidotto)} righe sono attenuate`} perché sotto i ${nf0(CAMPIONE_MINIMO_MIN)} minuti complessivi da subentrato.` : ""}</p>
+    <p class="nota-piccola">Ordinati per impatto: prima il contributo ai gol da subentrato (gol + assist), poi l'indice accumulato. Volutamente <strong>non</strong> per media rapportata alla partita intera: su spezzoni di pochi minuti quella media si gonfia e metterebbe in cima proprio chi ha giocato meno.</p>
+    <p class="nota-piccola">Le due colonne "per partita intera" rapportano il rendimento a una gara completa di calcio a 7, cioè ${nf0(MINUTI_PARTITA_INTERA)} minuti (due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}; il recupero non è conteggiato perché non è registrato e cambia da partita a partita). Servono a confrontare il giocatore con sé stesso — quanto rende entrando rispetto a quando parte titolare — non a confrontare giocatori con minutaggi molto diversi. Restano vuote ("—") quando i minuti giocati in quella veste sono meno di ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)}: una media rapportata a ${nf0(MINUTI_PARTITA_INTERA)} minuti ricavata da due o tre minuti in campo non è un dato, è quel numero moltiplicato per venti.${conCampioneRidotto ? ` ${conCampioneRidotto===1?"Una riga è attenuata":`${nf0(conCampioneRidotto)} righe sono attenuate`} perché sotto i ${nf0(CAMPIONE_MINIMO_MIN)} minuti complessivi da subentrato.` : ""}</p>
     <p class="nota-piccola">Chi è entrato a partita in corso si riconosce dall'evento «Cambio entra» nella timeline; chi ha giocato senza averne uno è considerato titolare. ${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} nel periodo ${partiteConIngressi===1?"ha":"hanno"} almeno un cambio registrato.</p>`;
+}
+
+/** Sezione zone di allenamento con selettore di sessione (19/09/2026). Il selettore serve a una cosa
+ *  precisa: il confronto tra Squadra A e Squadra B viene mostrato solo su una sessione singola, perché le
+ *  due squadre vengono rifatte a ogni allenamento (vedi renderZoneCampo). Senza un modo per isolare una
+ *  sessione quel confronto sarebbe di fatto irraggiungibile. */
+function renderZoneAllenamento(f){
+  const sel = $("#zn-sel-sessione");
+  if(sel){
+    const sessioni = (f.allenamenti||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+    const precedente = stato.zoneSessione;
+    sel.innerHTML = `<option value="">Tutte le sessioni del periodo (${nf0(sessioni.length)})</option>`
+      + sessioni.map(a => `<option value="${esc(a.Sessione_ID)}">${esc(dataLabel(a.Data))}${a.Tipo_Allenamento?" · "+esc(a.Tipo_Allenamento):""}</option>`).join("");
+    if(precedente && sessioni.some(a => a.Sessione_ID === precedente)) sel.value = precedente;
+    else { sel.value = ""; stato.zoneSessione = ""; }
+  }
+  const scelte = stato.zoneSessione
+    ? (f.allenamenti||[]).filter(a => a.Sessione_ID === stato.zoneSessione)
+    : (f.allenamenti||[]);
+  renderZoneCampo("contenuto-zone-allenamento", scelte, null, true);
 }
 
 /* --------- 9. Qualità dati --------- */
@@ -3431,7 +3628,8 @@ function render(){
   renderSubentrati(f);
   renderAllenamenti();
   renderIncroci();
-  renderZoneCampo("contenuto-zone-allenamento", f.allenamenti, null, true);
+  renderZoneAllenamento(f);
+  renderConfrontoAllenamento(f);
   renderQualita();
   aggiornaSelettoriReport();
   adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
@@ -4209,10 +4407,15 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
       : `${delta>0?"più alto":"più basso"} nel 2° tempo di ${nf(Math.abs(delta),1)} m rispetto al 1°${delta<0?" — possibile calo di intensità/stanchezza":""}`;
     bulletsBaricentro.push(`Baricentro di recupero per tempo: 1° tempo ${nf(bt.baricentro1,1)} m, 2° tempo ${nf(bt.baricentro2,1)} m — ${confronto}.`);
   }
+  // Gli stessi due avvisi mostrati a schermo finiscono anche nel PDF: un report stampato viene letto da chi
+  // non ha visto la dashboard, e senza queste due righe la griglia sembra più precisa di quanto sia.
+  const avvisoCampione = avvisoCampioneZone(Math.max(recupero.length, persa.length), "in questo report");
   bulletsReport(pagina, [
     `${nf0(recupero.length)} recuperi e ${nf0(persa.length)} palle perse con posizione registrata in questo report.`,
     "Griglia a 9 zone (terzi di campo): percentuale sul totale eventi con posizione. Heatmap: densità reale, colore più caldo dove gli eventi si concentrano di più.",
-    ...bulletsBaricentro
+    ...bulletsBaricentro,
+    ...(avvisoCampione ? [avvisoCampione] : []),
+    NOTA_BORDI_CAMPO
   ]);
   const rampa = [[0,hexToRgbArr(PALETTE_REPORT.c1)],[0.4,hexToRgbArr(PALETTE_REPORT.c4)],[0.7,hexToRgbArr(PALETTE_REPORT.c6)],[1,hexToRgbArr(PALETTE_REPORT.c2)]];
   const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
@@ -4889,7 +5092,9 @@ async function generaReportAllenamentoPeriodo(da, a){
     // una striscia bianca vuota di 230px a sinistra su tutta la seconda pagina fisica.
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Zone di recupero e palla persa", etichetta);
-      zoneCampoReport(pag, periodoCorr.allenamenti, false, true);
+      // il confronto per squadra viene incluso solo se il report copre una sola sessione (vedi
+      // renderZoneCampo per il perché: le squadre A/B cambiano a ogni allenamento)
+      zoneCampoReport(pag, periodoCorr.allenamenti, false, periodoCorr.allenamenti.length === 1);
     }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
@@ -5193,9 +5398,9 @@ async function chiediIA(){
  *  solo i "punti di forza" trovati per quel giocatore — se uno non ne aveva, il suo lato restava mezzo
  *  vuoto. Segnalato da Elisa il 04/09/2026: «non mostra gli stessi dati da dx a sx». Ora le due schede
  *  hanno per costruzione le STESSE righe, e dove un valore non c'è si scrive "—". */
-function schedeConfrontoReport(pagina, a, b, rankA, rankB){
+function schedeConfrontoReport(pagina, a, b, rankA, rankB, unitaPl="Partite"){
   const righe = (g, rank) => [
-    ["Partite · minuti", `${nf0(g.Partite_Giocate)} · ${nf0(g.Minuti_Totali)}'`],
+    [`${unitaPl} · minuti`, `${nf0(g.Partite_Giocate)} · ${nf0(g.Minuti_Totali)}'`],
     ["Indice prestazione", `${nf(g.Indice_Prestazione_Tot,1)} · ${rank}° in squadra`],
     ["Gol · assist", `${nf0(g.Gol)} · ${nf0(g.Assist)}`],
     ["Precisione passaggi", pctTxt(g.Precisione_Passaggi_pct,0)],
@@ -5291,20 +5496,22 @@ function compatibilitaRuoloReport(mio, ruoloAltro, righeDataset){
   });
 }
 
-async function generaReportConfronto(nomeA, nomeB){
-  const ds = stato.ds;
-  if(!nomeA || !nomeB || nomeA === nomeB){ statoReport("Scegli due giocatori diversi nella sezione Confronto per generare il report.", false, "#cf-rp-stato"); return; }
+async function generaReportConfronto(nomeA, nomeB, cfg=CONFRONTO_PARTITE){
+  const idStato = cfg === CONFRONTO_ALLENAMENTO ? "#cfa-rp-stato" : "#cf-rp-stato";
+  const titoloReport = cfg === CONFRONTO_ALLENAMENTO ? "Report Confronto Allenamenti" : "Report Confronto";
+  if(!nomeA || !nomeB || nomeA === nomeB){ statoReport("Scegli due giocatori diversi nella sezione Confronto per generare il report.", false, idStato); return; }
   const f = datiFiltrati();
-  const agg = aggregaGiocatori(f.giocatori);
+  const sorgente = cfg.righeDa(f) || [];
+  const agg = aggregaGiocatori(sorgente);
   const a = agg.find(x => x.Giocatore === nomeA), b = agg.find(x => x.Giocatore === nomeB);
-  if(!a || !b){ statoReport("Dati insufficienti per uno dei due giocatori nel periodo scelto.", false, "#cf-rp-stato"); return; }
+  if(!a || !b){ statoReport("Dati insufficienti per uno dei due giocatori nel periodo scelto.", false, idStato); return; }
 
   const rankA = agg.findIndex(x => x.Giocatore === a.Giocatore) + 1;
   const rankB = agg.findIndex(x => x.Giocatore === b.Giocatore) + 1;
   const stessoRuolo = a.Ruolo === b.Ruolo;
-  const righeStat = ds.haEventiDisciplinari ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  const righeStat = righeConfrontoPer(cfg.unitaPl, a, b);
 
-  statoReport("Genero il Report Confronto…", true, "#cf-rp-stato");
+  statoReport(`Genero il ${titoloReport}…`, true, idStato);
   // Dalla v1.23.0 passa dallo stesso motore degli altri report (generaEScarica + impaginaDocumento): pagine
   // A4 vere a piena larghezza, invece della vecchia pagina a tre colonne che sbordava sul foglio dopo.
   const metricheRadar = [
@@ -5314,16 +5521,17 @@ async function generaReportConfronto(nomeA, nomeB){
     ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
     ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
   ];
-  await generaEScarica(nomeFileData(`Report_Confronto_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), [
+  const prefissoFile = cfg === CONFRONTO_ALLENAMENTO ? "Report_Confronto_Allenamenti" : "Report_Confronto";
+  await generaEScarica(nomeFileData(`${prefissoFile}_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), [
     Object.assign(async (pag) => {
-      bandaReport(pag, "Report Confronto", `${a.Giocatore} vs ${b.Giocatore}`,
-        `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}`);
-      schedeConfrontoReport(pag, a, b, rankA, rankB);
+      bandaReport(pag, titoloReport, `${a.Giocatore} vs ${b.Giocatore}`,
+        `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}${cfg === CONFRONTO_ALLENAMENTO ? " · dati delle partitelle di allenamento" : ""}`);
+      schedeConfrontoReport(pag, a, b, rankA, rankB, cfg.unitaPl);
       titoloSezioneReport(pag, "Punti di forza a confronto");
       puntiForzaConfrontoReport(pag, a, b);
       if(!stessoRuolo){
-        const compA = compatibilitaRuoloReport(a, b.Ruolo, f.giocatori);
-        const compB = compatibilitaRuoloReport(b, a.Ruolo, f.giocatori);
+        const compA = compatibilitaRuoloReport(a, b.Ruolo, sorgente);
+        const compB = compatibilitaRuoloReport(b, a.Ruolo, sorgente);
         if(compA || compB){
           titoloSezioneReport(pag, "Compatibilità con il ruolo dell'altro");
           bulletsReport(pag, [
@@ -5346,9 +5554,12 @@ async function generaReportConfronto(nomeA, nomeB){
       }, 380);
       titoloSezioneReport(pag, "Tutti gli indicatori");
       tabellaConfrontoReport(pag, a, b, righeStat);
-      bulletsReport(pag, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]);
+      bulletsReport(pag, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]
+        .concat(cfg === CONFRONTO_ALLENAMENTO
+          ? ["Tutti i numeri di questo report vengono dalle partitelle di allenamento, non dalle partite ufficiali: servono a leggere anche i giocatori che in stagione hanno giocato poco o niente. Con un numero di presenze molto diverso tra i due, i totali non sono pienamente confrontabili — guardare la riga «Sessioni frequentate» prima di trarre conclusioni."]
+          : []));
     }, {piena:true})
-  ], "#cf-rp-stato");
+  ], idStato);
 }
 
 /* =====================================================================
@@ -5429,6 +5640,15 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#sel-all-da").addEventListener("change", e => { stato.allenamentoDashDa = e.target.value || null; renderAllenamenti(); });
   $("#sel-all-a").addEventListener("change", e => { stato.allenamentoDashA = e.target.value || null; renderAllenamenti(); });
   $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); });
+  const selZone = $("#zn-sel-sessione");
+  if(selZone) selZone.addEventListener("change", e => { stato.zoneSessione = e.target.value; renderZoneAllenamento(datiFiltrati()); });
+  const cfaA = $("#cfa-sel-a"), cfaB = $("#cfa-sel-b"), cfaBtn = $("#cfa-btn-report");
+  if(cfaA) cfaA.addEventListener("change", e => { stato.confrontoAllA = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
+  if(cfaB) cfaB.addEventListener("change", e => { stato.confrontoAllB = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
+  if(cfaBtn) cfaBtn.addEventListener("click", async () => {
+    try{ await generaReportConfronto(stato.confrontoAllA, stato.confrontoAllB, CONFRONTO_ALLENAMENTO); }
+    catch(err){ statoReport("Errore nella generazione del report: "+err.message, false, "#cfa-rp-stato"); }
+  });
   $("#cf-sel-a").addEventListener("change", e => { stato.confrontoA = e.target.value; renderConfronto(datiFiltrati()); });
   $("#cf-sel-b").addEventListener("change", e => { stato.confrontoB = e.target.value; renderConfronto(datiFiltrati()); });
   $("#cf-btn-report").addEventListener("click", async () => {

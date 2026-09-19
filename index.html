@@ -274,6 +274,11 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
 .rp-kpi .d.up{color:#2E7D32}
 .rp-kpi .d.down{color:#A13544}
 .rp-kpi .d.flat{color:#6E6D68; font-weight:600}
+/* Interruttore "numeri dietro le percentuali" sopra le classifiche (19/09/2026). */
+.riga-interruttore{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin:0 0 10px}
+.interruttore{display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:600; font-size:13.5px; white-space:nowrap}
+.interruttore input{width:16px; height:16px; accent-color:var(--c1); cursor:pointer}
+.riga-interruttore .nota-piccola{margin:0; flex:1 1 320px; min-width:0}
 .rp-section-title{font-size:14.5px; font-weight:800; color:#171614; margin:22px 0 10px; padding-bottom:6px; border-bottom:1px solid #D4D1CA}
 /* Ripresa di una sezione che continua sulla pagina successiva: stessa gerarchia, tono più leggero, così si
    distingue da un titolo nuovo senza far perdere il riferimento a cosa si sta leggendo. */
@@ -489,6 +494,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-allenamenti" data-tab="allenamento">Carico e stanchezza</a>
     <a href="#sez-incroci" data-tab="allenamento">Segnali incrociati</a>
     <a href="#sez-zone-allenamento" data-tab="allenamento">Zone recupero/palla persa</a>
+    <a href="#sez-confronto-allenamento" data-tab="allenamento">Confronto giocatori</a>
     <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
@@ -563,7 +569,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <p class="sez-desc">Vista sempre riferita a tutta la stagione, indipendente dal filtro periodo qui sopra: chi tocca più palloni in proporzione al tempo in campo, e quale modulo tattico rende di più.</p>
 
       <h3 class="sotto-tit">Giocatori più coinvolti nel gioco</h3>
-      <p class="sez-desc">Azioni totali (passaggi tentati + tiri tentati + dribbling tentati) ogni 90 minuti giocati, tutta la stagione. È una stima di quanto un giocatore è coinvolto nella manovra con i dati che raccogli oggi: non misura chi riceve più palloni dai compagni (servirebbe registrare anche i passaggi ricevuti, dato che al momento non hai), ma chi il pallone lo tocca e lo gioca di più in proporzione al tempo in campo.</p>
+      <p class="sez-desc">Azioni totali (passaggi tentati + tiri tentati + dribbling tentati) rapportate a una partita intera di calcio a 7 — 50 minuti, due tempi da 25 — su tutta la stagione. È una stima di quanto un giocatore è coinvolto nella manovra con i dati che raccogli oggi: non misura chi riceve più palloni dai compagni (servirebbe registrare anche i passaggi ricevuti, dato che al momento non hai), ma chi il pallone lo tocca e lo gioca di più in proporzione al tempo in campo.</p>
       <div id="contenuto-coinvolgimento"></div>
 
       <h3 class="sotto-tit">Formazioni a confronto</h3>
@@ -670,8 +676,33 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->
     <section id="sez-zone-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di recupero e palla persa (allenamento)</h2></div>
-      <p class="sez-desc">Le stesse zone di recupero e palla persa, calcolate sulle partitelle di allenamento nel periodo selezionato in alto (Team A/B interni contano entrambi, sono comunque tuoi giocatori). Richiede la posizione (coordinate X/Y) di questi eventi nei file caricati.</p>
+      <p class="sez-desc">Le stesse zone di recupero e palla persa, calcolate sulle partitelle di allenamento nel periodo selezionato in alto (Team A/B interni contano entrambi, sono comunque tuoi giocatori). Richiede la posizione (coordinate X/Y) di questi eventi nei file caricati. Il confronto tra Squadra A e Squadra B compare solo scegliendo una singola sessione qui sotto: le due squadre vengono rifatte a ogni allenamento, quindi sommarle su più sessioni non direbbe niente.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="zn-sel-sessione">Sessione</label>
+          <select id="zn-sel-sessione"></select></div>
+      </div>
       <div id="contenuto-zone-allenamento"></div>
+    </section>
+
+    <!-- 8b3. CONFRONTO TRA DUE GIOCATORI SUGLI ALLENAMENTI -->
+    <section id="sez-confronto-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Confronto tra due giocatori (allenamento)</h2></div>
+      <p class="sez-desc">Lo stesso confronto della scheda Giocatori, ma costruito sulle partitelle di allenamento invece che sulle partite ufficiali. Serve soprattutto per i giocatori che in stagione giocano poco o non giocano affatto: in allenamento i dati ci sono comunque, ed è l'unico modo per valutarli prima di decidere una convocazione. Usa il periodo scelto nel filtro in alto.</p>
+      <div class="card" style="margin-bottom:16px">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="cfa-sel-a">Giocatore A</label>
+            <select id="cfa-sel-a"></select>
+          </div>
+          <div class="campo">
+            <label for="cfa-sel-b">Giocatore B</label>
+            <select id="cfa-sel-b"></select>
+          </div>
+          <button class="btn primario" id="cfa-btn-report" style="margin-left:18px">Scarica report PDF</button>
+        </div>
+        <div class="report-status" id="cfa-rp-stato">Stesso impianto del report di confronto sulle partite — schede affiancate, punti di forza, radar e tabella completa — ma con i dati delle partitelle di allenamento.</div>
+      </div>
+      <div id="contenuto-confronto-allenamento"></div>
     </section>
 
     <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
@@ -726,7 +757,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
           </div>
           <button class="btn primario" id="cf-btn-report" style="margin-left:18px">Scarica report PDF</button>
         </div>
-        <div class="report-status" id="cf-rp-stato">Il report è un foglio A4 a tre colonne: statistiche e punti di forza di Giocatore A a sinistra, radar e tabella completa al centro, statistiche e punti di forza di Giocatore B a destra.</div>
+        <div class="report-status" id="cf-rp-stato">Il report mette le due schede giocatore affiancate con le stesse voci, i punti di forza dell'uno sull'altro, il radar di confronto e la tabella completa di tutti gli indicatori.</div>
       </div>
       <div id="contenuto-confronto"></div>
     </section>
@@ -765,7 +796,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
           <h4>Parate e gol subiti</h4>
           <p>La percentuale di parate mostrata per il portiere è una <strong>stima</strong>: i tiri subiti sono approssimati come <code>parate + gol subiti</code>, perché il foglio non registra i tiri avversari fuori porta.</p>
           <h4>Coinvolgimento nel gioco</h4>
-          <p><code>Coinvolgimento ogni 90' = Azioni_Totali / Minuti_Totali × 90</code>, sull'intera stagione. È una stima costruita solo con i dati che questo sistema raccoglie oggi (passaggi, tiri, dribbling tentati): non misura chi riceve più palloni dai compagni, perché non registriamo i passaggi ricevuti né i tocchi. Se in futuro si vuole misurare davvero «chi viene cercato di più», serve aggiungere quella rilevazione ai dati raccolti.</p>
+          <p><code>Azioni per partita intera = Azioni_Totali / Minuti_Totali × 50</code>, sull'intera stagione. I 50 minuti sono la durata regolamentare di una partita di calcio a 7 (due tempi da 25, recupero escluso perché non registrato e variabile): prima qui c'erano i 90 minuti del calcio a 11, un riferimento che in questo sport non esiste e che gonfiava ogni valore di quasi il doppio. È una stima costruita solo con i dati che questo sistema raccoglie oggi (passaggi, tiri, dribbling tentati): non misura chi riceve più palloni dai compagni, perché non registriamo i passaggi ricevuti né i tocchi. Se in futuro si vuole misurare davvero «chi viene cercato di più», serve aggiungere quella rilevazione ai dati raccolti.</p>
           <h4>Formazioni a confronto</h4>
           <p>Le partite vengono raggruppate per il valore della colonna <code>Modulo</code> (facoltativa, foglio Partite); per ogni modulo si sommano gol fatti/subiti e le azioni dei giocatori di quelle partite, poi si ricalcolano le medie e le percentuali come per l'aggregato di periodo. <strong>Avvertenza importante:</strong> questo confronto non tiene conto della forza dell'avversario affrontato con ciascun modulo — un modulo usato per lo più contro squadre più deboli sembrerà artificialmente migliore. È una lettura preliminare, da usare con cautela e da incrociare con quello che si è visto in campo; un confronto più affidabile richiederebbe di registrare anche una stima della forza dell'avversario partita per partita, cosa che questo sistema non fa ancora.</p>
           <h4>Nessun dato biometrico richiesto</h4>
