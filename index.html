@@ -6,7 +6,13 @@
 <title>Dashboard Calcio a 7 — Analisi prestazionale</title>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2301696F'/%3E%3Cpath d='M8 22 L16 10 L24 22' stroke='white' stroke-width='2.6' fill='none' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='10' r='2.6' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230D383C"/><polygon points="16.00,5.92 24.73,10.96 24.73,21.04 16.00,26.08 7.27,21.04 7.27,10.96" fill="none" stroke="%237EC6CB" stroke-width="1"/><polygon points="16.00,10.46 20.80,13.23 20.80,18.77 16.00,21.54 11.20,18.77 11.20,13.23" fill="none" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="16.00" y2="5.92" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="24.73" y2="10.96" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="24.73" y2="21.04" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="16.00" y2="26.08" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="7.27" y2="21.04" stroke="%234C9298" stroke-width="0.7"/><line x1="16" y1="16" x2="7.27" y2="10.96" stroke="%234C9298" stroke-width="0.7"/><polygon points="16.00,7.73 22.46,12.27 20.36,18.52 16.00,20.44 10.06,19.43 11.98,13.68" fill="%23EEB91E" fill-opacity="0.82" stroke="%23EEB91E" stroke-width="1.1" stroke-linejoin="round"/></svg>">
+<!-- Icona per la schermata Home di iPhone/iPad (07/10/2026). iOS non usa il favicon SVG qui sopra:
+     vuole un PNG raggiungibile a un indirizzo, e in sua assenza mette uno screenshot della pagina.
+     apple-touch-icon.png va quindi caricato nella repo accanto a index.html e app.js. iOS applica da
+     sé gli angoli arrotondati, perciò il file è quadrato e pieno. -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Analysis">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -486,6 +492,7 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
     <a href="#sez-zone-partita" data-tab="partita">Zone recupero/palla persa</a>
     <a href="#sez-golgame-partita" data-tab="partita">Zone tiro e assist gol</a>
     <a href="#sez-subentrati" data-tab="partita">Impatto dei subentrati</a>
+    <a href="#sez-riconquista" data-tab="partita">Tempo di riconquista</a>
     <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
@@ -673,6 +680,13 @@ footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:ce
       <div class="sez-testa"><span class="sez-num">06</span><h2>Segnali incrociati: carico e rendimento</h2></div>
       <p class="sez-desc">Confronta, mese su mese, la variazione del carico di allenamento di ogni giocatore con la variazione del suo indice prestazione medio in partita. Non è un cluster nuovo di dati: è una lettura che mette insieme gli allenamenti e le partite, gli unici due cluster che raccogli.</p>
       <div id="contenuto-incroci"></div>
+    </section>
+
+    <!-- 7d. TEMPO DI RICONQUISTA DELLA PALLA (partita) -->
+    <section id="sez-riconquista" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Tempo di riconquista della palla</h2></div>
+      <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso: è la misura della reattività nella transizione negativa. Si parte da ogni palla persa e si cerca il primo recupero successivo — nessun dato nuovo da raccogliere, entrambi gli eventi sono già nella timeline di Seven Lab. Le sequenze interrotte da un gol, dalla fine del tempo o che superano il minuto vengono contate a parte invece di entrare nella media.</p>
+      <div id="contenuto-riconquista"></div>
     </section>
 
     <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->

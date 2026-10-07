@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.26.0",
-  data: "2026-09-19",
-  note: "Dove perde palla un giocatore: due nuove sezioni (19/09/2026). Scegliendo un giocatore si vedono le zone del campo in cui perde piu palloni, con la stessa doppia vista delle altre sezioni di campo (griglia a nove zone in percentuale + heatmap della densita reale). Nella Dashboard Allenamento la sezione 09 lavora sul totale delle partitelle del periodo scelto; nella Dashboard Giocatori la sezione 04 segue il giocatore gia selezionato in alto e aggiunge un selettore di ambito che permette di guardare tutta la stagione oppure una singola partita. Nessun dato nuovo da raccogliere: il nome del giocatore era gia presente su ogni punto della sezione DATI SPAZIALI, quindi e un filtro su quello che c'e. IMPORTANTE, sul come leggerla: per un singolo giocatore il campione e molto piu piccolo di quello gia piccolo della squadra. Nei file reali visti finora il giocatore con piu palle perse georeferenziate ne aveva 7 in tutta la stagione, la mediana era 2, e in una singola partita si arriva a uno o due. Per questo sotto i grafici c'e l'elenco delle zone in NUMERI ASSOLUTI, ordinato per frequenza, con una frase che dice qual e la zona peggiore e su quanti palloni in tutto: e la lettura che il dato regge davvero oggi, mentre le percentuali su tre palloni cambiano completamente per un evento in piu o in meno. Restano anche gli avvisi graduati sul campione e l avvertenza sulle fasce laterali introdotti nella 1.25.0. I grafici ci sono comunque perche con una stagione intera di dati diventeranno la vista giusta."
+  numero: "1.28.0",
+  data: "2026-10-07",
+  note: "Tempo di riconquista anche nei report, e nuova icona per la schermata Home (07/10/2026). (1) La sezione \"Tempo di riconquista della palla\" introdotta nella 1.27.0 sulla dashboard ora compare anche nel Report Partita (sulla singola gara) e nel Report Stagionale (su tutte le partite del periodo), con gli stessi numeri perche usa lo stesso motore: riga di KPI con mediana, quota di riaggressioni entro 5 e 10 secondi e percentuale di palle perse riconquistate; tabella della distribuzione per fasce; tabella separata delle sequenze NON conteggiate nella mediana (nessun recupero entro 60 secondi, chiuse da un gol, chiuse dalla fine del tempo) con il motivo accanto a ciascuna. Nel report finiscono anche le avvertenze che prima stavano solo a schermo, perche un report stampato lo legge chi la dashboard non l ha vista: sulle partite registrate in diretta i secondi portano due ritardi di reazione e vanno letti come indicativi, e su quelle in differita senza velocita dichiarata risultano gonfiati. Come per il possesso palla e le zone, se non c e nessuna sequenza utilizzabile la sezione non compare affatto, invece di stampare un riquadro vuoto. (2) ICONA: nuova icona a radar stilizzato per il collegamento sulla schermata Home di iPhone. iOS non usa il favicon SVG della scheda del browser: vuole un PNG raggiungibile a un indirizzo, e in sua assenza mette uno screenshot della pagina. Va quindi caricato nella repo anche il file apple-touch-icon.png, accanto a index.html e app.js. Il file e quadrato e pieno perche gli angoli arrotondati li applica iOS. Aggiunto anche il titolo breve che compare sotto l icona."
 };
 
 /* =====================================================================
@@ -139,6 +139,106 @@ function secondiDaMMSS(v){
   const m = String(v||"").trim().match(/^(\d+):(\d{1,2})$/);
   if(!m) return null;
   return parseInt(m[1],10)*60 + parseInt(m[2],10);
+}
+
+/* =====================================================================
+   TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA (07/10/2026)
+   Seven Lab misura il tempo con un cronometro che parte e si ferma su comando. Dal vivo quel cronometro
+   coincide col tempo di partita. Taggando da video rallentato NO: misura il tempo di LAVORO di chi tagga.
+   Un tempo da 25' rivisto a metà velocità produce 50' di cronometro, e tutto ciò che a valle legge i secondi
+   (possesso, periodi, minuto d'ingresso dei subentrati, intervalli fra eventi) li prende per buoni.
+   La correzione si applica UNA VOLTA SOLA, in fase di lettura del file, su OGNI evento singolarmente — non
+   sul totale da ridistribuire. È questo che fa tornare giusti anche gli INTERVALLI: due eventi distanti 8
+   secondi reali stanno a 16 sul cronometro a 0,5×, e dopo la correzione tornano a 8. Senza, ogni metrica di
+   transizione (vedi "tempo di riconquista" più sotto) risulterebbe gonfiata del fattore di rallentamento.
+   Tutto il resto del sistema non sa niente di questa correzione: riceve secondi già di partita.
+
+   CONDIZIONE DI VALIDITÀ: la riproduzione deve essere stata UNIFORME — stessa velocità, nessuna pausa. Una
+   pausa inserisce tempo morto in un punto preciso, e un fattore globale lo spalma su tutta la partita:
+   aggiusta il totale e sbaglia i singoli intervalli, cioè rovina proprio ciò per cui si fa. I controlli in
+   "Qualità dei dati" servono ad accorgersene invece di fidarsi.
+
+   CONVENZIONE DEL NUMERO, fissata il 07/10/2026 con l'utente: il campo contiene la VELOCITÀ DI RIPRODUZIONE,
+   lo stesso numero che si imposta nel lettore video (0,25 · 0,5 · 0,75 · 1). Quindi t_reale = t_crono × v.
+   NON è un "fattore di rallentamento" (che sarebbe il reciproco): scambiarli sbaglia di un fattore 4.
+   ===================================================================== */
+const VELOCITA_MIN_VIDEO = 0.1, VELOCITA_MAX_VIDEO = 4;
+
+/** "diretta" (tagging dal vivo) oppure "differita" (tagging da video). Campo scritto da Seven Lab. */
+function metodoRilevazione(meta){
+  const m = String((meta && (meta["Metodo rilevazione"] || meta["Metodo"] || meta["Modalità"] || meta["Modalita"])) || "").trim().toLowerCase();
+  if(m.startsWith("differit")) return "differita";
+  if(m.startsWith("dirett")) return "diretta";
+  return null; // campo assente: file precedente a questa convenzione
+}
+
+/** Velocità di riproduzione dichiarata nei metadati. null se assente o implausibile: in quel caso NON si
+ *  corregge niente e lo si dichiara, invece di indovinare un fattore. */
+function velocitaRiproduzione(meta){
+  if(!meta) return null;
+  const grezzo = meta["Velocità riproduzione"] ?? meta["Velocita riproduzione"] ?? meta["Velocità video"] ?? meta["Fattore rallentamento"];
+  if(grezzo === undefined || grezzo === null || String(grezzo).trim() === "") return null;
+  const v = parseFloat(String(grezzo).replace(",", "."));
+  if(!isFinite(v) || v < VELOCITA_MIN_VIDEO || v > VELOCITA_MAX_VIDEO) return null;
+  return v;
+}
+
+/** Trasformazione affine dal cronometro di lavoro al tempo di partita.
+ *  t_reale = (t_crono − t0) × v — t0 è il cronometro al calcio d'inizio, così un avvio anticipato del
+ *  cronometro non si propaga (e non viene scalato lui stesso). Con t0 = 0 è la moltiplicazione semplice. */
+function tempoPartitaDaCronometro(tCrono, v, t0){
+  if(!isFinite(tCrono)) return tCrono;
+  return (tCrono - (t0 || 0)) * v;
+}
+
+/** Applica la correzione a un risultato di parsaFileSevenLab. Muta `eventi` e `riepilogoTempi` e torna la
+ *  diagnostica, che viene conservata sulla sessione (campo `scalaTempi`) per poterla dichiarare a schermo e
+ *  nei report — e per non riapplicarla mai due volte su una sessione riletta dalla memoria del browser. */
+function normalizzaTempiDifferita(parsed){
+  const diag = {metodo: metodoRilevazione(parsed.meta), applicata:false, velocita:null, t0:0, avviso:null};
+  if(diag.metodo !== "differita"){ parsed.scalaTempi = diag; return parsed; }
+
+  const v = velocitaRiproduzione(parsed.meta);
+  if(v === null){
+    diag.avviso = "Sessione registrata in differita ma senza velocità di riproduzione dichiarata nel file: i tempi non sono stati corretti. Conteggi e posizioni restano validi; possesso palla, divisione dei tempi, minuto d'ingresso dei subentrati e tempo di riconquista NON sono affidabili per questa sessione.";
+    parsed.scalaTempi = diag; return parsed;
+  }
+  diag.velocita = v;
+  if(v === 1){ parsed.scalaTempi = diag; return parsed; }
+
+  const rt = parsed.riepilogoTempi;
+  const t0 = (rt && isFinite(rt.inizioPartitaSec)) ? rt.inizioPartitaSec : 0;
+  diag.t0 = t0;
+
+  (parsed.eventi || []).forEach(e => {
+    // formato nuovo: "Secondo totale" è il tempo assoluto; "Secondo"/"Minuto" sono derivati dello stesso
+    // cronometro; "Minutaggio" è la sua scrittura in m:ss. Formato vecchio: solo "Secondo".
+    if(e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "")
+      e["Secondo totale"] = tempoPartitaDaCronometro(N(e["Secondo totale"]), v, t0);
+    else if(e["Secondo"] !== undefined && String(e["Secondo"]).trim() !== "")
+      e["Secondo"] = tempoPartitaDaCronometro(N(e["Secondo"]), v, t0);
+    if(e["Minuto"] !== undefined && String(e["Minuto"]).trim() !== "")
+      e["Minuto"] = tempoPartitaDaCronometro(N(e["Minuto"])*60, v, t0) / 60;
+    const sMm = secondiDaMMSS(e["Minutaggio"]);
+    if(sMm !== null) e["Minutaggio"] = mmssDaSecondi(tempoPartitaDaCronometro(sMm, v, t0));
+  });
+
+  if(rt){
+    // la durata è un intervallo: si scala e basta, senza togliere t0 (che è un istante, non una durata)
+    if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec * v;
+    ["inizioPartitaSec","fine1TempoSec","inizio2TempoSec","finePartitaSec"].forEach(k => {
+      if(rt[k] !== null && rt[k] !== undefined && isFinite(rt[k])) rt[k] = tempoPartitaDaCronometro(rt[k], v, t0);
+    });
+  }
+  diag.applicata = true;
+  parsed.scalaTempi = diag;
+  return parsed;
+}
+
+/** m:ss da secondi — speculare a secondiDaMMSS, serve a riscrivere "Minutaggio" dopo la correzione. */
+function mmssDaSecondi(sec){
+  const s = Math.max(0, Math.round(N(sec)));
+  return String(Math.floor(s/60)) + ":" + String(s%60).padStart(2,"0");
 }
 
 /** Legge un file .csv esportato da Seven Lab (una partita o un allenamento): un blocco iniziale di
@@ -270,7 +370,9 @@ function parsaFileSevenLab(testo){
     });
   }
 
-  return {tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame};
+  // Correzione dei tempi per le sessioni registrate da video: un solo punto, prima che qualunque calcolo
+  // tocchi questi secondi (vedi il blocco "TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA" più sopra).
+  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame});
 }
 
 /** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
@@ -294,7 +396,8 @@ function aggiungiSessioneDaTesto(nomeFile, testo){
   const id = idDaNomeFile(nomeFile);
   const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
     righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali,
-    statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame};
+    statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame,
+    scalaTempi:parsed.scalaTempi || null};
   const attuali = leggiSessioniSalvate();
   const idx = attuali.findIndex(s => s.id === id);
   if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
@@ -1057,7 +1160,8 @@ function assemblaDataset(grezzo){
     Forza_Avversario: r.Forza_Avversario ?? null,
     Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
-    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    ScalaTempi: r.ScalaTempi ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
   partite.forEach((p,i) => { p.Ordine = i+1; p.Mese = meseKey(p.Data);
@@ -1175,7 +1279,8 @@ function costruisciDatasetDaSessioni(sessioni){
         Durata_Minuti: N(s.meta["Durata minuti"]), Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
         Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
         DatiSpaziali: s.datiSpaziali || null,
-        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        ScalaTempi: s.scalaTempi || null
       });
       (s.righe||[]).forEach(r => {
         const tiriTot = N(r["Tiri"]), tiriPorta = N(r["Tiri in porta"]);
@@ -1496,6 +1601,121 @@ function datiRadarGiocatore(rigaGiocatore, rigaConfronto, righeRosa, ctxPortiere
  *  è l'unico posto in cui la durata di riferimento è scritta. Il recupero non si conta: è variabile e non
  *  è registrato nei file, e includerlo cambierebbe la scala da una partita all'altra. */
 const MINUTI_PARTITA_INTERA = (DURATA_TEMPO_REGOLAMENTARE_SEC/60)*2; // = 50: due tempi regolamentari
+/* =====================================================================
+   TEMPO DI RICONQUISTA DELLA PALLA (07/10/2026, richiesta dell'utente)
+   Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso. È la misura della reattività nella
+   transizione negativa: una squadra che riconquista entro pochi secondi sta riaggredendo, una che ci mette
+   venti secondi si è riordinata e ha lasciato giocare l'avversario.
+
+   COME SI CALCOLA: per ogni "palla persa" della nostra squadra si cerca il primo "recupero" nostro che
+   arriva dopo. L'intervallo fra i due è il tempo di riconquista di quella sequenza. Non servono dati nuovi:
+   entrambi gli eventi sono già nella timeline.
+
+   LE QUATTRO REGOLE CHE EVITANO I NUMERI FINTI:
+   1. Mai a cavallo dell'intervallo. Una palla persa al 24' e un recupero al 26' del secondo tempo non sono
+      la stessa sequenza di gioco: sono separate da quindici minuti di spogliatoio.
+   2. Un gol chiude la sequenza. Se fra la perdita e il recupero la palla finisce in rete (da una parte o
+      dall'altra), quella sequenza non è finita con una riconquista: si gioca da fermo. Contarla darebbe un
+      tempo lunghissimo che non misura niente.
+   3. Oltre la soglia, non è una riconquista. Dopo 60 secondi senza riprendere palla non si sta più parlando
+      di transizione ma di un'altra fase di gioco. Quelle sequenze si contano a parte ("non riconquistate"),
+      non si mediano: includerle gonfierebbe la media proprio con i casi peggiori travestiti da numero.
+   4. La mediana prima della media. La distribuzione è asimmetrica — tante riconquiste rapide e poche
+      lunghissime — e la media si lascia trascinare dalla coda. La mediana descrive la sequenza tipica.
+
+   DIPENDE DALLA PRECISIONE DEI TEMPI, e molto. Dal vivo ogni evento è registrato con qualche secondo di
+   ritardo variabile, e qui i ritardi sono DUE (sulla perdita e sul recupero), dello stesso ordine di
+   grandezza della cosa misurata. Per le sessioni in diretta il dato va letto come indicativo; da video con i
+   tempi corretti diventa accurato. La sezione lo dichiara invece di lasciarlo intuire.
+   ===================================================================== */
+const RICONQUISTA_SOGLIA_SEC = 60;      // oltre: sequenza non riconquistata (regola 3)
+const RICONQUISTA_IMMEDIATA_SEC = 5;    // riaggressione: standard diffuso nell'analisi del calcio
+const RICONQUISTA_RAPIDA_SEC = 10;
+const RICONQUISTA_CAMPIONE_MINIMO = 8;  // sotto: niente mediana, solo i casi grezzi
+
+/** Sequenze perdita → riconquista di UNA partita. Torna null se la timeline non è utilizzabile. */
+function sequenzeRiconquista(partita){
+  const norm = normalizzaEventiSevenLab({eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
+  if(norm.formato === "nessuno" || !norm.eventi.length) return null;
+  const nostra = e => String((e.raw && (e.raw.Team ?? e.raw.Squadra)) || "A").trim().toUpperCase() !== "B";
+  const classifica = e => e.formato === "nuovo"
+    ? classificaEventoRigaNuovoFormato(e.raw)
+    : classificaEventoSevenLab(e.raw.Tipo);
+
+  const eventi = norm.eventi
+    .map(e => ({...e, cl: classifica(e)}))
+    .filter(e => e.cl && isFinite(e.secondoAssoluto))
+    .sort((a,b) => a.secondoAssoluto - b.secondoAssoluto);
+
+  const sequenze = [];
+  for(let i = 0; i < eventi.length; i++){
+    const e = eventi[i];
+    if(!(e.cl.type === "BALL_LOST" && nostra(e))) continue;
+    let esito = null;
+    for(let j = i+1; j < eventi.length; j++){
+      const f = eventi[j];
+      if(f.periodo !== e.periodo){ esito = {tipo:"fine-tempo"}; break; }            // regola 1
+      if(f.cl.type === "GOAL"){ esito = {tipo:"gol"}; break; }                       // regola 2
+      const dt = f.secondoAssoluto - e.secondoAssoluto;
+      if(dt > RICONQUISTA_SOGLIA_SEC){ esito = {tipo:"oltre-soglia"}; break; }        // regola 3
+      if(f.cl.type === "RECOVERY" && nostra(f)){ esito = {tipo:"riconquista", secondi:dt}; break; }
+    }
+    if(!esito) esito = {tipo:"fine-dati"};
+    sequenze.push({periodo:e.periodo, secondoPerdita:e.secondoAssoluto,
+      giocatorePerdita:(e.raw.Giocatore||"").trim(), esito});
+  }
+  return sequenze;
+}
+
+const mediana = arr => {
+  if(!arr || !arr.length) return null;
+  const a = arr.slice().sort((x,y)=>x-y), m = Math.floor(a.length/2);
+  return a.length % 2 ? a[m] : (a[m-1]+a[m])/2;
+};
+
+/** Riepilogo su un elenco di partite. */
+function analizzaRiconquista(partite){
+  const tutte = [];
+  let senzaTimeline = 0, inDiretta = 0, inDifferitaNonCorretta = 0;
+  (partite||[]).forEach(p => {
+    const sq = sequenzeRiconquista(p);
+    if(!sq){ senzaTimeline++; return; }
+    const sc = p.ScalaTempi;
+    if(!sc || sc.metodo === "diretta" || sc.metodo === null) inDiretta++;
+    else if(sc.metodo === "differita" && !sc.applicata) inDifferitaNonCorretta++;
+    sq.forEach(x => tutte.push({...x, partita:p}));
+  });
+  if(!tutte.length) return null;
+
+  const riconquistate = tutte.filter(x => x.esito.tipo === "riconquista");
+  const tempi = riconquistate.map(x => x.esito.secondi);
+  const perPeriodo = n => {
+    const t = riconquistate.filter(x => x.periodo === n).map(x => x.esito.secondi);
+    return t.length ? {n:t.length, mediana:mediana(t), media:t.reduce((a,b)=>a+b,0)/t.length} : null;
+  };
+  const fascia = (min, max) => tempi.filter(t => t >= min && t < max).length;
+
+  return {
+    sequenze: tutte.length,
+    riconquistate: riconquistate.length,
+    nonRiconquistate: tutte.filter(x => x.esito.tipo === "oltre-soglia").length,
+    chiuseDaGol: tutte.filter(x => x.esito.tipo === "gol").length,
+    chiuseDaFineTempo: tutte.filter(x => x.esito.tipo === "fine-tempo" || x.esito.tipo === "fine-dati").length,
+    mediana: mediana(tempi),
+    media: tempi.length ? tempi.reduce((a,b)=>a+b,0)/tempi.length : null,
+    entroImmediata: tempi.filter(t => t <= RICONQUISTA_IMMEDIATA_SEC).length,
+    entroRapida: tempi.filter(t => t <= RICONQUISTA_RAPIDA_SEC).length,
+    fasce: [
+      {eti:`0-${RICONQUISTA_IMMEDIATA_SEC}s · riaggressione`, n:fascia(0, RICONQUISTA_IMMEDIATA_SEC+0.001)},
+      {eti:`${RICONQUISTA_IMMEDIATA_SEC}-${RICONQUISTA_RAPIDA_SEC}s · rapida`, n:fascia(RICONQUISTA_IMMEDIATA_SEC+0.001, RICONQUISTA_RAPIDA_SEC+0.001)},
+      {eti:`${RICONQUISTA_RAPIDA_SEC}-20s · riordinata`, n:fascia(RICONQUISTA_RAPIDA_SEC+0.001, 20)},
+      {eti:`20-${RICONQUISTA_SOGLIA_SEC}s · lenta`, n:fascia(20, RICONQUISTA_SOGLIA_SEC+0.001)}
+    ],
+    tempo1: perPeriodo(1), tempo2: perPeriodo(2),
+    qualita: {senzaTimeline, inDiretta, inDifferitaNonCorretta, partiteAnalizzate: (partite||[]).length - senzaTimeline}
+  };
+}
+
 /** Minuti minimi perché una media "per partita intera" venga calcolata e mostrata. Tenuta alla stessa
  *  proporzione di prima (erano 10 minuti su 90, cioè un ottavo scarso di partita). */
 const MINUTI_MINIMI_NORMALIZZAZIONE = 6;
@@ -3723,6 +3943,84 @@ function renderPersaGiocatorePartita(f){
   renderPersaGiocatore("contenuto-persa-giocatore-partita", scelte, stato.giocatore, contesto);
 }
 
+/** Sezione "Tempo di riconquista della palla" (Dashboard Partita, 07/10/2026). */
+function renderRiconquista(f){
+  const cont = $("#contenuto-riconquista");
+  if(!cont) return;
+  const a = analizzaRiconquista(f.partite);
+  if(!a){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i tempi (sezione «TIMELINE EVENTI» dell'export Seven Lab) e almeno una palla persa seguita da un recupero. Nei file caricati per il periodo scelto non c'è.</div>`;
+    return;
+  }
+  const q = a.qualita;
+  const pctRic = perc(a.riconquistate, a.sequenze);
+  const pctImm = perc(a.entroImmediata, a.riconquistate);
+  const pctRap = perc(a.entroRapida, a.riconquistate);
+  const maxFascia = Math.max(1, ...a.fasce.map(x => x.n));
+  const campioneScarso = a.riconquistate < RICONQUISTA_CAMPIONE_MINIMO;
+
+  const confrontoTempi = (a.tempo1 && a.tempo2)
+    ? (() => {
+        const d = a.tempo2.mediana - a.tempo1.mediana;
+        if(Math.abs(d) < 1) return `Fra primo e secondo tempo non cambia praticamente nulla (${nf(a.tempo1.mediana,1)}s contro ${nf(a.tempo2.mediana,1)}s).`;
+        return d > 0
+          ? `Nel secondo tempo la squadra ci mette <strong>${nf(d,1)}s in più</strong> a riprendersi la palla (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s): è il segnale che di solito accompagna il calo di intensità.`
+          : `Nel secondo tempo la squadra riconquista <strong>${nf(Math.abs(d),1)}s più in fretta</strong> (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s).`;
+      })()
+    : "Il confronto fra i due tempi comparirà quando ci saranno sequenze in entrambi.";
+
+  const avvisiQualita = [];
+  if(q.inDiretta) avvisiQualita.push(`${nf0(q.inDiretta)} ${q.inDiretta===1?"partita è stata registrata":"partite sono state registrate"} <strong>in diretta</strong>: lì ogni evento porta il ritardo di reazione di chi taggava, e qui i ritardi sono due (sulla perdita e sul recupero), dello stesso ordine di grandezza di quello che si sta misurando. Leggi questi numeri come indicativi, non come misure.`);
+  if(q.inDifferitaNonCorretta) avvisiQualita.push(`${nf0(q.inDifferitaNonCorretta)} ${q.inDifferitaNonCorretta===1?"partita è stata registrata":"partite sono state registrate"} <strong>in differita senza velocità di riproduzione dichiarata</strong>: i loro tempi sono quelli del cronometro di lavoro, non della partita. Questi secondi sono gonfiati e non vanno letti finché il file non riporta la velocità.`);
+  if(q.senzaTimeline) avvisiQualita.push(`${nf0(q.senzaTimeline)} ${q.senzaTimeline===1?"partita è esclusa":"partite sono escluse"} perché senza timeline eventi utilizzabile.`);
+
+  cont.innerHTML = `
+    <div class="griglia g-kpi">
+      <div class="kpi"><div class="kpi-eti">Tempo tipico di riconquista</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : nf(a.mediana,1)+"s"}</div>
+        <div class="kpi-nota">${campioneScarso ? `Solo ${nf0(a.riconquistate)} sequenze: troppo poche per una mediana` : `Mediana su ${nf0(a.riconquistate)} riconquiste · media ${nf(a.media,1)}s`}</div></div>
+      <div class="kpi"><div class="kpi-eti">Riaggressione entro ${nf0(RICONQUISTA_IMMEDIATA_SEC)}s</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : pctTxt(pctImm,0)}</div>
+        <div class="kpi-nota">${nf0(a.entroImmediata)} riconquiste su ${nf0(a.riconquistate)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Entro ${nf0(RICONQUISTA_RAPIDA_SEC)}s</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : pctTxt(pctRap,0)}</div>
+        <div class="kpi-nota">${nf0(a.entroRapida)} riconquiste su ${nf0(a.riconquistate)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Palle perse riconquistate</div>
+        <div class="kpi-valore">${pctTxt(pctRic,0)}</div>
+        <div class="kpi-nota">${nf0(a.riconquistate)} su ${nf0(a.sequenze)} palle perse analizzate</div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Quanto ci mette, sequenza per sequenza</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Distribuzione dei tempi di riconquista per fascia</caption>
+        <thead><tr><th scope="col">Fascia</th><th scope="col">Sequenze</th><th scope="col">Quota</th><th scope="col">Distribuzione</th></tr></thead>
+        <tbody>${a.fasce.map(x => `<tr>
+          <td>${esc(x.eti)}</td><td>${nf0(x.n)}</td><td>${pctTxt(perc(x.n, a.riconquistate),0)}</td>
+          <td><div class="barra-wrap"><div class="barra" style="width:${(x.n/maxFascia*100).toFixed(1)}%; background:var(--c1)"></div><span>${nf0(x.n)}</span></div></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">${confrontoTempi}</p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Le sequenze che non finiscono con una riconquista</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Esito delle palle perse non riconquistate</caption>
+        <thead><tr><th scope="col">Esito</th><th scope="col">Sequenze</th><th scope="col">Come viene trattato</th></tr></thead>
+        <tbody>
+          <tr><td>Nessun recupero entro ${nf0(RICONQUISTA_SOGLIA_SEC)}s</td><td>${nf0(a.nonRiconquistate)}</td><td>Contate a parte, escluse dalla mediana</td></tr>
+          <tr><td>Chiuse da un gol</td><td>${nf0(a.chiuseDaGol)}</td><td>La palla riparte da fermo: non è una riconquista</td></tr>
+          <tr><td>Chiuse dalla fine del tempo</td><td>${nf0(a.chiuseDaFineTempo)}</td><td>Mai misurate a cavallo dell'intervallo</td></tr>
+        </tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">Queste sequenze non vengono mediate con le altre di proposito: includerle con un tempo convenzionale gonfierebbe la media proprio con i casi peggiori, travestendoli da misura. Il tempo tipico qui sopra è la <strong>mediana</strong> e non la media perché la distribuzione è asimmetrica — tante riconquiste rapide e poche lunghissime — e la media si farebbe trascinare dalla coda.</p>
+    </div>
+
+    ${avvisiQualita.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${avvisiQualita.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Si parte da ogni palla persa della squadra e si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Nessun dato nuovo da raccogliere — entrambi gli eventi sono già nella timeline di Seven Lab.</p>`;
+}
+
 /* --------- 9. Qualità dati --------- */
 function renderQualita(){
   const cont = $("#contenuto-qualita");
@@ -3761,6 +4059,7 @@ function render(){
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
   renderGolGameCampo("contenuto-golgame-partita", f.partite);
   renderSubentrati(f);
+  renderRiconquista(f);
   renderAllenamenti();
   renderIncroci();
   renderZoneAllenamento(f);
@@ -4527,6 +4826,56 @@ function opzioniGraficoReport(extra={}){
  *  delle colonne X/Y è un'assunzione provvisoria). Non aggiunge nulla al report se non ci sono eventi con
  *  coordinate valide nel periodo — stesso criterio già usato per il possesso palla (vedi playbook punto 9):
  *  niente sezione vuota o "non disponibile" a stampa, semplicemente non compare finché non c'è il dato. */
+/** Sezione "Tempo di riconquista della palla" per un report (Partita o Stagionale, 07/10/2026).
+ *  Stesso motore della sezione a schermo (`analizzaRiconquista`), quindi i numeri non possono divergere.
+ *  Non aggiunge niente al report se non c'è nessuna sequenza utilizzabile — stesso criterio del possesso
+ *  palla e delle zone: meglio una sezione assente che una sezione vuota su un foglio stampato. */
+function riconquistaReport(pagina, partite){
+  const a = analizzaRiconquista(partite);
+  if(!a || !a.sequenze) return;
+  titoloSezioneReport(pagina, "Tempo di riconquista della palla");
+
+  const campioneScarso = a.riconquistate < RICONQUISTA_CAMPIONE_MINIMO;
+  kpiRowReport(pagina, [
+    {l:"Tempo tipico (mediana)", v: campioneScarso ? "—" : nf(a.mediana,1)+"s"},
+    {l:`Riaggressione entro ${nf0(RICONQUISTA_IMMEDIATA_SEC)}s`, v: campioneScarso ? "—" : pctTxt(perc(a.entroImmediata, a.riconquistate),0)},
+    {l:`Entro ${nf0(RICONQUISTA_RAPIDA_SEC)}s`, v: campioneScarso ? "—" : pctTxt(perc(a.entroRapida, a.riconquistate),0)},
+    {l:"Palle perse riconquistate", v: pctTxt(perc(a.riconquistate, a.sequenze),0)}
+  ]);
+
+  const bullet = [
+    `${nf0(a.sequenze)} palle perse analizzate, ${nf0(a.riconquistate)} seguite da una riconquista entro ${nf0(RICONQUISTA_SOGLIA_SEC)} secondi.`,
+    "Per ogni palla persa si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Il valore tipico è la <b>mediana</b> e non la media, perché la distribuzione è asimmetrica (tante riconquiste rapide, poche lunghissime) e la media si farebbe trascinare dalla coda."
+  ];
+  if(campioneScarso) bullet.push(`<b>Campione ridotto</b>: solo ${nf0(a.riconquistate)} riconquiste, troppo poche perché la mediana e le percentuali siano una misura. Leggi la distribuzione qui sotto come indicazione.`);
+  if(a.tempo1 && a.tempo2){
+    const d = a.tempo2.mediana - a.tempo1.mediana;
+    bullet.push(Math.abs(d) < 1
+      ? `Fra primo e secondo tempo la reattività non cambia (${nf(a.tempo1.mediana,1)}s contro ${nf(a.tempo2.mediana,1)}s).`
+      : (d > 0
+        ? `Nel secondo tempo la squadra impiega <b>${nf(d,1)}s in più</b> a riprendersi la palla (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s): è il segnale che accompagna il calo di intensità.`
+        : `Nel secondo tempo la squadra riconquista <b>${nf(Math.abs(d),1)}s più in fretta</b> (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s).`));
+  }
+  // Le stesse avvertenze della dashboard: un report stampato lo legge chi non ha visto lo schermo, e senza
+  // queste righe quei secondi sembrano misurati meglio di quanto siano.
+  const q = a.qualita;
+  if(q.inDiretta) bullet.push(`${nf0(q.inDiretta)} ${q.inDiretta===1?"partita è stata registrata":"partite sono state registrate"} <b>in diretta</b>: ogni evento porta il ritardo di reazione di chi registrava, e qui i ritardi sono due (sulla perdita e sul recupero), dello stesso ordine di grandezza di ciò che si misura. Valori indicativi, non misure.`);
+  if(q.inDifferitaNonCorretta) bullet.push(`${nf0(q.inDifferitaNonCorretta)} ${q.inDifferitaNonCorretta===1?"partita è stata registrata":"partite sono state registrate"} <b>in differita senza velocità di riproduzione dichiarata</b>: quei tempi sono quelli del cronometro di lavoro, non della partita, quindi questi secondi risultano gonfiati.`);
+  bulletsReport(pagina, bullet);
+
+  tabellaReport(pagina, ["Fascia", "Sequenze", "Quota sulle riconquiste"],
+    a.fasce.map(x => [esc(x.eti), nf0(x.n), pctTxt(perc(x.n, a.riconquistate),0)]));
+
+  if(a.nonRiconquistate || a.chiuseDaGol || a.chiuseDaFineTempo){
+    tabellaReport(pagina, ["Sequenze non conteggiate nella mediana", "Numero", "Perché"], [
+      [`Nessun recupero entro ${nf0(RICONQUISTA_SOGLIA_SEC)}s`, nf0(a.nonRiconquistate), "Oltre quella soglia non è più una transizione"],
+      ["Chiuse da un gol", nf0(a.chiuseDaGol), "La palla riparte da fermo: non è una riconquista"],
+      ["Chiuse dalla fine del tempo", nf0(a.chiuseDaFineTempo), "Mai misurate a cavallo dell'intervallo"]
+    ]);
+    bulletsReport(pagina, ["Queste sequenze restano fuori dalla mediana di proposito: contarle con un tempo convenzionale gonfierebbe la media proprio con i casi peggiori, travestendoli da misura."]);
+  }
+}
+
 function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
   const {recupero, persa} = raccogliEventiZona(sessioni);
   if(!recupero.length && !persa.length) return;
@@ -5054,6 +5403,7 @@ async function generaReportPartita(matchId){
           portieriGaraGame.portieri.map(p => [esc(p.portiere), nf0(p.totaleAffrontati), nf0(p.parate), nf0(p.golSubiti)]));
         bulletsReport(pag, [`"Tiri subiti totali" è il totale dei tiri affrontati dal portiere in questa partita (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
       }
+      riconquistaReport(pag, [partita]);
       zoneCampoReport(pag, [partita], true);
       golGameCampoReport(pag, [partita]);
     }, {piena:true}),
@@ -5366,6 +5716,7 @@ async function generaReportStagionale(){
           ? `"Tiri subiti totali" è il totale dei tiri affrontati in stagione; dove il file della partita non ha la sezione «STATISTICHE PORTIERI GAME» il dato è stimato come parate del portiere più gol incassati dalla squadra in quella gara.`
           : `"Tiri subiti totali" è il totale dei tiri affrontati in stagione (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
       }
+      riconquistaReport(pag, ds.partite);
       zoneCampoReport(pag, ds.partite, true);
       golGameCampoReport(pag, ds.partite);
     }, {piena:true}),
