@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.28.1",
-  data: "2026-10-07",
-  note: "Correzione di un difetto introdotto dalla 1.28.0: in alto a sinistra nella pagina compariva una scritta spuria. Causa: il nuovo favicon a radar era scritto come SVG dentro l'attributo href ma con apici DOPPI al suo interno, e il primo di quegli apici chiudeva l'attributo — tutto il resto dell'SVG finiva nella pagina come testo. Un SVG inline dentro un attributo HTML va scritto con apici SINGOLI e con i caratteri minore, maggiore e cancelletto percent-encoded, come faceva la riga originale prima della modifica. Corretto e verificato che la pagina non contenga piu nessun nodo di testo spurio e che il favicon venga davvero disegnato dal browser. Nessuna altra modifica rispetto alla 1.28.0: tempo di riconquista nei report di partita e stagionale, e icona per la schermata Home."
+  numero: "1.33.0",
+  data: "2026-10-10",
+  note: "Palle perse che diventano gol (10/10/2026). Nuova sezione 11 nella Dashboard Partita e 10 nella Dashboard Allenamento, piu una sezione nel Report Partita, nel Report Stagionale e nel Report Periodo Allenamenti, e una riga con i nomi in «Cosa dicono i dati». Un gol viene attribuito all ultima palla persa della squadra che lo subisce, se avvenuta al massimo 15 secondi prima, nello stesso tempo, e se nel frattempo quella squadra non ha riavuto il pallone (un suo recupero, passaggio, dribbling o tiro spezza il legame). In partita contano i gol subiti dalla nostra squadra; in allenamento i gol di entrambe le squadre interne. Per ogni giocatore il numero di palle perse diventate gol accanto alle sue palle perse totali, e la zona del campo della perdita quando il file ha la posizione. Selettore partita/allenamento singolo o tutto il periodo. Controllo incrociato con i gol subiti dichiarati nel file."
 };
 
 /* =====================================================================
@@ -164,21 +164,80 @@ function secondiDaMMSS(v){
    ===================================================================== */
 const VELOCITA_MIN_VIDEO = 0.1, VELOCITA_MAX_VIDEO = 4;
 
-/** "diretta" (tagging dal vivo) oppure "differita" (tagging da video). Campo scritto da Seven Lab. */
-function metodoRilevazione(meta){
-  const m = String((meta && (meta["Metodo rilevazione"] || meta["Metodo"] || meta["Modalità"] || meta["Modalita"])) || "").trim().toLowerCase();
-  if(m.startsWith("differit")) return "differita";
-  if(m.startsWith("dirett")) return "diretta";
-  return null; // campo assente: file precedente a questa convenzione
+/* METODO DI RILEVAZIONE MANCANTE = DIRETTA (10/10/2026). Regola chiesta esplicitamente dall'utente: tutti i
+   file raccolti prima che Seven Lab scrivesse "Diretta"/"Differita" sono stati registrati dal vivo, e lo
+   storico non va perso né trattato come un caso a parte. Quindi: se il file non dice in modo riconoscibile
+   come è stato registrato, è DIRETTA. Il campo `predefinito` ricorda che non l'ha detto il file ma la
+   regola, così chi in futuro conterà "quante sessioni dal vivo e quante da video" sa da dove viene il dato.
+   L'unico caso in cui la regola si accompagna a un avviso è quello che un file vecchio non può produrre:
+   un file che dichiara una velocità di riproduzione ma non il metodo. Lì la regola si applica comunque
+   (diretta, tempi non toccati), ma il fatto viene detto, perché è il segno di un file nuovo il cui metodo
+   è scritto in un modo che il sistema non riconosce — e un file da video letto come diretta tiene i tempi
+   del cronometro di lavoro, cioè sbagliati del fattore di rallentamento. */
+const CHIAVI_METODO_NOTE = ["Metodo rilevazione","Metodo di rilevazione","Modalità rilevazione","Modalita rilevazione",
+  "Modalità","Modalita","Metodo","Rilevazione"];
+/** Riconosce il valore del metodo, con i sinonimi plausibili. null se non riconosciuto. */
+function interpretaMetodo(valore){
+  const v = String(valore||"").trim().toLowerCase();
+  if(!v) return null;
+  const differita = /differit|da video|^video$/.test(v), diretta = /dirett|^live$|dal vivo|^vivo$/.test(v);
+  if(differita && !diretta) return "differita";
+  if(diretta && !differita) return "diretta";
+  return null; // assente, sconosciuto o contraddittorio
+}
+/** "diretta" (tagging dal vivo) oppure "differita" (tagging da video). Cerca il campo prima fra i nomi
+ *  noti, poi fra qualunque chiave dei metadati che parli di metodo/modalità/rilevazione, poi — se Seven Lab
+ *  lo scrivesse riga per riga invece che in testa al file (punto ancora da chiarire nel playbook) — fra le
+ *  colonne della timeline, a maggioranza. Ritorna sempre un metodo: in assenza di un'indicazione
+ *  riconoscibile è "diretta" (regola dell'utente), con `predefinito:true`. */
+function metodoRilevazione(meta, eventi){
+  const esito = {metodo:"diretta", predefinito:true, letto:null, fonte:null, misto:false};
+  if(meta){
+    const chiaviMeta = Object.keys(meta).filter(k => k !== "_titoloApp");
+    const candidate = CHIAVI_METODO_NOTE.filter(k => meta[k] !== undefined)
+      .concat(chiaviMeta.filter(k => /metod|modalit|rilevazion/i.test(k) && !CHIAVI_METODO_NOTE.includes(k)));
+    for(const k of candidate){
+      const grezzo = String(meta[k]||"").trim();
+      if(!grezzo) continue;
+      const m = interpretaMetodo(grezzo);
+      if(m) return {metodo:m, predefinito:false, letto:grezzo, fonte:"metadati «"+k+"»", misto:false};
+      if(esito.letto === null){ esito.letto = grezzo; esito.fonte = "metadati «"+k+"»"; } // presente ma non riconosciuto
+    }
+  }
+  // riga per riga, nella timeline
+  const righe = Array.isArray(eventi) ? eventi : [];
+  if(righe.length){
+    const colonna = Object.keys(righe[0]||{}).find(k => /metod|modalit|rilevazion/i.test(k));
+    if(colonna){
+      const conteggio = {diretta:0, differita:0};
+      righe.forEach(r => { const m = interpretaMetodo(r[colonna]); if(m) conteggio[m]++; });
+      const tot = conteggio.diretta + conteggio.differita;
+      if(tot){
+        const m = conteggio.differita >= conteggio.diretta ? "differita" : "diretta";
+        return {metodo:m, predefinito:false, letto:m, fonte:"timeline, colonna «"+colonna+"»",
+          misto: conteggio.diretta > 0 && conteggio.differita > 0, conteggio};
+      }
+    }
+  }
+  return esito;
 }
 
 /** Velocità di riproduzione dichiarata nei metadati. null se assente o implausibile: in quel caso NON si
- *  corregge niente e lo si dichiara, invece di indovinare un fattore. */
+ *  corregge niente e lo si dichiara, invece di indovinare un fattore. Accetta "0,5", "0.5", "0,5x", "×0,5"
+ *  e "50%"; cerca il campo anche sotto nomi non previsti che parlino di velocità/rallentamento. */
 function velocitaRiproduzione(meta){
   if(!meta) return null;
-  const grezzo = meta["Velocità riproduzione"] ?? meta["Velocita riproduzione"] ?? meta["Velocità video"] ?? meta["Fattore rallentamento"];
+  let grezzo = meta["Velocità riproduzione"] ?? meta["Velocita riproduzione"] ?? meta["Velocità video"] ?? meta["Velocita video"] ?? meta["Fattore rallentamento"];
+  if(grezzo === undefined){
+    const k = Object.keys(meta).find(c => /velocit|rallent|playback/i.test(c));
+    if(k) grezzo = meta[k];
+  }
   if(grezzo === undefined || grezzo === null || String(grezzo).trim() === "") return null;
-  const v = parseFloat(String(grezzo).replace(",", "."));
+  const testo = String(grezzo).replace(",", ".");
+  const num = testo.match(/\d+(?:\.\d+)?/);
+  if(!num) return null;
+  let v = parseFloat(num[0]);
+  if(/%/.test(testo)) v = v / 100;
   if(!isFinite(v) || v < VELOCITA_MIN_VIDEO || v > VELOCITA_MAX_VIDEO) return null;
   return v;
 }
@@ -191,20 +250,47 @@ function tempoPartitaDaCronometro(tCrono, v, t0){
   return (tCrono - (t0 || 0)) * v;
 }
 
-/** Applica la correzione a un risultato di parsaFileSevenLab. Muta `eventi` e `riepilogoTempi` e torna la
- *  diagnostica, che viene conservata sulla sessione (campo `scalaTempi`) per poterla dichiarare a schermo e
- *  nei report — e per non riapplicarla mai due volte su una sessione riletta dalla memoria del browser. */
-function normalizzaTempiDifferita(parsed){
-  const diag = {metodo: metodoRilevazione(parsed.meta), applicata:false, velocita:null, t0:0, avviso:null};
-  if(diag.metodo !== "differita"){ parsed.scalaTempi = diag; return parsed; }
+/** Una durata in minuti scritta da Seven Lab ("52", "37,5") riportata al tempo di partita. Torna la stringa
+ *  com'era se non è un numero (campo vuoto), così una colonna assente resta assente. */
+function scalaMinutiTesto(grezzo, v){
+  if(grezzo === undefined || grezzo === null || String(grezzo).trim() === "") return grezzo;
+  const n = parseFloat(String(grezzo).replace(",", "."));
+  if(!isFinite(n)) return grezzo;
+  return String(Math.round(n * v * 10) / 10);
+}
 
+/** Applica la correzione a un risultato di parsaFileSevenLab. Muta `eventi`, `riepilogoTempi`, i minuti
+ *  della tabella giocatori e la durata della sessione, e torna la diagnostica, che viene conservata sulla
+ *  sessione (campo `scalaTempi`) per poterla dichiarare a schermo e nei report — e per non riapplicarla mai
+ *  due volte su una sessione riletta dalla memoria del browser. */
+function normalizzaTempiDifferita(parsed){
+  const met = metodoRilevazione(parsed.meta, parsed.eventi);
+  const diag = {metodo: met.metodo, predefinito: met.predefinito, metodoLetto: met.letto, fonteMetodo: met.fonte,
+    applicata:false, minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[]};
   const v = velocitaRiproduzione(parsed.meta);
+  const chiudi = () => { diag.avviso = diag.avvisi.length ? diag.avvisi.join(" ") : null; parsed.scalaTempi = diag; return parsed; };
+
+  if(met.letto && met.predefinito)
+    diag.avvisi.push(`Il file indica il metodo di rilevazione come «${met.letto}», che il sistema non riconosce: la sessione è stata trattata come registrata in diretta. Se era da video, segnalacelo: basta insegnare all'app questa scritta.`);
+  if(met.misto)
+    diag.avvisi.push(`La timeline mescola eventi registrati in diretta (${nf0(met.conteggio.diretta)}) e in differita (${nf0(met.conteggio.differita)}): la sessione è stata trattata come ${met.metodo}, quella in maggioranza. Una correzione dei tempi per singola riga non è ancora prevista.`);
+
+  if(diag.metodo !== "differita"){
+    // Regola dell'utente: senza metodo è diretta. Ma un file che dichiara una velocità di riproduzione non
+    // può essere un file dello storico, che quel campo non l'ha mai avuto: va detto.
+    if(met.predefinito && v !== null && v !== 1)
+      diag.avvisi.push(`Il file dichiara una velocità di riproduzione (${String(v).replace(".", ",")}×) ma non dice se è stato registrato in diretta o in differita: per regola è stato trattato come diretta e i tempi NON sono stati corretti. Se è stato registrato da video, i tempi e i minuti di questa sessione sono gonfiati: segnalacelo.`);
+    return chiudi();
+  }
+
   if(v === null){
-    diag.avviso = "Sessione registrata in differita ma senza velocità di riproduzione dichiarata nel file: i tempi non sono stati corretti. Conteggi e posizioni restano validi; possesso palla, divisione dei tempi, minuto d'ingresso dei subentrati e tempo di riconquista NON sono affidabili per questa sessione.";
-    parsed.scalaTempi = diag; return parsed;
+    diag.avvisi.push("Sessione registrata in differita ma senza velocità di riproduzione dichiarata nel file: i tempi non sono stati corretti. Conteggi e posizioni restano validi; minuti giocati, possesso palla, divisione dei tempi, minuto d'ingresso dei subentrati e tempo di riconquista NON sono affidabili per questa sessione.");
+    return chiudi();
   }
   diag.velocita = v;
-  if(v === 1){ parsed.scalaTempi = diag; return parsed; }
+  if(v > 1)
+    diag.avvisi.push(`Velocità di riproduzione dichiarata superiore a 1 (${String(v).replace(".", ",")}×): vuol dire video più veloce del reale, insolito per registrare. Se il numero nel file è un «fattore di rallentamento» (2 = metà velocità) invece della velocità del lettore, i tempi sono sbagliati di un fattore ${String(Math.round(v*v*10)/10).replace(".", ",")}: segnalacelo.`);
+  if(v === 1) return chiudi();
 
   const rt = parsed.riepilogoTempi;
   const t0 = (rt && isFinite(rt.inizioPartitaSec)) ? rt.inizioPartitaSec : 0;
@@ -230,9 +316,39 @@ function normalizzaTempiDifferita(parsed){
       if(rt[k] !== null && rt[k] !== undefined && isFinite(rt[k])) rt[k] = tempoPartitaDaCronometro(rt[k], v, t0);
     });
   }
+
+  // MINUTI GIOCATI E DURATA DELLA SESSIONE (10/10/2026). Seven Lab calcola i minuti di ciascun giocatore
+  // sommando i tratti in cui è in campo, misurati sullo stesso cronometro di lavoro (vedi la mappa del
+  // codice di Seven Lab nel progetto, modulo 063, e il debito annotato lì: "velocità video registrata ma
+  // non usata per correggere tempi/minuti"). La versione 1.27.0 correggeva i tempi degli eventi ma non
+  // questi: in un allenamento a 0,5× un giocatore presente per tutti i 25' risultava averne giocati 50, e il
+  // carico (minuti × RPE) raddoppiava. Sono durate, non istanti: si scalano e basta, senza t0.
+  (parsed.righe || []).forEach(r => {
+    if(r["Minuti giocati"] !== undefined) r["Minuti giocati"] = scalaMinutiTesto(r["Minuti giocati"], v);
+    const mm = secondiDaMMSS(r["Minutaggio"]);
+    if(mm !== null) r["Minutaggio"] = mmssDaSecondi(mm * v);
+  });
+  if(parsed.meta && parsed.meta["Durata minuti"] !== undefined)
+    parsed.meta["Durata minuti"] = scalaMinutiTesto(parsed.meta["Durata minuti"], v);
+  diag.minutiCorretti = true;
   diag.applicata = true;
-  parsed.scalaTempi = diag;
-  return parsed;
+  return chiudi();
+}
+
+/** Diagnostica dei tempi di una sessione GIÀ SALVATA nel browser, letta con la regola di oggi. Le sessioni
+ *  caricate con una versione precedente possono non averla affatto (prima della 1.27.0) o averla con
+ *  metodo null (dalla 1.27.0 alla 1.31.0, quando "nessun metodo" restava indeterminato): per la regola
+ *  dell'utente sono diretta. Non tocca l'oggetto salvato. */
+function scalaTempiEffettiva(sc){
+  if(!sc) return {metodo:"diretta", predefinito:true, metodoLetto:null, fonteMetodo:null, applicata:false,
+    minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[]};
+  if(sc.metodo === "diretta" || sc.metodo === "differita") return sc;
+  return Object.assign({}, sc, {metodo:"diretta", predefinito:true});
+}
+/** Fattore da applicare ai minuti di una sessione salvata con la 1.27.0-1.31.0: tempi degli eventi già
+ *  corretti, minuti giocati no (vedi sopra). 1 in tutti gli altri casi. */
+function fattoreMinutiArretrati(sc){
+  return (sc && sc.applicata && !sc.minutiCorretti && isFinite(sc.velocita) && sc.velocita > 0) ? sc.velocita : 1;
 }
 
 /** m:ss da secondi — speculare a secondiDaMMSS, serve a riscrivere "Minutaggio" dopo la correzione. */
@@ -261,7 +377,7 @@ function parsaFileSevenLab(testo){
   for(; i<righeGrezze.length; i++){
     if(rigaVuota(righeGrezze[i])){ i++; break; }
     const campi = parsaRigaCSV(righeGrezze[i]);
-    if(campi.length === 2) meta[campi[0]] = campi[1];
+    if(campi.length >= 2 && campi.slice(2).every(c => c === "")) meta[campi[0]] = campi[1];
     else if(campi.length === 1 && !meta["_titoloApp"]) meta["_titoloApp"] = campi[0];
   }
   const tipo = String(meta["Tipo"] || "").trim().toLowerCase();
@@ -717,6 +833,440 @@ function estraiPuntiGolGameDaSessione(sessione, tipo){
 }
 
 /* =====================================================================
+   DOVE ENTRA LA PALLA IN PORTA (punto d'ingresso in porta dei gol fatti, 08/10/2026)
+   Richiesta esplicita dell'utente: "nel csv game ti arriveranno anche le coordinate geografiche relative a
+   dove il tiro finisce nella porta da calcio dopo un goal fatto! quindi nella dashboard delle partite e nel
+   report dovrai mostrare un grafico con una porta da calcio e con un pallone indicare il punto relativo alle
+   coordinate [...] la porta di calcio a 7 è 7.32*2.44, ma ti serve solo come indicazione, perché a me non
+   interessano le quote con le misure esatte, ma solo graficamente".
+   Quindi: le misure servono SOLO a tenere la proporzione del disegno (3:1), e NON vengono mai scritte a
+   schermo né nei report — nessuna quota, nessun "7.32 m".
+
+   NOMI DI COLONNA: ASSUNZIONE, NON CERTEZZA. Al momento in cui questa funzione è stata scritta nessun file
+   reale con queste coordinate era ancora stato visto. Il punto 24 del playbook ricorda che il formato dei
+   DATI SPAZIALI era stato indovinato sbagliato la prima volta, e il punto 26 che Seven Lab ha poi rinominato
+   "X metri" in "X metri normalizzati": quindi qui NON si cerca un nome preciso, si riconoscono le colonne per
+   come sono fatte (individuaColonnePorta) e si deduce l'unità di misura dai valori stessi (scalaAssePorta).
+   Tutto quello che viene dedotto è scritto in chiaro sotto il grafico, così il primo file reale lo conferma
+   o lo smentisce a vista invece di produrre un grafico plausibile e sbagliato.
+
+   VERSO DELL'ASSE VERTICALE: non viene mai raddrizzato in automatico. Se Seven Lab misurasse l'altezza dalla
+   traversa verso il basso invece che da terra verso l'alto, i gol finirebbero disegnati capovolti; il sistema
+   lo SEGNALA quando il sospetto è forte (quasi tutti i gol sotto la traversa) invece di correggere da solo —
+   stessa linea tenuta per la convenzione sulla velocità di riproduzione dei file in differita: un dato
+   ambiguo si dichiara, non si aggiusta a indovinare.
+   ===================================================================== */
+const PORTA_LARGHEZZA_M = 7.32, PORTA_ALTEZZA_M = 2.44; // solo per la PROPORZIONE del disegno (3:1)
+const PORTA_GOL_INDICATIVI = 10; // sotto questo numero di gol il disegno vale come indizio, non come tendenza
+
+/** Riconosce, fra le colonne di "DETTAGLIO GOL GAME", la coppia che contiene il punto d'ingresso in porta.
+ *  Non cerca un nome preciso (vedi la nota sopra): tiene le colonne che parlano della porta/dello specchio
+ *  e, fra quelle, individua quella orizzontale e quella verticale. Richiede che la colonna contenga almeno
+ *  un numero nelle righe passate, così una colonna descrittiva (es. "Zona porta" = "angolo basso sinistro")
+ *  non viene mai scambiata per una coordinata. Ritorna null se non trova la coppia. */
+function individuaColonnePorta(righe){
+  if(!Array.isArray(righe) || !righe.length) return null;
+  const chiavi = Object.keys(righe[0] || {});
+  const haNumeri = k => righe.some(r => coordinataValida(r[k]) !== null);
+  // Candidate: colonne che parlano della porta (o dell'ingresso/della rete/dello specchio), escluse quelle
+  // che descrivono il campo ("Larghezza campo m") o che sono etichette testuali ("Zona porta", "Settore").
+  const candidate = chiavi.filter(k => {
+    const s = String(k).toLowerCase();
+    if(!/port|ingress|rete|specchio/.test(s)) return false;
+    if(/campo|zona|settore|lato|descri|angolo|portiere/.test(s)) return false;
+    return haNumeri(k);
+  });
+  const orizzontale = candidate.find(k => /(^|[^a-z])x([^a-z]|$)|largh|orizz/i.test(String(k)));
+  const verticale   = candidate.find(k => /(^|[^a-z])y([^a-z]|$)|altez|vertic|alt\b/i.test(String(k)));
+  if(!orizzontale || !verticale || orizzontale === verticale) return null;
+  // Etichetta testuale di Seven Lab sul settore di porta, se c'è: non serve per disegnare, ma è un
+  // controllo incrociato gratuito sulla nostra griglia 3x3 (come "Terzo campo"/"Fascia" per le zone campo).
+  const etichetta = chiavi.find(k => /(zona|settore|angolo).*(port|rete|specchio)|(port|rete|specchio).*(zona|settore|angolo)/i.test(String(k)));
+  return {orizzontale, verticale, etichetta: etichetta || null};
+}
+
+/** Deduce dai valori l'unità di misura di un asse del punto d'ingresso in porta: normalizzata 0-1, metri
+ *  (0 = palo sinistro / terra), metri centrati sul palo (negativi a sinistra del centro) o percentuale
+ *  0-100. `massimoMetri` è la misura dell'asse (7.32 in larghezza, 2.44 in altezza). Torna anche `ambigua`
+ *  quando i punti sono troppo pochi perché la deduzione sia solida: in quel caso l'avviso lo dice. */
+function scalaAssePorta(valori, massimoMetri){
+  const validi = valori.filter(v => Number.isFinite(v));
+  if(!validi.length) return {tipo:"ignota", ambigua:true};
+  const max = Math.max(...validi), min = Math.min(...validi);
+  if(min < -0.01) return {tipo:"metri-centrati", ambigua: validi.length < 3};
+  if(max <= 1.0001) return {tipo:"normalizzata", ambigua: max < 0.2 || validi.length < 3};
+  if(max <= massimoMetri*1.08) return {tipo:"metri", ambigua: validi.length < 3};
+  if(max <= 100.5) return {tipo:"percentuale", ambigua: validi.length < 3};
+  return {tipo:"ignota", ambigua:true};
+}
+const ETICHETTA_SCALA_PORTA = {
+  "normalizzata": "valori da 0 a 1",
+  "metri": "metri dal palo/da terra",
+  "metri-centrati": "metri dal centro della porta",
+  "percentuale": "percentuale 0-100",
+  "ignota": "unità non riconosciuta"
+};
+/** Porta un valore grezzo sull'intervallo 0-1 dell'asse (0 = palo sinistro / terra, 1 = palo destro /
+ *  traversa), secondo la scala dedotta. Fuori intervallo viene tagliato ai bordi invece di essere scartato:
+ *  un tiro sul palo registrato a 7.4 invece di 7.32 è un gol vero, non un dato da buttare. */
+function normalizzaValorePorta(v, scala, massimoMetri){
+  if(!Number.isFinite(v)) return null;
+  let t;
+  if(scala === "normalizzata") t = v;
+  else if(scala === "metri") t = v / massimoMetri;
+  else if(scala === "metri-centrati") t = (v + massimoMetri/2) / massimoMetri;
+  else if(scala === "percentuale") t = v / 100;
+  else return null;
+  return Math.min(1, Math.max(0, t));
+}
+
+/** Estrae da una sessione i punti d'ingresso in porta dei gol fatti. Ritorna sempre
+ *  {punti, diagnostica}: `punti` = [{x01, y01, marcatore, assist, secondo, zonaFile}] con x01 0=palo
+ *  sinistro → 1=palo destro (porta vista da chi tira) e y01 0=terra → 1=traversa; `diagnostica` dice quali
+ *  colonne sono state usate, con quale unità, e gli eventuali avvisi da mostrare all'utente. */
+function estraiPuntiPortaDaSessione(sessione){
+  const righe = (sessione && Array.isArray(sessione.DettaglioGolGame)) ? sessione.DettaglioGolGame : [];
+  const vuoto = {punti: [], diagnostica: null};
+  if(!righe.length) return vuoto;
+  const col = individuaColonnePorta(righe);
+  if(!col) return vuoto;
+  const grezzi = righe.map(r => ({
+    vx: coordinataValida(r[col.orizzontale]), vy: coordinataValida(r[col.verticale]),
+    marcatore: r["Marcatore"] || null, assist: r["Assist"] || null, secondo: N(r["Secondo"]),
+    zonaFile: col.etichetta ? (String(r[col.etichetta]||"").trim() || null) : null
+  })).filter(g => g.vx !== null && g.vy !== null);
+  if(!grezzi.length) return vuoto;
+  const scalaX = scalaAssePorta(grezzi.map(g=>g.vx), PORTA_LARGHEZZA_M);
+  const scalaY = scalaAssePorta(grezzi.map(g=>g.vy), PORTA_ALTEZZA_M);
+  const punti = grezzi.map(g => ({
+    x01: normalizzaValorePorta(g.vx, scalaX.tipo, PORTA_LARGHEZZA_M),
+    y01: normalizzaValorePorta(g.vy, scalaY.tipo, PORTA_ALTEZZA_M),
+    marcatore: g.marcatore, assist: g.assist, secondo: g.secondo, zonaFile: g.zonaFile
+  })).filter(p => p.x01 !== null && p.y01 !== null);
+  const avvisi = [];
+  if(scalaX.tipo === "ignota" || scalaY.tipo === "ignota")
+    avvisi.push(`Unità di misura non riconosciuta nelle colonne «${col.orizzontale}» / «${col.verticale}»: i punti sono comunque disegnati, ma la posizione potrebbe non essere corretta. Mandaci il file così sistemiamo la lettura.`);
+  else if(scalaX.ambigua || scalaY.ambigua)
+    avvisi.push(`Unità di misura dedotta da pochi valori (${ETICHETTA_SCALA_PORTA[scalaX.tipo]} in larghezza, ${ETICHETTA_SCALA_PORTA[scalaY.tipo]} in altezza): con pochi gol la deduzione è fragile e si consolida da sé man mano che arrivano altre partite.`);
+  // Sospetto "asse verticale al rovescio": se quasi tutti i gol risultano nel terzo alto della porta è più
+  // probabile che l'altezza sia misurata dalla traversa verso il basso che non che si segni sempre sotto
+  // l'incrocio. Si segnala, non si corregge (vedi la nota di testa).
+  const alti = punti.filter(p => p.y01 > 2/3).length;
+  if(punti.length >= 4 && alti / punti.length >= 0.8)
+    avvisi.push(`Attenzione: ${nf0(alti)} gol su ${nf0(punti.length)} risultano nel terzo alto della porta. Può essere vero, ma è il segnale tipico di un'altezza misurata dalla traversa verso il basso invece che da terra: se nel tuo file è così, segnalacelo e ribaltiamo l'asse.`);
+  return {punti, diagnostica: {
+    colonnaX: col.orizzontale, colonnaY: col.verticale, colonnaEtichetta: col.etichetta,
+    scalaX: scalaX.tipo, scalaY: scalaY.tipo, avvisi
+  }};
+}
+
+/* Settori della porta: la stessa griglia 3x3 già usata per le zone di campo, applicata allo specchio della
+   porta. Sinistra/destra sono dal punto di vista di chi tira (la porta vista di fronte, come nel disegno). */
+const PORTA_RIGHE = ["Alto", "Mezza", "Basso"];      // indice 0 = sotto la traversa
+const PORTA_COLONNE = ["sinistra", "centro", "destra"];
+function zonaPorta(x01, y01){
+  const col = x01 < 1/3 ? 0 : (x01 < 2/3 ? 1 : 2);
+  const riga = y01 >= 2/3 ? 0 : (y01 >= 1/3 ? 1 : 2);
+  return {riga, col, indice: riga*3+col, etichetta: PORTA_RIGHE[riga]+" · "+PORTA_COLONNE[col]};
+}
+/** Conteggio e percentuale dei gol per ciascuno dei 9 settori della porta. Restituisce sempre i valori
+ *  ASSOLUTI accanto alle percentuali (richiesta dell'utente del 04/09/2026: una percentuale deve poter
+ *  essere interrogata risalendo ai numeri che la generano). */
+function calcolaSettoriPorta(punti){
+  const celle = Array.from({length:9}, (_,i) => ({indice:i, riga:Math.floor(i/3), col:i%3,
+    etichetta: PORTA_RIGHE[Math.floor(i/3)]+" · "+PORTA_COLONNE[i%3], n:0, pct:0}));
+  (punti||[]).forEach(p => { celle[zonaPorta(p.x01, p.y01).indice].n++; });
+  const totale = (punti||[]).length;
+  celle.forEach(c => { c.pct = totale ? (c.n/totale)*100 : 0; });
+  return {celle, totale};
+}
+
+/** Disegna un pallone da calcio: sfera bianca, pentagono scuro al centro e cuciture verso il bordo. A raggio
+ *  piccolo il pentagono resta l'unico dettaglio leggibile, ed è quello che fa riconoscere la palla. */
+function disegnaPallone(ctx, cx, cy, r, opts){
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.shadowColor = "rgba(0,0,0,0.30)"; ctx.shadowBlur = r*0.6; ctx.shadowOffsetY = r*0.20;
+  ctx.fillStyle = opts.palloneFondo; ctx.fill();
+  ctx.shadowColor = "transparent"; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  const vertice = i => { const a = -Math.PI/2 + i*2*Math.PI/5; return [Math.cos(a), Math.sin(a)]; };
+  ctx.beginPath();
+  for(let i=0;i<5;i++){ const [ux,uy] = vertice(i); const px = cx+ux*r*0.44, py = cy+uy*r*0.44;
+    i ? ctx.lineTo(px,py) : ctx.moveTo(px,py); }
+  ctx.closePath(); ctx.fillStyle = opts.palloneMacchia; ctx.fill();
+  ctx.strokeStyle = opts.palloneMacchia; ctx.lineWidth = Math.max(0.7, r*0.11); ctx.lineCap = "round";
+  for(let i=0;i<5;i++){ const [ux,uy] = vertice(i);
+    ctx.beginPath(); ctx.moveTo(cx+ux*r*0.44, cy+uy*r*0.44); ctx.lineTo(cx+ux*r*0.90, cy+uy*r*0.90); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.strokeStyle = opts.palloneBordo; ctx.lineWidth = Math.max(1, r*0.13); ctx.stroke();
+  ctx.restore();
+}
+
+/** Disegna una porta da calcio vista di fronte (proporzione 7.32x2.44 = 3:1, nessuna quota a schermo) con un
+ *  pallone su ogni punto d'ingresso. `punti`: [{x01, y01}] con 0-1 su ciascun asse (0 = palo sinistro / terra).
+ *  `opts`: {sfondo, erba, telaio, lineaPorta, rete, testo, palloneFondo, palloneMacchia, palloneBordo,
+ *  numera} — `numera:true` scrive accanto a ogni pallone il numero con cui compare nell'elenco sotto il
+ *  grafico (solo quando i gol sono pochi: oltre, i numeri coprirebbero i palloni). */
+function disegnaPortaCalcio(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  // Geometria: la porta tiene la proporzione reale, centrata, con un po' d'aria sopra e la fascia di prato
+  // sotto. Le misure in metri servono SOLO qui, per il rapporto larghezza/altezza.
+  // Le scritte e i palloni vanno dimensionati su quanto il canvas viene MOSTRATO, non su quanti pixel ha:
+  // lo stesso disegno serve la dashboard (canvas grande, rimpicciolito poco) e i report (canvas grande
+  // rimpicciolito a meno della metà per la stampa). Senza questa correzione le etichette uscivano enormi a
+  // schermo e minuscole in stampa.
+  const scalaCss = (canvas.clientWidth && canvas.clientWidth > 0) ? (canvas.clientWidth / w) : 1;
+  const px = mostrati => Math.max(7, mostrati / scalaCss); // px di canvas per N px davvero visti
+  // La fascia sotto la linea di fondo deve bastare alle etichette, che sono dimensionate in pixel VISTI:
+  // su uno schermo stretto occupano una fetta ben più grande del canvas, e con una fascia proporzionale
+  // finivano sopra la porta.
+  const padLat = w*0.07, sopra = h*0.06, sotto = Math.max(h*0.075, px(27));
+  const disponibileH = h - sopra - sotto;
+  let gh = (w - padLat*2) * (PORTA_ALTEZZA_M/PORTA_LARGHEZZA_M), gw;
+  if(gh > disponibileH) gh = disponibileH;
+  gw = gh * (PORTA_LARGHEZZA_M/PORTA_ALTEZZA_M);
+  // la porta è appoggiata in basso, non centrata: lo spazio che avanza va SOPRA la traversa (dove si legge
+  // come cielo) invece che sotto la linea di fondo, dove sarebbe solo prato vuoto
+  const x0 = (w - gw)/2, y0 = sopra + Math.max(0, disponibileH - gh), y1 = y0 + gh;
+  const spessore = Math.max(2, gh*0.066);
+  // prato
+  ctx.fillStyle = opts.erba; ctx.fillRect(0, y1, w, h-y1);
+  // specchio della porta: velo con un filo di profondità (più scuro verso il basso, dove la rete è più
+  // fitta e in ombra) e rete a maglie fini
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x0, y0, gw, gh); ctx.clip();
+  const velo = ctx.createLinearGradient(0, y0, 0, y1);
+  velo.addColorStop(0, opts.rete.veloAlto); velo.addColorStop(1, opts.rete.veloBasso);
+  ctx.fillStyle = velo; ctx.fillRect(x0, y0, gw, gh);
+  ctx.strokeStyle = opts.rete.filo; ctx.lineWidth = Math.max(0.5, gh*0.005);
+  const passo = gh/10;
+  for(let x=x0; x<=x0+gw+0.1; x+=passo){ ctx.beginPath(); ctx.moveTo(x,y0); ctx.lineTo(x,y1); ctx.stroke(); }
+  for(let y=y0; y<=y1+0.1; y+=passo){ ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+gw,y); ctx.stroke(); }
+  ctx.restore();
+  // i 9 settori, tratteggiati e discreti: servono a leggere il disegno, non a dominarlo
+  ctx.save();
+  ctx.strokeStyle = opts.lineaSettori; ctx.lineWidth = Math.max(0.8, gh*0.009);
+  ctx.setLineDash([gh*0.045, gh*0.04]);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(x0+gw*i/3, y0); ctx.lineTo(x0+gw*i/3, y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x0, y0+gh*i/3); ctx.lineTo(x0+gw, y0+gh*i/3); ctx.stroke();
+  }
+  ctx.restore();
+  // linea di fondo
+  ctx.strokeStyle = opts.lineaPorta; ctx.lineWidth = Math.max(1, gh*0.016);
+  ctx.beginPath(); ctx.moveTo(w*0.015, y1); ctx.lineTo(w*0.985, y1); ctx.stroke();
+  // telaio: pali e traversa, fuori dallo specchio (così lo specchio è esattamente l'area di porta)
+  ctx.save();
+  ctx.fillStyle = opts.telaio; ctx.strokeStyle = opts.telaioBordo; ctx.lineWidth = Math.max(1, gh*0.011);
+  ctx.lineJoin = "miter";
+  const bar = (bx, by, bw, bh) => { ctx.beginPath(); ctx.rect(bx, by, bw, bh); ctx.fill(); ctx.stroke(); };
+  bar(x0-spessore, y0-spessore, spessore, gh+spessore);
+  bar(x0+gw,       y0-spessore, spessore, gh+spessore);
+  bar(x0-spessore, y0-spessore, gw+spessore*2, spessore);
+  ctx.restore();
+  // palloni
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x01) && Number.isFinite(p.y01));
+  const r = Math.max(4, gh*0.068);
+  const evidenziati = opts.evidenziati || [];
+  const posizioni = validi.map((p, i) => ({indice:i, punto:p, cx: x0 + p.x01*gw, cy: y1 - p.y01*gh, r}));
+  posizioni.forEach(pos => {
+    if(evidenziati.indexOf(pos.indice) >= 0){
+      ctx.save();
+      ctx.beginPath(); ctx.arc(pos.cx, pos.cy, r*1.55, 0, Math.PI*2);
+      ctx.fillStyle = opts.alone; ctx.fill();
+      ctx.beginPath(); ctx.arc(pos.cx, pos.cy, r*1.42, 0, Math.PI*2);
+      ctx.strokeStyle = opts.aloneBordo; ctx.lineWidth = Math.max(1.5, r*0.16); ctx.stroke();
+      ctx.restore();
+    }
+    disegnaPallone(ctx, pos.cx, pos.cy, r, opts);
+  });
+  if(opts.numera) posizioni.forEach(pos => {
+    ctx.save();
+    ctx.font = `800 ${Math.round(r*1.05)}px Satoshi, system-ui, sans-serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    const rb = r*0.72;
+    // il numero sta in alto a destra del pallone, ma rientra a sinistra/in basso se finirebbe fuori
+    let bx = pos.cx + r*1.25, by = pos.cy - r*1.05;
+    if(bx + rb > w - 2) bx = pos.cx - r*1.25;
+    if(by - rb < 2) by = pos.cy + r*1.05;
+    ctx.beginPath(); ctx.arc(bx, by, rb, 0, Math.PI*2);
+    ctx.fillStyle = opts.badgeFondo; ctx.fill();
+    ctx.fillStyle = opts.badgeTesto; ctx.fillText(String(pos.indice+1), bx, by);
+    ctx.restore();
+  });
+  if(!validi.length){
+    ctx.save();
+    ctx.font = `600 ${Math.round(px(13))}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = opts.testo; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("Nessun punto d'ingresso registrato", w/2, y0+gh/2);
+    ctx.restore();
+  }
+  // orientamento: senza questa riga non si capisce da che parte si guarda la porta
+  ctx.save();
+  const corpoEt = Math.min(px(10.5), gh*0.105);
+  ctx.font = `700 ${Math.round(corpoEt)}px Satoshi, system-ui, sans-serif`;
+  ctx.fillStyle = opts.testo; ctx.textBaseline = "bottom";
+  const yEt = Math.min(h - px(6), y1 + corpoEt*2);
+  ctx.textAlign = "left";  ctx.fillText("SINISTRA", w*0.025, yEt);
+  ctx.textAlign = "right"; ctx.fillText("DESTRA", w-w*0.025, yEt);
+  // la didascalia centrale sparisce sugli schermi stretti, dove finirebbe addosso alle due laterali
+  if(canvas.clientWidth === 0 || canvas.clientWidth > 430){
+    ctx.font = `500 ${Math.round(corpoEt*0.95)}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = opts.testoTenue || opts.testo;
+    ctx.textAlign = "center"; ctx.fillText(opts.didascalia || "porta vista da chi tira", w/2, yEt);
+  }
+  ctx.restore();
+  // la geometria resta attaccata al canvas: serve a capire su quale pallone si è cliccato
+  canvas.__porta = {posizioni, x0, y0, gw, gh, r};
+  return canvas.__porta;
+}
+
+/** Rende cliccabili i palloni del grafico della porta — richiesta dell'utente (09/10/2026): invece di una
+ *  tabella sotto il grafico, il nome del marcatore e il minuto compaiono in un riquadro a comparsa quando si
+ *  tocca il pallone. Gestisce anche il caso di più gol finiti quasi nello stesso punto: il riquadro li
+ *  elenca tutti, perché a quel punto un solo tocco non potrebbe distinguerli.
+ *  Funziona identico con mouse e con dito (`pointerdown`), e le coordinate si convertono passando per il
+ *  rettangolo del canvas, quindi resta giusto a qualunque larghezza di schermo senza ridisegnare nulla. */
+function collegaPortaInterattiva(canvas, punti, opts, conPartita){
+  const wrap = canvas.parentElement;
+  if(!wrap) return;
+  const pop = document.createElement("div");
+  pop.className = "porta-popup nascosto";
+  pop.setAttribute("role", "dialog");
+  wrap.appendChild(pop);
+  let apertiOra = [];
+  const ridisegna = evidenziati => disegnaPortaCalcio(canvas, punti, Object.assign({}, opts, {evidenziati}));
+  const chiudi = () => { apertiOra = []; pop.classList.add("nascosto"); ridisegna([]); };
+  const coordinateCanvas = ev => {
+    const rect = canvas.getBoundingClientRect();
+    if(!rect.width || !rect.height) return null;
+    return {x: (ev.clientX - rect.left) * (canvas.width / rect.width),
+            y: (ev.clientY - rect.top) * (canvas.height / rect.height), rect};
+  };
+  const colpiti = c => {
+    const g = canvas.__porta;
+    if(!g) return [];
+    // raggio di tocco più generoso del pallone: su telefono il dito non è preciso al pixel
+    const soglia = g.r * 1.6;
+    return g.posizioni
+      .map(p => ({p, d: Math.hypot(p.cx - c.x, p.cy - c.y)}))
+      .filter(o => o.d <= soglia)
+      .sort((a,b) => a.d - b.d)
+      .map(o => o.p);
+  };
+  canvas.addEventListener("pointermove", ev => {
+    if(ev.pointerType !== "mouse") return;
+    const c = coordinateCanvas(ev);
+    canvas.style.cursor = (c && colpiti(c).length) ? "pointer" : "default";
+  });
+  canvas.addEventListener("pointerdown", ev => {
+    const c = coordinateCanvas(ev);
+    if(!c) return;
+    const sotto = colpiti(c);
+    if(!sotto.length){ chiudi(); return; }
+    const indici = sotto.map(p => p.indice);
+    if(apertiOra.length === indici.length && apertiOra.every((v,i) => v === indici[i]) && !pop.classList.contains("nascosto")){
+      chiudi(); return; // secondo tocco sullo stesso pallone: si richiude
+    }
+    apertiOra = indici;
+    const zona = zonaPorta(sotto[0].punto.x01, sotto[0].punto.y01).etichetta;
+    pop.innerHTML = `
+      <button type="button" class="porta-popup-chiudi" aria-label="Chiudi">×</button>
+      <div class="pp-zona">${esc(zona)}</div>
+      ${sotto.map(p => {
+        const d = p.punto;
+        return `<div class="pp-gol">
+          <span class="pp-min">${d.secondo ? esc(mmssDaSecondi(d.secondo)) : "—"}</span>
+          <span class="pp-nome">${esc(d.marcatore || "Marcatore non indicato")}</span>
+          ${d.assist ? `<span class="pp-assist">assist di ${esc(d.assist)}</span>` : ""}
+          ${conPartita ? `<span class="pp-partita">${esc(d.partita || "")}</span>` : ""}
+          ${d.zonaFile ? `<span class="pp-file">Seven Lab: ${esc(d.zonaFile)}</span>` : ""}
+        </div>`; }).join("")}
+      ${sotto.length > 1 ? `<div class="pp-nota">${nf0(sotto.length)} gol entrati quasi nello stesso punto.</div>` : ""}`;
+    pop.querySelector(".porta-popup-chiudi").addEventListener("click", e => { e.stopPropagation(); chiudi(); });
+    pop.classList.remove("nascosto");
+    pop.classList.remove("porta-popup-sotto");
+    pop.style.left = ""; pop.style.top = "";
+    ridisegna(indici);
+    // Posizione: sopra il pallone, rientrata nei bordi del disegno. Se però il riquadro è più alto del
+    // disegno stesso (succede su telefono, dove il grafico è alto poco più di cento pixel) non esiste
+    // nessuna posizione che lo tenga dentro: allora scende sotto il grafico, dentro la scheda.
+    const scala = c.rect.width / canvas.width;
+    const altezzaPop = pop.offsetHeight;
+    if(altezzaPop > c.rect.height - 16){ pop.classList.add("porta-popup-sotto"); return; }
+    const cxCss = sotto[0].cx * scala, cyCss = sotto[0].cy * (c.rect.height / canvas.height);
+    const larghezzaPop = pop.offsetWidth;
+    let left = cxCss - larghezzaPop/2;
+    left = Math.max(6, Math.min(c.rect.width - larghezzaPop - 6, left));
+    let top = cyCss - altezzaPop - canvas.__porta.r*scala - 10;
+    if(top < 6) top = cyCss + canvas.__porta.r*scala + 10;
+    top = Math.max(6, Math.min(c.rect.height - altezzaPop - 6, top));
+    pop.style.left = Math.round(left)+"px";
+    pop.style.top = Math.round(top)+"px";
+  });
+  document.addEventListener("pointerdown", ev => {
+    if(!wrap.contains(ev.target) && !pop.classList.contains("nascosto")) chiudi();
+  });
+}
+
+/** Raccoglie i punti d'ingresso in porta di più sessioni, tenendo per ogni punto l'etichetta della partita
+ *  (serve nell'elenco quando il periodo scelto contiene più di una gara) e ordinandoli in ordine di gara e
+ *  di minuto, così la numerazione del disegno e quella dell'elenco coincidono. */
+function raccogliPuntiPorta(sessioni){
+  const fuori = [];
+  (sessioni||[]).forEach(s => (s.PuntiPorta||[]).forEach(p => fuori.push(Object.assign({}, p, {
+    // `idPartita` è l'identificativo vero: due gare possono avere la stessa etichetta (stessa data, stesso
+    // avversario) e contarle come una sola farebbe sparire la colonna "Partita" proprio quando serve.
+    idPartita: s.Match_ID || s.Sessione_ID || String(s.Ordine||""),
+    partita: s.Etichetta || s.Match_ID || "", ordinePartita: s.Ordine || 0}))));
+  return fuori.sort((a,b) => (a.ordinePartita - b.ordinePartita) || ((a.secondo||0) - (b.secondo||0)));
+}
+/** Elenco delle colonne che la sezione «DETTAGLIO GOL GAME» porta davvero nei file caricati. Serve quando
+ *  il punto d'ingresso in porta NON viene riconosciuto: invece di un generico "dato non disponibile", la
+ *  schermata mostra i nomi di colonna veri del file, così si capisce a vista se il dato c'è con un nome che
+ *  non abbiamo previsto (vedi la nota di testa sulla fragilità dei nomi di colonna) e basta segnalarlo.
+ *  Esclude le colonne già usate dall'app, che non aggiungono informazione. */
+const COLONNE_GOLGAME_NOTE = ["secondo","marcatore","assist","assist x m","assist y m","tiro x m","tiro y m",
+  "larghezza campo m","lunghezza campo m","zona mappa"];
+function colonneGolGameSconosciute(sessioni){
+  const viste = new Set();
+  (sessioni||[]).forEach(s => {
+    const righe = Array.isArray(s.DettaglioGolGame) ? s.DettaglioGolGame : [];
+    if(righe.length) Object.keys(righe[0]).forEach(k => {
+      const nome = String(k).trim();
+      if(nome && !COLONNE_GOLGAME_NOTE.includes(nome.toLowerCase())) viste.add(nome);
+    });
+  });
+  return Array.from(viste);
+}
+/** Primo blocco di diagnostica non vuoto fra le sessioni passate (le colonne e l'unità sono le stesse per
+ *  tutti i file dello stesso export: non serve ripetere l'avviso una volta per partita). */
+function diagnosticaPorta(sessioni){
+  for(const s of (sessioni||[])) if(s.DiagnosticaPorta) return s.DiagnosticaPorta;
+  return null;
+}
+/** Settore di porta preferito da ciascun marcatore, dal più prolifico in giù — la lettura che ha senso sul
+ *  periodo (dove un marcatore ha più gol), non sulla singola partita. */
+function settoriPerMarcatore(punti){
+  const mappa = new Map();
+  (punti||[]).forEach(p => {
+    const nome = String(p.marcatore||"").trim() || "Non indicato";
+    const acc = mappa.get(nome) || {marcatore:nome, gol:0, celle:Array(9).fill(0)};
+    acc.gol++; acc.celle[zonaPorta(p.x01, p.y01).indice]++;
+    mappa.set(nome, acc);
+  });
+  return Array.from(mappa.values()).map(a => {
+    let best = 0; a.celle.forEach((n,i) => { if(n > a.celle[best]) best = i; });
+    const riga = Math.floor(best/3), col = best%3;
+    return {marcatore:a.marcatore, gol:a.gol, settore: PORTA_RIGHE[riga]+" · "+PORTA_COLONNE[col],
+      nSettore: a.celle[best], altezzaBassa: a.celle.slice(6,9).reduce((x,y)=>x+y,0)};
+  }).sort((a,b) => b.gol - a.gol || a.marcatore.localeCompare(b.marcatore,"it"));
+}
+
+/* =====================================================================
    STATISTICHE PORTIERI GAME (sezione "STATISTICHE PORTIERI GAME", 03/09/2026)
    ===================================================================== */
 /** Righe di "STATISTICHE PORTIERI GAME" di una sessione, normalizzate a numeri, con la somma "tiri subiti"
@@ -1168,7 +1718,9 @@ function assemblaDataset(grezzo){
     p.Etichetta = dataCorta(p.Data)+" "+p.Avversario; p.Risultato = p.Gol_Fatti+"-"+p.Gol_Subiti;
     p.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:p.DatiSpaziali}, true);
     p.PuntiGol = estraiPuntiGolGameDaSessione(p, "gol");
-    p.PuntiAssistGol = estraiPuntiGolGameDaSessione(p, "assist"); });
+    p.PuntiAssistGol = estraiPuntiGolGameDaSessione(p, "assist");
+    const porta = estraiPuntiPortaDaSessione(p);
+    p.PuntiPorta = porta.punti; p.DiagnosticaPorta = porta.diagnostica; });
 
   const mappaPartite = new Map(partite.map(p => [p.Match_ID, p]));
 
@@ -1203,12 +1755,15 @@ function assemblaDataset(grezzo){
     Tipo_Allenamento: String(r.Tipo_Allenamento ?? "").trim() || "Non indicato",
     Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
-    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    ScalaTempi: r.ScalaTempi ?? null
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
   allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
     a.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:a.DatiSpaziali}, false);
     a.PuntiGol = estraiPuntiGolGameDaSessione(a, "gol");
-    a.PuntiAssistGol = estraiPuntiGolGameDaSessione(a, "assist"); });
+    a.PuntiAssistGol = estraiPuntiGolGameDaSessione(a, "assist");
+    const porta = estraiPuntiPortaDaSessione(a);
+    a.PuntiPorta = porta.punti; a.DiagnosticaPorta = porta.diagnostica; });
   const mappaSessioni = new Map(allenamenti.map(a => [a.Sessione_ID, a]));
 
   // Statistiche "da partita" (gol, tiri, passaggi, dribbling, recuperi, parate) registrate per giocatore
@@ -1257,6 +1812,10 @@ function assemblaDataset(grezzo){
     haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
     haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0),
     haDatiGolGame: partite.some(p=>p.PuntiGol.length>0) || allenamenti.some(a=>a.PuntiGol.length>0),
+    // Punto d'ingresso in porta dei gol (08/10/2026): dato NUOVO della sezione «DETTAGLIO GOL GAME», che i
+    // file più vecchi non hanno pur avendo già le coordinate di tiro/assist — va quindi un flag a sé, non
+    // basta haDatiGolGame.
+    haDatiPortaGol: partite.some(p=>p.PuntiPorta.length>0) || allenamenti.some(a=>a.PuntiPorta.length>0),
     // le palle perse per giocatore ci sono negli export Seven Lab ma non nei dati demo né in un vecchio
     // Excel: senza questa distinzione l'asse del radar mostrerebbe "0 per tutti" come se fosse un dato vero
     haPallePerse: giocatori.some(g => g.Palle_Perse !== null && g.Palle_Perse !== undefined),
@@ -1271,16 +1830,21 @@ function costruisciDatasetDaSessioni(sessioni){
   if(!sessioni.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
   const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [];
   sessioni.forEach(s => {
+    // Regola dell'utente (10/10/2026): una sessione senza metodo di rilevazione è diretta — vale anche per
+    // quelle già salvate nel browser da versioni precedenti. E i minuti di una sessione in differita salvata
+    // con la 1.27.0-1.31.0 (tempi corretti, minuti no) si correggono qui, senza toccare l'oggetto salvato.
+    const scala = scalaTempiEffettiva(s.scalaTempi);
+    const fm = fattoreMinutiArretrati(s.scalaTempi);
     if(s.tipo === "partita"){
       partiteRaw.push({
         Match_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
         Avversario: (s.meta["Avversario"]||"").trim() || "Avversario non indicato",
         Competizione: "", Gol_Fatti: N(s.meta["Gol fatti"]), Gol_Subiti: N(s.meta["Gol subiti"]),
-        Durata_Minuti: N(s.meta["Durata minuti"]), Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
+        Durata_Minuti: N(s.meta["Durata minuti"]) * fm, Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
         Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
         DatiSpaziali: s.datiSpaziali || null,
         StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
-        ScalaTempi: s.scalaTempi || null
+        ScalaTempi: scala
       });
       (s.righe||[]).forEach(r => {
         const tiriTot = N(r["Tiri"]), tiriPorta = N(r["Tiri in porta"]);
@@ -1296,7 +1860,7 @@ function costruisciDatasetDaSessioni(sessioni){
         // più vecchi: null (non 0), per non far sembrare un dato vero un semplice "non disponibile".
         giocatoriRaw.push({
           Match_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
-          Minuti_Giocati: N(r["Minuti giocati"]), Gol: N(r["Gol"]), Assist: N(r["Assist"]),
+          Minuti_Giocati: N(r["Minuti giocati"]) * fm, Gol: N(r["Gol"]), Assist: N(r["Assist"]),
           Tiri_In_Porta: tiriPorta, Tiri_Fuori: Math.max(0, tiriTot - tiriPorta),
           Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
           Dribbling_Tentati: dribRiusciti + dribFalliti, Dribbling_Falliti: dribFalliti,
@@ -1319,9 +1883,10 @@ function costruisciDatasetDaSessioni(sessioni){
       allenamentiRaw.push({
         Sessione_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
         Tipo_Allenamento: (s.meta["Formato"]||"").trim() || "Allenamento",
-        Durata_Minuti_Sessione: N(s.meta["Durata minuti"]), Note: "", Eventi: s.eventi || null,
+        Durata_Minuti_Sessione: N(s.meta["Durata minuti"]) * fm, Note: "", Eventi: s.eventi || null,
         DatiSpaziali: s.datiSpaziali || null,
-        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        ScalaTempi: scala
       });
       // RPE (03/09/2026): da questa consegna Seven Lab può esportare un voto di durezza 1-10 assegnato
       // dallo staff per l'intera sessione (chiave "RPE" nel blocco metadati, confermato sul primo file di
@@ -1337,7 +1902,7 @@ function costruisciDatasetDaSessioni(sessioni){
         presenzeRaw.push({
           Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(),
           Presente: "Sì", // ogni riga nel file = giocatore convocato/presente a quella sessione
-          Minuti_Allenamento: N(r["Minuti giocati"]), RPE: rpeSessione, Note: ""
+          Minuti_Allenamento: N(r["Minuti giocati"]) * fm, RPE: rpeSessione, Note: ""
         });
         // Seven Lab registra, nelle partitelle di allenamento (7 contro 7 interno), le stesse colonne "da
         // partita" per ogni giocatore (gol, tiri, passaggi, dribbling, recuperi, parate): per molte squadre
@@ -1353,7 +1918,7 @@ function costruisciDatasetDaSessioni(sessioni){
           const dribRiuscitiAll = N(r["Dribbling riusciti"]), dribFallitiAll = N(r["Dribbling falliti"]);
           statAllenamentoRaw.push({
             Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
-            Minuti_Giocati: N(r["Minuti giocati"]), Gol: N(r["Gol"]), Assist: N(r["Assist"]),
+            Minuti_Giocati: N(r["Minuti giocati"]) * fm, Gol: N(r["Gol"]), Assist: N(r["Assist"]),
             Tiri_In_Porta: tiriPortaAll, Tiri_Fuori: Math.max(0, tiriTotAll - tiriPortaAll),
             Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
             Dribbling_Tentati: dribRiuscitiAll + dribFallitiAll, Dribbling_Falliti: dribFallitiAll,
@@ -1714,6 +2279,190 @@ function analizzaRiconquista(partite){
     tempo1: perPeriodo(1), tempo2: perPeriodo(2),
     qualita: {senzaTimeline, inDiretta, inDifferitaNonCorretta, partiteAnalizzate: (partite||[]).length - senzaTimeline}
   };
+}
+
+/* =====================================================================
+   PALLE PERSE CHE DIVENTANO GOL SUBITI (10/10/2026)
+   Richiesta esplicita dell'utente: «una lettura di quali palle perse portano a un gol avversario, quando la
+   correlazione tra un evento palla persa e un gol è breve, io direi 15 secondi [...] è necessario che sia
+   indicato nelle insight quel giocatore! ci servirà a capire quale giocatore tende a essere meno accurato in
+   situazione di pressing avversario». Sia in partita (Game) sia in allenamento (Live).
+
+   COME SI ATTRIBUISCE UN GOL A UNA PALLA PERSA. Si parte da ogni gol subito e si guarda INDIETRO, non dalla
+   palla persa in avanti: un gol si attribuisce all'ULTIMA palla persa della squadra che lo subisce, se è
+   avvenuta al massimo 15 secondi prima, nello stesso tempo di gioco, e se in mezzo quella squadra non ha
+   mai riavuto la palla. "Riavuto la palla" = un suo recupero, un suo passaggio/dribbling/tiro, oppure una
+   palla persa dell'avversario. Guardare indietro dall'ultima perdita evita l'errore classico di questo
+   tipo di conteggio: perdo palla, la riprendo subito, la perde un compagno, gol — senza la regola, il gol
+   verrebbe dato a entrambi, e il primo non c'entra nulla.
+   Passaggi sbagliati e dribbling falliti NON contano come palla persa: l'utente ha chiesto dell'evento
+   «palla persa», ed è anche la scelta coerente col motore del possesso, dove solo quell'evento passa il
+   pallone all'avversario. Un passaggio sbagliato fra la perdita e il gol, però, spezza l'attribuzione:
+   vuol dire che la squadra aveva di nuovo la palla, e il gol viene da quell'errore, non dalla perdita.
+
+   CHI SUBISCE IL GOL. In partita la timeline ha una colonna "Gol subito" (scritta da Seven Lab sul portiere
+   della squadra che subisce) e l'avversario può avere anche una propria riga "Gol": entrambe valgono, e due
+   segnali dello stesso gol a pochi secondi di distanza vengono fusi in uno. In allenamento le due squadre
+   sono entrambe interne: un gol di una delle due è subito dall'altra, e la palla persa che lo ha generato
+   è di un tuo giocatore in ogni caso — quindi si contano i gol di entrambe le parti.
+   ===================================================================== */
+const PERSA_GOL_FINESTRA_SEC = 15;
+const PERSA_GOL_FUSIONE_SEC = 10; // due segnali dello stesso gol (Gol subito + Gol avversario, rigore + Gol)
+
+/** Lato che SUBISCE il gol scritto in una riga della timeline: "A", "B" oppure null se la riga non è un
+ *  gol. "Gol subito" è sul portiere di chi subisce; "Gol"/rigore/punizione/corner a segno su chi segna. */
+function latoCheSubisce(e){
+  const r = e.raw || {};
+  const team = String(r.Team ?? r.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const altro = team === "A" ? "B" : "A";
+  if(e.formato === "nuovo"){
+    if(r["Gol subito"] === "1") return team;
+    const cl = classificaEventoRigaNuovoFormato(r);
+    return (cl && cl.type === "GOAL") ? altro : null;
+  }
+  const t = String(r.Tipo||"").trim().toLowerCase();
+  if(/gol subit/.test(t)) return team;
+  return /^gol$/.test(t) ? altro : null;
+}
+
+/** Abbina ogni palla persa della timeline alla sua posizione in DATI SPAZIALI, quando c'è. Stessa regola già
+ *  usata per assegnare il tempo ai punti di campo (assegnaPeriodoEventiZona): nessun identificativo comune
+ *  fra le due sezioni, quindi l'abbinamento è per giocatore + squadra, nell'ordine in cui compaiono. Torna
+ *  una Map indice-originale-della-riga → {x, y}. */
+function posizioniPallePerse(eventiGrezzi, datiSpaziali){
+  const code = new Map();
+  estraiEventiZonaGrezzi({datiSpaziali}).filter(p => p.tipo === "persa").forEach(p => {
+    const k = String(p.giocatore||"").trim()+"|"+p.team;
+    if(!code.has(k)) code.set(k, []);
+    code.get(k).push(p);
+  });
+  const fuori = new Map();
+  if(!code.size) return fuori;
+  (eventiGrezzi||[]).forEach(e => {
+    const cl = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
+    if(!cl || cl.type !== "BALL_LOST") return;
+    const team = String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+    const coda = code.get(String(e.raw.Giocatore||"").trim()+"|"+team);
+    if(coda && coda.length) fuori.set(e.idxOriginale, coda.shift());
+  });
+  return fuori;
+}
+/** Terzo di campo da una X normalizzata (0 = propria porta di chi perde palla, 50 = porta avversaria). */
+function terzoDaX(x){
+  if(!Number.isFinite(x)) return null;
+  return x < CAMPO_LUNGHEZZA_M/3 ? "terzo difensivo" : (x < CAMPO_LUNGHEZZA_M*2/3 ? "terzo centrale" : "terzo offensivo");
+}
+
+/** Episodi "palla persa → gol subito entro 15 secondi" di UNA sessione. `tipo`: "partita" (contano solo i gol
+ *  subiti dalla nostra squadra, Team A) o "allenamento" (contano i gol di entrambe le squadre interne).
+ *  Ritorna null se la sessione non ha una timeline utilizzabile. */
+function episodiPersaGolSessione(sessione, tipo){
+  const norm = normalizzaEventiSevenLab({eventi: sessione.Eventi, riepilogoTempi: sessione.RiepilogoTempi});
+  if(norm.formato === "nessuno" || !norm.eventi.length) return null;
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = norm.eventi
+    .filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo),
+      subisce: latoCheSubisce(e), lato: lato(e)}))
+    .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  const latiInteressati = tipo === "partita" ? ["A"] : ["A","B"];
+
+  // gol subiti, fusi quando lo stesso gol compare in più righe
+  const gol = [];
+  eventi.forEach((e, i) => {
+    if(!e.subisce || !latiInteressati.includes(e.subisce)) return;
+    const doppione = gol.find(g => g.subisce === e.subisce && Math.abs(g.t - e.secondoAssoluto) <= PERSA_GOL_FUSIONE_SEC);
+    if(doppione){
+      // tieni come marcatore quello della riga "Gol" (chi segna), non il portiere della riga "Gol subito"
+      if(!doppione.marcatore && e.raw["Gol subito"] !== "1") doppione.marcatore = String(e.raw.Giocatore||"").trim() || null;
+      return;
+    }
+    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce,
+      marcatore: (e.formato === "nuovo" && e.raw["Gol subito"] === "1") ? null : (String(e.raw.Giocatore||"").trim() || null)});
+  });
+
+  const posizioni = posizioniPallePerse(norm.eventi, sessione.DatiSpaziali);
+  const episodi = [], senzaPersa = [];
+  gol.forEach(g => {
+    // ultima palla persa di chi subisce, entro la finestra e nello stesso tempo
+    let iPersa = -1;
+    for(let j = g.i - 1; j >= 0; j--){
+      const e = eventi[j];
+      if(g.t - e.secondoAssoluto > PERSA_GOL_FINESTRA_SEC || e.periodo !== g.periodo) break;
+      if(e.cl && e.cl.type === "BALL_LOST" && e.lato === g.subisce){ iPersa = j; break; }
+    }
+    if(iPersa < 0){ senzaPersa.push(g); return; }
+    // in mezzo, chi subisce non deve aver riavuto la palla
+    const riavuta = eventi.slice(iPersa+1, g.i).some(e => {
+      if(!e.cl) return false;
+      if(e.lato === g.subisce && ["RECOVERY","PASS","DRIBBLE","SHOT"].includes(e.cl.type)) return true;
+      if(e.lato !== g.subisce && e.cl.type === "BALL_LOST") return true;
+      return false;
+    });
+    if(riavuta){ senzaPersa.push(g); return; }
+    const p = eventi[iPersa];
+    const pos = posizioni.get(p.idxOriginale);
+    episodi.push({giocatore: String(p.raw.Giocatore||"").trim() || "Non indicato", squadra: p.lato,
+      secondoPersa: p.secondoAssoluto, secondoGol: g.t, secondi: g.t - p.secondoAssoluto, periodo: g.periodo,
+      marcatore: g.marcatore, zona: pos ? terzoDaX(pos.x) : null});
+  });
+
+  // palle perse totali per giocatore nella stessa sessione: il denominatore per leggere i numeri sopra
+  const perse = new Map();
+  eventi.forEach(e => {
+    if(!(e.cl && e.cl.type === "BALL_LOST") || !latiInteressati.includes(e.lato)) return;
+    const n = String(e.raw.Giocatore||"").trim() || "Non indicato";
+    perse.set(n, (perse.get(n)||0) + 1);
+  });
+  return {episodi, golAnalizzati: gol.length, golSenzaPersa: senzaPersa.length, pallePerse: perse};
+}
+
+/** Riepilogo su più sessioni dello stesso tipo, con il dettaglio per giocatore. */
+function analizzaPersaGol(sessioni, tipo){
+  const episodi = [], perseTot = new Map();
+  let golAnalizzati = 0, golSenzaPersa = 0, senzaTimeline = 0, golDichiarati = 0, sessioniConTimeline = 0;
+  let inDiretta = 0;
+  (sessioni||[]).forEach(s => {
+    const r = episodiPersaGolSessione(s, tipo);
+    if(!r){ senzaTimeline++; return; }
+    sessioniConTimeline++;
+    golAnalizzati += r.golAnalizzati; golSenzaPersa += r.golSenzaPersa;
+    if(tipo === "partita") golDichiarati += N(s.Gol_Subiti);
+    const sc = scalaTempiEffettiva(s.ScalaTempi);
+    if(sc.metodo === "diretta") inDiretta++;
+    r.episodi.forEach(ep => episodi.push({...ep,
+      idSessione: s.Match_ID || s.Sessione_ID, etichetta: s.Etichetta || "", ordine: s.Ordine || 0}));
+    r.pallePerse.forEach((n, g) => perseTot.set(g, (perseTot.get(g)||0) + n));
+  });
+  if(!sessioniConTimeline) return null;
+  episodi.sort((a,b) => (a.ordine - b.ordine) || (a.secondoPersa - b.secondoPersa));
+  const perGiocatore = new Map();
+  episodi.forEach(ep => {
+    const acc = perGiocatore.get(ep.giocatore) || {giocatore: ep.giocatore, episodi:0, secondi:[], zone:{}};
+    acc.episodi++; acc.secondi.push(ep.secondi);
+    if(ep.zona) acc.zone[ep.zona] = (acc.zone[ep.zona]||0) + 1;
+    perGiocatore.set(ep.giocatore, acc);
+  });
+  const giocatori = Array.from(perGiocatore.values()).map(a => {
+    const perse = perseTot.get(a.giocatore) || a.episodi;
+    const zonaTop = Object.entries(a.zone).sort((x,y) => y[1]-x[1])[0];
+    return {giocatore:a.giocatore, episodi:a.episodi, pallePerse:perse, quota: perc(a.episodi, perse),
+      zonaFrequente: zonaTop ? zonaTop[0] : null, zonaFrequenteN: zonaTop ? zonaTop[1] : 0};
+  }).sort((a,b) => (b.episodi - a.episodi) || ((b.quota||0) - (a.quota||0)) || a.giocatore.localeCompare(b.giocatore,"it"));
+  return {episodi, giocatori, golAnalizzati, golSenzaPersa, golDichiarati, senzaTimeline, sessioniConTimeline, inDiretta,
+    medianaSecondi: mediana(episodi.map(e => e.secondi))};
+}
+
+/** La frase "insight" che nomina i giocatori: usata in dashboard e nei report, così le due non divergono.
+ *  `html`: true per il grassetto sui nomi. */
+function frasePersaGol(a, tipo, html){
+  if(!a || !a.golAnalizzati) return null;
+  const b = s => html ? `<b>${esc(s)}</b>` : s;
+  const chi = tipo === "partita" ? "gol subiti" : "gol nelle partitelle";
+  if(!a.episodi.length)
+    return `Nessuno dei ${nf0(a.golAnalizzati)} ${chi} è arrivato entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una ${tipo === "partita" ? "nostra " : ""}palla persa.`;
+  const elenco = a.giocatori.map(g => `${b(g.giocatore)} (${nf0(g.episodi)})`).join(", ");
+  return `${nf0(a.episodi.length)} ${a.episodi.length===1?"gol è arrivato":"gol sono arrivati"} entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una palla persa, su ${nf0(a.golAnalizzati)} ${chi}: ${elenco}.`;
 }
 
 /** Minuti minimi perché una media "per partita intera" venga calcolata e mostrata. Tenuta alla stessa
@@ -2152,6 +2901,7 @@ const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Pre
   // Sessione singola scelta nella sezione "Zone di recupero e palla persa (allenamento)": "" = tutte.
   // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
   zoneSessione:"",
+  persaGolPartita:"", persaGolAllenamento:"", // selettore partita/allenamento della sezione "palle perse → gol"
   // Sezioni "Dove perde palla": giocatore scelto in allenamento, e ambito (stagione o singola partita)
   // nella scheda Giocatori (19/09/2026).
   persaGiocatoreAll:"", persaAmbitoPartita:"",
@@ -3700,6 +4450,111 @@ function renderGolGameCampo(idContenitore, sessioni){
   disegnaCampoHeatmap($("#"+idp+"-heat-assist"), assist, optsBase);
 }
 
+/** Avvisi comuni a schermo e nei report sul punto d'ingresso in porta: quelli dedotti dal file
+ *  (colonne/unità/verso dell'asse, vedi estraiPuntiPortaDaSessione) più quello sulla dimensione del
+ *  campione, che qui è per forza piccolo — un gol = un punto, non un evento fra centinaia. */
+function avvisiPorta(punti, diag){
+  const righe = [];
+  if(punti.length < PORTA_GOL_INDICATIVI)
+    righe.push(`<strong>Pochi gol per parlare di tendenza:</strong> ${nf0(punti.length)} ${punti.length===1?"gol":"gol"} con il punto d'ingresso registrato. Il disegno dice dove sono finiti questi gol, non dove la squadra segna di solito: per quello servono alcune decine di gol, che si accumulano partita dopo partita.`);
+  if(diag && diag.avvisi) diag.avvisi.forEach(a => righe.push(a));
+  if(diag) righe.push(`Colonne lette dal file: «${esc(diag.colonnaX)}» in larghezza e «${esc(diag.colonnaY)}» in altezza, interpretate come ${esc(ETICHETTA_SCALA_PORTA[diag.scalaX]||diag.scalaX)} e ${esc(ETICHETTA_SCALA_PORTA[diag.scalaY]||diag.scalaY)}${diag.colonnaEtichetta ? `, con «${esc(diag.colonnaEtichetta)}» come riscontro testuale di Seven Lab` : ""}. Se il disegno non corrisponde a come sono andati i gol, è qui che si corregge: segnalacelo col file.`);
+  return righe;
+}
+
+/** Sezione "Dove entra la palla in porta" (dashboard partita) — richiesta esplicita dell'utente
+ *  (08/10/2026): una porta da calcio disegnata e un pallone su ogni punto d'ingresso dei gol fatti, senza
+ *  quote né misure a schermo. Accanto al disegno, i nove settori di porta con i valori ASSOLUTI accanto alle
+ *  percentuali e l'elenco gol per gol, così il grafico si può sempre interrogare risalendo ai numeri.
+ *  Il periodo scelto in alto decide se si guarda una partita sola o un insieme di gare: la distinzione
+ *  partita singola / periodo è nei contenuti (l'elenco mostra la colonna della partita solo se ce n'è più
+ *  di una, e la numerazione dei palloni compare solo quando i gol sono abbastanza pochi da restare leggibili). */
+function renderPortaGol(idContenitore, sessioni){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haDatiPortaGol){
+    const ignote = colonneGolGameSconosciute(sessioni);
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono, nella sezione «DETTAGLIO GOL GAME» dell'export Seven Lab, le coordinate del punto in cui la palla entra in porta sui gol fatti — un dato nuovo, che i file caricati finora non contengono. Appena i tuoi export lo includeranno, questa sezione si popola da sola: il sistema riconosce le colonne da sé, senza bisogno di aggiornare l'app.${
+      ignote.length ? `<br><br>Nei file caricati questa sezione contiene anche queste colonne, che l'app non sta usando: ${ignote.map(c=>"«"+esc(c)+"»").join(", ")}. Se una di queste è il punto d'ingresso in porta, segnalacelo: basta insegnare all'app questo nome.` : ""}</div>`;
+    return;
+  }
+  const punti = raccogliPuntiPorta(sessioni);
+  if(!punti.length){
+    cont.innerHTML = `<div class="vuoto">Nessun gol con il punto d'ingresso registrato nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const diag = diagnosticaPorta(sessioni);
+  const {celle, totale} = calcolaSettoriPorta(punti);
+  const piuPartite = new Set(punti.map(p=>p.idPartita)).size > 1;
+  const maxCella = Math.max(1, ...celle.map(c=>c.n));
+  // Riempimento proporzionale ai gol, calcolato qui con hexRgba come per i campetti su canvas, invece che in
+  // CSS: così la scala di colore è la stessa dei grafici e non dipende da funzioni CSS più recenti.
+  const sfondoCella = n => hexRgba(colore("c1"), n ? 0.12 + (n/maxCella)*0.58 : 0);
+  const bassi = celle.slice(6,9).reduce((a,c)=>a+c.n,0);
+  const alti = celle.slice(0,3).reduce((a,c)=>a+c.n,0);
+  const laterali = celle.filter(c => c.col !== 1).reduce((a,c)=>a+c.n,0);
+  const idp = "pg-"+idContenitore;
+  const marcatori = settoriPerMarcatore(punti);
+  // La matrice dei nove settori ricalca la forma della porta qui sopra (ogni nono è a sua volta 3:1, come
+  // lo specchio intero) con le etichette fuori dalle caselle invece che dentro: dentro resta solo il dato.
+  const matrice = `
+    <div class="porta-matrice">
+      <div class="pm-assi-y">${PORTA_RIGHE.map(r=>`<span>${esc(r)}</span>`).join("")}</div>
+      <div class="pm-griglia">${celle.map(c => `
+        <div class="pm-cella${c.n ? "" : " pm-vuota"}" style="background:${sfondoCella(c.n)}">
+          <span class="pm-pct">${totale ? nf0(c.pct)+"%" : "—"}</span>
+          <span class="pm-n">${nf0(c.n)} ${c.n===1?"gol":"gol"}</span>
+        </div>`).join("")}</div>
+      <div class="pm-assi-x">${PORTA_COLONNE.map(c=>`<span>${esc(c.charAt(0).toUpperCase()+c.slice(1))}</span>`).join("")}</div>
+    </div>`;
+  cont.innerHTML = `
+    <div class="card porta-card">
+      <div class="grafico-titolo">Dove è entrata la palla</div>
+      <div class="grafico-sub">${nf0(punti.length)} gol con il punto d'ingresso registrato${piuPartite ? " nel periodo scelto" : " in questa partita"}. <span class="porta-suggerimento">Tocca un pallone per vedere chi ha segnato e a che minuto.</span></div>
+      <div class="grafico-wrap-porta"><canvas id="${idp}-porta" width="1440" height="540"></canvas></div>
+      <ul class="porta-elenco-accessibile">${punti.map(p => `<li>${esc(zonaPorta(p.x01,p.y01).etichetta)} — ${esc(p.marcatore||"marcatore non indicato")}${p.secondo ? ", minuto "+esc(mmssDaSecondi(p.secondo)) : ""}${piuPartite && p.partita ? ", "+esc(p.partita) : ""}</li>`).join("")}</ul>
+    </div>
+    <div class="card porta-card">
+      <div class="grafico-titolo">Peso dei nove settori</div>
+      <div class="grafico-sub">Quanto pesa ciascun nono di porta sul totale dei gol, sulla stessa forma e con lo stesso orientamento del grafico qui sopra.</div>
+      ${matrice}
+      <div class="porta-sintesi">
+        <div><span class="pz-l">In basso</span><span class="pz-v">${nf0(bassi)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">A mezza altezza</span><span class="pz-v">${nf0(totale-bassi-alti)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">In alto</span><span class="pz-v">${nf0(alti)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">Verso i pali</span><span class="pz-v">${nf0(laterali)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">Nel terzo centrale</span><span class="pz-v">${nf0(totale-laterali)}<small>/${nf0(totale)}</small></span></div>
+      </div>
+      <p class="nota-piccola">Sotto la percentuale c'è sempre il conteggio vero: su ${nf0(totale)} gol un singolo episodio in più sposta una casella di ${nf0(100/Math.max(1,totale))} punti, quindi le percentuali vanno lette insieme ai numeri.</p>
+    </div>
+    ${piuPartite && marcatori.length ? `<div class="card porta-card">
+      <div class="grafico-titolo">Il settore preferito di ogni marcatore</div>
+      <div class="grafico-sub">Dove ciascuno fa entrare la palla più spesso, nel periodo scelto. Una lettura che ha senso solo con più partite: su una gara sola coincide col singolo gol.</div>
+      <div class="tabella-scroll"><table>
+        <thead><tr><th scope="col">Marcatore</th><th scope="col">Gol con posizione</th><th scope="col">Settore più frequente</th><th scope="col">Gol in quel settore</th><th scope="col">Nel terzo basso</th></tr></thead>
+        <tbody>${marcatori.map(m => `<tr>
+          <td>${esc(m.marcatore)}</td><td>${nf0(m.gol)}</td><td>${esc(m.settore)}</td>
+          <td>${nf0(m.nSettore)}</td><td>${nf0(m.altezzaBassa)} su ${nf0(m.gol)}</td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${avvisiPorta(punti, diag).map(a => `<p class="nota-piccola">${a}</p>`).join("")}`;
+  const cv = $("#"+idp+"-porta");
+  const opzioni = {
+    sfondo: colore("surface-alt"), erba: hexRgba(colore("success"), 0.12),
+    telaio: colore("surface"), telaioBordo: hexRgba(colore("text"), 0.70),
+    lineaPorta: hexRgba(colore("muted"), 0.70), lineaSettori: hexRgba(colore("muted"), 0.40),
+    rete: {veloAlto: hexRgba(colore("muted"), 0.04), veloBasso: hexRgba(colore("muted"), 0.11),
+           filo: hexRgba(colore("muted"), 0.26)},
+    testo: colore("muted"), testoTenue: hexRgba(colore("muted"), 0.85),
+    palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    alone: hexRgba(colore("c1"), 0.18), aloneBordo: colore("c1"),
+    badgeFondo: colore("c1"), badgeTesto: "#FFFFFF", numera: false
+  };
+  disegnaPortaCalcio(cv, punti, opzioni);
+  collegaPortaInterattiva(cv, punti, opzioni, piuPartite);
+}
+
 /** Dà a ogni colonna delle tabelle a schermo la larghezza che le serve davvero, invece di quella dettata
  *  dall'intestazione (audit del 04/09/2026: colonne larghe 144-152px per contenere valori come "83,3%",
  *  solo perché l'intestazione "Prec. passaggi" stava su una riga sola). Le intestazioni ora possono andare
@@ -4021,6 +4876,95 @@ function renderRiconquista(f){
     <p class="nota-piccola" style="margin-top:12px">Si parte da ogni palla persa della squadra e si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Nessun dato nuovo da raccogliere — entrambi gli eventi sono già nella timeline di Seven Lab.</p>`;
 }
 
+/** Sezione "Palle perse che diventano gol" — Dashboard Partita e Dashboard Allenamento (10/10/2026).
+ *  Il selettore della sezione sceglie fra tutte le sessioni del periodo in alto e una sessione sola: la
+ *  solita distinzione partita singola / periodo. In cima la frase che nomina i giocatori (la stessa che va
+ *  nei report, da frasePersaGol); sotto i numeri ASSOLUTI per giocatore accanto alla quota sulle sue palle
+ *  perse, e l'elenco degli episodi. */
+function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo, tipo){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  const sel = $("#"+idSelettore);
+  const ordinate = (sessioniPeriodo||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+  const idDi = s => s.Match_ID || s.Sessione_ID;
+  if(sel){
+    const etiTutte = tipo === "partita" ? `Tutte le partite del periodo (${nf0(ordinate.length)})` : `Tutti gli allenamenti del periodo (${nf0(ordinate.length)})`;
+    sel.innerHTML = `<option value="">${etiTutte}</option>` + ordinate.map(s => `<option value="${esc(idDi(s))}">${esc(dataLabel(s.Data))} · ${esc(tipo === "partita" ? "vs "+s.Avversario : (s.Tipo_Allenamento||"allenamento"))}</option>`).join("");
+    if(stato[chiaveStato] && ordinate.some(s => idDi(s) === stato[chiaveStato])) sel.value = stato[chiaveStato];
+    else { sel.value = ""; stato[chiaveStato] = ""; }
+  }
+  const scelte = stato[chiaveStato] ? ordinate.filter(s => idDi(s) === stato[chiaveStato]) : (sessioniPeriodo||[]);
+  const singola = scelte.length === 1;
+  const a = analizzaPersaGol(scelte, tipo);
+  if(!a){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i tempi (sezione «TIMELINE EVENTI» dell'export Seven Lab). Nei file scelti non c'è.</div>`;
+    return;
+  }
+  if(!a.golAnalizzati){
+    cont.innerHTML = `<div class="vuoto">${tipo === "partita" ? "Nessun gol subito nella timeline" : "Nessun gol nelle partitelle"} ${singola ? (tipo === "partita" ? "di questa partita" : "di questo allenamento") : "del periodo scelto"}: non c'è niente da attribuire.</div>`;
+    return;
+  }
+  const pctAttr = perc(a.episodi.length, a.golAnalizzati);
+  const maxEp = Math.max(1, ...a.giocatori.map(g => g.episodi));
+  const conZona = a.episodi.some(e => e.zona);
+  const piuSessioni = new Set(a.episodi.map(e => e.idSessione)).size > 1 || !singola;
+  const note = [];
+  if(tipo === "partita" && a.golDichiarati > a.golAnalizzati)
+    note.push(`Nei metadati ${a.golDichiarati===1?"risulta":"risultano"} <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline ne trovo ${nf0(a.golAnalizzati)}: ${nf0(a.golDichiarati - a.golAnalizzati)} ${a.golDichiarati - a.golAnalizzati === 1 ? "gol non è stato registrato" : "gol non sono stati registrati"} come evento con un tempo, e restano fuori da questa lettura.`);
+  if(a.senzaTimeline) note.push(`${nf0(a.senzaTimeline)} ${a.senzaTimeline===1?"sessione è esclusa":"sessioni sono escluse"} perché senza timeline eventi.`);
+  if(a.inDiretta) note.push(`${nf0(a.inDiretta)} ${a.inDiretta===1?"sessione è stata registrata":"sessioni sono state registrate"} in diretta: un secondo o due di ritardo nel tocco contano poco su una finestra di ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi, ma dal vivo qualche palla persa sfugge — e un gol preceduto da una perdita non registrata finisce fra quelli «senza palla persa».`);
+
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${frasePersaGol(a, tipo, true)}</span></div>
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">${tipo === "partita" ? "Gol subiti analizzati" : "Gol analizzati"}</div>
+        <div class="kpi-valore">${nf0(a.golAnalizzati)}</div>
+        <div class="kpi-nota">${singola ? (tipo === "partita" ? "in questa partita" : "in questo allenamento") : `in ${nf0(a.sessioniConTimeline)} ${tipo === "partita" ? (a.sessioniConTimeline===1?"partita":"partite") : (a.sessioniConTimeline===1?"allenamento":"allenamenti")}`}</div></div>
+      <div class="kpi"><div class="kpi-eti">Nati da una palla persa</div>
+        <div class="kpi-valore">${nf0(a.episodi.length)}</div>
+        <div class="kpi-nota">${pctTxt(pctAttr,0)} dei gol · entro ${nf0(PERSA_GOL_FINESTRA_SEC)}s</div></div>
+      <div class="kpi"><div class="kpi-eti">Giocatori coinvolti</div>
+        <div class="kpi-valore">${nf0(a.giocatori.length)}</div>
+        <div class="kpi-nota">${a.giocatori.length ? "hanno perso la palla da cui è nato un gol" : "—"}</div></div>
+      <div class="kpi"><div class="kpi-eti">Dalla perdita al gol</div>
+        <div class="kpi-valore">${a.medianaSecondi !== null ? nf(a.medianaSecondi,0)+"s" : "—"}</div>
+        <div class="kpi-nota">${a.episodi.length ? "tempo tipico (mediana)" : "nessun episodio"}</div></div>
+    </div>
+    ${a.giocatori.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Chi ha perso la palla</div>
+      <div class="grafico-sub">Il conteggio vero viene prima della quota: chi tocca molti palloni ne perde di più, e una quota alta su due sole palle perse non dice ancora niente.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Palle perse che hanno portato a un gol, per giocatore</caption>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col">Palle perse diventate gol</th><th scope="col">Palle perse in tutto</th><th scope="col">Quota</th>${conZona ? `<th scope="col">Dove le perde, più spesso</th>` : ""}<th scope="col">Peso</th></tr></thead>
+        <tbody>${a.giocatori.map(g => `<tr>
+          <td>${esc(g.giocatore)}</td><td>${nf0(g.episodi)}</td><td>${nf0(g.pallePerse)}</td><td>${pctTxt(g.quota,0)}</td>
+          ${conZona ? `<td>${g.zonaFrequente ? esc(g.zonaFrequente)+(g.episodi > 1 ? ` (${nf0(g.zonaFrequenteN)} su ${nf0(g.episodi)})` : "") : "—"}</td>` : ""}
+          <td><div class="barra-wrap"><div class="barra" style="width:${(g.episodi/maxEp*100).toFixed(1)}%; background:var(--danger)"></div><span>${nf0(g.episodi)}</span></div></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Gli episodi, uno per uno</div>
+      <div class="grafico-sub">Minuto della palla persa, chi l'ha persa e quanti secondi dopo è arrivato il gol.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Episodi palla persa seguita da gol</caption>
+        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Minuto</th><th scope="col">Ha perso palla</th>${tipo === "allenamento" ? `<th scope="col">Squadra</th>` : ""}<th scope="col">Gol dopo</th>${conZona ? `<th scope="col">Zona della perdita</th>` : ""}${tipo === "allenamento" ? `<th scope="col">Ha segnato</th>` : ""}</tr></thead>
+        <tbody>${a.episodi.map(e => `<tr>
+          ${piuSessioni ? `<td>${esc(e.etichetta)}</td>` : ""}
+          <td>${esc(mmssDaSecondi(e.secondoPersa))}</td><td>${esc(e.giocatore)}</td>
+          ${tipo === "allenamento" ? `<td>${esc(e.squadra)}</td>` : ""}
+          <td>${nf(e.secondi,0)}s</td>
+          ${conZona ? `<td>${e.zona ? esc(e.zona) : "—"}</td>` : ""}
+          ${tipo === "allenamento" ? `<td>${esc(e.marcatore || "—")}</td>` : ""}
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Un gol viene attribuito all'<strong>ultima</strong> palla persa della squadra che lo subisce, se è avvenuta al massimo ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima e se nel frattempo quella squadra non ha mai riavuto il pallone (un recupero, un passaggio, un dribbling o un tiro suo spezzano il legame). ${a.golSenzaPersa ? `${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non ha":"gol non hanno"} una palla persa in quella finestra: arrivano da azioni più lunghe, da palla inattiva o da un errore non registrato come palla persa (un passaggio sbagliato, per esempio).` : ""}</p>
+    <p class="nota-piccola">Come leggerlo: una palla persa a ridosso di un gol dice che è stata persa nel momento sbagliato, non dimostra da sola che il giocatore fosse sotto pressing — quello il dato non lo registra. Diventa un indizio solido quando lo stesso nome torna su più partite${conZona ? ", e ancora di più se le perdite sono nel terzo difensivo, dove di solito si gioca sotto pressione" : ""}.</p>`;
+}
+
 /* --------- 9. Qualità dati --------- */
 function renderQualita(){
   const cont = $("#contenuto-qualita");
@@ -4058,12 +5002,15 @@ function render(){
   renderPersaGiocatorePartita(f);
   renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
   renderGolGameCampo("contenuto-golgame-partita", f.partite);
+  renderPortaGol("contenuto-porta-partita", f.partite);
   renderSubentrati(f);
   renderRiconquista(f);
+  renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita");
   renderAllenamenti();
   renderIncroci();
   renderZoneAllenamento(f);
   renderPersaGiocatoreAllenamento(f);
+  renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento");
   renderConfrontoAllenamento(f);
   renderQualita();
   aggiornaSelettoriReport();
@@ -4215,11 +5162,22 @@ function renderPannelloFile(){
     <div class="lista-file">${sessioni.map(s => {
       const dataSess = parseDataSevenLab(s.meta["Data"]);
       const desc = s.tipo === "partita" ? ("vs "+esc((s.meta["Avversario"]||"").trim()||"—")) : (esc((s.meta["Formato"]||"").trim())||"allenamento");
+      // Metodo di rilevazione accanto a ogni file (10/10/2026): è il modo più rapido per vedere, appena
+      // caricato un file da video, se il sistema l'ha riconosciuto e se ha corretto i tempi — e per i file
+      // dello storico, che il metodo non lo scrivono, che sono stati presi come diretta.
+      const sc = scalaTempiEffettiva(s.scalaTempi);
+      const vel = sc.velocita ? String(sc.velocita).replace(".", ",")+"×" : "";
+      const badgeMetodo = sc.metodo === "differita"
+        ? `<span class="badge-metodo differita" title="${sc.applicata ? "Registrata da video: tempi e minuti riportati al tempo reale" : "Registrata da video: tempi NON corretti"}">Differita${vel ? " · "+vel : ""}${sc.applicata ? " · tempi corretti" : (sc.velocita === 1 ? "" : " · tempi non corretti")}</span>`
+        : `<span class="badge-metodo diretta${sc.predefinito ? " predefinito" : ""}" title="${sc.predefinito ? "Il file non indica il metodo di rilevazione: considerata diretta" : "Registrata dal vivo"}">Diretta${sc.predefinito ? " (non indicato)" : ""}</span>`;
+      const avvisi = (sc.avvisi && sc.avvisi.length) ? sc.avvisi : (sc.avviso ? [sc.avviso] : []);
       return `<div class="riga-file">
         <span class="badge-tipo ${s.tipo}">${s.tipo === "partita" ? "Partita" : "Allenamento"}</span>
+        ${badgeMetodo}
         <span class="riga-file-nome">${esc(s.nomeFile)}</span>
         <span class="riga-file-dett">${dataLabel(dataSess)} · ${desc}</span>
         <button type="button" class="btn piccolo pericolo" data-elimina-sessione="${esc(s.id)}">Elimina</button>
+        ${avvisi.map(t => `<div class="riga-file-avviso">${esc(t)}</div>`).join("")}
       </div>`;
     }).join("")}</div>`;
 }
@@ -4996,6 +5954,96 @@ function golGameCampoReport(pagina, sessioni){
   aggiungiCampo("Heatmap origine assist", disegnaCampoHeatmap, assist, optsBase);
 }
 
+/** Sezione "Dove entra la palla in porta" nei report PDF — stessa richiesta della sezione a schermo
+ *  (08/10/2026), con la distinzione esplicita chiesta dall'utente fra partita singola e periodo:
+ *  su una gara sola l'elenco gol per gol (pochi, utili uno a uno, con i palloni numerati nel disegno);
+ *  su un periodo il settore preferito di ciascun marcatore, che su una partita sola non significherebbe
+ *  nulla. Il disegno e la griglia dei nove settori ci sono in entrambi i casi.
+ *  Nessuna quota né misura: la porta è disegnata in proporzione, come richiesto esplicitamente. */
+function portaGolReport(pagina, sessioni){
+  const punti = raccogliPuntiPorta(sessioni);
+  const singolaPartita = (sessioni||[]).length === 1;
+  titoloSezioneReport(pagina, "Dove entra la palla in porta");
+  if(!punti.length){
+    const conDati = (typeof stato !== "undefined" && stato.ds && stato.ds.haDatiPortaGol);
+    bulletsReport(pagina, [conDati
+      ? "Nessun gol con il punto d'ingresso in porta registrato in questo report: i file inclusi non hanno queste coordinate (o non ci sono gol nel periodo scelto)."
+      : "Dato non disponibile: servono, nella sezione «DETTAGLIO GOL GAME» dell'export Seven Lab, le coordinate del punto in cui la palla entra in porta sui gol fatti. Nessuno dei file caricati le contiene: appena i tuoi export le includeranno, questa sezione si popola da sola."]);
+    return;
+  }
+  const diag = diagnosticaPorta(sessioni);
+  const {celle, totale} = calcolaSettoriPorta(punti);
+  const bassi = celle.slice(6,9).reduce((a,c)=>a+c.n,0);
+  const alti = celle.slice(0,3).reduce((a,c)=>a+c.n,0);
+  const laterali = celle.filter(c => c.col !== 1).reduce((a,c)=>a+c.n,0);
+  const numera = punti.length <= 9;
+  bulletsReport(pagina, [
+    `${nf0(punti.length)} ${punti.length===1?"gol":"gol"} con il punto d'ingresso in porta registrato${singolaPartita ? " in questa partita" : " nel periodo di questo report"}.`,
+    `Ripartizione in altezza: <b>${nf0(bassi)}</b> nel terzo basso, <b>${nf0(totale-bassi-alti)}</b> a mezza altezza, <b>${nf0(alti)}</b> nel terzo alto. In larghezza: <b>${nf0(laterali)}</b> verso i pali, <b>${nf0(totale-laterali)}</b> nel terzo centrale.`,
+    "La porta è disegnata in proporzione e vista da chi tira: sinistra e destra sono quelle dell'attaccante, non del portiere. Nessuna quota a disegno: il grafico serve a vedere il punto, non a misurarlo." + (numera ? " Ogni pallone porta il numero con cui compare nell'elenco più sotto." : "")
+  ]);
+  const wrap = document.createElement("div");
+  wrap.className = "rp-porta-wrap";
+  const cv = document.createElement("canvas");
+  // A tutta larghezza di pagina la cattura html2canvas lavora su ~1450 px: il canvas va più grande di così,
+  // altrimenti il disegno arriva in stampa già ingrandito (stessa ragione di LATO_CAMPO_REPORT_PX).
+  cv.width = 1800; cv.height = 675; // 8:3, come il riquadro CSS
+  wrap.appendChild(cv);
+  pagina.corpo.appendChild(wrap);
+  disegnaPortaCalcio(cv, punti, {
+    sfondo: "#F4F2EC", erba: "rgba(67,122,34,0.12)", telaio: "#FFFFFF", telaioBordo: "rgba(40,37,29,0.80)",
+    lineaPorta: "rgba(40,37,29,0.62)", lineaSettori: "rgba(40,37,29,0.34)",
+    rete: {veloAlto: "rgba(40,37,29,0.035)", veloBasso: "rgba(40,37,29,0.10)", filo: "rgba(40,37,29,0.22)"},
+    testo: PALETTE_REPORT.muted, testoTenue: "rgba(40,37,29,0.62)",
+    alone: "rgba(1,105,111,0.18)", aloneBordo: PALETTE_REPORT.primary,
+    palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    badgeFondo: PALETTE_REPORT.primary, badgeTesto: "#FFFFFF", numera
+  });
+  // I nove settori: conteggio e percentuale accanto, mai la percentuale da sola.
+  tabellaReport(pagina, ["Settore di porta", "Gol", "% sul totale"],
+    celle.filter(c => c.n > 0).sort((a,b) => b.n - a.n || a.indice - b.indice)
+      .map(c => [esc(c.etichetta), nf0(c.n), nf0(c.pct)+"%"]));
+  if(singolaPartita){
+    tabellaReport(pagina, ["#", "Minuto", "Marcatore", "Settore di porta"],
+      punti.map((p,i) => [String(i+1), p.secondo ? esc(mmssDaSecondi(p.secondo)) : "—",
+        esc(p.marcatore || "Non indicato"), esc(zonaPorta(p.x01,p.y01).etichetta)]));
+  }else{
+    const marcatori = settoriPerMarcatore(punti);
+    tabellaReport(pagina, ["Marcatore", "Gol con posizione", "Settore più frequente", "In quel settore", "Nel terzo basso"],
+      marcatori.map(m => [esc(m.marcatore), nf0(m.gol), esc(m.settore), nf0(m.nSettore), nf0(m.altezzaBassa)+" su "+nf0(m.gol)]));
+  }
+  const avvisi = avvisiPorta(punti, diag);
+  if(avvisi.length) bulletsReport(pagina, avvisi);
+}
+
+/** Sezione "Palle perse che diventano gol" nei report (10/10/2026). Su una sessione sola l'elenco degli
+ *  episodi; su un periodo la tabella per giocatore, con il conteggio assoluto accanto alla quota. La frase
+ *  con i nomi è la stessa della dashboard e va anche in "Cosa dicono i dati" (vedi i generatori). Se la
+ *  timeline manca o non ci sono gol, la sezione lo dice invece di sparire. */
+function persaGolReport(pagina, sessioni, tipo){
+  const a = analizzaPersaGol(sessioni, tipo);
+  titoloSezioneReport(pagina, tipo === "partita" ? "Palle perse che diventano gol subiti" : "Palle perse che diventano gol");
+  if(!a){ bulletsReport(pagina, ["Non disponibile: serve la timeline degli eventi con i tempi, che i file di questo report non hanno."]); return; }
+  if(!a.golAnalizzati){ bulletsReport(pagina, [tipo === "partita" ? "Nessun gol subito registrato nella timeline: niente da attribuire." : "Nessun gol nelle partitelle di questo periodo: niente da attribuire."]); return; }
+  const singola = (sessioni||[]).length === 1;
+  const conZona = a.episodi.some(e => e.zona);
+  const righe = [frasePersaGol(a, tipo, true)];
+  if(a.golSenzaPersa) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non ha":"gol non hanno"} una palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti: azione più lunga, palla inattiva o errore non registrato come palla persa.`);
+  if(tipo === "partita" && a.golDichiarati > a.golAnalizzati) righe.push(`Nei metadati risultano ${nf0(a.golDichiarati)} gol subiti, nella timeline ${nf0(a.golAnalizzati)}: i gol senza un evento con il tempo restano fuori da questa lettura.`);
+  righe.push(`Il gol va all'ultima palla persa della squadra che lo subisce, se entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi e senza che nel frattempo quella squadra abbia riavuto il pallone. Dice che la palla è stata persa nel momento sbagliato; diventa un indizio di difficoltà sotto pressing quando lo stesso nome torna su più partite.`);
+  bulletsReport(pagina, righe);
+  if(!a.episodi.length) return;
+  if(singola){
+    const intest = ["Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], tipo === "allenamento" ? ["Ha segnato"] : []);
+    tabellaReport(pagina, intest, a.episodi.map(e => [esc(mmssDaSecondi(e.secondoPersa)), esc(e.giocatore)]
+      .concat(tipo === "allenamento" ? [esc(e.squadra)] : [], [nf(e.secondi,0)+"s"], conZona ? [e.zona ? esc(e.zona) : "—"] : [], tipo === "allenamento" ? [esc(e.marcatore || "—")] : [])));
+  }else{
+    tabellaReport(pagina, ["Giocatore", "Palle perse diventate gol", "Palle perse in tutto", "Quota"].concat(conZona ? ["Dove le perde, più spesso"] : []),
+      a.giocatori.map(g => [esc(g.giocatore), nf0(g.episodi), nf0(g.pallePerse), pctTxt(g.quota,0)]
+        .concat(conZona ? [g.zonaFrequente ? esc(g.zonaFrequente) : "—"] : [])));
+  }
+}
+
 const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
                                    // html2canvas) sia per calcolare, negli stessi px CSS, dove si può
                                    // tagliare una pagina troppo lunga senza spezzare un blocco a metà.
@@ -5404,8 +6452,10 @@ async function generaReportPartita(matchId){
         bulletsReport(pag, [`"Tiri subiti totali" è il totale dei tiri affrontati dal portiere in questa partita (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
       }
       riconquistaReport(pag, [partita]);
+      persaGolReport(pag, [partita], "partita");
       zoneCampoReport(pag, [partita], true);
       golGameCampoReport(pag, [partita]);
+      portaGolReport(pag, [partita]);
     }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Partita", "Lettura della gara", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — sintesi e contributo dei giocatori`);
@@ -5416,6 +6466,9 @@ async function generaReportPartita(matchId){
       bullet.push(`${nf0(sGara.tiri_totali)} tiri totali, ${pctTxt(sGara.efficacia_realizzativa ?? perc(sGara.gol_giocatori, sGara.tiri_totali),0)} trasformati in gol.`);
       const miglioreRecupero = aggGara.slice().sort((a,b)=>b.Recuperi-a.Recuperi)[0];
       if(miglioreRecupero) bullet.push(`<b>${esc(miglioreRecupero.Giocatore)}</b> ha guidato la fase di non possesso con ${nf0(miglioreRecupero.Recuperi)} palloni recuperati.`);
+      // palle perse che sono costate un gol, con i nomi (richiesta dell'utente del 10/10/2026)
+      const frasePG = frasePersaGol(analizzaPersaGol([partita], "partita"), "partita", true);
+      if(frasePG) bullet.push(frasePG);
       bulletsReport(pag, bullet);
       titoloSezioneReport(pag, "Contributo dei giocatori");
       tabellaReport(pag, ["Giocatore","Ruolo","Min","Gol","Ast","Prec. pass.","Indice"],
@@ -5553,6 +6606,8 @@ async function generaReportAllenamentoPeriodo(da, a){
       if(haRPE && caricoMedioCorr!==null) bullet.push(`Il carico medio di allenamento (sRPE) è stato di ${nf0(caricoMedioCorr)} unità a presenza${caricoMedioPrec!==null?`, contro ${nf0(caricoMedioPrec)} del periodo precedente`:""}.`);
       if(haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha accumulato il carico più alto del periodo (${nf0(piuCaricoGiocatore.Carico_Tot)} u.a.).`);
       if(!haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha il carico di stanchezza stimato più alto del periodo (proxy da presenza e minuti nelle partitelle, non un vero RPE).`);
+      const frasePGAll = frasePersaGol(analizzaPersaGol(periodoCorr.allenamenti, "allenamento"), "allenamento", true);
+      if(frasePGAll) bullet.push(frasePGAll);
       bulletsReport(pag, bullet);
       titoloSezioneReport(pag, "Tendenze rispetto al periodo precedente");
       if(!righeAllenPrec.length){
@@ -5581,6 +6636,7 @@ async function generaReportAllenamentoPeriodo(da, a){
       // il confronto per squadra viene incluso solo se il report copre una sola sessione (vedi
       // renderZoneCampo per il perché: le squadre A/B cambiano a ogni allenamento)
       zoneCampoReport(pag, periodoCorr.allenamenti, false, periodoCorr.allenamenti.length === 1);
+      persaGolReport(pag, periodoCorr.allenamenti, "allenamento");
     }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
@@ -5717,8 +6773,10 @@ async function generaReportStagionale(){
           : `"Tiri subiti totali" è il totale dei tiri affrontati in stagione (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
       }
       riconquistaReport(pag, ds.partite);
+      persaGolReport(pag, ds.partite, "partita");
       zoneCampoReport(pag, ds.partite, true);
       golGameCampoReport(pag, ds.partite);
+      portaGolReport(pag, ds.partite);
     }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, "Report Stagionale", "Lettura della stagione", `${ds.partite.length} partite — sintesi e contributo dei giocatori`);
@@ -5730,6 +6788,8 @@ async function generaReportStagionale(){
       const migliorRecuperoStag = agg.slice().sort((a,b)=>b.Recuperi-a.Recuperi)[0];
       if(migliorRecuperoStag) bulletStag.push(`<b>${esc(migliorRecuperoStag.Giocatore)}</b> ha guidato la fase di non possesso con ${nf0(migliorRecuperoStag.Recuperi)} palloni recuperati.`);
       bulletStag.push(`Bilancio: ${nf0(vinteStag)} vittorie, ${nf0(pareggiateStag)} pareggi, ${nf0(perseStag)} sconfitte · ${nf0(sq.gol_fatti)} gol fatti e ${nf0(sq.gol_subiti)} subiti.`);
+      const frasePGStag = frasePersaGol(analizzaPersaGol(ds.partite, "partita"), "partita", true);
+      if(frasePGStag) bulletStag.push(frasePGStag);
       bulletsReport(pag, bulletStag);
       titoloSezioneReport(pag, "Contributo dei giocatori in stagione");
       tabellaReport(pag, ["Giocatore","Ruolo","Partite","Min","Gol","Ast","Prec. pass.","Indice tot."],
@@ -6133,6 +7193,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if(selPGP) selPGP.addEventListener("change", e => { stato.persaAmbitoPartita = e.target.value; renderPersaGiocatorePartita(datiFiltrati()); });
   const selZone = $("#zn-sel-sessione");
   if(selZone) selZone.addEventListener("change", e => { stato.zoneSessione = e.target.value; renderZoneAllenamento(datiFiltrati()); });
+  const selPGL = $("#pgl-sel-partita");
+  if(selPGL) selPGL.addEventListener("change", e => { stato.persaGolPartita = e.target.value;
+    renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", datiFiltrati().partite, "partita"); adattaLarghezzeColonneSchermo(); });
+  const selPGLA = $("#pgl-sel-allenamento");
+  if(selPGLA) selPGLA.addEventListener("change", e => { stato.persaGolAllenamento = e.target.value;
+    renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", datiFiltrati().allenamenti, "allenamento"); adattaLarghezzeColonneSchermo(); });
   const cfaA = $("#cfa-sel-a"), cfaB = $("#cfa-sel-b"), cfaBtn = $("#cfa-btn-report");
   if(cfaA) cfaA.addEventListener("change", e => { stato.confrontoAllA = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
   if(cfaB) cfaB.addEventListener("change", e => { stato.confrontoAllB = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
