@@ -419,6 +419,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
 .rp-page.rp-doc{min-height:0}
 .rp-chart-wrap{width:100%; height:230px; position:relative; margin-bottom:6px}
 .rp-campo-griglia{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px}
+.rp-nota-campo{font-size:10.5px; line-height:1.45; color:#6E6D68; margin-top:6px}
 .rp-campo-etichetta{font-size:11px; font-weight:700; color:#28251D; margin-bottom:5px}
 .rp-porta-wrap{width:100%; aspect-ratio:8/3; position:relative; margin-bottom:12px}
 .rp-porta-wrap canvas{width:100%; height:100%; display:block; border-radius:6px}
@@ -939,10 +940,11 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
         <div class="corpo">
           <h4>Metriche per singola partita</h4>
           <p><code>Tiri_Totali = Tiri_In_Porta + Tiri_Fuori</code> · <code>Passaggi_Totali = Passaggi_Corretti + Passaggi_Sbagliati</code> · <code>Dribbling_Riusciti = Dribbling_Tentati − Dribbling_Falliti</code> · <code>Coinvolgimento_Gol = Gol + Assist</code>.</p>
-          <p><code>Precisione al tiro % = Tiri_In_Porta / Tiri_Totali × 100</code> · <code>Efficacia realizzativa % = Gol / Tiri_Totali × 100</code> · <code>Precisione passaggi % = Passaggi_Corretti / Passaggi_Totali × 100</code> · <code>Successo dribbling % = Dribbling_Riusciti / Dribbling_Tentati × 100</code>. Se il denominatore è 0 la percentuale non è definita e viene mostrata come «—», non come zero.</p>
+          <p><code>Precisione al tiro % = Tiri_In_Porta / Tiri_Totali × 100</code> · <code>Efficacia realizzativa % = Gol / Tiri_Totali × 100</code> · <code>Precisione passaggi % = Passaggi_Corretti / Passaggi_Totali × 100</code> · <code>Successo dribbling % = Dribbling_Riusciti / Dribbling_Tentati × 100</code>. Se il denominatore è 0 la percentuale non è definita e viene mostrata come «—», non come zero. Se nei file il tiro in porta non è segnato a parte (in tutte le partite, o in tutti gli allenamenti, i tiri in porta coincidono con i gol) la precisione al tiro sarebbe identica all'efficacia realizzativa: in quel caso non viene mostrata e al suo posto compare la sola realizzazione.</p>
           <p><code>Errori_Totali = Passaggi_Sbagliati + Dribbling_Falliti</code> · <code>Azioni_Totali = Passaggi_Totali + Dribbling_Tentati + Tiri_Totali</code> · <code>Tasso di errore % = Errori_Totali / Azioni_Totali × 100</code>. Le metriche «per 60'» sono <code>valore / Minuti_Giocati × 60</code>.</p>
           <h4>Indice prestazione sintetico</h4>
-          <p><code>Gol×4 + Assist×3 + Dribbling_Riusciti×0,5 − Dribbling_Falliti×0,3 + Recuperi×0,4 + Tiri_In_Porta×0,3 − Tiri_Fuori×0,2 + Passaggi_Corretti×0,05 − Passaggi_Sbagliati×0,05 + Parate×1,5</code>.</p>
+          <p><code>Gol×4 + Assist×3 + Dribbling_Riusciti×0,5 − Dribbling_Falliti×0,3 + Recuperi×0,4 + Passaggi_Corretti×0,05 − Passaggi_Sbagliati×0,05 + Parate×1,5</code>.</p>
+          <p>I tiri non entrano nell'indice: del tiro conta solo l'esito, cioè il gol. Il tiro in porta non viene segnato a parte, quindi non si può distinguere un tiro parato da uno fuori; e il solo numero di tiri non dice se si tratta di un attaccante propositivo o di chi non passa mai la palla.</p>
           <p><strong>Avvertenza:</strong> non è una metrica ufficiale del calcio. È una somma pesata scelta per dare un ordine di grandezza confrontabile all'interno della stessa squadra: pesi diversi darebbero classifiche diverse. Le celle vuote valgono 0, quindi la colonna Parate vuota per i non-portieri non azzera il loro indice.</p>
           <h4>Aggregato di periodo</h4>
           <p>I conteggi vengono sommati su tutte le partite del periodo e poi si ricalcolano le percentuali sui totali. Non si fa la media delle percentuali, che darebbe più peso alle partite con pochi tentativi.</p>

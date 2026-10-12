@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.34.0",
+  numero: "1.37.0",
   data: "2026-10-12",
-  note: "Tempi dei file da video, heatmap e verifiche sul primo file vero (12/10/2026). (1) I file registrati con SevenLab Video hanno gia i tempi del video: la partita dell 11/10 va da 0:00 a 51:21 con il primo tempo chiuso a 25:47. Le versioni 1.27.0-1.33.1 li moltiplicavano comunque per la velocita dichiarata (0,75 in partita, 0,5 nell allenamento): partita ridotta a 38 minuti, minuti giocati, carico e tempi di riconquista ridotti dello stesso fattore. Ora la correzione si applica solo se i dati dimostrano un cronometro di lavoro; le sessioni gia salvate vengono rimesse a posto da sole all apertura. (2) La «Fine partita» scritta nello stesso istante della fine del primo tempo non azzera piu il secondo tempo. (3) Nella riga «Gol subito» c e il nostro portiere: non viene piu mostrato come marcatore. (4) Heatmap rifatte: macchie piu strette quando gli eventi sono tanti, colore pieno solo dove si concentrano davvero, niente velo su tutto il campo, e i punti veri sopra. (5) L avvertenza sul bordo laterale del campo compare solo se i dati la giustificano: nei file da video la larghezza e coperta tutta."
+  note: "Indice prestazione senza i tiri (12/10/2026). Tolti +0,3 per tiro in porta e −0,2 per tiro fuori: il tiro in porta non viene segnato, quindi ogni tiro non diventato gol veniva penalizzato, e il numero di tiri da solo non distingue un attaccante propositivo da chi non passa la palla. Del tiro conta solo il gol (×4). Comprende la 1.36.0: nomi che differiscono solo per maiuscole o spazi unificati sulla grafia più usata; precisione al tiro tolta dove coincide con la realizzazione."
 };
 
 /* =====================================================================
@@ -1652,9 +1652,15 @@ function disegnaCampoHeatmap(canvas, punti, opts){
 /* =====================================================================
    MOTORE DI CALCOLO
    ===================================================================== */
+/* I TIRI NON PESANO PIÙ (12/10/2026, decisione dell'utente). Fino alla 1.36.0 c'erano anche +0,3 per tiro in porta
+   e −0,2 per tiro fuori. Ma il tiro in porta non viene segnato (solo il tiro e il gol, vedi segnaTiriPorta), quindi
+   ogni tiro non diventato gol — anche se parato — contava come «fuori» e toglieva punti. E il solo numero di tiri
+   non si può leggere: tanti tiri possono essere un attaccante propositivo o uno che non passa mai la palla, e oggi
+   il dato non permette di distinguerli. Del tiro conta quindi solo l'esito: il gol (×4). Vale per partite e
+   allenamenti, e anche per i dati di esempio. */
 function indicePrestazione(r){
   return N(r.Gol)*4 + N(r.Assist)*3 + N(r.Dribbling_Riusciti)*0.5 + N(r.Dribbling_Falliti)*(-0.3)
-    + N(r.Recuperi)*0.4 + N(r.Tiri_In_Porta)*0.3 + N(r.Tiri_Fuori)*(-0.2)
+    + N(r.Recuperi)*0.4
     + N(r.Passaggi_Corretti)*0.05 + N(r.Passaggi_Sbagliati)*(-0.05) + N(r.Parate)*1.5;
 }
 
@@ -1909,6 +1915,7 @@ function assemblaDataset(grezzo){
     };
     return derivaRiga(g, mappaPartite.get(g.Match_ID));
   }).filter(g => g.Giocatore);
+  const haTiriInPorta = segnaTiriPorta(giocatori);
 
   const perGiocatore = new Map();
   giocatori.filter(g => g.Data).sort((a,b) => a.Data - b.Data).forEach(g => {
@@ -1953,6 +1960,7 @@ function assemblaDataset(grezzo){
     };
     return derivaRiga(g, mappaSessioni.get(g.Sessione_ID));
   }).filter(g => g.Giocatore);
+  const haTiriInPortaAllenamento = segnaTiriPorta(statAllenamento);
 
   const presenze = (grezzo.Presenze_Allenamento || []).filter(r => !rigaVuota(r) && !isEsempio(r)).map(r => {
     const s = mappaSessioni.get(String(r.Sessione_ID ?? "").trim());
@@ -1975,6 +1983,7 @@ function assemblaDataset(grezzo){
     haAllenamenti: allenamenti.length>0 && presenze.length>0,
     haRPE: presenze.some(p => p.RPE !== null),
     haStatAllenamento: statAllenamento.length>0,
+    haTiriInPorta, haTiriInPortaAllenamento,
     haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
     haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0),
     haDatiGolGame: partite.some(p=>p.PuntiGol.length>0) || allenamenti.some(a=>a.PuntiGol.length>0),
@@ -1988,12 +1997,74 @@ function assemblaDataset(grezzo){
     haStatistichePortieriGame: partite.some(p=>p.StatistichePortieriGame) || allenamenti.some(a=>a.StatistichePortieriGame)};
 }
 
+/* NOMI SCRITTI IN MODI DIVERSI (12/10/2026). Richiesta esplicita dell'utente, dopo aver visto nel grafico del
+   carico sia «Arben Sheshi» sia «Arben sheshi»: lo stesso giocatore scritto con maiuscole diverse in due file,
+   che l'app contava come due persone. I nomi che differiscono SOLO per maiuscole/minuscole o per spazi vengono
+   unificati sulla grafia più usata. Niente di più aggressivo (accenti, iniziali, soprannomi): sarebbe tirare a
+   indovinare, e un nome è la chiave di quasi ogni statistica.
+   L'unificazione avviene a ogni costruzione del dataset su COPIE delle sessioni: i file salvati restano come
+   sono, quindi niente è irreversibile, e vale anche per i file già caricati. Le unioni fatte sono elencate in
+   «Qualità dei dati», così si vede cosa è stato unito. */
+const pulisciNome = n => String(n ?? "").trim().replace(/\s+/g, " ");
+const chiaveNome = n => pulisciNome(n).toLocaleLowerCase("it");
+/** Quante parole del nome cominciano con la maiuscola: a parità di uso si preferisce «Arben Sheshi». */
+const maiuscoleIniziali = n => pulisciNome(n).split(" ").filter(w => w && w[0] === w[0].toLocaleUpperCase("it") && w[0] !== w[0].toLocaleLowerCase("it")).length;
+/** Per ogni nome, la grafia da usare. Priorità: in quante sessioni compare nel tabellino giocatori (è la
+ *  grafia "ufficiale" del file), poi le maiuscole iniziali, poi quante volte compare negli eventi. */
+function mappaNomiCanonici(sessioni){
+  const voci = new Map(); // chiave → Map(grafia → {sessioni, eventi})
+  const conta = (nome, campo) => {
+    const g = pulisciNome(nome); if(!g) return;
+    const k = chiaveNome(g);
+    if(!voci.has(k)) voci.set(k, new Map());
+    const m = voci.get(k), v = m.get(g) || {sessioni:0, eventi:0};
+    v[campo]++; m.set(g, v);
+  };
+  (sessioni||[]).forEach(s => {
+    new Set((s.righe||[]).map(r => pulisciNome(r["Giocatore"]))).forEach(n => conta(n, "sessioni"));
+    (s.eventi||[]).forEach(e => conta(e["Giocatore"], "eventi"));
+    (s.datiSpaziali||[]).forEach(d => conta(d["Giocatore"], "eventi"));
+    (s.dettaglioGolGame||[]).forEach(g => { conta(g["Marcatore"], "eventi"); conta(g["Assist"], "eventi"); });
+    (s.statistichePortieriGame||[]).forEach(p => conta(p["Portiere"], "eventi"));
+  });
+  const canonico = new Map(), unioni = [];
+  voci.forEach((grafie, k) => {
+    const lista = [...grafie.entries()].sort((a,b) =>
+      (b[1].sessioni - a[1].sessioni) || (maiuscoleIniziali(b[0]) - maiuscoleIniziali(a[0])) ||
+      (b[1].eventi - a[1].eventi) || a[0].localeCompare(b[0], "it"));
+    canonico.set(k, lista[0][0]);
+    // conta come unione solo se le grafie differiscono davvero nel testo visibile (non solo per spazi in coda)
+    const diverse = [...new Set(lista.map(x => x[0]))];
+    if(diverse.length > 1) unioni.push({nome: lista[0][0], varianti: diverse.slice(1)});
+  });
+  return {canonico, unioni};
+}
+/** Copie delle sessioni con tutti i nomi riportati alla grafia unica. Tocca solo i campi che contengono un
+ *  nome di giocatore; il resto è condiviso con l'originale (non viene modificato). */
+function normalizzaNomiSessioni(sessioni){
+  const {canonico, unioni} = mappaNomiCanonici(sessioni);
+  const nome = n => { const g = pulisciNome(n); return g ? (canonico.get(chiaveNome(g)) || g) : n; };
+  const conNome = (righe, campi) => Array.isArray(righe)
+    ? righe.map(r => { const c = Object.assign({}, r); campi.forEach(f => { if(c[f] !== undefined && String(c[f]).trim() !== "") c[f] = nome(c[f]); }); return c; })
+    : righe;
+  const copie = (sessioni||[]).map(s => Object.assign({}, s, {
+    righe: conNome(s.righe, ["Giocatore"]),
+    eventi: conNome(s.eventi, ["Giocatore"]),
+    datiSpaziali: conNome(s.datiSpaziali, ["Giocatore"]),
+    dettaglioGolGame: conNome(s.dettaglioGolGame, ["Marcatore", "Assist"]),
+    statistichePortieriGame: conNome(s.statistichePortieriGame, ["Portiere"])
+  }));
+  return {sessioni: copie, unioni};
+}
+
 /** Percorso di ingresso "Seven Lab": costruisce il dataset a partire dalle sessioni accumulate
  *  (un file = una partita o un allenamento), invece che da un unico Excel con più fogli.
  *  A differenza di preparaDataset() non pretende di avere sia le partite sia gli allenamenti:
  *  basta una sola sessione di un solo tipo per iniziare a vedere qualcosa. */
-function costruisciDatasetDaSessioni(sessioni){
-  if(!sessioni.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
+function costruisciDatasetDaSessioni(sessioniSalvate){
+  if(!sessioniSalvate.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
+  // nomi scritti in modi diversi (maiuscole, spazi) riportati a una grafia sola, su copie: vedi normalizzaNomiSessioni
+  const {sessioni, unioni: unioniNomi} = normalizzaNomiSessioni(sessioniSalvate);
   const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [];
   sessioni.forEach(s => {
     // Regola dell'utente (10/10/2026): una sessione senza metodo di rilevazione è diretta — vale anche per
@@ -2096,9 +2167,28 @@ function costruisciDatasetDaSessioni(sessioni){
     }
   });
   if(!partiteRaw.length && !allenamentiRaw.length) throw new Error("Nei file caricati non ho trovato né partite né allenamenti validi.");
-  return assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw,
+  const ds = assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw,
     Presenze_Allenamento:presenzeRaw, Statistiche_Allenamento:statAllenamentoRaw});
+  ds.unioniNomi = unioniNomi;
+  return ds;
 }
+
+/* TIRI IN PORTA NON SEGNATI A PARTE (12/10/2026). Richiesta dell'utente: «non indico se un tiro va in porta
+   o no, segno solo se ha fatto un tiro e se ha fatto gol». In quei file Seven Lab mette "Tiro in porta" solo sui
+   gol, quindi Tiri_In_Porta = Gol per tutti e la precisione al tiro (tiri in porta / tiri) è lo STESSO numero
+   della realizzazione (gol / tiri): due assi, due righe, due grafici che dicono la stessa cosa. Regola:
+   se in tutto l'insieme (partite, oppure allenamenti) nessuna riga ha più tiri in porta che gol, il tiro in
+   porta non è rilevato → la precisione al tiro vale null e ovunque si mostra la sola realizzazione.
+   Basta UN tiro in porta senza gol per tenerla: succede per esempio nelle partitelle di allenamento quando
+   la parata del portiere è segnata, perché Seven Lab marca come "in porta" il tiro parato. Il flag sta su
+   ogni riga (TiriPortaRilevati) così aggregati, gruppi e riepiloghi di squadra lo ereditano da sé. */
+function segnaTiriPorta(righe){
+  const rilevati = (righe||[]).some(r => N(r.Tiri_In_Porta) > N(r.Gol));
+  (righe||[]).forEach(r => { r.TiriPortaRilevati = rilevati; if(!rilevati) r.Precisione_Tiro_pct = null; });
+  return rilevati;
+}
+/** false solo se le righe dicono esplicitamente che il tiro in porta non è rilevato (dati demo/Excel: true). */
+const tiriPortaRilevati = righe => !(righe||[]).some(r => r && r.TiriPortaRilevati === false);
 
 function derivaRiga(g, partita){
   g.Tiri_Totali = g.Tiri_In_Porta + g.Tiri_Fuori;
@@ -2160,7 +2250,8 @@ function aggregaGiocatori(righe){
     a.Coinvolgimento_Gol = a.Gol + a.Assist;
     a.Errori_Totali = a.Passaggi_Sbagliati + a.Dribbling_Falliti;
     a.Azioni_Totali = a.Passaggi_Totali + a.Dribbling_Tentati + a.Tiri_Totali;
-    a.Precisione_Tiro_pct = perc(a.Tiri_In_Porta, a.Tiri_Totali);
+    a.TiriPortaRilevati = tiriPortaRilevati(rs);
+    a.Precisione_Tiro_pct = a.TiriPortaRilevati ? perc(a.Tiri_In_Porta, a.Tiri_Totali) : null;
     a.Efficacia_Realizzativa_pct = perc(a.Gol, a.Tiri_Totali);
     a.Precisione_Passaggi_pct = perc(a.Passaggi_Corretti, a.Passaggi_Totali);
     a.Successo_Dribbling_pct = perc(a.Dribbling_Riusciti, a.Dribbling_Tentati);
@@ -2241,7 +2332,8 @@ function poolGiocatori(righeAgg){
   p.Dribbling_Riusciti = (somme.Dribbling_Tentati - somme.Dribbling_Falliti)/n;
   p.Dribbling_Tentati = somme.Dribbling_Tentati/n;
   // percentuali → ricalcolate sui totali sommati del gruppo
-  p.Precisione_Tiro_pct = perc(somme.Tiri_In_Porta, somme.Tiri_In_Porta + somme.Tiri_Fuori);
+  p.TiriPortaRilevati = tiriPortaRilevati(righe);
+  p.Precisione_Tiro_pct = p.TiriPortaRilevati ? perc(somme.Tiri_In_Porta, somme.Tiri_In_Porta + somme.Tiri_Fuori) : null;
   p.Efficacia_Realizzativa_pct = perc(somme.Gol, somme.Tiri_In_Porta + somme.Tiri_Fuori);
   p.Precisione_Passaggi_pct = perc(somme.Passaggi_Corretti, somme.Passaggi_Corretti + somme.Passaggi_Sbagliati);
   p.Successo_Dribbling_pct = perc(somme.Dribbling_Tentati - somme.Dribbling_Falliti, somme.Dribbling_Tentati);
@@ -2530,6 +2622,16 @@ function posizioniPallePerse(eventiGrezzi, datiSpaziali){
   });
   return fuori;
 }
+/** Zona 3×3 da una posizione normalizzata (stesse regole e stesse parole della griglia di campo e di "Dove
+ *  perde palla": terzo dalla X, fascia dalla Y), per esempio «terzo difensivo, sinistra». Dal 12/10/2026 la
+ *  sezione palle perse → gol usa questa invece del solo terzo: l'utente vuole sapere IN QUALE ZONA si perdono
+ *  i palloni che diventano gol, e il terzo da solo non lo dice. */
+function zonaCampoDaPunto(x, y){
+  if(!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  const col = Math.min(2, Math.max(0, Math.floor((x / CAMPO_LUNGHEZZA_M) * 3)));
+  const riga = Math.min(2, Math.max(0, Math.floor((y / CAMPO_LARGHEZZA_M) * 3)));
+  return `terzo ${["difensivo","centrale","offensivo"][col]}, ${["sinistra","centro","destra"][riga]}`;
+}
 /** Terzo di campo da una X normalizzata (0 = propria porta di chi perde palla, 50 = porta avversaria). */
 function terzoDaX(x){
   if(!Number.isFinite(x)) return null;
@@ -2607,7 +2709,8 @@ function episodiPersaGolSessione(sessione, tipo){
     const pos = posizioni.get(p.idxOriginale);
     episodi.push({giocatore: String(p.raw.Giocatore||"").trim() || "Non indicato", squadra: p.lato,
       secondoPersa: p.secondoAssoluto, secondoGol: g.t, secondi: g.t - p.secondoAssoluto, periodo: g.periodo,
-      marcatore: g.marcatore, zona: pos ? terzoDaX(pos.x) : null});
+      marcatore: g.marcatore, zona: pos ? zonaCampoDaPunto(pos.x, pos.y) : null,
+      x: pos ? pos.x : null, y: pos ? pos.y : null});
   });
 
   // palle perse totali per giocatore nella stessa sessione: il denominatore per leggere i numeri sopra
@@ -2761,7 +2864,10 @@ function riepilogoSquadra(righe, partite){
     gol_subiti: partite.reduce((a,p)=>a+p.Gol_Subiti,0),
     gol_giocatori: s("Gol"), assist: s("Assist"),
     tiri_in_porta: s("Tiri_In_Porta"), tiri_totali: tiriTot,
-    precisione_tiro: perc(s("Tiri_In_Porta"), tiriTot),
+    // vedi segnaTiriPorta: senza tiri in porta segnati a parte la precisione al tiro non esiste
+    tiri_porta_rilevati: tiriPortaRilevati(righe),
+    precisione_tiro: tiriPortaRilevati(righe) ? perc(s("Tiri_In_Porta"), tiriTot) : null,
+    efficacia_realizzativa: perc(s("Gol"), tiriTot),
     precisione_passaggi: perc(s("Passaggi_Corretti"), passTot),
     successo_dribbling: perc(dribRius, dribTent),
     tasso_errore: perc(s("Passaggi_Sbagliati")+s("Dribbling_Falliti"), azioni),
@@ -3101,6 +3207,9 @@ function validaDati(ds){
     if(p.DurataSessione !== null && p.Minuti_Allenamento > p.DurataSessione && p.DurataSessione > 0)
       add("attenzione", `${dove}: ${nf0(p.Minuti_Allenamento)} minuti di allenamento su una sessione di ${nf0(p.DurataSessione)} minuti.`);
   });
+  // nomi unificati (12/10/2026): non è un errore, ma va detto cosa è stato unito
+  (ds.unioniNomi || []).forEach(u => add("attenzione",
+    `Nome scritto in modi diversi nei file: ${u.varianti.map(v => "«"+esc(v)+"»").join(", ")} ${u.varianti.length === 1 ? "è stato unito" : "sono stati uniti"} a <strong>«${esc(u.nome)}»</strong>, la grafia più usata. Se fossero persone diverse, scrivi i nomi in modo che si distinguano anche senza maiuscole.`));
   return av;
 }
 
@@ -3230,8 +3339,11 @@ function renderKPI(f){
       prevRaw: sPrec?sPrec.gol_subiti:null, currRaw: sCorr?sCorr.gol_subiti:null, meglio:"basso", dec:0, unit:""},
     {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.gol_giocatori)+" gol e "+nf0(s.assist)+" assist dai giocatori",
       prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
-    {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
-      prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"},
+    s.tiri_porta_rilevati
+      ? {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
+          prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"}
+      : {eti:"Realizzazione", val:pctTxt(s.efficacia_realizzativa), nota:nf0(s.gol_giocatori)+" gol su "+nf0(s.tiri_totali)+" tiri",
+          prevRaw: sPrec?sPrec.efficacia_realizzativa:null, currRaw: sCorr?sCorr.efficacia_realizzativa:null, meglio:"alto", dec:1, unit:" pt"},
     {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:"Tasso di errore squadra "+pctTxt(s.tasso_errore),
       prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
   ];
@@ -3279,9 +3391,13 @@ function renderAndamento(f){
     {id:"gr-passaggi", titolo:"Precisione passaggi di squadra", sub:"Passaggi corretti sul totale, partita per partita.",
      dataset:[{label:"Precisione passaggi", data:perMatch.map(x=>x.s.precisione_passaggi), color:colore("c1")}],
      media: media(perMatch.map(x=>x.s.precisione_passaggi)), mediaLabel:"Media periodo", suffisso:"%"},
-    {id:"gr-tiro", titolo:"Precisione al tiro di squadra", sub:"Tiri in porta sul totale dei tiri, partita per partita.",
-     dataset:[{label:"Precisione al tiro", data:perMatch.map(x=>x.s.precisione_tiro), color:colore("c3")}],
-     media: media(perMatch.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"},
+    tiriPortaRilevati(f.giocatori)
+      ? {id:"gr-tiro", titolo:"Precisione al tiro di squadra", sub:"Tiri in porta sul totale dei tiri, partita per partita.",
+         dataset:[{label:"Precisione al tiro", data:perMatch.map(x=>x.s.precisione_tiro), color:colore("c3")}],
+         media: media(perMatch.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"}
+      : {id:"gr-tiro", titolo:"Realizzazione di squadra", sub:"Gol sul totale dei tiri, partita per partita.",
+         dataset:[{label:"Realizzazione", data:perMatch.map(x=>x.s.efficacia_realizzativa), color:colore("c3")}],
+         media: media(perMatch.map(x=>x.s.efficacia_realizzativa)), mediaLabel:"Media periodo", suffisso:"%"},
     {id:"gr-errore", titolo:"Tasso di errore di squadra", sub:"Palloni persi sul totale delle azioni: più è basso, meglio è.",
      dataset:[{label:"Tasso di errore", data:perMatch.map(x=>x.s.tasso_errore), color:colore("c5")}],
      media: media(perMatch.map(x=>x.s.tasso_errore)), mediaLabel:"Media periodo", suffisso:"%"}
@@ -3451,7 +3567,7 @@ function renderTendenze(f){
   }
   const tutte = calcolaTendenze(f.giocatori);
   stato.tendenze = tutte;
-  const blocchi = Object.keys(CONFIG_TREND).map(metrica => {
+  const blocchi = Object.keys(CONFIG_TREND).filter(m => m !== "Precisione_Tiro_pct" || tiriPortaRilevati(f.giocatori)).map(metrica => {
     const cfg = CONFIG_TREND[metrica];
     const rilev = tutte.filter(t => t.Metrica === metrica && t.rilevante)
       .sort((a,b) => Math.abs(b.delta_totale) - Math.abs(a.delta_totale)).slice(0,3);
@@ -3574,10 +3690,13 @@ function renderKPIAllenamentoStat(f){
       raw:presenzaSess.media, prevRaw:null, currRaw:null},
     {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist", raw:s.gol_giocatori,
       prevRaw: sPrec?sPrec.gol_giocatori:null, currRaw: sCorr?sCorr.gol_giocatori:null, meglio:"alto", dec:0, unit:""},
-    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
+    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota: s.tiri_porta_rilevati ? nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali) : nf0(s.tiri_totali)+" tiri totali",
       prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
-    {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
-      prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"},
+    s.tiri_porta_rilevati
+      ? {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
+          prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"}
+      : {eti:"Realizzazione", val:pctTxt(s.efficacia_realizzativa), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
+          prevRaw: sPrec?sPrec.efficacia_realizzativa:null, currRaw: sCorr?sCorr.efficacia_realizzativa:null, meglio:"alto", dec:1, unit:" pt"},
     {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:nf0(s.recuperi)+" recuperi, "+nf0(s.parate)+" parate",
       prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
   ];
@@ -3627,9 +3746,13 @@ function renderAndamentoAllenamentoStat(f){
     {id:"gr-all-passaggi", titolo:"Precisione passaggi in allenamento", sub:"Passaggi corretti sul totale, sessione per sessione.",
      dataset:[{label:"Precisione passaggi", data:perSessione.map(x=>x.s.precisione_passaggi), color:colore("c1")}],
      media: media(perSessione.map(x=>x.s.precisione_passaggi)), mediaLabel:"Media periodo", suffisso:"%"},
-    {id:"gr-all-tiro", titolo:"Precisione al tiro in allenamento", sub:"Tiri in porta sul totale dei tiri, sessione per sessione.",
-     dataset:[{label:"Precisione al tiro", data:perSessione.map(x=>x.s.precisione_tiro), color:colore("c3")}],
-     media: media(perSessione.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"},
+    tiriPortaRilevati(f.statAllenamento)
+      ? {id:"gr-all-tiro", titolo:"Precisione al tiro in allenamento", sub:"Tiri in porta sul totale dei tiri, sessione per sessione.",
+         dataset:[{label:"Precisione al tiro", data:perSessione.map(x=>x.s.precisione_tiro), color:colore("c3")}],
+         media: media(perSessione.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"}
+      : {id:"gr-all-tiro", titolo:"Realizzazione in allenamento", sub:"Gol sul totale dei tiri, sessione per sessione.",
+         dataset:[{label:"Realizzazione", data:perSessione.map(x=>x.s.efficacia_realizzativa), color:colore("c3")}],
+         media: media(perSessione.map(x=>x.s.efficacia_realizzativa)), mediaLabel:"Media periodo", suffisso:"%"},
     {id:"gr-all-errore", titolo:"Tasso di errore in allenamento", sub:"Palloni persi sul totale delle azioni: più è basso, meglio è.",
      dataset:[{label:"Tasso di errore", data:perSessione.map(x=>x.s.tasso_errore), color:colore("c5")}],
      media: media(perSessione.map(x=>x.s.tasso_errore)), mediaLabel:"Media periodo", suffisso:"%"}
@@ -3738,7 +3861,7 @@ function renderTendenzeAllenamentoStat(f){
     return;
   }
   const tutte = calcolaTendenze(f.statAllenamento);
-  const blocchi = Object.keys(CONFIG_TREND).map(metrica => {
+  const blocchi = Object.keys(CONFIG_TREND).filter(m => m !== "Precisione_Tiro_pct" || tiriPortaRilevati(f.statAllenamento)).map(metrica => {
     const cfg = CONFIG_TREND[metrica];
     const rilev = tutte.filter(t => t.Metrica === metrica && t.rilevante)
       .sort((a,b) => Math.abs(b.delta_totale) - Math.abs(a.delta_totale)).slice(0,3);
@@ -4040,7 +4163,7 @@ function renderGiocatore(f){
           (statMioPortiere && statMioPortiere.stimato) ? "Per le partite i cui file non hanno la sezione «STATISTICHE PORTIERI GAME», tiri e gol subiti sono <strong>stimati</strong> come le sue parate più i gol incassati dalla squadra in quella gara; dove la sezione c'è si usa il dato rilevato." : ""
         ].filter(Boolean).join(" ")}</p></div>
       <div class="card"><div class="grafico-titolo">Andamento partita per partita</div>
-        <div class="grafico-sub">Precisione al tiro, precisione passaggi e tasso di errore nelle sue partite.</div>
+        <div class="grafico-sub">${tiriPortaRilevati(righe) ? "Precisione al tiro" : "Realizzazione (gol sui tiri)"}, precisione passaggi e tasso di errore nelle sue partite.</div>
         <div class="grafico-wrap alto"><canvas id="gr-gioc-linee"></canvas></div></div>
       <div class="card"><div class="grafico-titolo">Minuti giocati</div>
         <div class="grafico-sub">Minutaggio partita per partita, con la media del periodo.</div>
@@ -4078,7 +4201,9 @@ function renderGiocatore(f){
   creaGrafico("gr-gioc-linee", {
     type:"line",
     data:{labels:et, datasets:[
-      {label:"Precisione al tiro", data:righe.map(r=>r.Precisione_Tiro_pct), borderColor:colore("c1"), backgroundColor:colore("c1"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true},
+      tiriPortaRilevati(righe)
+        ? {label:"Precisione al tiro", data:righe.map(r=>r.Precisione_Tiro_pct), borderColor:colore("c1"), backgroundColor:colore("c1"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true}
+        : {label:"Realizzazione", data:righe.map(r=>r.Efficacia_Realizzativa_pct), borderColor:colore("c1"), backgroundColor:colore("c1"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true},
       {label:"Precisione passaggi", data:righe.map(r=>r.Precisione_Passaggi_pct), borderColor:colore("c3"), backgroundColor:colore("c3"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true},
       {label:"Tasso di errore", data:righe.map(r=>r.Tasso_Errore_pct), borderColor:colore("c2"), backgroundColor:colore("c2"), tension:.25, borderWidth:2.4, pointRadius:4, borderDash:[5,4], spanGaps:true}
     ]},
@@ -4149,7 +4274,11 @@ function righeConfrontoPer(unitaPl, a, b){
   // due giocatori ha qualcosa da mostrare lì.
   const conta = g => g ? (N(g.Cartellini_Totali)+N(g.Angoli_Tentati)+N(g.Punizioni_Tentate)+N(g.Rigori_Tentati)) : 0;
   const haDisciplina = (stato.ds && stato.ds.haEventiDisciplinari) && (unitaPl === "Partite" || conta(a)+conta(b) > 0);
-  const base = haDisciplina ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  let base = haDisciplina ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  // tiro in porta non rilevato (segnaTiriPorta): «in porta» e precisione al tiro diventano tiri e realizzazione
+  if(!tiriPortaRilevati([a, b])) base = base.map(r =>
+      r.label === "Tiri (in porta / totali)" ? {label:"Tiri", get:g=>g.Tiri_Totali, tipo:"num", meglio:"alto"}
+    : r.label === "Precisione al tiro" ? {label:"Realizzazione", get:g=>g.Efficacia_Realizzativa_pct, tipo:"pct", meglio:"alto"} : r);
   if(unitaPl === "Partite") return base;
   return base.map(r => r.label === "Partite giocate" ? {...r, label:"Sessioni frequentate"}
                      : (r.label === "Indice prestazione (tot. / medio)" ? {...r, label:"Indice prestazione (tot. / a sessione)"} : r));
@@ -4228,7 +4357,7 @@ function renderConfrontoGenerico(f, cfg){
     ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
     ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
     ["Affidabilità (100 − tasso errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
-  ];
+  ].filter(([nome]) => nome !== "Precisione al tiro" || tiriPortaRilevati([a, b]));
   const stessoRuolo = a.Ruolo === b.Ruolo;
 
   const righe = righeConfrontoPer(cfg.unitaPl, a, b);
@@ -4348,7 +4477,7 @@ function renderAllenamenti(){
       </div>
       ${haRPE ? `<div class="card"><div class="grafico-titolo">Carico di allenamento per giocatore</div>
         <div class="grafico-sub">Unità sRPE accumulate nel periodo (minuti × RPE, carico 0 se assente).</div>
-        <div class="grafico-wrap alto"><canvas id="gr-carico"></canvas></div></div>
+        <div class="grafico-wrap alto" style="height:${Math.max(320, righe.length * 24 + 60)}px"><canvas id="gr-carico"></canvas></div></div>
       <div class="card"><div class="grafico-titolo">Carico medio di squadra mese per mese</div>
         <div class="grafico-sub">Media delle unità sRPE per presenza registrata. Serve a vedere se il carico cresce troppo in fretta.</div>
         <div class="grafico-wrap"><canvas id="gr-carico-mese"></canvas></div></div>` : `<div class="card"><div class="grafico-titolo">Carico di allenamento (sRPE)</div>
@@ -4373,7 +4502,10 @@ function renderAllenamenti(){
         callbacks:{label:it=>"Carico: "+nf0(it.parsed.x)+" unità sRPE"}}},
       scales:{
         x:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}, border:{color:colore("grid")}},
-        y:{ticks:{color:colore("muted"), font:{size:11}}, grid:{display:false}, border:{color:colore("grid")}}
+        // autoSkip:false (12/10/2026): con più di una quindicina di giocatori Chart.js saltava un nome su due
+        // per farli stare nei 320px fissi del riquadro — si vedevano più barre che nomi. Ora il riquadro cresce
+        // con il numero di giocatori (24px a barra) e ogni barra ha il suo nome.
+        y:{ticks:{color:colore("muted"), font:{size:11}, autoSkip:false}, grid:{display:false}, border:{color:colore("grid")}}
       }})
   });
   }
@@ -5213,20 +5345,9 @@ function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo
         </tr>`).join("")}</tbody>
       </table></div>
     </div>` : ""}
-    ${a.nonAttribuiti.length ? `
-    <div class="card" style="margin-top:16px">
-      <div class="grafico-titolo">Gol non attribuiti, e perché</div>
-      <div class="grafico-sub">Ogni gol che non finisce nella tabella qui sopra, con il motivo: così la regola si può controllare caso per caso.</div>
-      <div class="tabella-scroll"><table>
-        <caption class="solo-sr">Gol non attribuiti a una palla persa, con il motivo</caption>
-        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Gol al</th><th scope="col">Ha segnato</th><th scope="col">Perché non è attribuito</th></tr></thead>
-        <tbody>${a.nonAttribuiti.map(g => `<tr>
-          ${piuSessioni ? `<td>${esc(g.etichetta)}</td>` : ""}
-          <td>${esc(mmssDaSecondi(g.t))}</td><td>${esc(g.marcatore || "—")}</td>
-          <td class="cella-testo">${motivoNonAttribuito(g, tipo)}</td>
-        </tr>`).join("")}</tbody>
-      </table></div>
-    </div>` : ""}
+    ${/* La scheda "Gol non attribuiti, e perché" (v1.33.1) è stata tolta il 12/10/2026 su richiesta
+         dell'utente: sui file veri diceva quasi solo «nessuna palla persa nei 15 secondi prima», cioè niente.
+         Il motore continua a calcolare i motivi (nonAttribuiti), se un giorno servissero altrove. */ ""}
     ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
     <p class="nota-piccola" style="margin-top:12px">Un gol viene attribuito all'<strong>ultima</strong> palla persa della squadra che lo subisce, se è avvenuta al massimo ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima e se nel frattempo quella squadra non ha ripreso davvero il pallone: un suo recupero, un suo passaggio o dribbling riuscito, un suo tiro, o una palla persa dell'avversario spezzano il legame. Un passaggio sbagliato o un dribbling fallito subito dopo la perdita no: fanno parte della stessa azione sotto pressione.</p>
     <p class="nota-piccola">Come leggerlo: una palla persa a ridosso di un gol dice che è stata persa nel momento sbagliato, non dimostra da sola che il giocatore fosse sotto pressing — quello il dato non lo registra. Diventa un indizio solido quando lo stesso nome torna su più partite${conZona ? ", e ancora di più se le perdite sono nel terzo difensivo, dove di solito si gioca sotto pressione" : ""}.</p>`;
@@ -6010,9 +6131,14 @@ function tabelleDettaglioGiocatori(pagina, righeAgg, haEventiDisciplinari){
   // "non ha giocato"), ma attenuate, così si trova subito chi ha giocato davvero — audit del 04/09/2026.
   const spente = righeAgg.map(a => N(a.Minuti_Totali) <= 0);
   titoloSezioneReport(pagina, "Fase offensiva");
-  tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri (in porta)","Prec. tiro","Effic. realizz."],
-    righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
-      `${nf0(a.Tiri_Totali)} (${nf0(a.Tiri_In_Porta)})`, pctTxt(a.Precisione_Tiro_pct,0), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
+  if(tiriPortaRilevati(righeAgg))
+    tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri (in porta)","Prec. tiro","Effic. realizz."],
+      righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
+        `${nf0(a.Tiri_Totali)} (${nf0(a.Tiri_In_Porta)})`, pctTxt(a.Precisione_Tiro_pct,0), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
+  else // tiro in porta non rilevato: vedi segnaTiriPorta
+    tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri","Realizzazione"],
+      righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
+        nf0(a.Tiri_Totali), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
   titoloSezioneReport(pagina, "Passaggi, dribbling e fase difensiva");
   tabellaReport(pagina, ["Giocatore","Passaggi (corr. / tot.)","Prec. pass.","Dribbling (riusc. / tent.)","Succ. drib.","Recuperi","Parate","Tasso errore","Indice"],
     righeAgg.map(a => [esc(a.Giocatore), `${nf0(a.Passaggi_Corretti)}/${nf0(a.Passaggi_Totali)}`, pctTxt(a.Precisione_Passaggi_pct,0),
@@ -6285,6 +6411,56 @@ function portaGolReport(pagina, sessioni){
   if(avvisi.length) bulletsReport(pagina, avvisi);
 }
 
+/** Campo con le palle perse da cui è nato un gol (report, 12/10/2026 — richiesta dell'utente: «capire in quali
+ *  zone di campo sono stati persi quei palloni che hanno causato un gol subito»). Griglia a 9 zone con il
+ *  NUMERO di palloni in ciascuna (non la percentuale: sono pochi per definizione), colore più intenso dove ce ne
+ *  sono di più, e sopra i punti veri. `numera`: su una partita sola i punti portano il numero della riga
+ *  dell'elenco episodi, così il disegno e la tabella si leggono insieme. */
+function disegnaCampoPersaGol(canvas, episodi, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const conPos = (episodi||[]).filter(e => Number.isFinite(e.x) && Number.isFinite(e.y));
+  const {celle} = calcolaZoneCampo(conPos);
+  const max = Math.max(1, ...celle.map(c => c.conteggio));
+  celle.forEach((c, i) => {
+    if(!c.conteggio) return;
+    const riga = Math.floor(i/3), col = i%3;
+    ctx.fillStyle = hexRgba(opts.colore, 0.12 + 0.38 * (c.conteggio / max));
+    ctx.fillRect(col*w/3, riga*h/3, w/3, h/3);
+    ctx.save();
+    ctx.font = `800 ${Math.round(h*0.085)}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = hexRgba(opts.testo, 0.55); ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText(String(c.conteggio), (col+1)*w/3 - w*0.015, riga*h/3 + h*0.02);
+    ctx.restore();
+  });
+  ctx.strokeStyle = hexRgba(opts.lineaCampo, 0.35); ctx.lineWidth = Math.max(1, w*0.003);
+  ctx.setLineDash([w*0.01, w*0.008]);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(i*w/3,0); ctx.lineTo(i*w/3,h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i*h/3); ctx.lineTo(w,i*h/3); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  const r = Math.max(6, Math.min(w, h) * (opts.numera ? 0.034 : 0.02));
+  conPos.forEach((e, k) => {
+    const px = Math.min(w - r, Math.max(r, (e.x / CAMPO_LUNGHEZZA_M) * w));
+    const py = Math.min(h - r, Math.max(r, (e.y / CAMPO_LARGHEZZA_M) * h));
+    ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2);
+    ctx.fillStyle = opts.colore; ctx.fill();
+    ctx.lineWidth = Math.max(1.5, r*0.18); ctx.strokeStyle = "#FFFFFF"; ctx.stroke();
+    if(opts.numera){
+      ctx.save();
+      ctx.font = `800 ${Math.round(r*1.15)}px Satoshi, system-ui, sans-serif`;
+      ctx.fillStyle = "#FFFFFF"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(String(e.numero || k+1), px, py + r*0.05);
+      ctx.restore();
+    }
+  });
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
 /** Sezione "Palle perse che diventano gol" nei report (10/10/2026). Su una sessione sola l'elenco degli
  *  episodi; su un periodo la tabella per giocatore, con il conteggio assoluto accanto alla quota. La frase
  *  con i nomi è la stessa della dashboard e va anche in "Cosa dicono i dati" (vedi i generatori). Se la
@@ -6302,17 +6478,38 @@ function persaGolReport(pagina, sessioni, tipo){
   const singola = (sessioni||[]).length === 1;
   const conZona = a.episodi.some(e => e.zona);
   const righe = [frasePersaGol(a, tipo, true)];
-  if(a.golSenzaPersa && !singola) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non è attribuito":"gol non sono attribuiti"} a una palla persa: nessuna perdita nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima, oppure la squadra aveva ripreso il pallone nel frattempo.`);
+  if(a.golSenzaPersa) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non è attribuito":"gol non sono attribuiti"} a una palla persa: nessuna perdita nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima, oppure la squadra aveva ripreso il pallone nel frattempo.`);
   if(tipo === "partita" && a.golDichiarati > a.golAnalizzati) righe.push(`Nei metadati risultano ${nf0(a.golDichiarati)} gol subiti, nella timeline ${nf0(a.golAnalizzati)}: i gol senza un evento con il tempo restano fuori da questa lettura.`);
   righe.push(`Il gol va all'ultima palla persa della squadra che lo subisce, se entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi e senza che nel frattempo quella squadra abbia ripreso davvero il pallone (un suo recupero, passaggio o dribbling riuscito, tiro). Dice che la palla è stata persa nel momento sbagliato; diventa un indizio di difficoltà sotto pressing quando lo stesso nome torna su più partite.`);
-  if(singola && a.nonAttribuiti.length)
-    a.nonAttribuiti.forEach(g => righe.push(`Gol al ${esc(mmssDaSecondi(g.t))}${g.marcatore ? " ("+esc(g.marcatore)+")" : ""}, non attribuito — ${motivoNonAttribuito(g, tipo)}`));
   bulletsReport(pagina, righe);
   if(!a.episodi.length) return;
+  // Dove sono state perse quelle palle: campo a 9 zone con i conteggi e i punti, e accanto le zone in numeri.
+  const conPos = a.episodi.filter(e => Number.isFinite(e.x) && Number.isFinite(e.y));
+  if(conPos.length){
+    a.episodi.forEach((e, k) => { e.numero = k + 1; });
+    const zone = elencoZonePerse(conPos);
+    const griglia = document.createElement("div");
+    griglia.className = "rp-campo-griglia";
+    pagina.corpo.appendChild(griglia);
+    const cellaCampo = document.createElement("div");
+    cellaCampo.innerHTML = `<div class="rp-campo-etichetta">Dove sono state perse le palle diventate gol</div>`;
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
+    wrap.appendChild(cv); cellaCampo.appendChild(wrap); griglia.appendChild(cellaCampo);
+    disegnaCampoPersaGol(cv, a.episodi, {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", colore:"#A13544", numera: singola});
+    const cellaZone = document.createElement("div");
+    cellaZone.innerHTML = `<div class="rp-campo-etichetta">Le zone, in numeri</div>
+      <table class="rp-table"><thead><tr><th>Zona del campo</th><th>Palle perse diventate gol</th></tr></thead><tbody>${
+        zone.map(z => `<tr><td>${esc(z.etichetta)}</td><td>${nf0(z.conteggio)}</td></tr>`).join("")}</tbody></table>
+      <div class="rp-nota-campo">${conPos.length < a.episodi.length ? `${nf0(a.episodi.length - conPos.length)} ${a.episodi.length - conPos.length === 1 ? "pallone non ha" : "palloni non hanno"} la posizione nel file e ${a.episodi.length - conPos.length === 1 ? "resta" : "restano"} fuori dal campo. ` : ""}${singola ? "Il numero sul punto è quello della riga nell'elenco qui sotto. " : ""}Propria porta a sinistra; sinistra e destra nel verso d'attacco.</div>`;
+    griglia.appendChild(cellaZone);
+    const tbl = cellaZone.querySelector("table");
+    if(tbl) adattaLarghezzeColonneReport(tbl);
+  }
   if(singola){
     const conMarcatore = a.episodi.some(e => e.marcatore);
-    const intest = ["Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], conMarcatore ? ["Ha segnato"] : []);
-    tabellaReport(pagina, intest, a.episodi.map(e => [esc(mmssDaSecondi(e.secondoPersa)), esc(e.giocatore)]
+    const intest = ["#", "Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], conMarcatore ? ["Ha segnato"] : []);
+    tabellaReport(pagina, intest, a.episodi.map((e, k) => [String(k+1), esc(mmssDaSecondi(e.secondoPersa)), esc(e.giocatore)]
       .concat(tipo === "allenamento" ? [esc(e.squadra)] : [], [nf(e.secondi,0)+"s"], conZona ? [e.zona ? esc(e.zona) : "—"] : [], conMarcatore ? [esc(e.marcatore || "—")] : [])));
   }else{
     tabellaReport(pagina, ["Giocatore", "Palle perse diventate gol", "Palle perse in tutto", "Quota"].concat(conZona ? ["Dove le perde, più spesso"] : []),
@@ -6655,7 +6852,9 @@ async function generaReportPartita(matchId){
         eyebrow:"Giocatore della partita", nome:mvp?.Giocatore, ruolo:mvp?.Ruolo, colore:"#C99400",
         gruppi: mvp ? [
           {titolo:"Statistiche in questa gara", barre:[
-            {label:"Precisione al tiro", valore:pctTxt(mvp.Precisione_Tiro_pct,0), pct:mvp.Precisione_Tiro_pct??0},
+            mvp.TiriPortaRilevati !== false
+              ? {label:"Precisione al tiro", valore:pctTxt(mvp.Precisione_Tiro_pct,0), pct:mvp.Precisione_Tiro_pct??0}
+              : {label:"Realizzazione", valore:pctTxt(mvp.Efficacia_Realizzativa_pct,0), pct:mvp.Efficacia_Realizzativa_pct??0},
             {label:"Precisione passaggi", valore:pctTxt(mvp.Precisione_Passaggi_pct,0), pct:mvp.Precisione_Passaggi_pct??0},
             {label:"Successo dribbling", valore:pctTxt(mvp.Successo_Dribbling_pct,0), pct:mvp.Successo_Dribbling_pct??0}
           ]},
@@ -6671,13 +6870,17 @@ async function generaReportPartita(matchId){
       titoloSezioneReport(pag, "Statistiche di squadra");
       statisticheSquadraReport(pag, [
         [
-          {label:"Precisione al tiro", valore:pctTxt(sGara.precisione_tiro,0), pct:sGara.precisione_tiro??0, colore:PALETTE_REPORT.c1},
+          sGara.tiri_porta_rilevati
+            ? {label:"Precisione al tiro", valore:pctTxt(sGara.precisione_tiro,0), pct:sGara.precisione_tiro??0, colore:PALETTE_REPORT.c1}
+            : {label:"Realizzazione", valore:pctTxt(sGara.efficacia_realizzativa,0), pct:sGara.efficacia_realizzativa??0, colore:PALETTE_REPORT.c1},
           {label:"Precisione passaggi", valore:pctTxt(sGara.precisione_passaggi,0), pct:sGara.precisione_passaggi??0, colore:PALETTE_REPORT.c1},
           {label:"Successo dribbling", valore:pctTxt(sGara.successo_dribbling,0), pct:sGara.successo_dribbling??0, colore:PALETTE_REPORT.c1},
           {label:"Tasso di errore", valore:pctTxt(sGara.tasso_errore,0), pct:sGara.tasso_errore??0, colore:PALETTE_REPORT.c2}
         ],
         [
-          {label:"Tiri totali (in porta)", valore:`${nf0(sGara.tiri_totali)} (${nf0(sGara.tiri_in_porta)})`},
+          sGara.tiri_porta_rilevati
+            ? {label:"Tiri totali (in porta)", valore:`${nf0(sGara.tiri_totali)} (${nf0(sGara.tiri_in_porta)})`}
+            : {label:"Tiri totali", valore:nf0(sGara.tiri_totali)},
           {label:"Assist", valore:nf0(sGara.assist)},
           {label:"Palloni recuperati", valore:nf0(sGara.recuperi)},
           {label:"Parate", valore:nf0(sGara.parate)}
@@ -6901,9 +7104,10 @@ async function generaReportAllenamentoPeriodo(da, a){
       incrociMese.filter(x=>x.tipo==="affaticamento").forEach(x => avvisi.push(`<b>${esc(x.Giocatore)}</b>: carico in aumento (${nf(x.rapportoCarico,1)}×) insieme a un calo di rendimento in partita — possibile affaticamento.`));
       bulletsReport(pag, avvisi.length ? avvisi : ["Nessun segnale particolare da monitorare in questo periodo."]);
       titoloSezioneReport(pag, "Presenza per giocatore");
+      // altezza proporzionale ai giocatori e nessun nome saltato (stesso difetto del carico in dashboard, 12/10/2026)
       graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
         {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
-      ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}}}})});
+      ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}, autoSkip:false}, grid:{display:false}}}})}, Math.max(230, righeAllen.length * 16 + 40));
     },
     // Pagina a piena larghezza per i grafici a campo (04/09/2026): attaccati alla pagina con la colonna
     // laterale restavano larghi poco più di mezza pagina, con le percentuali dentro le zone illeggibili e
@@ -6988,13 +7192,17 @@ async function generaReportStagionale(){
       titoloSezioneReport(pag, "Statistiche di squadra");
       statisticheSquadraReport(pag, [
         [
-          {label:"Precisione al tiro", valore:pctTxt(sq.precisione_tiro,0), pct:sq.precisione_tiro??0, colore:PALETTE_REPORT.c1},
+          sq.tiri_porta_rilevati
+            ? {label:"Precisione al tiro", valore:pctTxt(sq.precisione_tiro,0), pct:sq.precisione_tiro??0, colore:PALETTE_REPORT.c1}
+            : {label:"Realizzazione", valore:pctTxt(sq.efficacia_realizzativa,0), pct:sq.efficacia_realizzativa??0, colore:PALETTE_REPORT.c1},
           {label:"Precisione passaggi", valore:pctTxt(sq.precisione_passaggi,0), pct:sq.precisione_passaggi??0, colore:PALETTE_REPORT.c1},
           {label:"Successo dribbling", valore:pctTxt(sq.successo_dribbling,0), pct:sq.successo_dribbling??0, colore:PALETTE_REPORT.c1},
           {label:"Tasso di errore", valore:pctTxt(sq.tasso_errore,0), pct:sq.tasso_errore??0, colore:PALETTE_REPORT.c2}
         ],
         [
-          {label:"Tiri totali (in porta)", valore:`${nf0(sq.tiri_totali)} (${nf0(sq.tiri_in_porta)})`},
+          sq.tiri_porta_rilevati
+            ? {label:"Tiri totali (in porta)", valore:`${nf0(sq.tiri_totali)} (${nf0(sq.tiri_in_porta)})`}
+            : {label:"Tiri totali", valore:nf0(sq.tiri_totali)},
           {label:"Assist", valore:nf0(sq.assist)},
           {label:"Palloni recuperati", valore:nf0(sq.recuperi)},
           {label:"Parate", valore:nf0(sq.parate)}
@@ -7140,11 +7348,13 @@ function contestoIA(){
     squadra: {gol_fatti:sq.gol_fatti, gol_subiti:sq.gol_subiti,
       precisione_passaggi_pct: sq.precisione_passaggi===null?null:+sq.precisione_passaggi.toFixed(1),
       precisione_tiro_pct: sq.precisione_tiro===null?null:+sq.precisione_tiro.toFixed(1),
+      realizzazione_pct: sq.efficacia_realizzativa===null?null:+sq.efficacia_realizzativa.toFixed(1),
       successo_dribbling_pct: sq.successo_dribbling===null?null:+sq.successo_dribbling.toFixed(1),
       tasso_errore_pct: sq.tasso_errore===null?null:+sq.tasso_errore.toFixed(1)},
     classifica: agg.map(a=>({giocatore:a.Giocatore, ruolo:a.Ruolo, partite:a.Partite_Giocate, minuti:a.Minuti_Totali,
       gol:a.Gol, assist:a.Assist, precisione_passaggi_pct:a.Precisione_Passaggi_pct===null?null:+a.Precisione_Passaggi_pct.toFixed(1),
       precisione_tiro_pct:a.Precisione_Tiro_pct===null?null:+a.Precisione_Tiro_pct.toFixed(1),
+      tiri:a.Tiri_Totali, realizzazione_pct:a.Efficacia_Realizzativa_pct===null?null:+a.Efficacia_Realizzativa_pct.toFixed(1),
       successo_dribbling_pct:a.Successo_Dribbling_pct===null?null:+a.Successo_Dribbling_pct.toFixed(1),
       tasso_errore_pct:a.Tasso_Errore_pct===null?null:+a.Tasso_Errore_pct.toFixed(1),
       parate:a.Parate, indice_prestazione:+a.Indice_Prestazione_Tot.toFixed(1)})),
@@ -7228,7 +7438,7 @@ function schedeConfrontoReport(pagina, a, b, rankA, rankB, unitaPl="Partite"){
     ["Indice prestazione", `${nf(g.Indice_Prestazione_Tot,1)} · ${rank}° in squadra`],
     ["Gol · assist", `${nf0(g.Gol)} · ${nf0(g.Assist)}`],
     ["Precisione passaggi", pctTxt(g.Precisione_Passaggi_pct,0)],
-    ["Precisione al tiro", pctTxt(g.Precisione_Tiro_pct,0)],
+    tiriPortaRilevati([a, b]) ? ["Precisione al tiro", pctTxt(g.Precisione_Tiro_pct,0)] : ["Realizzazione", pctTxt(g.Efficacia_Realizzativa_pct,0)],
     ["Successo dribbling", pctTxt(g.Successo_Dribbling_pct,0)],
     ["Tasso di errore", pctTxt(g.Tasso_Errore_pct,0)]
   ];
@@ -7344,7 +7554,7 @@ async function generaReportConfronto(nomeA, nomeB, cfg=CONFRONTO_PARTITE){
     ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
     ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
     ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
-  ];
+  ].filter(([nome]) => nome !== "Precisione al tiro" || tiriPortaRilevati([a, b]));
   const prefissoFile = cfg === CONFRONTO_ALLENAMENTO ? "Report_Confronto_Allenamenti" : "Report_Confronto";
   await generaEScarica(nomeFileData(`${prefissoFile}_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), [
     Object.assign(async (pag) => {
