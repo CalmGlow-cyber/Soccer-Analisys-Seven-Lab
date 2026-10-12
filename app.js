@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.33.0",
-  data: "2026-10-10",
-  note: "Palle perse che diventano gol (10/10/2026). Nuova sezione 11 nella Dashboard Partita e 10 nella Dashboard Allenamento, piu una sezione nel Report Partita, nel Report Stagionale e nel Report Periodo Allenamenti, e una riga con i nomi in «Cosa dicono i dati». Un gol viene attribuito all ultima palla persa della squadra che lo subisce, se avvenuta al massimo 15 secondi prima, nello stesso tempo, e se nel frattempo quella squadra non ha riavuto il pallone (un suo recupero, passaggio, dribbling o tiro spezza il legame). In partita contano i gol subiti dalla nostra squadra; in allenamento i gol di entrambe le squadre interne. Per ogni giocatore il numero di palle perse diventate gol accanto alle sue palle perse totali, e la zona del campo della perdita quando il file ha la posizione. Selettore partita/allenamento singolo o tutto il periodo. Controllo incrociato con i gol subiti dichiarati nel file."
+  numero: "1.34.0",
+  data: "2026-10-12",
+  note: "Tempi dei file da video, heatmap e verifiche sul primo file vero (12/10/2026). (1) I file registrati con SevenLab Video hanno gia i tempi del video: la partita dell 11/10 va da 0:00 a 51:21 con il primo tempo chiuso a 25:47. Le versioni 1.27.0-1.33.1 li moltiplicavano comunque per la velocita dichiarata (0,75 in partita, 0,5 nell allenamento): partita ridotta a 38 minuti, minuti giocati, carico e tempi di riconquista ridotti dello stesso fattore. Ora la correzione si applica solo se i dati dimostrano un cronometro di lavoro; le sessioni gia salvate vengono rimesse a posto da sole all apertura. (2) La «Fine partita» scritta nello stesso istante della fine del primo tempo non azzera piu il secondo tempo. (3) Nella riga «Gol subito» c e il nostro portiere: non viene piu mostrato come marcatore. (4) Heatmap rifatte: macchie piu strette quando gli eventi sono tanti, colore pieno solo dove si concentrano davvero, niente velo su tutto il campo, e i punti veri sopra. (5) L avvertenza sul bordo laterale del campo compare solo se i dati la giustificano: nei file da video la larghezza e coperta tutta."
 };
 
 /* =====================================================================
@@ -259,6 +259,54 @@ function scalaMinutiTesto(grezzo, v){
   return String(Math.round(n * v * 10) / 10);
 }
 
+/* CHI HA SCRITTO I TEMPI: IL CRONOMETRO O IL VIDEO? (12/10/2026)
+   Primo file vero in differita (partita_1.csv, 11/10/2026 contro OLC, e allenamento_1.csv del 10/10): la timeline
+   della partita va da 0:00 a 51:21 e il primo tempo finisce a 25:47 — cioè un tempo regolamentare da 25' più
+   47" di recupero. Sono già TEMPI DI PARTITA, non tempi di lavoro: il file dichiara «Velocità riproduzione 0.75x»
+   ma il programma con cui è stato registrato, SevenLab Video, scrive il tempo di ogni evento sulla posizione del
+   video. Lo conferma anche l'orologio da parete del riepilogo (due ore per registrare 51 minuti di gioco) e, a
+   parità di gioco, l'intervallo tipico fra due eventi: 3 secondi nella partita e 3 nell'allenamento «a 0.50x».
+   La versione 1.27.0-1.33.1 correggeva comunque: riduceva la partita a 38 minuti e l'allenamento alla metà,
+   con minuti giocati, carico e intervalli ridotti dello stesso fattore. Ora la correzione si applica solo quando
+   i dati dimostrano un cronometro di lavoro; nel dubbio i tempi restano come sono e lo si dice. */
+const TEMPO_PLAUSIBILE_MIN_SEC = 20*60, TEMPO_PLAUSIBILE_MAX_SEC = 33*60;   // 25' + recupero, con margine
+const PARTITA_PLAUSIBILE_MIN_SEC = 44*60, PARTITA_PLAUSIBILE_MAX_SEC = 62*60; // 50' + recupero, con margine
+/** Fine del primo tempo e fine dei dati, in secondi del file, prima di qualunque correzione. */
+function duratePrimaDellaCorrezione(parsed){
+  const eventi = parsed.eventi || [];
+  const sec = e => { const v = (e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "") ? e["Secondo totale"] : e["Secondo"]; const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : null; };
+  let fine1 = parsed.riepilogoTempi && isFinite(parsed.riepilogoTempi.fine1TempoSec) ? parsed.riepilogoTempi.fine1TempoSec : null;
+  if(fine1 === null){ const r = eventi.find(e => e["Fine 1° tempo"] === "1"); if(r) fine1 = sec(r); }
+  const tutti = eventi.map(sec).filter(x => x !== null);
+  return {fine1, fine: tutti.length ? Math.max(...tutti) : null};
+}
+/** Decide se i tempi del file sono quelli del video (già di partita) o quelli del cronometro di lavoro.
+ *  Ritorna {orologio: "video"|"cronometro"|"incerto", motivi:[...]}. */
+function orologioDelFile(parsed, v){
+  const motivi = [];
+  const dg = parsed.dettaglioGolGame;
+  if(Array.isArray(dg) && dg.length && Object.keys(dg[0]).some(k => /^porta\s*[xy]/i.test(String(k).trim())))
+    motivi.push("il dettaglio dei gol ha le colonne «Porta X/Y m», che scrive solo SevenLab Video");
+  if((parsed.eventi||[]).some(e => /cambio squadra/i.test(String(e["Dettaglio"]||""))))
+    motivi.push("la timeline ha righe «Cambio squadra», che scrive solo SevenLab Video");
+  const {fine1, fine} = duratePrimaDellaCorrezione(parsed);
+  const dentro = (x, a, b) => x !== null && x >= a && x <= b;
+  if(parsed.tipo === "partita"){
+    if(dentro(fine1, TEMPO_PLAUSIBILE_MIN_SEC, TEMPO_PLAUSIBILE_MAX_SEC))
+      motivi.push(`il primo tempo finisce a ${mmssDaSecondi(fine1)}: è già la durata di un tempo vero (25' più recupero)`);
+    else if(fine1 === null && dentro(fine, PARTITA_PLAUSIBILE_MIN_SEC, PARTITA_PLAUSIBILE_MAX_SEC))
+      motivi.push(`la partita dura ${mmssDaSecondi(fine)}: è già la durata di una partita vera`);
+    if(motivi.length) return {orologio:"video", motivi};
+    // nessuna impronta del video: il cronometro di lavoro è dimostrato se SOLO i tempi corretti sono plausibili
+    if(fine1 !== null && dentro(fine1 * v, TEMPO_PLAUSIBILE_MIN_SEC, TEMPO_PLAUSIBILE_MAX_SEC))
+      return {orologio:"cronometro", motivi:[`il primo tempo finisce a ${mmssDaSecondi(fine1)} sul cronometro, ${mmssDaSecondi(fine1*v)} riportato alla velocità del video: è un cronometro di lavoro`]};
+    if(fine1 === null && dentro(fine * v, PARTITA_PLAUSIBILE_MIN_SEC, PARTITA_PLAUSIBILE_MAX_SEC))
+      return {orologio:"cronometro", motivi:[`la partita dura ${mmssDaSecondi(fine)} sul cronometro, ${mmssDaSecondi(fine*v)} riportata alla velocità del video: è un cronometro di lavoro`]};
+    return {orologio:"incerto", motivi:[]};
+  }
+  return motivi.length ? {orologio:"video", motivi} : {orologio:"incerto", motivi:[]};
+}
+
 /** Applica la correzione a un risultato di parsaFileSevenLab. Muta `eventi`, `riepilogoTempi`, i minuti
  *  della tabella giocatori e la durata della sessione, e torna la diagnostica, che viene conservata sulla
  *  sessione (campo `scalaTempi`) per poterla dichiarare a schermo e nei report — e per non riapplicarla mai
@@ -266,7 +314,8 @@ function scalaMinutiTesto(grezzo, v){
 function normalizzaTempiDifferita(parsed){
   const met = metodoRilevazione(parsed.meta, parsed.eventi);
   const diag = {metodo: met.metodo, predefinito: met.predefinito, metodoLetto: met.letto, fonteMetodo: met.fonte,
-    applicata:false, minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[]};
+    applicata:false, minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[],
+    orologio:null, motiviOrologio:[], regolaOrologio:2};
   const v = velocitaRiproduzione(parsed.meta);
   const chiudi = () => { diag.avviso = diag.avvisi.length ? diag.avvisi.join(" ") : null; parsed.scalaTempi = diag; return parsed; };
 
@@ -288,9 +337,16 @@ function normalizzaTempiDifferita(parsed){
     return chiudi();
   }
   diag.velocita = v;
+  if(v === 1) return chiudi();
+  const oro = orologioDelFile(parsed, v);
+  diag.orologio = oro.orologio; diag.motiviOrologio = oro.motivi; diag.regolaOrologio = 2;
+  if(oro.orologio === "video") return chiudi(); // tempi già di partita: niente da correggere
+  if(oro.orologio === "incerto"){
+    diag.avvisi.push(`Velocità di riproduzione dichiarata (${String(v).replace(".", ",")}×), ma dal file non si capisce se i tempi seguono il video o il cronometro: sono stati lasciati come sono. SevenLab Video li scrive già sul tempo del video; se questa sessione è stata registrata con il cronometro di SevenLab, tempi e minuti sono gonfiati: segnalacelo.`);
+    return chiudi();
+  }
   if(v > 1)
     diag.avvisi.push(`Velocità di riproduzione dichiarata superiore a 1 (${String(v).replace(".", ",")}×): vuol dire video più veloce del reale, insolito per registrare. Se il numero nel file è un «fattore di rallentamento» (2 = metà velocità) invece della velocità del lettore, i tempi sono sbagliati di un fattore ${String(Math.round(v*v*10)/10).replace(".", ",")}: segnalacelo.`);
-  if(v === 1) return chiudi();
 
   const rt = parsed.riepilogoTempi;
   const t0 = (rt && isFinite(rt.inizioPartitaSec)) ? rt.inizioPartitaSec : 0;
@@ -333,6 +389,69 @@ function normalizzaTempiDifferita(parsed){
   diag.minutiCorretti = true;
   diag.applicata = true;
   return chiudi();
+}
+
+/** Riporta una sessione salvata ai tempi scritti nel file, annullando la correzione applicata dalla 1.27.0 in
+ *  poi (è una trasformazione affine: si inverte esattamente, salvo l'arrotondamento a 0,1 dei minuti giocati).
+ *  Serve a rivalutare con la regola del 12/10/2026 le sessioni già salvate nel browser, senza chiedere di
+ *  ricaricare i file. Muta l'oggetto passato. */
+function annullaCorrezioneTempi(sess){
+  const sc = sess.scalaTempi;
+  if(!sc || !sc.applicata || !(sc.velocita > 0)) return sess;
+  const v = sc.velocita, t0 = sc.t0 || 0;
+  const inv = t => Math.round((t / v + t0) * 1000) / 1000;
+  (sess.eventi || []).forEach(e => {
+    if(e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "") e["Secondo totale"] = inv(N(e["Secondo totale"]));
+    else if(e["Secondo"] !== undefined && String(e["Secondo"]).trim() !== "") e["Secondo"] = inv(N(e["Secondo"]));
+    if(e["Minuto"] !== undefined && String(e["Minuto"]).trim() !== "") e["Minuto"] = inv(N(e["Minuto"])*60) / 60;
+    const mm = secondiDaMMSS(e["Minutaggio"]);
+    if(mm !== null) e["Minutaggio"] = mmssDaSecondi(inv(mm));
+  });
+  const rt = sess.riepilogoTempi;
+  if(rt){
+    if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec / v;
+    ["inizioPartitaSec","fine1TempoSec","inizio2TempoSec","finePartitaSec"].forEach(k => {
+      if(rt[k] !== null && rt[k] !== undefined && isFinite(rt[k])) rt[k] = inv(rt[k]);
+    });
+  }
+  if(sc.minutiCorretti){
+    const indietro = g => { const n = parseFloat(String(g).replace(",", ".")); return isFinite(n) ? String(Math.round(n / v * 100) / 100) : g; };
+    (sess.righe || []).forEach(r => {
+      if(r["Minuti giocati"] !== undefined && String(r["Minuti giocati"]).trim() !== "") r["Minuti giocati"] = indietro(r["Minuti giocati"]);
+      const mm = secondiDaMMSS(r["Minutaggio"]);
+      if(mm !== null){
+        const sec = Math.round(mm / v);
+        r["Minutaggio"] = mmssDaSecondi(sec);
+        // il minutaggio m:ss era arrotondato al secondo, i minuti giocati al decimo: il primo si inverte
+        // esatto, quindi i minuti si ricavano da lì (48:15 → 48,25 invece di 48,27)
+        if(r["Minuti giocati"] !== undefined) r["Minuti giocati"] = String(Math.round(sec / 60 * 100) / 100);
+      }
+    });
+    if(sess.meta && sess.meta["Durata minuti"] !== undefined) sess.meta["Durata minuti"] = indietro(sess.meta["Durata minuti"]);
+  }
+  sess.scalaTempi = Object.assign({}, sc, {applicata:false, minutiCorretti:false});
+  return sess;
+}
+/** Una volta sola, all'avvio: le sessioni in differita salvate con la regola vecchia (correzione sempre
+ *  applicata) vengono riportate ai tempi del file e rivalutate con quella nuova. Torna quante ne ha cambiate. */
+function rivalutaTempiSessioniSalvate(){
+  const sessioni = leggiSessioniSalvate();
+  let cambiate = 0;
+  const nuove = sessioni.map(sess => {
+    const sc = sess.scalaTempi;
+    if(!sc || sc.metodo !== "differita" || sc.regolaOrologio === 2) return sess;
+    const copia = JSON.parse(JSON.stringify(sess));
+    annullaCorrezioneTempi(copia);
+    const parsed = {tipo: copia.tipo, meta: copia.meta, righe: copia.righe, eventi: copia.eventi,
+      riepilogoTempi: copia.riepilogoTempi, datiSpaziali: copia.datiSpaziali,
+      statistichePortieriGame: copia.statistichePortieriGame, dettaglioGolGame: copia.dettaglioGolGame};
+    normalizzaTempiDifferita(parsed);
+    cambiate++;
+    return Object.assign(copia, {meta: parsed.meta, righe: parsed.righe, eventi: parsed.eventi,
+      riepilogoTempi: parsed.riepilogoTempi, scalaTempi: parsed.scalaTempi});
+  });
+  if(cambiate) scriviSessioniSalvate(nuove);
+  return cambiate;
 }
 
 /** Diagnostica dei tempi di una sessione GIÀ SALVATA nel browser, letta con la regola di oggi. Le sessioni
@@ -618,6 +737,12 @@ function normalizzaEventiSevenLab(sessione){
       const ultimoGrezzo = grezzi[grezzi.length-1];
       tempo2FineSec = rigaFinePartita ? N(rigaFinePartita["Secondo totale"]) : (ultimoGrezzo ? N(ultimoGrezzo["Secondo totale"]) : null);
     }
+    // «Fine partita» scritta nello stesso istante della fine del primo tempo (file vero dell'11/10/2026: tutti e
+    // tre i marcatori a 25:47, e la timeline che prosegue fino a 51:21). Se dopo quel punto ci sono ancora
+    // più di un minuto di eventi, la fine vera è l'ultimo evento, altrimenti il secondo tempo durerebbe zero.
+    const ultimoSec = grezzi.reduce((m, e) => { const t = N(e["Secondo totale"]); return isFinite(t) && t > m ? t : m; }, 0);
+    if(tempo1FineSec !== null && tempo2FineSec !== null && tempo2FineSec <= tempo1FineSec + 30 && ultimoSec > tempo2FineSec + 60)
+      tempo2FineSec = ultimoSec;
     const haPausa = tempo1FineSec !== null;
     const eventi = grezzi.map((e, idx) => {
       const secondoAssoluto = N(e["Secondo totale"]);
@@ -1438,10 +1563,24 @@ function disegnaCampoZone(canvas, punti, opts){
   disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
   disegnaEtichettePorte(ctx, w, h, opts.testo);
 }
-/** Heatmap vera e propria (non solo la griglia a zone): ogni evento disegna un alone sfumato sul campo
- *  su un canvas offscreen, che si accumula dove più eventi cadono vicini; l'intensità accumulata viene poi
- *  ricolorata con una scala freddo→caldo (`opts.rampa`, tappe [stop 0-1, [r,g,b]] crescenti) — il colore
- *  stesso cambia con la densità, non solo l'opacità di un unico colore, per essere una heatmap vera. */
+/** Heatmap della densità degli eventi sul campo — RIFATTA il 12/10/2026 su richiesta dell'utente («le zone
+ *  colorate devono essere necessariamente così ampie?»). La versione precedente disegnava un alone di raggio
+ *  fisso (5,5 m) attorno a ogni evento e sommava le opacità fino a un tetto: con le decine di eventi della
+ *  registrazione da video il tetto si raggiungeva quasi ovunque, e il campo diventava due macchie rosse più un
+ *  velo azzurro su tutto il resto, cioè l'opposto di una mappa che indica DOVE.
+ *  Ora: (1) la densità è calcolata in metri su una griglia del campo, con una campana gaussiana la cui ampiezza
+ *  si STRINGE quando gli eventi aumentano (molti eventi = la mappa può permettersi di essere precisa; pochi =
+ *  resta più morbida per non disegnare un puntino per evento); (2) la densità è rapportata al suo massimo, così
+ *  il colore pieno c'è solo dove gli eventi si concentrano davvero; (3) sotto il 18% del massimo il campo resta
+ *  pulito invece di velarsi; (4) sopra la mappa, i punti veri, piccoli: si vede subito se una macchia è fatta
+ *  di due eventi o di venti. `opts.rampa`: tappe [stop 0-1, [r,g,b]] crescenti, dalla densità bassa all'alta. */
+const HEATMAP_SOGLIA = 0.18;
+/** Rampa calda della heatmap: ambra dove gli eventi cominciano a esserci, ruggine, rosso pieno dove si
+ *  concentrano. Niente tappa azzurra iniziale: era quella che velava tutto il campo. */
+function rampaHeatmap(ambra, ruggine, rosso){
+  return [[0, hexToRgbArr(ambra)], [0.55, hexToRgbArr(ruggine)], [1, hexToRgbArr(rosso)]];
+}
+function ampiezzaHeatmapMetri(n){ return Math.max(1.6, Math.min(4, 5 * Math.pow(Math.max(1, n), -0.2))); }
 function disegnaCampoHeatmap(canvas, punti, opts){
   const ctx = canvas.getContext("2d");
   const w = canvas.width, h = canvas.height;
@@ -1449,37 +1588,64 @@ function disegnaCampoHeatmap(canvas, punti, opts){
   ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
   const validi = (punti||[]).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
   if(validi.length){
-    const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
+    // griglia di 25 cm: 200×120 celle per il campo 50×30 (più rada, il bordo delle macchie veniva a gradini)
+    const GX = 200, GY = 120, passoX = CAMPO_LUNGHEZZA_M / GX, passoY = CAMPO_LARGHEZZA_M / GY;
+    const sigma = ampiezzaHeatmapMetri(validi.length), due2 = 2 * sigma * sigma, raggio = 3 * sigma;
+    const dens = new Float32Array(GX * GY);
+    validi.forEach(p => {
+      const px = Math.min(CAMPO_LUNGHEZZA_M, Math.max(0, p.x)), py = Math.min(CAMPO_LARGHEZZA_M, Math.max(0, p.y));
+      const i0 = Math.max(0, Math.floor((px - raggio) / passoX)), i1 = Math.min(GX-1, Math.ceil((px + raggio) / passoX));
+      const j0 = Math.max(0, Math.floor((py - raggio) / passoY)), j1 = Math.min(GY-1, Math.ceil((py + raggio) / passoY));
+      for(let j = j0; j <= j1; j++){
+        const dy = (j + 0.5) * passoY - py;
+        for(let i = i0; i <= i1; i++){
+          const dx = (i + 0.5) * passoX - px;
+          dens[j*GX + i] += Math.exp(-(dx*dx + dy*dy) / due2);
+        }
+      }
+    });
+    let max = 0; for(let k = 0; k < dens.length; k++) if(dens[k] > max) max = dens[k];
+    const buf = document.createElement("canvas"); buf.width = GX; buf.height = GY;
     const bctx = buf.getContext("2d");
-    const raggio = Math.max(w,h) * 0.11;
+    const img = bctx.createImageData(GX, GY);
+    const rampa = opts.rampa;
+    const bordo = HEATMAP_SOGLIA * 0.55; // da qui il colore entra in dissolvenza, invece di comparire di colpo
+    for(let k = 0; k < dens.length; k++){
+      const t = max > 0 ? dens[k] / max : 0;
+      if(t < bordo) continue;
+      const e = Math.min(1, (t - bordo) / (HEATMAP_SOGLIA - bordo)), dissolvenza = e * e * (3 - 2 * e);
+      // 0 al bordo della macchia, 1 al centro; la radice leggera alza i toni intermedi, che altrimenti
+      // restavano tutti color sabbia
+      const u = Math.pow(Math.max(0, (t - HEATMAP_SOGLIA) / (1 - HEATMAP_SOGLIA)), 0.8);
+      let a = rampa[0], b = rampa[rampa.length-1], f = 1;
+      for(let s = 0; s < rampa.length-1; s++){
+        if(u >= rampa[s][0] && u <= rampa[s+1][0]){ a = rampa[s]; b = rampa[s+1]; f = (u - a[0]) / ((b[0] - a[0]) || 1); break; }
+      }
+      img.data[k*4]   = Math.round(a[1][0] + (b[1][0]-a[1][0])*f);
+      img.data[k*4+1] = Math.round(a[1][1] + (b[1][1]-a[1][1])*f);
+      img.data[k*4+2] = Math.round(a[1][2] + (b[1][2]-a[1][2])*f);
+      img.data[k*4+3] = Math.round((0.26 + 0.66 * u) * dissolvenza * 255);   // bordo sfumato, centro quasi pieno
+    }
+    bctx.putImageData(img, 0, 0);
+    ctx.save();
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(buf, 0, 0, w, h);
+    ctx.restore();
+  }
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  // i punti veri, sopra: piccoli, scuri, con un filo chiaro attorno per staccarsi dal colore pieno
+  if(validi.length){
+    const r = Math.max(1.6, Math.min(w, h) * 0.0085);
+    ctx.save();
     validi.forEach(p => {
       const px = Math.min(w, Math.max(0, (p.x / CAMPO_LUNGHEZZA_M) * w));
       const py = Math.min(h, Math.max(0, (p.y / CAMPO_LARGHEZZA_M) * h));
-      const grad = bctx.createRadialGradient(px,py,0,px,py,raggio);
-      grad.addColorStop(0, "rgba(0,0,0,0.4)");
-      grad.addColorStop(1, "rgba(0,0,0,0)");
-      bctx.fillStyle = grad;
-      bctx.beginPath(); bctx.arc(px,py,raggio,0,Math.PI*2); bctx.fill();
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2);
+      ctx.fillStyle = opts.punto || "rgba(40,37,29,0.72)"; ctx.fill();
+      ctx.lineWidth = Math.max(0.8, r * 0.45); ctx.strokeStyle = opts.puntoBordo || "rgba(255,255,255,0.85)"; ctx.stroke();
     });
-    const img = bctx.getImageData(0,0,w,h);
-    const out = ctx.getImageData(0,0,w,h);
-    const rampa = opts.rampa;
-    for(let i=0;i<img.data.length;i+=4){
-      const t = Math.min(1, img.data[i+3] / 200);
-      if(t <= 0.03) continue;
-      let segA = rampa[0], segB = rampa[rampa.length-1], frac = 1;
-      for(let s=0; s<rampa.length-1; s++){
-        if(t >= rampa[s][0] && t <= rampa[s+1][0]){ segA = rampa[s]; segB = rampa[s+1];
-          frac = (t-segA[0])/((segB[0]-segA[0])||1); break; }
-      }
-      const r = Math.round(segA[1][0] + (segB[1][0]-segA[1][0])*frac);
-      const g = Math.round(segA[1][1] + (segB[1][1]-segA[1][1])*frac);
-      const b = Math.round(segA[1][2] + (segB[1][2]-segA[1][2])*frac);
-      out.data[i]=r; out.data[i+1]=g; out.data[i+2]=b; out.data[i+3] = Math.round(Math.min(1, 0.3+t*0.7)*255);
-    }
-    ctx.putImageData(out, 0, 0);
+    ctx.restore();
   }
-  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
   disegnaEtichettePorte(ctx, w, h, opts.testo);
 }
 
@@ -2207,8 +2373,12 @@ function sequenzeRiconquista(partita){
     ? classificaEventoRigaNuovoFormato(e.raw)
     : classificaEventoSevenLab(e.raw.Tipo);
 
+  // Anche un gol SUBITO chiude la sequenza (12/10/2026): la riga «Gol subito» non è nel vocabolario del
+  // possesso e veniva scartata, quindi dopo un gol preso il primo recupero successivo al calcio d'inizio
+  // finiva contato come «riconquista» della palla persa prima del gol. Stesso riconoscimento della sezione
+  // "palle perse che diventano gol" (latoCheSubisce).
   const eventi = norm.eventi
-    .map(e => ({...e, cl: classifica(e)}))
+    .map(e => ({...e, cl: classifica(e) || (latoCheSubisce(e, "partita") ? {type:"GOAL", outcome:null} : null)}))
     .filter(e => e.cl && isFinite(e.secondoAssoluto))
     .sort((a,b) => a.secondoAssoluto - b.secondoAssoluto);
 
@@ -2309,19 +2479,32 @@ function analizzaRiconquista(partite){
 const PERSA_GOL_FINESTRA_SEC = 15;
 const PERSA_GOL_FUSIONE_SEC = 10; // due segnali dello stesso gol (Gol subito + Gol avversario, rigore + Gol)
 
-/** Lato che SUBISCE il gol scritto in una riga della timeline: "A", "B" oppure null se la riga non è un
- *  gol. "Gol subito" è sul portiere di chi subisce; "Gol"/rigore/punizione/corner a segno su chi segna. */
-function latoCheSubisce(e){
+/** Una riga della timeline segna un «gol subito»? Tollerante sul nome ("Gol subito", "Goal subito",
+ *  "Gol subito avversario"...), ma non confonde "Tiro subito". */
+function rigaGolSubito(r){
+  return Object.keys(r||{}).some(k => /^(gol|goal)\s*subit/i.test(String(k).trim()) && String(r[k]).trim() === "1");
+}
+/** Lato che SUBISCE il gol scritto in una riga della timeline: "A", "B" oppure null se la riga non è un gol.
+ *  CORRETTO IL 12/10/2026 sul primo file vero di Elisa (partita del 11/10 contro OLC): la versione
+ *  1.33.0 assumeva che «Gol subito» fosse scritto sul NOSTRO portiere (Team A) e ne deduceva che subisce la
+ *  squadra della riga. Nel file vero invece la riga «Gol subito» porta il nostro portiere ma con Team B
+ *  (verificato su partita_1.csv il 12/10: «Lorenzo Baù», B, sette righe per sette gol subiti): il sistema
+ *  concludeva che a subire fosse l'avversario e scartava tutti i gol subiti — la
+ *  sezione diceva «nessun gol subito» su una partita che ne aveva. «Gol subito», in partita, è per
+ *  definizione un gol preso dalla NOSTRA squadra, qualunque sia la squadra scritta sulla riga. In
+ *  allenamento le due squadre sono entrambe interne e il gol di ciascuna è già nella colonna «Gol»: lì
+ *  «Gol subito» non si usa, per non contare due volte lo stesso gol dalla parte sbagliata. */
+function latoCheSubisce(e, tipo){
   const r = e.raw || {};
   const team = String(r.Team ?? r.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
   const altro = team === "A" ? "B" : "A";
   if(e.formato === "nuovo"){
-    if(r["Gol subito"] === "1") return team;
+    if(rigaGolSubito(r)) return tipo === "partita" ? "A" : null;
     const cl = classificaEventoRigaNuovoFormato(r);
     return (cl && cl.type === "GOAL") ? altro : null;
   }
   const t = String(r.Tipo||"").trim().toLowerCase();
-  if(/gol subit/.test(t)) return team;
+  if(/gol subit|goal subit/.test(t)) return tipo === "partita" ? "A" : null;
   return /^gol$/.test(t) ? altro : null;
 }
 
@@ -2363,26 +2546,33 @@ function episodiPersaGolSessione(sessione, tipo){
   const eventi = norm.eventi
     .filter(e => Number.isFinite(e.secondoAssoluto))
     .map(e => ({...e, cl: e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo),
-      subisce: latoCheSubisce(e), lato: lato(e)}))
+      subisce: latoCheSubisce(e, tipo), lato: lato(e)}))
     .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
   const latiInteressati = tipo === "partita" ? ["A"] : ["A","B"];
 
-  // gol subiti, fusi quando lo stesso gol compare in più righe
+  // gol subiti, fusi quando lo stesso gol compare in più righe. Il marcatore viene solo da una riga «Gol» della
+  // squadra che segna. La riga «Gol subito» porta il NOSTRO portiere — nel file vero dell'11/10 «Lorenzo Baù»,
+  // con squadra B — e mai chi ha segnato: mostrarlo come marcatore sarebbe sbagliato.
   const gol = [];
+  const marcatoreDi = e => (!rigaGolSubito(e.raw) && e.lato !== e.subisce) ? (String(e.raw.Giocatore||"").trim() || null) : null;
   eventi.forEach((e, i) => {
     if(!e.subisce || !latiInteressati.includes(e.subisce)) return;
     const doppione = gol.find(g => g.subisce === e.subisce && Math.abs(g.t - e.secondoAssoluto) <= PERSA_GOL_FUSIONE_SEC);
-    if(doppione){
-      // tieni come marcatore quello della riga "Gol" (chi segna), non il portiere della riga "Gol subito"
-      if(!doppione.marcatore && e.raw["Gol subito"] !== "1") doppione.marcatore = String(e.raw.Giocatore||"").trim() || null;
-      return;
-    }
-    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce,
-      marcatore: (e.formato === "nuovo" && e.raw["Gol subito"] === "1") ? null : (String(e.raw.Giocatore||"").trim() || null)});
+    if(doppione){ if(!doppione.marcatore) doppione.marcatore = marcatoreDi(e); return; }
+    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce, marcatore: marcatoreDi(e)});
   });
 
   const posizioni = posizioniPallePerse(norm.eventi, sessione.DatiSpaziali);
   const episodi = [], senzaPersa = [];
+  const nomeEvento = e => {
+    const c = e.cl || {};
+    if(c.type === "RECOVERY") return "recupero";
+    if(c.type === "PASS") return c.outcome === "SUCCESS" ? "passaggio riuscito" : "passaggio sbagliato";
+    if(c.type === "DRIBBLE") return c.outcome === "SUCCESS" ? "dribbling riuscito" : "dribbling fallito";
+    if(c.type === "SHOT") return "tiro";
+    if(c.type === "BALL_LOST") return "palla persa";
+    return "evento";
+  };
   gol.forEach(g => {
     // ultima palla persa di chi subisce, entro la finestra e nello stesso tempo
     let iPersa = -1;
@@ -2391,15 +2581,28 @@ function episodiPersaGolSessione(sessione, tipo){
       if(g.t - e.secondoAssoluto > PERSA_GOL_FINESTRA_SEC || e.periodo !== g.periodo) break;
       if(e.cl && e.cl.type === "BALL_LOST" && e.lato === g.subisce){ iPersa = j; break; }
     }
-    if(iPersa < 0){ senzaPersa.push(g); return; }
-    // in mezzo, chi subisce non deve aver riavuto la palla
-    const riavuta = eventi.slice(iPersa+1, g.i).some(e => {
+    if(iPersa < 0){ senzaPersa.push({...g, motivo:"nessuna-persa"}); return; }
+    // In mezzo, chi subisce non deve aver RIPRESO davvero il controllo del pallone: un suo recupero, un suo
+    // passaggio o dribbling RIUSCITO, un suo tiro, oppure una palla persa dell'avversario. Un passaggio
+    // sbagliato o un dribbling fallito subito dopo la perdita (12/10/2026) NON spezza più il legame: è la
+    // stessa azione confusa sotto pressione, e se qualcosa conferma la difficoltà invece di smentirla.
+    const interruzione = eventi.slice(iPersa+1, g.i).find(e => {
       if(!e.cl) return false;
-      if(e.lato === g.subisce && ["RECOVERY","PASS","DRIBBLE","SHOT"].includes(e.cl.type)) return true;
-      if(e.lato !== g.subisce && e.cl.type === "BALL_LOST") return true;
-      return false;
+      if(e.lato === g.subisce){
+        if(e.cl.type === "RECOVERY" || e.cl.type === "SHOT") return true;
+        if((e.cl.type === "PASS" || e.cl.type === "DRIBBLE") && e.cl.outcome === "SUCCESS") return true;
+        return false;
+      }
+      return e.cl.type === "BALL_LOST";
     });
-    if(riavuta){ senzaPersa.push(g); return; }
+    if(interruzione){
+      const pr = eventi[iPersa];
+      senzaPersa.push({...g, motivo:"spezzato",
+        persa: {giocatore: String(pr.raw.Giocatore||"").trim() || "Non indicato", t: pr.secondoAssoluto},
+        interruzione: {evento: nomeEvento(interruzione), giocatore: String(interruzione.raw.Giocatore||"").trim() || "Non indicato",
+          t: interruzione.secondoAssoluto, squadraCheSubisce: interruzione.lato === g.subisce}});
+      return;
+    }
     const p = eventi[iPersa];
     const pos = posizioni.get(p.idxOriginale);
     episodi.push({giocatore: String(p.raw.Giocatore||"").trim() || "Non indicato", squadra: p.lato,
@@ -2414,12 +2617,18 @@ function episodiPersaGolSessione(sessione, tipo){
     const n = String(e.raw.Giocatore||"").trim() || "Non indicato";
     perse.set(n, (perse.get(n)||0) + 1);
   });
-  return {episodi, golAnalizzati: gol.length, golSenzaPersa: senzaPersa.length, pallePerse: perse};
+  // Colonne della timeline che parlano di gol, con quante volte valgono "1": se i gol subiti trovati sono
+  // meno di quelli dichiarati nel file, è la prima cosa da guardare per capire come sono scritti.
+  const colonneGol = {};
+  if(norm.formato === "nuovo") norm.eventi.forEach(e => Object.keys(e.raw).forEach(k => {
+    if(/gol|goal|rete/i.test(k) && String(e.raw[k]).trim() === "1") colonneGol[k] = (colonneGol[k]||0) + 1;
+  }));
+  return {episodi, golAnalizzati: gol.length, golSenzaPersa: senzaPersa.length, nonAttribuiti: senzaPersa, pallePerse: perse, colonneGol};
 }
 
 /** Riepilogo su più sessioni dello stesso tipo, con il dettaglio per giocatore. */
 function analizzaPersaGol(sessioni, tipo){
-  const episodi = [], perseTot = new Map();
+  const episodi = [], perseTot = new Map(), nonAttribuiti = [], colonneGol = {};
   let golAnalizzati = 0, golSenzaPersa = 0, senzaTimeline = 0, golDichiarati = 0, sessioniConTimeline = 0;
   let inDiretta = 0;
   (sessioni||[]).forEach(s => {
@@ -2432,6 +2641,8 @@ function analizzaPersaGol(sessioni, tipo){
     if(sc.metodo === "diretta") inDiretta++;
     r.episodi.forEach(ep => episodi.push({...ep,
       idSessione: s.Match_ID || s.Sessione_ID, etichetta: s.Etichetta || "", ordine: s.Ordine || 0}));
+    r.nonAttribuiti.forEach(g => nonAttribuiti.push({...g, idSessione: s.Match_ID || s.Sessione_ID, etichetta: s.Etichetta || "", ordine: s.Ordine || 0}));
+    Object.entries(r.colonneGol).forEach(([k,n]) => { colonneGol[k] = (colonneGol[k]||0) + n; });
     r.pallePerse.forEach((n, g) => perseTot.set(g, (perseTot.get(g)||0) + n));
   });
   if(!sessioniConTimeline) return null;
@@ -2449,8 +2660,9 @@ function analizzaPersaGol(sessioni, tipo){
     return {giocatore:a.giocatore, episodi:a.episodi, pallePerse:perse, quota: perc(a.episodi, perse),
       zonaFrequente: zonaTop ? zonaTop[0] : null, zonaFrequenteN: zonaTop ? zonaTop[1] : 0};
   }).sort((a,b) => (b.episodi - a.episodi) || ((b.quota||0) - (a.quota||0)) || a.giocatore.localeCompare(b.giocatore,"it"));
+  nonAttribuiti.sort((a,b) => (a.ordine - b.ordine) || (a.t - b.t));
   return {episodi, giocatori, golAnalizzati, golSenzaPersa, golDichiarati, senzaTimeline, sessioniConTimeline, inDiretta,
-    medianaSecondi: mediana(episodi.map(e => e.secondi))};
+    nonAttribuiti, colonneGol, medianaSecondi: mediana(episodi.map(e => e.secondi))};
 }
 
 /** La frase "insight" che nomina i giocatori: usata in dashboard e nei report, così le due non divergono.
@@ -2460,7 +2672,9 @@ function frasePersaGol(a, tipo, html){
   const b = s => html ? `<b>${esc(s)}</b>` : s;
   const chi = tipo === "partita" ? "gol subiti" : "gol nelle partitelle";
   if(!a.episodi.length)
-    return `Nessuno dei ${nf0(a.golAnalizzati)} ${chi} è arrivato entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una ${tipo === "partita" ? "nostra " : ""}palla persa.`;
+    return a.golAnalizzati === 1
+      ? `L'unico ${tipo === "partita" ? "gol subito" : "gol"} non è attribuibile a una ${tipo === "partita" ? "nostra " : ""}palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti.`
+      : `Nessuno dei ${nf0(a.golAnalizzati)} ${chi} è attribuibile a una ${tipo === "partita" ? "nostra " : ""}palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti.`;
   const elenco = a.giocatori.map(g => `${b(g.giocatore)} (${nf0(g.episodi)})`).join(", ");
   return `${nf0(a.episodi.length)} ${a.episodi.length===1?"gol è arrivato":"gol sono arrivati"} entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una palla persa, su ${nf0(a.golAnalizzati)} ${chi}: ${elenco}.`;
 }
@@ -4276,7 +4490,21 @@ function avvisoCampioneZone(n, cosa){
 }
 
 /** Avvertenza fissa sulla lettura laterale, misurata sui file reali: vedi il commento qui sopra. */
-const NOTA_BORDI_CAMPO = `Sulle <strong>fasce laterali</strong> il dato va letto con cautela: nei file esaminati nessun evento è mai stato registrato nel quinto esterno della larghezza del campo, quindi le zone laterali coprono di fatto molta meno superficie raggiungibile di quella centrale e la concentrazione al centro risulta amplificata. Il <strong>confronto tra una sessione e l'altra</strong> resta valido — la distorsione è sempre la stessa — mentre il valore assoluto per fascia non è interpretabile finché l'area toccabile in Seven Lab non copre tutta la larghezza.`;
+/** Avvertenza sul quinto esterno della larghezza del campo — da SEMPRE presente a CONDIZIONATA ai dati
+ *  (12/10/2026). Nei file registrati dal vivo fino a settembre nessun evento cadeva mai nei 6 metri vicini alle
+ *  linee laterali (vedi claude/attendibilita-dati-posizionali.md): le fasce laterali risultavano artificialmente
+ *  vuote e il centro artificialmente pieno. Nei primi file registrati da video (partita e allenamento dell'11 e
+ *  del 10/10) la larghezza è coperta quasi tutta — da 0,2 a 28,9 metri in partita, 25 eventi su 81 nei due
+ *  quinti esterni — quindi l'avvertenza compare solo se i punti mostrati la giustificano davvero: abbastanza
+ *  eventi e (quasi) nessuno vicino alle linee laterali. */
+const BORDO_LATERALE_M = CAMPO_LARGHEZZA_M / 5;
+function notaBordiCampo(punti){
+  const validi = (punti||[]).filter(p => Number.isFinite(p.y));
+  if(validi.length < 20) return null;
+  const esterni = validi.filter(p => p.y < BORDO_LATERALE_M || p.y > CAMPO_LARGHEZZA_M - BORDO_LATERALE_M).length;
+  if(esterni / validi.length >= 0.03) return null;
+  return `Sulle <strong>fasce laterali</strong> questo dato va letto con cautela: su ${nf0(validi.length)} eventi con posizione, ${esterni === 0 ? "nessuno cade" : `solo ${nf0(esterni)} ${esterni===1?"cade":"cadono"}`} nei 6 metri vicini alle linee laterali. Nel calcio non succede: di solito è il segno che, al momento di toccare il campo, i bordi non vengono usati — come capitava nei file registrati dal vivo. Le zone laterali risultano così più vuote del vero e il centro più pieno; il confronto fra sessioni registrate allo stesso modo resta valido.`;
+}
 
 function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostraPerSquadra){
   const cont = $("#"+idContenitore);
@@ -4318,11 +4546,13 @@ function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostr
     ${(() => {
       const n = Math.max(recupero.length, persa.length);
       const av = avvisoCampioneZone(n, "nel periodo scelto");
-      return (av ? `<p class="nota-piccola">${av}</p>` : "") + `<p class="nota-piccola">${NOTA_BORDI_CAMPO}</p>`;
+      const bordi = notaBordiCampo(recupero.concat(persa));
+      return (av ? `<p class="nota-piccola">${av}</p>` : "") + (bordi ? `<p class="nota-piccola">${bordi}</p>` : "");
     })()}
     ${(baricentroRecupero!==null || baricentroPersa!==null) ? `<p class="nota-piccola">Il baricentro stimato è calcolato solo dagli eventi di recupero/palla persa con posizione, non da tutte le azioni della partita: non rappresenta il posizionamento generale della squadra sul campo, solo dove tende a recuperare/perdere palla.</p>` : ""}`;
-  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
-  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
   disegnaCampoZone($("#"+idp+"-zona-recupero"), recupero, Object.assign({}, optsBase, {colore:colore("success")}));
   disegnaCampoZone($("#"+idp+"-zona-persa"), persa, Object.assign({}, optsBase, {colore:colore("danger")}));
   disegnaCampoHeatmap($("#"+idp+"-heat-recupero"), recupero, optsBase);
@@ -4442,8 +4672,9 @@ function renderGolGameCampo(idContenitore, sessioni){
     </div>
     ${(() => { const av = avvisoCampioneZone(gol.length, "nel periodo scelto"); return av ? `<p class="nota-piccola">${av}</p>` : ""; })()}
     <p class="nota-piccola" style="margin-top:8px">Assi dedotti dai valori delle coordinate nel file (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): se un file futuro mostrasse dati incoerenti con "porta avversaria a destra", segnalacelo così verifichiamo.</p>`;
-  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
-  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
   disegnaCampoZone($("#"+idp+"-zona-gol"), gol, Object.assign({}, optsBase, {colore:colore("c1")}));
   disegnaCampoZone($("#"+idp+"-zona-assist"), assist, Object.assign({}, optsBase, {colore:colore("c4")}));
   disegnaCampoHeatmap($("#"+idp+"-heat-gol"), gol, optsBase);
@@ -4708,8 +4939,9 @@ function renderPersaGiocatore(idContenitore, sessioni, nome, contesto){
   const zone = elencoZonePerse(perse);
   const top = zone[0];
   const idp = "pg-"+idContenitore;
-  const rampa = [[0,hexToRgbArr(colore("c1"))],[0.4,hexToRgbArr(colore("c4"))],[0.7,hexToRgbArr(colore("c6"))],[1,hexToRgbArr(colore("c2"))]];
-  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa};
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
   const avviso = avvisoCampioneZone(perse.length, `per ${nome} ${contesto}`);
   cont.innerHTML = `
     <div class="griglia g-2 g-campi">
@@ -4734,7 +4966,7 @@ function renderPersaGiocatore(idContenitore, sessioni, nome, contesto){
       <p class="nota-piccola" style="margin-top:8px">La zona in cui perde più palloni è <strong>${esc(top.etichetta)}</strong>, con ${nf0(top.conteggio)} ${top.conteggio===1?"pallone":"palloni"} su ${nf0(perse.length)}.${recuperi.length ? ` Per contesto: nello stesso arco ha ${nf0(recuperi.length)} ${recuperi.length===1?"recupero":"recuperi"} con posizione.` : ""} I numeri assoluti sono la lettura da usare finché il campione resta piccolo: la colonna della quota, su pochi palloni, cambia moltissimo per un evento in più o in meno.</p>
     </div>
     ${avviso ? `<p class="nota-piccola">${avviso}</p>` : ""}
-    <p class="nota-piccola">${NOTA_BORDI_CAMPO}</p>`;
+    ${(() => { const bordi = notaBordiCampo(perse); return bordi ? `<p class="nota-piccola">${bordi}</p>` : ""; })()}`;
   disegnaCampoZone($("#"+idp+"-zona"), perse, Object.assign({}, optsBase, {colore:colore("danger")}));
   disegnaCampoHeatmap($("#"+idp+"-heat"), perse, optsBase);
 }
@@ -4876,6 +5108,24 @@ function renderRiconquista(f){
     <p class="nota-piccola" style="margin-top:12px">Si parte da ogni palla persa della squadra e si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Nessun dato nuovo da raccogliere — entrambi gli eventi sono già nella timeline di Seven Lab.</p>`;
 }
 
+/** Perché un gol non è stato attribuito a nessuna palla persa, in una frase (12/10/2026). Senza questa
+ *  spiegazione un gol non attribuito sembrava un errore del sistema: ora si vede quale palla persa c'era e
+ *  quale evento ha spezzato il legame, e la regola si può giudicare caso per caso. */
+function motivoNonAttribuito(g, tipo){
+  if(g.motivo === "nessuna-persa")
+    return `Nessuna palla persa ${tipo === "partita" ? "della nostra squadra" : "della squadra "+esc(g.subisce)} nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima.`;
+  const it = g.interruzione, pr = g.persa;
+  return `Ultima palla persa: <b>${esc(pr.giocatore)}</b> al ${esc(mmssDaSecondi(pr.t))}, ${nf(g.t - pr.t,0)}s prima del gol. Non attribuita perché al ${esc(mmssDaSecondi(it.t))} `
+    + (it.squadraCheSubisce
+        ? `${esc(it.giocatore)} ha fatto un ${esc(it.evento)}: la squadra aveva ripreso il pallone.`
+        : `${esc(it.giocatore)} (avversario) ha perso palla: la squadra aveva ripreso il pallone.`);
+}
+/** Le colonne della timeline che parlano di gol, in chiaro: serve quando i gol trovati non tornano. */
+function elencoColonneGol(a){
+  const voci = Object.entries(a.colonneGol || {});
+  return voci.length ? voci.map(([k,n]) => `«${esc(k)}» (${nf0(n)})`).join(", ") : "nessuna";
+}
+
 /** Sezione "Palle perse che diventano gol" — Dashboard Partita e Dashboard Allenamento (10/10/2026).
  *  Il selettore della sezione sceglie fra tutte le sessioni del periodo in alto e una sessione sola: la
  *  solita distinzione partita singola / periodo. In cima la frase che nomina i giocatori (la stessa che va
@@ -4901,16 +5151,19 @@ function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo
     return;
   }
   if(!a.golAnalizzati){
-    cont.innerHTML = `<div class="vuoto">${tipo === "partita" ? "Nessun gol subito nella timeline" : "Nessun gol nelle partitelle"} ${singola ? (tipo === "partita" ? "di questa partita" : "di questo allenamento") : "del periodo scelto"}: non c'è niente da attribuire.</div>`;
+    cont.innerHTML = (tipo === "partita" && a.golDichiarati > 0)
+      ? `<div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span>Il file dichiara <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline non ne riconosco nessuno: sono scritti in un modo che il sistema non legge ancora. Colonne della timeline che parlano di gol: ${elencoColonneGol(a)}. Mandaci il file: basta insegnare all'app quella colonna.</span></div>`
+      : `<div class="vuoto">${tipo === "partita" ? "Nessun gol subito nella timeline" : "Nessun gol nelle partitelle"} ${singola ? (tipo === "partita" ? "di questa partita" : "di questo allenamento") : "del periodo scelto"}: non c'è niente da attribuire.</div>`;
     return;
   }
   const pctAttr = perc(a.episodi.length, a.golAnalizzati);
   const maxEp = Math.max(1, ...a.giocatori.map(g => g.episodi));
   const conZona = a.episodi.some(e => e.zona);
+  const conMarcatore = a.episodi.some(e => e.marcatore);
   const piuSessioni = new Set(a.episodi.map(e => e.idSessione)).size > 1 || !singola;
   const note = [];
   if(tipo === "partita" && a.golDichiarati > a.golAnalizzati)
-    note.push(`Nei metadati ${a.golDichiarati===1?"risulta":"risultano"} <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline ne trovo ${nf0(a.golAnalizzati)}: ${nf0(a.golDichiarati - a.golAnalizzati)} ${a.golDichiarati - a.golAnalizzati === 1 ? "gol non è stato registrato" : "gol non sono stati registrati"} come evento con un tempo, e restano fuori da questa lettura.`);
+    note.push(`Nei metadati ${a.golDichiarati===1?"risulta":"risultano"} <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline ne trovo ${nf0(a.golAnalizzati)}: ${nf0(a.golDichiarati - a.golAnalizzati)} ${a.golDichiarati - a.golAnalizzati === 1 ? "gol non è stato registrato" : "gol non sono stati registrati"} come evento con un tempo, e restano fuori da questa lettura. Colonne della timeline che parlano di gol: ${elencoColonneGol(a)}.`);
   if(a.senzaTimeline) note.push(`${nf0(a.senzaTimeline)} ${a.senzaTimeline===1?"sessione è esclusa":"sessioni sono escluse"} perché senza timeline eventi.`);
   if(a.inDiretta) note.push(`${nf0(a.inDiretta)} ${a.inDiretta===1?"sessione è stata registrata":"sessioni sono state registrate"} in diretta: un secondo o due di ritardo nel tocco contano poco su una finestra di ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi, ma dal vivo qualche palla persa sfugge — e un gol preceduto da una perdita non registrata finisce fra quelli «senza palla persa».`);
 
@@ -4949,19 +5202,33 @@ function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo
       <div class="grafico-sub">Minuto della palla persa, chi l'ha persa e quanti secondi dopo è arrivato il gol.</div>
       <div class="tabella-scroll"><table>
         <caption class="solo-sr">Episodi palla persa seguita da gol</caption>
-        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Minuto</th><th scope="col">Ha perso palla</th>${tipo === "allenamento" ? `<th scope="col">Squadra</th>` : ""}<th scope="col">Gol dopo</th>${conZona ? `<th scope="col">Zona della perdita</th>` : ""}${tipo === "allenamento" ? `<th scope="col">Ha segnato</th>` : ""}</tr></thead>
+        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Minuto</th><th scope="col">Ha perso palla</th>${tipo === "allenamento" ? `<th scope="col">Squadra</th>` : ""}<th scope="col">Gol dopo</th>${conZona ? `<th scope="col">Zona della perdita</th>` : ""}${conMarcatore ? `<th scope="col">Ha segnato</th>` : ""}</tr></thead>
         <tbody>${a.episodi.map(e => `<tr>
           ${piuSessioni ? `<td>${esc(e.etichetta)}</td>` : ""}
           <td>${esc(mmssDaSecondi(e.secondoPersa))}</td><td>${esc(e.giocatore)}</td>
           ${tipo === "allenamento" ? `<td>${esc(e.squadra)}</td>` : ""}
           <td>${nf(e.secondi,0)}s</td>
           ${conZona ? `<td>${e.zona ? esc(e.zona) : "—"}</td>` : ""}
-          ${tipo === "allenamento" ? `<td>${esc(e.marcatore || "—")}</td>` : ""}
+          ${conMarcatore ? `<td>${esc(e.marcatore || "—")}</td>` : ""}
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${a.nonAttribuiti.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Gol non attribuiti, e perché</div>
+      <div class="grafico-sub">Ogni gol che non finisce nella tabella qui sopra, con il motivo: così la regola si può controllare caso per caso.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Gol non attribuiti a una palla persa, con il motivo</caption>
+        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Gol al</th><th scope="col">Ha segnato</th><th scope="col">Perché non è attribuito</th></tr></thead>
+        <tbody>${a.nonAttribuiti.map(g => `<tr>
+          ${piuSessioni ? `<td>${esc(g.etichetta)}</td>` : ""}
+          <td>${esc(mmssDaSecondi(g.t))}</td><td>${esc(g.marcatore || "—")}</td>
+          <td class="cella-testo">${motivoNonAttribuito(g, tipo)}</td>
         </tr>`).join("")}</tbody>
       </table></div>
     </div>` : ""}
     ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
-    <p class="nota-piccola" style="margin-top:12px">Un gol viene attribuito all'<strong>ultima</strong> palla persa della squadra che lo subisce, se è avvenuta al massimo ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima e se nel frattempo quella squadra non ha mai riavuto il pallone (un recupero, un passaggio, un dribbling o un tiro suo spezzano il legame). ${a.golSenzaPersa ? `${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non ha":"gol non hanno"} una palla persa in quella finestra: arrivano da azioni più lunghe, da palla inattiva o da un errore non registrato come palla persa (un passaggio sbagliato, per esempio).` : ""}</p>
+    <p class="nota-piccola" style="margin-top:12px">Un gol viene attribuito all'<strong>ultima</strong> palla persa della squadra che lo subisce, se è avvenuta al massimo ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima e se nel frattempo quella squadra non ha ripreso davvero il pallone: un suo recupero, un suo passaggio o dribbling riuscito, un suo tiro, o una palla persa dell'avversario spezzano il legame. Un passaggio sbagliato o un dribbling fallito subito dopo la perdita no: fanno parte della stessa azione sotto pressione.</p>
     <p class="nota-piccola">Come leggerlo: una palla persa a ridosso di un gol dice che è stata persa nel momento sbagliato, non dimostra da sola che il giocatore fosse sotto pressing — quello il dato non lo registra. Diventa un indizio solido quando lo stesso nome torna su più partite${conZona ? ", e ancora di più se le perdite sono nel terzo difensivo, dove di solito si gioca sotto pressione" : ""}.</p>`;
 }
 
@@ -5168,7 +5435,9 @@ function renderPannelloFile(){
       const sc = scalaTempiEffettiva(s.scalaTempi);
       const vel = sc.velocita ? String(sc.velocita).replace(".", ",")+"×" : "";
       const badgeMetodo = sc.metodo === "differita"
-        ? `<span class="badge-metodo differita" title="${sc.applicata ? "Registrata da video: tempi e minuti riportati al tempo reale" : "Registrata da video: tempi NON corretti"}">Differita${vel ? " · "+vel : ""}${sc.applicata ? " · tempi corretti" : (sc.velocita === 1 ? "" : " · tempi non corretti")}</span>`
+        ? (sc.orologio === "video"
+            ? `<span class="badge-metodo differita" title="${esc("Tempi già di partita, lasciati come sono: " + (sc.motiviOrologio||[]).join("; "))}">Differita${vel ? " · "+vel : ""} · tempi del video</span>`
+            : `<span class="badge-metodo differita" title="${sc.applicata ? "Registrata con il cronometro: tempi e minuti riportati al tempo reale" : "Tempi lasciati come sono"}">Differita${vel ? " · "+vel : ""}${sc.applicata ? " · tempi corretti" : (sc.velocita === 1 ? "" : " · tempi non corretti")}</span>`)
         : `<span class="badge-metodo diretta${sc.predefinito ? " predefinito" : ""}" title="${sc.predefinito ? "Il file non indica il metodo di rilevazione: considerata diretta" : "Registrata dal vivo"}">Diretta${sc.predefinito ? " (non indicato)" : ""}</span>`;
       const avvisi = (sc.avvisi && sc.avvisi.length) ? sc.avvisi : (sc.avviso ? [sc.avviso] : []);
       return `<div class="riga-file">
@@ -5858,9 +6127,9 @@ function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
     "Griglia a 9 zone (terzi di campo): percentuale sul totale eventi con posizione. Heatmap: densità reale, colore più caldo dove gli eventi si concentrano di più.",
     ...bulletsBaricentro,
     ...(avvisoCampione ? [avvisoCampione] : []),
-    NOTA_BORDI_CAMPO
+    ...(notaBordiCampo(recupero.concat(persa)) ? [notaBordiCampo(recupero.concat(persa))] : [])
   ]);
-  const rampa = [[0,hexToRgbArr(PALETTE_REPORT.c1)],[0.4,hexToRgbArr(PALETTE_REPORT.c4)],[0.7,hexToRgbArr(PALETTE_REPORT.c6)],[1,hexToRgbArr(PALETTE_REPORT.c2)]];
+  const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
   const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
   const griglia = document.createElement("div");
   griglia.className = "rp-campo-griglia";
@@ -5933,7 +6202,7 @@ function golGameCampoReport(pagina, sessioni){
     "Griglia a 9 zone (terzi di campo): percentuale sul totale gol con posizione. Heatmap: densità reale, colore più caldo dove si concentrano di più i punti di tiro/assist.",
     "Assi dedotti dai valori delle coordinate della sezione «DETTAGLIO GOL GAME» (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): da verificare se un file futuro mostrasse un pattern diverso."
   ]);
-  const rampa = [[0,hexToRgbArr(PALETTE_REPORT.c1)],[0.4,hexToRgbArr(PALETTE_REPORT.c4)],[0.7,hexToRgbArr(PALETTE_REPORT.c6)],[1,hexToRgbArr(PALETTE_REPORT.c2)]];
+  const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
   const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
   const griglia = document.createElement("div");
   griglia.className = "rp-campo-griglia";
@@ -6024,19 +6293,27 @@ function persaGolReport(pagina, sessioni, tipo){
   const a = analizzaPersaGol(sessioni, tipo);
   titoloSezioneReport(pagina, tipo === "partita" ? "Palle perse che diventano gol subiti" : "Palle perse che diventano gol");
   if(!a){ bulletsReport(pagina, ["Non disponibile: serve la timeline degli eventi con i tempi, che i file di questo report non hanno."]); return; }
-  if(!a.golAnalizzati){ bulletsReport(pagina, [tipo === "partita" ? "Nessun gol subito registrato nella timeline: niente da attribuire." : "Nessun gol nelle partitelle di questo periodo: niente da attribuire."]); return; }
+  if(!a.golAnalizzati){
+    bulletsReport(pagina, [(tipo === "partita" && a.golDichiarati > 0)
+      ? `Il file dichiara ${nf0(a.golDichiarati)} gol subiti, ma nella timeline non ne riconosco nessuno (colonne che parlano di gol: ${elencoColonneGol(a)}): la lettura non è possibile finché l'app non impara come sono scritti.`
+      : (tipo === "partita" ? "Nessun gol subito registrato nella timeline: niente da attribuire." : "Nessun gol nelle partitelle di questo periodo: niente da attribuire.")]);
+    return;
+  }
   const singola = (sessioni||[]).length === 1;
   const conZona = a.episodi.some(e => e.zona);
   const righe = [frasePersaGol(a, tipo, true)];
-  if(a.golSenzaPersa) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non ha":"gol non hanno"} una palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti: azione più lunga, palla inattiva o errore non registrato come palla persa.`);
+  if(a.golSenzaPersa && !singola) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non è attribuito":"gol non sono attribuiti"} a una palla persa: nessuna perdita nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima, oppure la squadra aveva ripreso il pallone nel frattempo.`);
   if(tipo === "partita" && a.golDichiarati > a.golAnalizzati) righe.push(`Nei metadati risultano ${nf0(a.golDichiarati)} gol subiti, nella timeline ${nf0(a.golAnalizzati)}: i gol senza un evento con il tempo restano fuori da questa lettura.`);
-  righe.push(`Il gol va all'ultima palla persa della squadra che lo subisce, se entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi e senza che nel frattempo quella squadra abbia riavuto il pallone. Dice che la palla è stata persa nel momento sbagliato; diventa un indizio di difficoltà sotto pressing quando lo stesso nome torna su più partite.`);
+  righe.push(`Il gol va all'ultima palla persa della squadra che lo subisce, se entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi e senza che nel frattempo quella squadra abbia ripreso davvero il pallone (un suo recupero, passaggio o dribbling riuscito, tiro). Dice che la palla è stata persa nel momento sbagliato; diventa un indizio di difficoltà sotto pressing quando lo stesso nome torna su più partite.`);
+  if(singola && a.nonAttribuiti.length)
+    a.nonAttribuiti.forEach(g => righe.push(`Gol al ${esc(mmssDaSecondi(g.t))}${g.marcatore ? " ("+esc(g.marcatore)+")" : ""}, non attribuito — ${motivoNonAttribuito(g, tipo)}`));
   bulletsReport(pagina, righe);
   if(!a.episodi.length) return;
   if(singola){
-    const intest = ["Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], tipo === "allenamento" ? ["Ha segnato"] : []);
+    const conMarcatore = a.episodi.some(e => e.marcatore);
+    const intest = ["Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], conMarcatore ? ["Ha segnato"] : []);
     tabellaReport(pagina, intest, a.episodi.map(e => [esc(mmssDaSecondi(e.secondoPersa)), esc(e.giocatore)]
-      .concat(tipo === "allenamento" ? [esc(e.squadra)] : [], [nf(e.secondi,0)+"s"], conZona ? [e.zona ? esc(e.zona) : "—"] : [], tipo === "allenamento" ? [esc(e.marcatore || "—")] : [])));
+      .concat(tipo === "allenamento" ? [esc(e.squadra)] : [], [nf(e.secondi,0)+"s"], conZona ? [e.zona ? esc(e.zona) : "—"] : [], conMarcatore ? [esc(e.marcatore || "—")] : [])));
   }else{
     tabellaReport(pagina, ["Giocatore", "Palle perse diventate gol", "Palle perse in tutto", "Quota"].concat(conZona ? ["Dove le perde, più spesso"] : []),
       a.giocatori.map(g => [esc(g.giocatore), nf0(g.episodi), nf0(g.pallePerse), pctTxt(g.quota,0)]
@@ -7154,6 +7431,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ricaricaDaSessioni();
   });
   // riprende automaticamente da dove si era rimasti se ci sono già file Seven Lab salvati nel browser
+  // regola dei tempi del 12/10/2026 applicata anche alle sessioni già salvate (vedi rivalutaTempiSessioniSalvate)
+  try{ rivalutaTempiSessioniSalvate(); }catch(e){ console.warn("Rivalutazione tempi non riuscita", e); }
   if(leggiSessioniSalvate().length) ricaricaDaSessioni(); else renderPannelloFile();
   $("#btn-demo").addEventListener("click", () => {
     try{
