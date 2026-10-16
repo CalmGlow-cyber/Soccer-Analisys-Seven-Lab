@@ -14,7 +14,7 @@
      vuole un PNG raggiungibile a un indirizzo, e in sua assenza mette uno screenshot della pagina.
      apple-touch-icon.png va quindi caricato nella repo accanto a index.html e app.js. iOS applica da
      sé gli angoli arrotondati, perciò il file è quadrato e pieno. -->
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
 <meta name="apple-mobile-web-app-title" content="Analysis">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -326,6 +326,51 @@ td .pill{white-space:nowrap; text-transform:none; letter-spacing:0; font-size:12
 th.cella-testo{text-align:left !important}
 .ruolo-mini{font-size:11.5px; color:var(--muted); font-weight:600}
 .kpi-unita{font-size:14px; font-weight:600; color:var(--muted)}
+/* sincronizzazione (16/10/2026) */
+#btn-cloud{white-space:nowrap}
+#btn-cloud.cloud-fuori{border-color:color-mix(in srgb, var(--primary) 55%, var(--border)); color:var(--primary)}
+#btn-cloud.cloud-ok::before{content:"✓ "; color:var(--success)}
+#btn-cloud.cloud-errore{border-color:var(--danger); color:var(--danger)}
+#btn-cloud.cloud-lavoro{color:var(--muted)}
+#dlg-cloud{border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); padding:20px; width:min(440px, calc(100vw - 32px)); box-shadow:0 18px 50px rgba(0,0,0,.25)}
+#dlg-cloud::backdrop{background:rgba(20,18,15,.45)}
+.dlg-testa{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.dlg-testa h2{font-size:18px; margin:0}
+.dlg-testo{font-size:14px; line-height:1.5; color:var(--muted); margin:10px 0 14px}
+.dlg-form{display:grid; gap:6px}
+.dlg-form label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-top:6px}
+.dlg-form input{font:inherit; font-size:16px; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--surface-alt); color:var(--text)}
+.dlg-form .btn{margin-top:12px}
+.dlg-msg{font-size:13px; color:var(--danger); min-height:1em}
+.azioni-dlg{display:flex; gap:10px; flex-wrap:wrap}
+.dlg-stato{font-size:13.5px; line-height:1.5; margin:14px 0 0}
+.cloud-msg-errore{color:var(--danger)}
+.dlg-nota{font-size:12px; color:var(--faint); margin:10px 0 0}
+/* formazioni (16/10/2026) */
+.fz-legenda{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--muted); margin-top:10px}
+.fz-legenda span{display:inline-flex; align-items:center; gap:6px}
+.fz-ruolo{display:inline-block; width:9px; height:9px; border-radius:50%; flex:none}
+.fz-r0{background:var(--c6)} .fz-r1{background:var(--c1)} .fz-r2{background:var(--c3)} .fz-r3{background:var(--c2)}
+.fz-titoletto{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:4px}
+.fz-riga{display:flex; flex-direction:column; gap:7px; padding:11px 0; border-top:1px solid var(--border)}
+.fz-titoletto + .fz-riga{border-top:none}
+.fz-nomi{display:flex; flex-wrap:wrap; gap:5px}
+.fz-chip{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; padding:2px 9px 2px 7px; border-radius:99px; background:var(--surface-alt); border:1px solid var(--border)}
+.fz-numeri{display:grid; grid-template-columns:minmax(70px,1fr) auto; align-items:center; gap:10px; font-size:12.5px; color:var(--muted)}
+.fz-numeri .barra-wrap{min-width:0}
+.fz-pillole{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:12px; font-size:12.5px; color:var(--muted)}
+.fz-pillole span{display:inline-flex; align-items:center; gap:6px}
+.fz-pillole .pill{text-transform:none; letter-spacing:0; font-size:12px}
+.fz-campo{position:relative; margin:14px auto 0; width:100%; max-width:360px; aspect-ratio:3/4; border:2px solid; border-radius:10px; overflow:hidden}
+.fz-campo-meta{position:absolute; left:0; right:0; top:50%; border-top:2px solid}
+.fz-campo-cerchio{position:absolute; left:50%; top:50%; width:26%; aspect-ratio:1; border:2px solid; border-radius:50%; transform:translate(-50%,-50%)}
+.fz-campo-area{position:absolute; left:28%; right:28%; height:13%; border:2px solid}
+.fz-area-alta{top:-2px; border-top:none} .fz-area-bassa{bottom:-2px; border-bottom:none}
+.fz-campo-righe{position:absolute; inset:5% 3%; display:flex; flex-direction:column; justify-content:space-around}
+.fz-linea{display:flex; justify-content:space-evenly; align-items:flex-start; gap:4px}
+.fz-gioc{display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; max-width:31%}
+.fz-maglia{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:13px; letter-spacing:.02em; box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.fz-nome{font-size:12px; font-weight:700; text-align:center; line-height:1.15; overflow-wrap:anywhere; padding:1px 6px; border-radius:6px}
 
 /* ---------- tendenze ---------- */
 .sotto-tit{font-size:17px; margin:28px 0 4px; padding-top:20px; border-top:1px solid var(--border)}
@@ -546,6 +591,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     </div>
     <div class="spazio"></div>
     <span id="badge-dataset" class="badge nascosto">Nessun dato</span>
+    <button class="btn piccolo cloud-fuori" id="btn-cloud" type="button" aria-haspopup="dialog">Sincronizza i dispositivi</button>
     <button class="btn piccolo" id="btn-tema" aria-label="Cambia tema">Tema scuro</button>
     <button class="btn piccolo nascosto" id="btn-nuovo">Carica un altro file</button>
   </div>
@@ -592,6 +638,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     <a href="#sez-riconquista" data-tab="partita">Tempo di riconquista</a>
     <a href="#sez-persa-gol-partita" data-tab="partita">Palle perse e gol subiti</a>
     <a href="#sez-incampo-partita" data-tab="partita">Gol subiti e chi è in campo</a>
+    <a href="#sez-formazione-partita" data-tab="partita">La formazione migliore</a>
     <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
@@ -604,6 +651,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     <a href="#sez-persa-giocatore-allenamento" data-tab="allenamento">Dove perde palla</a>
     <a href="#sez-persa-gol-allenamento" data-tab="allenamento">Palle perse e gol</a>
     <a href="#sez-incampo-allenamento" data-tab="allenamento">Gol subiti e chi è in campo</a>
+    <a href="#sez-formazione-allenamento" data-tab="allenamento">La formazione migliore</a>
     <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
@@ -629,7 +677,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
       <input type="file" id="input-file" accept=".xlsx,.xls,.csv" multiple class="solo-sr" aria-label="Scegli i file esportati da Seven Lab">
       <div class="privacy">
         <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><rect x="4" y="11" width="16" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-        <span>I dati restano nel tuo browser: i file non vengono inviati a nessun server, il calcolo avviene sul tuo dispositivo.</span>
+        <span>Il calcolo avviene sul tuo dispositivo. Senza accesso i file restano in questo browser; se entri con il tuo account SevenLab («Sincronizza i dispositivi», in alto) vengono salvati anche nel cloud di SevenLab, così li ritrovi su PC, iPad e telefono. Li vedono solo gli account autorizzati.</span>
       </div>
     </div>
     <div id="errore-caricamento" class="nascosto" style="margin-top:16px"></div>
@@ -719,23 +767,6 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
       <div id="contenuto-subentrati"></div>
     </section>
 
-    <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) -->
-    <section id="sez-report-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
-      <p class="sez-desc">Il report di una singola partita e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
-      <div class="card">
-        <div class="report-toolbar">
-          <div class="campo">
-            <label for="rp-sel-partita">Partita</label>
-            <select id="rp-sel-partita"></select>
-          </div>
-          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
-          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
-        </div>
-        <div class="report-status" id="rp-stato-partita">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo.</div>
-      </div>
-    </section>
-
     <!-- ===================== DASHBOARD ALLENAMENTO ===================== -->
     <!-- 7. KPI DA ALLENAMENTO (statistiche di gioco raccolte nelle partitelle) -->
     <section id="sez-kpi-stat-allenamento" data-tab-sezione="allenamento">
@@ -819,6 +850,36 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
       <div id="contenuto-incampo-partita"></div>
     </section>
 
+    <!-- 7g. LA FORMAZIONE MIGLIORE (partita) -->
+    <section id="sez-formazione-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">13</span><h2>La formazione migliore</h2></div>
+      <p class="sez-desc">Fra le formazioni che sono davvero scese in campo insieme, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi. Per tutto il periodo o per una partita sola.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="fm-sel-partita">Partita</label>
+          <select id="fm-sel-partita"></select></div>
+        <div class="campo"><label for="fm-sel-criterio-partita">Criterio</label>
+          <select id="fm-sel-criterio-partita"></select></div>
+      </div>
+      <div id="contenuto-formazione-partita"></div>
+    </section>
+
+    <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) — spostata in fondo alla scheda partita il 16/10/2026 -->
+    <section id="sez-report-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
+      <p class="sez-desc">Il report di una singola partita e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="card">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="rp-sel-partita">Partita</label>
+            <select id="rp-sel-partita"></select>
+          </div>
+          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
+          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
+        </div>
+        <div class="report-status" id="rp-stato-partita">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo.</div>
+      </div>
+    </section>
+
     <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->
     <section id="sez-zone-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di recupero e palla persa (allenamento)</h2></div>
@@ -882,6 +943,17 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
           <select id="icp-sel-allenamento"></select></div>
       </div>
       <div id="contenuto-incampo-allenamento"></div>
+    </section>
+
+    <!-- 8b7. LA FORMAZIONE MIGLIORE (allenamento) -->
+    <section id="sez-formazione-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">12</span><h2>La formazione migliore (allenamento)</h2></div>
+      <p class="sez-desc">Fra le squadre interne che hanno giocato insieme nelle partitelle del periodo, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="fm-sel-criterio-allenamento">Criterio</label>
+          <select id="fm-sel-criterio-allenamento"></select></div>
+      </div>
+      <div id="contenuto-formazione-allenamento"></div>
     </section>
 
     <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
@@ -992,6 +1064,8 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
           <p>Le partite vengono raggruppate per il valore della colonna <code>Modulo</code> (facoltativa, foglio Partite); per ogni modulo si sommano gol fatti/subiti e le azioni dei giocatori di quelle partite, poi si ricalcolano le medie e le percentuali come per l'aggregato di periodo. <strong>Avvertenza importante:</strong> questo confronto non tiene conto della forza dell'avversario affrontato con ciascun modulo — un modulo usato per lo più contro squadre più deboli sembrerà artificialmente migliore. È una lettura preliminare, da usare con cautela e da incrociare con quello che si è visto in campo; un confronto più affidabile richiederebbe di registrare anche una stima della forza dell'avversario partita per partita, cosa che questo sistema non fa ancora.</p>
           <h4>Gol subiti e chi è in campo</h4>
           <p>Chi è in campo si ricostruisce dalla timeline: titolari sono i giocatori con minuti che non hanno come primo cambio un ingresso (o che giocano palloni prima di entrare); ogni «Cambio entra» mette in campo, ogni «Cambio esce» o cartellino rosso toglie. In allenamento la squadra interna è quella scritta sulle righe del giocatore, fino a un eventuale «Cambio squadra». Una partita in cui risultano più di 7 giocatori in campo, o palloni giocati da chi risulta in panchina, viene esclusa: manca un cambio. Per ogni giocatore <code>gol subiti ogni 50' con lui = gol subiti con lui in campo / minuti in campo × 50</code>, e lo stesso «senza di lui» sul tempo restante (in allenamento: le due squadre interne sommate). Lo stesso per le coppie di giocatori di movimento con almeno 15' insieme. Soglie: almeno 10' in campo e 10' senza. Il segnale nasce dal test binomiale esatto a due code (con n gol e una quota q di minuti in campo, i gol «suoi» per puro caso sarebbero Binomiale(n, q)), corretto per il numero di confronti con Benjamini-Hochberg: <strong>chiaro</strong> se la probabilità corretta è sotto 0,10, <strong>da tenere d'occhio</strong> se lo è solo quella grezza. È una correlazione, non un'attribuzione di colpa.</p>
+          <h4>Formazioni e formazione migliore</h4>
+          <p>Formazione = l'insieme dei giocatori in campo nello stesso momento per la stessa squadra (in allenamento: la squadra interna), ricavato dagli stessi tratti a formazione costante della sezione precedente; se torna in campo, anche in partite diverse, somma minuti e gol. Per ogni formazione: minuti insieme, gol fatti e gol subiti mentre era in campo. Per scegliere la migliore il criterio consigliato è il <strong>saldo reti</strong> (gol fatti − gol subiti), a parità meno gol subiti, poi più minuti; si possono scegliere anche «meno gol subiti» o «più gol fatti». Servono almeno 5' insieme, e per la scelta ogni formazione parte come se avesse già giocato 10' al ritmo medio della squadra: <code>stima = (gol + media al minuto × 10) / (minuti + 10) × 50</code>. Chi ha giocato tanto insieme resta quasi com'è, chi ha giocato poco viene riportato verso la media. I numeri mostrati sono quelli veri. Le coppie di difensori seguono le regole delle coppie, con 10' insieme come soglia.</p>
           <h4>Nessun dato biometrico richiesto</h4>
           <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
           <h4>Pulizia dei dati</h4>
@@ -1030,8 +1104,31 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
 </main>
 
 <footer>
-  Dashboard costruita per l'analisi prestazionale di una squadra di calcio a 7 · Tutti i calcoli avvengono nel browser · I dati mostrati sono quelli che carichi tu
+  Dashboard costruita per l'analisi prestazionale di una squadra di calcio a 7 · I calcoli avvengono nel browser · Con l'accesso, i file caricati si sincronizzano fra i tuoi dispositivi
 </footer>
+
+<!-- Sincronizzazione fra dispositivi (16/10/2026) -->
+<dialog id="dlg-cloud" aria-labelledby="dlg-cloud-titolo">
+  <div class="dlg-testa"><h2 id="dlg-cloud-titolo">Gli stessi file su PC, iPad e telefono</h2>
+    <button type="button" class="btn piccolo" id="btn-cloud-chiudi" aria-label="Chiudi">Chiudi</button></div>
+  <p class="dlg-testo">Entra con <strong>la stessa email e la stessa password di SevenLab</strong>. Da quel momento ogni file che carichi o elimini su un dispositivo arriva da solo anche sugli altri, quando li apri.</p>
+  <form id="cloud-form" class="dlg-form" autocomplete="on">
+    <label for="cloud-email">Email</label>
+    <input id="cloud-email" type="email" autocomplete="username" inputmode="email" required>
+    <label for="cloud-password">Password</label>
+    <input id="cloud-password" type="password" autocomplete="current-password" required>
+    <button type="submit" class="btn primario">Entra e sincronizza</button>
+    <div id="cloud-msg" class="dlg-msg" role="status"></div>
+  </form>
+  <div id="cloud-collegato" class="nascosto">
+    <div class="azioni-dlg">
+      <button type="button" class="btn primario" id="btn-cloud-ora">Sincronizza ora</button>
+      <button type="button" class="btn" id="btn-cloud-esci">Esci</button>
+    </div>
+  </div>
+  <p id="cloud-stato" class="dlg-stato" role="status"></p>
+  <p class="dlg-nota">Su ogni dispositivo basta entrare una volta. Uscire non cancella i file da questo dispositivo né dal cloud.</p>
+</dialog>
 
 <script src="app.js"></script>
 </body>
