@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.37.0",
-  data: "2026-10-12",
-  note: "Indice prestazione senza i tiri (12/10/2026). Tolti +0,3 per tiro in porta e −0,2 per tiro fuori: il tiro in porta non viene segnato, quindi ogni tiro non diventato gol veniva penalizzato, e il numero di tiri da solo non distingue un attaccante propositivo da chi non passa la palla. Del tiro conta solo il gol (×4). Comprende la 1.36.0: nomi che differiscono solo per maiuscole o spazi unificati sulla grafia più usata; precisione al tiro tolta dove coincide con la realizzazione."
+  numero: "1.38.1",
+  data: "2026-10-16",
+  note: "Logo nuovo (16/10/2026): quello di Elisa, «Analysis», scontornato, nella scheda del browser, nella testata e nella schermata Home. Comprende la 1.38.0: gol subiti e chi è in campo. Nuove sezioni nelle dashboard partita (12) e allenamento (11), nei report partita, stagionale e allenamenti e in «Cosa dicono i dati»: per ogni giocatore e per ogni coppia di giocatori, quanti gol prende la squadra ogni 50' quando sono in campo rispetto a quando non ci sono, con un'etichetta che dice se la differenza può essere il caso. Chi è in campo si ricava dai cambi della timeline; in allenamento dalla squadra interna di ciascuno."
 };
 
 /* =====================================================================
@@ -2638,6 +2638,25 @@ function terzoDaX(x){
   return x < CAMPO_LUNGHEZZA_M/3 ? "terzo difensivo" : (x < CAMPO_LUNGHEZZA_M*2/3 ? "terzo centrale" : "terzo offensivo");
 }
 
+/** Gol subiti di una sessione, da eventi già classificati e ordinati per tempo (campi `subisce`, `lato`,
+ *  `secondoAssoluto`, `periodo`, `raw`), fusi quando lo stesso gol compare in più righe. Il marcatore viene solo
+ *  da una riga «Gol» della squadra che segna. La riga «Gol subito» porta il NOSTRO portiere — nel file vero
+ *  dell'11/10 «Lorenzo Baù», con squadra B — e mai chi ha segnato: mostrarlo come marcatore sarebbe sbagliato.
+ *  In partita contano solo i gol presi dalla nostra squadra (A), in allenamento quelli di entrambe le squadre.
+ *  Usata dalle palle perse → gol e da «gol subiti e chi è in campo», così le due sezioni contano gli stessi gol. */
+function golDaEventiClassificati(eventi, tipo){
+  const latiInteressati = tipo === "partita" ? ["A"] : ["A","B"];
+  const gol = [];
+  const marcatoreDi = e => (!rigaGolSubito(e.raw) && e.lato !== e.subisce) ? (String(e.raw.Giocatore||"").trim() || null) : null;
+  (eventi||[]).forEach((e, i) => {
+    if(!e.subisce || !latiInteressati.includes(e.subisce)) return;
+    const doppione = gol.find(g => g.subisce === e.subisce && Math.abs(g.t - e.secondoAssoluto) <= PERSA_GOL_FUSIONE_SEC);
+    if(doppione){ if(!doppione.marcatore) doppione.marcatore = marcatoreDi(e); return; }
+    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce, marcatore: marcatoreDi(e)});
+  });
+  return gol;
+}
+
 /** Episodi "palla persa → gol subito entro 15 secondi" di UNA sessione. `tipo`: "partita" (contano solo i gol
  *  subiti dalla nostra squadra, Team A) o "allenamento" (contano i gol di entrambe le squadre interne).
  *  Ritorna null se la sessione non ha una timeline utilizzabile. */
@@ -2651,18 +2670,7 @@ function episodiPersaGolSessione(sessione, tipo){
       subisce: latoCheSubisce(e, tipo), lato: lato(e)}))
     .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
   const latiInteressati = tipo === "partita" ? ["A"] : ["A","B"];
-
-  // gol subiti, fusi quando lo stesso gol compare in più righe. Il marcatore viene solo da una riga «Gol» della
-  // squadra che segna. La riga «Gol subito» porta il NOSTRO portiere — nel file vero dell'11/10 «Lorenzo Baù»,
-  // con squadra B — e mai chi ha segnato: mostrarlo come marcatore sarebbe sbagliato.
-  const gol = [];
-  const marcatoreDi = e => (!rigaGolSubito(e.raw) && e.lato !== e.subisce) ? (String(e.raw.Giocatore||"").trim() || null) : null;
-  eventi.forEach((e, i) => {
-    if(!e.subisce || !latiInteressati.includes(e.subisce)) return;
-    const doppione = gol.find(g => g.subisce === e.subisce && Math.abs(g.t - e.secondoAssoluto) <= PERSA_GOL_FUSIONE_SEC);
-    if(doppione){ if(!doppione.marcatore) doppione.marcatore = marcatoreDi(e); return; }
-    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce, marcatore: marcatoreDi(e)});
-  });
+  const gol = golDaEventiClassificati(eventi, tipo);
 
   const posizioni = posizioniPallePerse(norm.eventi, sessione.DatiSpaziali);
   const episodi = [], senzaPersa = [];
@@ -2780,6 +2788,261 @@ function frasePersaGol(a, tipo, html){
       : `Nessuno dei ${nf0(a.golAnalizzati)} ${chi} è attribuibile a una ${tipo === "partita" ? "nostra " : ""}palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti.`;
   const elenco = a.giocatori.map(g => `${b(g.giocatore)} (${nf0(g.episodi)})`).join(", ");
   return `${nf0(a.episodi.length)} ${a.episodi.length===1?"gol è arrivato":"gol sono arrivati"} entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una palla persa, su ${nf0(a.golAnalizzati)} ${chi}: ${elenco}.`;
+}
+
+/* =====================================================================
+   GOL SUBITI E CHI È IN CAMPO (16/10/2026)
+   Richiesta dell'utente: «una insight che evidenzi la correlazione tra difensore e goal preso in allenamento?
+   Magari esiste una correlazione tra una serie di giocatori e goal presi per quella squadra, cioè magari una
+   serie di difensori o di giocatori portano a un contributo difensivo minore e quindi più goal subiti!
+   Questo uguale anche in partita».
+
+   L'IDEA (è il «con/senza» dell'hockey e del basket). Per ogni giocatore si confrontano due ritmi: i gol che la
+   sua squadra subisce quando LUI È IN CAMPO e quelli che subisce quando non c'è, entrambi rapportati a 50 minuti
+   (una partita intera di calcio a 7). Lo stesso per le coppie di giocatori in campo insieme, che è la «serie di
+   giocatori» della richiesta. Nessun dato nuovo: chi è in campo si ricava dai cambi della timeline.
+
+   CHI È IN CAMPO, MOMENTO PER MOMENTO. Giocano solo i giocatori con minuti nel tabellino. Chi ha come primo cambio
+   un ingresso («Cambio entra» sulla sua riga) parte dalla panchina, gli altri sono titolari; ogni «Cambio entra»
+   lo mette in campo, ogni «Cambio esce» o «Cartellino rosso» lo toglie. In partita sono tutti della nostra squadra.
+   In allenamento serve anche la squadra interna: è quella che compare sulle sue righe prima di un eventuale
+   «Cambio squadra A → B» (che SevenLab Video scrive quando si scambiano due giocatori), dopo è quella d'arrivo.
+   Chi in allenamento non ha nemmeno un evento non si sa in che squadra fosse: resta fuori, e lo si dice.
+   Il tempo viene tagliato in tratti in cui la formazione non cambia; ogni gol subito si dà a chi era in campo
+   per la squadra che lo ha preso, un istante prima del gol (un cambio fatto nello stesso secondo non conta).
+
+   IN ALLENAMENTO TUTTI GIOCANO SEMPRE, quindi «senza di lui» vuol dire soprattutto l'altra squadra: il confronto
+   diventa «quanti gol ha preso la squadra in cui giocava» contro «quanti ne ha presi quella in cui non c'era».
+   Con le squadre rimescolate a ogni allenamento, sulla stagione è proprio la lettura che serve.
+
+   IL CASO. Con pochi gol le differenze grandi vengono anche per caso: 7 gol subiti in una partita, 13 giocatori,
+   qualcuno risulterà «in campo su quasi tutti» senza alcuna colpa. Per questo ogni confronto ha un'etichetta:
+   - si calcola quanto è probabile, per puro caso, trovarsi in campo su così tanti (o così pochi) gol, dati i
+     minuti giocati (test binomiale esatto a due code: con n gol in totale e una quota q di minuti in campo,
+     i gol «suoi» per caso sarebbero Binomiale(n, q));
+   - poiché si guardano molti giocatori insieme, quella probabilità viene corretta per il numero di confronti
+     (Benjamini-Hochberg): su 13 giocatori uno «strano» per caso esce quasi sempre;
+   - «Segnale chiaro» se la probabilità corretta è sotto il 10%, «Da tenere d'occhio» se lo è solo quella grezza,
+     altrimenti «Nei limiti del caso». Il dato diventa solido quando lo stesso nome torna su più partite.
+   E resta una correlazione: dice chi era in campo, non di chi è la colpa (dipende da compagni e avversari).
+   ===================================================================== */
+const IN_CAMPO_MINUTI_MIN = 10;      // minuti minimi in campo E senza di lui perché un giocatore entri nel confronto
+const IN_CAMPO_MINUTI_COPPIA = 15;   // minuti minimi insieme perché una coppia entri nel confronto
+const IN_CAMPO_SOGLIA = 0.10;        // soglia della probabilità (corretta per «chiaro», grezza per «da tenere d'occhio»)
+const IN_CAMPO_MAX_IN_CAMPO = 7;     // calcio a 7: in partita più di 7 in campo vuol dire un cambio mancante nella timeline
+/** Gli ospiti degli allenamenti («OSPITE COGNOME 1»…) contano per la formazione (sono in campo) ma non vengono
+ *  classificati: lo stesso segnaposto non è la stessa persona da un allenamento all'altro. */
+const nomeOspite = n => /^ospite\b/i.test(String(n||"").trim());
+
+/** Probabilità a due code del test binomiale esatto: quanto è raro, per caso, osservare k successi su n con
+ *  probabilità p. Calcolata in scala logaritmica, così regge anche sui gol di un'intera stagione. */
+function binomialeDueCode(k, n, p){
+  if(!(n > 0) || !(p > 0) || !(p < 1)) return 1;
+  const lf = [0]; for(let i = 1; i <= n; i++) lf[i] = lf[i-1] + Math.log(i);
+  const pmf = x => Math.exp(lf[n] - lf[x] - lf[n-x] + x*Math.log(p) + (n-x)*Math.log(1-p));
+  let su = 0, giu = 0;
+  for(let x = 0; x <= n; x++){ const v = pmf(x); if(x >= k) su += v; if(x <= k) giu += v; }
+  return Math.min(1, 2*Math.min(su, giu));
+}
+/** Correzione di Benjamini-Hochberg: per ogni probabilità grezza, quella corretta per il numero di confronti. */
+function correzioneConfronti(pv){
+  const m = pv.length, ord = pv.map((p, i) => ({p, i})).sort((a, b) => a.p - b.p), q = new Array(m);
+  let minimo = 1;
+  for(let r = m - 1; r >= 0; r--){ minimo = Math.min(minimo, ord[r].p * m / (r + 1)); q[ord[r].i] = minimo; }
+  return q;
+}
+function etichettaSegnale(p, q){
+  if(p === null || p === undefined) return null;
+  if(q < IN_CAMPO_SOGLIA) return "chiaro";
+  if(p < IN_CAMPO_SOGLIA) return "occhio";
+  return "caso";
+}
+const TESTO_SEGNALE = {chiaro:"Segnale chiaro", occhio:"Da tenere d'occhio", caso:"Nei limiti del caso"};
+
+/** Righe del tabellino di una sessione (minuti e ruolo di ciascun giocatore). */
+function righeTabellinoSessione(s, tipo){
+  const ds = stato.ds; if(!ds) return [];
+  return tipo === "partita" ? ds.giocatori.filter(g => g.Match_ID === s.Match_ID)
+                            : (ds.statAllenamento || []).filter(g => g.Sessione_ID === s.Sessione_ID);
+}
+
+/** Chi è in campo, per quale squadra, in ogni tratto di UNA sessione, e chi era in campo su ogni gol subito.
+ *  Torna {esclusa} con il motivo se la sessione non si può ricostruire. */
+function formazioniSessione(sessione, tipo){
+  const norm = normalizzaEventiSevenLab({eventi: sessione.Eventi, riepilogoTempi: sessione.RiepilogoTempi});
+  if(norm.formato !== "nuovo" || !norm.eventi.length) return {esclusa: "senza timeline eventi"};
+  const latoRiga = r => String(r.Team ?? r.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = norm.eventi.filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: classificaEventoRigaNuovoFormato(e.raw), subisce: latoCheSubisce(e, tipo), lato: latoRiga(e.raw)}))
+    .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  const gol = golDaEventiClassificati(eventi, tipo);
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const inizio = rigaInizio ? rigaInizio.secondoAssoluto : Math.min(0, ...eventi.map(e => e.secondoAssoluto));
+  let fine = norm.periodi.tempo2FineSec;
+  if(!Number.isFinite(fine)) fine = eventi[eventi.length-1].secondoAssoluto;
+  gol.forEach(g => { if(g.t > fine) fine = g.t; });
+  if(!(fine > inizio)) return {esclusa: "durata non ricavabile"};
+
+  const tabellino = righeTabellinoSessione(sessione, tipo);
+  const ruoli = new Map(tabellino.map(r => [r.Giocatore, r.Ruolo]));
+  const nomi = tabellino.filter(r => N(r.Minuti_Giocati) > 0).map(r => r.Giocatore);
+  if(!nomi.length) return {esclusa: "nessun giocatore con minuti nel tabellino"};
+  const nomeDi = e => String(e.raw.Giocatore||"").trim();
+  const cambioSquadra = e => /cambio\s*squadra/i.test(String(e.raw.Dettaglio||""));
+
+  const intervalli = new Map(), squadraIniziale = new Map(), cambiSquadra = new Map(), senzaSquadra = [];
+  const rigaCambio = e => e.raw["Cambio entra"] === "1" || e.raw["Cambio esce"] === "1" || e.raw["Cartellino rosso"] === "1";
+  // un'azione di gioco del giocatore (non un cambio, non un cambio squadra, non la riga «Gol subito» del portiere)
+  const azione = e => !!e.cl && !rigaCambio(e) && !cambioSquadra(e) && !rigaGolSubito(e.raw);
+  let azioniFuori = 0; const chiFuori = new Set();
+  nomi.forEach(nome => {
+    const sue = eventi.filter(e => nomeDi(e) === nome);
+    // in campo / fuori. Titolare = il primo cambio non è un ingresso, OPPURE ha già giocato palloni prima di
+    // entrare: in quel caso manca la sua uscita, e il controllo sulla formazione più sotto lo scopre.
+    const cambi = sue.filter(rigaCambio).map(e => ({t: e.secondoAssoluto, entra: e.raw["Cambio entra"] === "1"}));
+    const primoIngresso = cambi.length && cambi[0].entra ? cambi[0].t : null;
+    const giocavaGia = primoIngresso !== null && sue.some(e => azione(e) && e.secondoAssoluto < primoIngresso - 2);
+    let dentro = !(cambi.length && cambi[0].entra) || giocavaGia, da = inizio;
+    const iv = [];
+    cambi.forEach(c => {
+      if(c.entra && !dentro){ dentro = true; da = Math.max(inizio, c.t); }
+      else if(!c.entra && dentro){ dentro = false; if(c.t > da) iv.push([da, Math.min(c.t, fine)]); }
+    });
+    if(dentro && fine > da) iv.push([da, fine]);
+    intervalli.set(nome, iv);
+    // azioni registrate mentre risulta in panchina (tolleranza di 3 secondi attorno ai cambi): manca un cambio
+    const fuori = sue.filter(e => azione(e) && !iv.some(([a,b]) => e.secondoAssoluto >= a - 3 && e.secondoAssoluto <= b + 3));
+    if(fuori.length){ azioniFuori += fuori.length; chiFuori.add(nome); }
+    // squadra (in partita sempre la nostra)
+    if(tipo === "partita"){ squadraIniziale.set(nome, "A"); cambiSquadra.set(nome, []); return; }
+    const cs = sue.filter(cambioSquadra).map(e => {
+      const m = String(e.raw.Dettaglio).match(/→\s*([AB])\b|->\s*([AB])\b/i);
+      return {t: e.secondoAssoluto, squadra: m ? (m[1]||m[2]).toUpperCase() : e.lato};
+    });
+    const primoCambio = cs.length ? cs[0].t : Infinity;
+    const prima = sue.filter(e => !cambioSquadra(e) && !rigaGolSubito(e.raw) && e.secondoAssoluto < primoCambio).map(e => e.lato);
+    if(!prima.length && !cs.length){ senzaSquadra.push(nome); return; }
+    const contaA = prima.filter(x => x === "A").length;
+    const iniziale = prima.length ? (contaA >= prima.length - contaA ? "A" : "B") : (cs[0].squadra === "A" ? "B" : "A");
+    squadraIniziale.set(nome, iniziale); cambiSquadra.set(nome, cs);
+  });
+  const squadraAl = (nome, t) => { let sq = squadraIniziale.get(nome); (cambiSquadra.get(nome)||[]).forEach(c => { if(c.t <= t) sq = c.squadra; }); return sq; };
+  const inCampoAl = (nome, t) => squadraIniziale.has(nome) && (intervalli.get(nome)||[]).some(([a,b]) => t > a && t <= b);
+  const conSquadra = nomi.filter(n => squadraIniziale.has(n));
+
+  // tratti a formazione costante
+  const tagli = new Set([inizio, fine]);
+  intervalli.forEach(iv => iv.forEach(([a,b]) => { tagli.add(a); tagli.add(b); }));
+  cambiSquadra.forEach(cs => cs.forEach(c => { if(c.t > inizio && c.t < fine) tagli.add(c.t); }));
+  const punti = [...tagli].filter(t => t >= inizio && t <= fine).sort((a,b) => a-b);
+  const lati = tipo === "partita" ? ["A"] : ["A","B"];
+  const formazioneAl = t => { const f = {A:[], B:[]}; conSquadra.forEach(n => { if(inCampoAl(n, t)) f[squadraAl(n, t)].push(n); }); return f; };
+  const tratti = [];
+  let maxInCampo = 0;
+  for(let i = 0; i < punti.length - 1; i++){
+    const a = punti[i], b = punti[i+1]; if(!(b > a)) continue;
+    const f = formazioneAl((a+b)/2);
+    if(tipo === "partita") maxInCampo = Math.max(maxInCampo, f.A.length);
+    tratti.push({a, b, f});
+  }
+  if(tipo === "partita" && maxInCampo > IN_CAMPO_MAX_IN_CAMPO)
+    return {esclusa: `formazione non ricostruibile: risultano fino a ${maxInCampo} giocatori in campo insieme, probabilmente manca un cambio nella timeline`};
+  if(azioniFuori)
+    return {esclusa: `formazione non ricostruibile: ${[...chiFuori].join(", ")} ${chiFuori.size === 1 ? "ha" : "hanno"} palloni giocati mentre ${chiFuori.size === 1 ? "risulta" : "risultano"} in panchina, quindi manca un cambio nella timeline`};
+  const golInCampo = gol.map(g => ({t: g.t, subisce: g.subisce, inCampo: formazioneAl(g.t - 0.5)[g.subisce]}));
+  return {durataSec: fine - inizio, lati, tratti, gol: golInCampo, ruoli, senzaSquadra};
+}
+
+/** Confronto con/senza su più sessioni dello stesso tipo, per giocatore e per coppia. */
+function analizzaInCampo(sessioni, tipo){
+  const perG = new Map(), perC = new Map(), escluse = [];
+  let secTot = 0, golTot = 0, analizzate = 0;
+  const senzaSquadra = new Set(), ruoli = new Map(), sessioniG = new Map();
+  (sessioni||[]).forEach(s => {
+    const r = formazioniSessione(s, tipo);
+    if(r.esclusa){ escluse.push({etichetta: s.Etichetta || "", motivo: r.esclusa}); return; }
+    analizzate++;
+    secTot += r.durataSec * r.lati.length; golTot += r.gol.length;
+    r.senzaSquadra.forEach(n => senzaSquadra.add(n));
+    r.ruoli.forEach((ru, n) => { if(!ruoli.has(n)) ruoli.set(n, ru); });
+    const g = n => { if(!perG.has(n)) perG.set(n, {sec:0, gol:0}); return perG.get(n); };
+    const portiere = n => ruoloPortiere(r.ruoli.get(n));
+    const chiaveCoppia = (x, y) => x.localeCompare(y, "it") < 0 ? x+"\u0001"+y : y+"\u0001"+x;
+    const c = k => { if(!perC.has(k)) perC.set(k, {sec:0, gol:0}); return perC.get(k); };
+    const visti = new Set();
+    r.tratti.forEach(tr => {
+      const d = tr.b - tr.a;
+      r.lati.forEach(l => {
+        const f = tr.f[l];
+        f.forEach(n => { g(n).sec += d; visti.add(n); });
+        const movimento = f.filter(n => !portiere(n));
+        for(let i = 0; i < movimento.length; i++) for(let j = i+1; j < movimento.length; j++) c(chiaveCoppia(movimento[i], movimento[j])).sec += d;
+      });
+    });
+    visti.forEach(n => sessioniG.set(n, (sessioniG.get(n)||0) + 1));
+    r.gol.forEach(gl => {
+      gl.inCampo.forEach(n => g(n).gol++);
+      const movimento = gl.inCampo.filter(n => !portiere(n));
+      for(let i = 0; i < movimento.length; i++) for(let j = i+1; j < movimento.length; j++) c(chiaveCoppia(movimento[i], movimento[j])).gol++;
+    });
+  });
+  if(!analizzate) return {analizzate: 0, escluse};
+  const ritmo = (gol, sec) => sec > 0 ? gol / (sec/60) * MINUTI_PARTITA_INTERA : null;
+  const confronto = (nome, v, minimo) => {
+    const secSenza = secTot - v.sec, golSenza = golTot - v.gol;
+    const conRitmo = ritmo(v.gol, v.sec), senzaRitmo = secSenza > 0 ? ritmo(golSenza, secSenza) : null;
+    const valido = v.sec >= minimo*60 && secSenza >= IN_CAMPO_MINUTI_MIN*60 && golTot > 0;
+    return {nome, minuti: v.sec/60, gol: v.gol, minutiSenza: secSenza/60, golSenza,
+      ritmoCon: conRitmo, ritmoSenza: senzaRitmo,
+      differenza: (conRitmo !== null && senzaRitmo !== null) ? conRitmo - senzaRitmo : null,
+      p: valido ? binomialeDueCode(v.gol, golTot, v.sec/secTot) : null, valido};
+  };
+  const etichetta = lista => {
+    const validi = lista.filter(x => x.valido), q = correzioneConfronti(validi.map(x => x.p));
+    validi.forEach((x, i) => { x.q = q[i]; x.segnale = etichettaSegnale(x.p, x.q); });
+    lista.forEach(x => { if(!x.valido){ x.q = null; x.segnale = null; } });
+    return lista.sort((a, b) => (b.valido - a.valido) || ((b.differenza ?? -1e9) - (a.differenza ?? -1e9)) || (b.minuti - a.minuti));
+  };
+  const ospiti = [...perG.keys()].filter(nomeOspite);
+  const giocatori = etichetta([...perG.entries()].filter(([n]) => !nomeOspite(n)).map(([n, v]) => Object.assign(confronto(n, v, IN_CAMPO_MINUTI_MIN),
+    {ruolo: ruoli.get(n) || "", portiere: ruoloPortiere(ruoli.get(n)), sessioni: sessioniG.get(n) || 0})));
+  const coppie = etichetta([...perC.entries()].filter(([k]) => !k.split("\u0001").some(nomeOspite)).map(([k, v]) => {
+    const [x, y] = k.split("\u0001");
+    return Object.assign(confronto(x+" e "+y, v, IN_CAMPO_MINUTI_COPPIA), {x, y, ruoloX: ruoli.get(x)||"", ruoloY: ruoli.get(y)||""});
+  })).filter(c => c.valido);
+  return {tipo, analizzate, escluse, golTotali: golTot, minutiSquadra: secTot/60, ritmoSquadra: ritmo(golTot, secTot),
+    giocatori, coppie, senzaSquadra: [...senzaSquadra], ospiti};
+}
+
+/** La frase "insight" con i nomi, uguale in dashboard e nei report. `html`: grassetto sui nomi. */
+function fraseInCampo(a, html){
+  if(!a || !a.analizzate || !a.golTotali) return null;
+  const b = s => html ? `<b>${esc(s)}</b>` : s;
+  const allen = a.tipo === "allenamento";
+  const r50 = v => nf(v, 1);
+  const elenco = nomi => nomi.length === 1 ? b(nomi[0]) : nomi.slice(0, -1).map(b).join(", ") + " e " + b(nomi[nomi.length-1]);
+  // giocatori con numeri identici (in allenamento: sempre nella stessa squadra) si nominano insieme
+  const gruppo = (lista, primo) => lista.filter(g => g.gol === primo.gol && Math.round(g.minuti) === Math.round(primo.minuti)
+    && Math.abs((g.ritmoSenza ?? 0) - (primo.ritmoSenza ?? 0)) < 0.05).slice(0, 5);
+  const descr = (lista) => {
+    const g = lista[0], nomi = lista.map(x => x.nome), piu = nomi.length > 1;
+    const soggetto = allen
+      ? `quando ${piu ? `${elenco(nomi)} erano in campo la loro squadra` : `${elenco(nomi)} era in campo la sua squadra`} ha subito`
+      : `con ${elenco(nomi)} in campo la squadra ha subito`;
+    return `${soggetto} ${nf0(g.gol)} gol in ${nf0(g.minuti)}' (${r50(g.ritmoCon)} ogni 50'), contro ${r50(g.ritmoSenza)} senza ${piu ? "di loro" : "di lui"}`;
+  };
+  const descrCoppia = c => `con ${b(c.x)} e ${b(c.y)} in campo insieme ${allen ? "la loro squadra ha" : "la squadra ha"} subito ${nf0(c.gol)} gol in ${nf0(c.minuti)}' (${r50(c.ritmoCon)} ogni 50', contro ${r50(c.ritmoSenza)})`;
+  const peggiori = a.giocatori.filter(g => g.valido && g.differenza > 0);
+  const forti = peggiori.filter(g => g.segnale === "chiaro"), occhio = peggiori.filter(g => g.segnale === "occhio");
+  const coppieForti = a.coppie.filter(c => c.differenza > 0 && (c.segnale === "chiaro" || c.segnale === "occhio"))
+    .sort((x, y) => (x.segnale === "chiaro" ? 0 : 1) - (y.segnale === "chiaro" ? 0 : 1) || y.differenza - x.differenza);
+  const frasi = [];
+  if(forti.length) frasi.push(`Segnale chiaro: ${descr(gruppo(forti, forti[0]))}.`);
+  else if(occhio.length) frasi.push(`Da tenere d'occhio: ${descr(gruppo(occhio, occhio[0]))}.`);
+  else if(peggiori.length) frasi.push(`Il dato più alto: ${descr(gruppo(peggiori, peggiori[0]))}. Con ${nf0(a.golTotali)} ${allen ? "gol" : "gol subiti"} in tutto la differenza è ancora nei limiti del caso.`);
+  else frasi.push(`Nessun giocatore con abbastanza minuti ha un ritmo di gol subiti più alto con lui in campo che senza.`);
+  if(coppieForti.length) frasi.push(`Fra le coppie, ${coppieForti[0].segnale === "chiaro" ? "segnale chiaro" : "da tenere d'occhio"}: ${descrCoppia(coppieForti[0])}.`);
+  return frasi.join(" ");
 }
 
 /** Minuti minimi perché una media "per partita intera" venga calcolata e mostrata. Tenuta alla stessa
@@ -3225,6 +3488,7 @@ const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Pre
   // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
   zoneSessione:"",
   persaGolPartita:"", persaGolAllenamento:"", // selettore partita/allenamento della sezione "palle perse → gol"
+  inCampoPartita:"", inCampoAllenamento:"", // selettore della sezione "gol subiti e chi è in campo"
   // Sezioni "Dove perde palla": giocatore scelto in allenamento, e ambito (stagione o singola partita)
   // nella scheda Giocatori (19/09/2026).
   persaGiocatoreAll:"", persaAmbitoPartita:"",
@@ -5353,6 +5617,122 @@ function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo
     <p class="nota-piccola">Come leggerlo: una palla persa a ridosso di un gol dice che è stata persa nel momento sbagliato, non dimostra da sola che il giocatore fosse sotto pressing — quello il dato non lo registra. Diventa un indizio solido quando lo stesso nome torna su più partite${conZona ? ", e ancora di più se le perdite sono nel terzo difensivo, dove di solito si gioca sotto pressione" : ""}.</p>`;
 }
 
+/* --------- Gol subiti e chi è in campo (partita e allenamento, 16/10/2026) --------- */
+/** Pillola del segnale: il colore dice anche il verso (più gol subiti con lui = rosso, meno = verde). */
+function pillSegnale(x){
+  if(!x || !x.segnale) return "—";
+  const cls = x.segnale === "caso" ? "neu" : (x.segnale === "occhio" ? "att" : ((x.differenza ?? 0) > 0 ? "neg" : "pos"));
+  return `<span class="pill ${cls}">${esc(TESTO_SEGNALE[x.segnale])}</span>`;
+}
+const fmtDiff = v => v === null || v === undefined ? "—" : (v > 0 ? "+" : (v < 0 ? "−" : "")) + nf(Math.abs(v), 1);
+
+function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo, tipo){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  const sel = $("#"+idSelettore);
+  const allen = tipo === "allenamento";
+  const ordinate = (sessioniPeriodo||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+  const idDi = s => s.Match_ID || s.Sessione_ID;
+  if(sel){
+    const etiTutte = !allen ? `Tutte le partite del periodo (${nf0(ordinate.length)})` : `Tutti gli allenamenti del periodo (${nf0(ordinate.length)})`;
+    sel.innerHTML = `<option value="">${etiTutte}</option>` + ordinate.map(s => `<option value="${esc(idDi(s))}">${esc(dataLabel(s.Data))} · ${esc(!allen ? "vs "+s.Avversario : (s.Tipo_Allenamento||"allenamento"))}</option>`).join("");
+    if(stato[chiaveStato] && ordinate.some(s => idDi(s) === stato[chiaveStato])) sel.value = stato[chiaveStato];
+    else { sel.value = ""; stato[chiaveStato] = ""; }
+  }
+  const scelte = stato[chiaveStato] ? ordinate.filter(s => idDi(s) === stato[chiaveStato]) : (sessioniPeriodo||[]);
+  const singola = scelte.length === 1;
+  const a = analizzaInCampo(scelte, tipo);
+  if(!a.analizzate){
+    const motivi = [...new Set((a.escluse||[]).map(e => e.motivo))];
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i cambi («Cambio entra» / «Cambio esce») per sapere chi era in campo${motivi.length ? `: ${esc(motivi.join("; "))}` : ""}.</div>`;
+    return;
+  }
+  if(!a.golTotali){
+    cont.innerHTML = `<div class="vuoto">${!allen ? "Nessun gol subito" : "Nessun gol nelle partitelle"} ${singola ? (!allen ? "in questa partita" : "in questo allenamento") : "nel periodo scelto"}: non c'è niente da mettere in relazione con chi era in campo.</div>`;
+    return;
+  }
+  const validi = a.giocatori.filter(g => g.valido);
+  const nChiari = validi.filter(g => g.segnale === "chiaro").length + a.coppie.filter(c => c.segnale === "chiaro").length;
+  const nOcchio = validi.filter(g => g.segnale === "occhio").length + a.coppie.filter(c => c.segnale === "occhio").length;
+  const idGrafico = "gr-incampo-" + tipo;
+  const senza = allen ? "senza di lui (soprattutto l'altra squadra)" : "senza di lui";
+  const coppiePeggio = a.coppie.filter(c => c.differenza > 0).slice(0, 5);
+  const coppieMeglio = a.coppie.filter(c => c.differenza < 0).sort((x, y) => x.differenza - y.differenza).slice(0, 5);
+  const tabCoppie = (lista, titolo, sub) => `<div class="card" style="margin-top:16px"><div class="grafico-titolo">${titolo}</div><div class="grafico-sub">${sub}</div>
+    ${lista.length ? `<div class="tabella-scroll"><table>
+      <caption class="solo-sr">${titolo}</caption>
+      <thead><tr><th scope="col">Coppia</th><th scope="col">Minuti insieme</th><th scope="col">Gol subiti insieme</th><th scope="col">Ogni 50' insieme</th><th scope="col">Ogni 50' senza la coppia</th><th scope="col">Segnale</th></tr></thead>
+      <tbody>${lista.map(c => `<tr><td class="cella-testo">${esc(c.x)} e ${esc(c.y)}<br><span class="ruolo-mini">${esc(c.ruoloX || "—")} · ${esc(c.ruoloY || "—")}</span></td>
+        <td>${nf0(c.minuti)}'</td><td>${nf0(c.gol)}</td><td>${nf(c.ritmoCon,1)}</td><td>${nf(c.ritmoSenza,1)}</td><td>${pillSegnale(c)}</td></tr>`).join("")}</tbody>
+    </table></div>` : `<div class="vuoto">Nessuna coppia con almeno ${nf0(IN_CAMPO_MINUTI_COPPIA)}' insieme in questo verso.</div>`}</div>`;
+  const note = [];
+  if(a.escluse.length) note.push(`${nf0(a.escluse.length)} ${a.escluse.length===1 ? (allen?"allenamento escluso":"partita esclusa") : (allen?"allenamenti esclusi":"partite escluse")}: ${a.escluse.map(e => `${esc(e.etichetta)} (${esc(e.motivo)})`).join("; ")}.`);
+  if(a.senzaSquadra.length) note.push(`${a.senzaSquadra.map(esc).join(", ")}: ${a.senzaSquadra.length===1?"nessun evento registrato, quindi non si sa in quale squadra giocasse":"nessun evento registrato, quindi non si sa in quale squadra giocassero"}. ${a.senzaSquadra.length===1?"È escluso":"Sono esclusi"} dalla formazione.`);
+  if(allen && singola) note.push(`Con un solo allenamento il confronto coincide con la squadra in cui ciascuno ha giocato: chi era nella stessa squadra per tutta la partitella ha gli stessi numeri. Diventa una lettura sui singoli quando le squadre cambiano da un allenamento all'altro.`);
+
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseInCampo(a, true)}</span></div>
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">${!allen ? "Gol subiti analizzati" : "Gol analizzati"}</div>
+        <div class="kpi-valore">${nf0(a.golTotali)}</div>
+        <div class="kpi-nota">${singola ? (!allen ? "in questa partita" : "in questo allenamento") : `in ${nf0(a.analizzate)} ${!allen ? (a.analizzate===1?"partita":"partite") : (a.analizzate===1?"allenamento":"allenamenti")}`}</div></div>
+      <div class="kpi"><div class="kpi-eti">${!allen ? "Gol subiti ogni 50'" : "Gol subiti ogni 50', per squadra"}</div>
+        <div class="kpi-valore">${nf(a.ritmoSquadra,1)}</div>
+        <div class="kpi-nota">il termine di paragone di tutta la sezione</div></div>
+      <div class="kpi"><div class="kpi-eti">Giocatori confrontati</div>
+        <div class="kpi-valore">${nf0(validi.length)}</div>
+        <div class="kpi-nota">con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' in campo e ${nf0(IN_CAMPO_MINUTI_MIN)}' senza</div></div>
+      <div class="kpi"><div class="kpi-eti">Segnali</div>
+        <div class="kpi-valore">${nf0(nChiari)} <span class="kpi-unita">chiari</span></div>
+        <div class="kpi-nota">${nf0(nOcchio)} da tenere d'occhio, fra giocatori e coppie</div></div>
+    </div>
+    ${validi.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Gol subiti con lui in campo, rispetto a ${senza}</div>
+      <div class="grafico-sub">Differenza fra i gol subiti ogni 50' con il giocatore in campo e ${allen ? "senza di lui" : "con lui fuori"}. Verso destra la squadra ne prende di più quando c'è lui, verso sinistra di meno. Le barre chiare sono differenze nei limiti del caso.</div>
+      <div class="grafico-wrap alto" style="height:${Math.max(260, validi.length * 26 + 60)}px"><canvas id="${idGrafico}"></canvas></div>
+    </div>` : ""}
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Giocatore per giocatore</div>
+      <div class="grafico-sub">Prima il conteggio vero, poi il ritmo ogni 50'. Le righe attenuate hanno troppo pochi minuti in campo o senza di lui per un confronto${!allen ? " (il portiere, se gioca sempre, non ha un «senza di lui»)" : ""}.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Gol subiti con ciascun giocatore in campo e senza</caption>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col" class="cella-testo">Ruolo</th><th scope="col">Minuti in campo</th><th scope="col">Gol subiti con lui</th><th scope="col">Ogni 50' con lui</th><th scope="col">Ogni 50' senza di lui</th><th scope="col">Differenza</th><th scope="col">Segnale</th></tr></thead>
+        <tbody>${a.giocatori.map(g => `<tr${g.valido ? "" : ' class="riga-attenuata"'}>
+          <td class="cella-testo">${esc(g.nome)}</td><td class="cella-testo">${esc(g.ruolo || "—")}</td>
+          <td>${nf0(g.minuti)}'</td><td>${nf0(g.gol)}</td><td>${nf(g.ritmoCon,1)}</td>
+          <td>${g.valido ? nf(g.ritmoSenza,1) : "—"}</td><td>${g.valido ? fmtDiff(g.differenza) : "—"}</td><td>${pillSegnale(g)}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </div>
+    <div>
+      ${tabCoppie(coppiePeggio, "Coppie con più gol subiti insieme", `Due giocatori di movimento in campo nello stesso momento${allen ? ", nella stessa squadra" : ""}, con almeno ${nf0(IN_CAMPO_MINUTI_COPPIA)}' insieme. È qui che si vede se una certa coppia — per esempio due difensori — regge meno.`)}
+      ${tabCoppie(coppieMeglio, "Coppie con meno gol subiti insieme", `Stesso criterio, nel verso opposto: le coppie con cui la squadra ne prende meno.`)}
+    </div>
+    ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Chi è in campo si ricava dai cambi della timeline («Cambio entra», «Cambio esce», cartellino rosso)${allen ? " e, in allenamento, dalla squadra scritta sulle righe di ciascun giocatore e dai «Cambio squadra»" : ""}. Ogni gol subito va a chi era in campo per la squadra che lo ha preso, un istante prima del gol. ${allen ? "In allenamento giocano tutti per tutta la partitella, quindi «senza di lui» vuol dire soprattutto la squadra avversaria: il confronto è fra la squadra in cui giocava e quella in cui non c'era." : "«Senza di lui» comprende anche le partite che non ha giocato."}</p>
+    <p class="nota-piccola">Come leggere il segnale: con pochi gol una differenza grande può venire anche per caso, e qui si confrontano tanti giocatori e tante coppie insieme. <strong>Segnale chiaro</strong>: anche tenendo conto di quanti confronti si fanno, difficilmente è il caso. <strong>Da tenere d'occhio</strong>: la differenza è marcata, ma potrebbe ancora essere il caso; se si ripete nelle prossime ${allen ? "sessioni" : "partite"} diventa un indizio. <strong>Nei limiti del caso</strong>: per ora non dice niente. In ogni caso è una correlazione: dice chi era in campo quando la squadra ha preso gol, non di chi è la colpa, che dipende anche da compagni e avversari.${a.ospiti && a.ospiti.length ? " Gli ospiti contano per la formazione ma non vengono classificati: lo stesso nome segnaposto non è la stessa persona da un allenamento all'altro." : ""}</p>`;
+
+  if(validi.length){
+    const conVerso = validi.slice().sort((x, y) => y.differenza - x.differenza);
+    const c2 = colore("c2"), c1 = colore("c1");
+    creaGrafico(idGrafico, {
+      type:"bar",
+      data:{labels:conVerso.map(g => g.nome), datasets:[{label:"Differenza ogni 50'", data:conVerso.map(g => +g.differenza.toFixed(2)),
+        backgroundColor:conVerso.map(g => hexRgba(g.differenza > 0 ? c2 : c1, g.segnale === "caso" ? 0.38 : 1)),
+        borderColor:conVerso.map(g => g.differenza > 0 ? c2 : c1), borderWidth:1, borderRadius:4, maxBarThickness:22}]},
+      options:baseOpzioni({indexAxis:"y", plugins:{legend:{display:false},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{label: it => { const g = conVerso[it.dataIndex];
+            return [`${nf0(g.gol)} gol subiti in ${nf0(g.minuti)}' con lui in campo`, `${nf(g.ritmoCon,1)} ogni 50' con lui, ${nf(g.ritmoSenza,1)} senza`, TESTO_SEGNALE[g.segnale]]; }}}},
+        scales:{
+          x:{ticks:{color:colore("muted"), font:{size:11}, callback:v => fmtDiff(v)}, grid:{color: ctx => ctx.tick && ctx.tick.value === 0 ? colore("muted") : colore("grid")}, border:{color:colore("grid")},
+            title:{display:true, text:"gol subiti ogni 50' in più (+) o in meno (−) con lui in campo", color:colore("muted"), font:{size:11}}},
+          y:{ticks:{color:colore("muted"), font:{size:11}, autoSkip:false}, grid:{display:false}, border:{color:colore("grid")}}
+        }})
+    });
+  }
+}
+
 /* --------- 9. Qualità dati --------- */
 function renderQualita(){
   const cont = $("#contenuto-qualita");
@@ -5394,11 +5774,13 @@ function render(){
   renderSubentrati(f);
   renderRiconquista(f);
   renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita");
+  renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita");
   renderAllenamenti();
   renderIncroci();
   renderZoneAllenamento(f);
   renderPersaGiocatoreAllenamento(f);
   renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento");
+  renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", f.allenamenti, "allenamento");
   renderConfrontoAllenamento(f);
   renderQualita();
   aggiornaSelettoriReport();
@@ -6518,6 +6900,45 @@ function persaGolReport(pagina, sessioni, tipo){
   }
 }
 
+/** Sezione «Gol subiti e chi è in campo» per i report (partita, stagionale, allenamenti), 16/10/2026. Stesso
+ *  motore e stessa frase della dashboard. Se non c'è niente da dire (nessun gol, nessuna formazione
+ *  ricostruibile) la sezione non compare: meglio assente che vuota su un foglio stampato. */
+function inCampoReport(pagina, sessioni, tipo){
+  const a = analizzaInCampo(sessioni, tipo);
+  if(!a.analizzate || !a.golTotali) return;
+  const allen = tipo === "allenamento";
+  const validi = a.giocatori.filter(g => g.valido);
+  titoloSezioneReport(pagina, "Gol subiti e chi è in campo");
+  const righe = [fraseInCampo(a, true),
+    `${allen ? "Gol subiti dalla squadra in cui giocava ciascuno" : "Gol subiti con ciascun giocatore in campo"}, ogni 50', confrontati con ${allen ? "quelli presi senza di lui (in allenamento soprattutto dall'altra squadra)" : "quelli presi con lui fuori"}. Termine di paragone: ${nf(a.ritmoSquadra,1)} gol subiti ogni 50'${allen ? " per squadra" : ""}, su ${nf0(a.golTotali)} gol in ${nf0(a.analizzate)} ${allen ? (a.analizzate===1?"allenamento":"allenamenti") : (a.analizzate===1?"partita":"partite")}.`,
+    `«Da tenere d'occhio» e «Segnale chiaro» tengono conto del caso e di quanti giocatori si confrontano insieme. È una correlazione: dice chi era in campo quando si è preso gol, non di chi è la colpa.`];
+  if(a.escluse.length) righe.push(`${nf0(a.escluse.length)} ${a.escluse.length===1?"sessione esclusa":"sessioni escluse"}: ${a.escluse.map(e => `${esc(e.etichetta)} (${esc(e.motivo)})`).join("; ")}.`);
+  bulletsReport(pagina, righe);
+  if(validi.length){
+    const ord = validi.slice().sort((x, y) => y.differenza - x.differenza);
+    graficoReport(pagina, "rp-chart-incampo-"+tipo, {type:"bar", data:{labels:ord.map(g => g.nome), datasets:[
+      {label:"Differenza ogni 50'", data:ord.map(g => +g.differenza.toFixed(2)),
+       backgroundColor:ord.map(g => hexRgba(g.differenza > 0 ? PALETTE_REPORT.c2 : PALETTE_REPORT.c1, g.segnale === "caso" ? 0.4 : 1)),
+       borderColor:ord.map(g => g.differenza > 0 ? PALETTE_REPORT.c2 : PALETTE_REPORT.c1), borderWidth:1, borderRadius:3}]},
+      options: opzioniGraficoReport({indexAxis:"y", plugins:{legend:{display:false}}, scales:{
+        x:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v => fmtDiff(v)}, grid:{color: ctx => ctx.tick && ctx.tick.value === 0 ? PALETTE_REPORT.muted : PALETTE_REPORT.grid},
+           title:{display:true, text:"gol subiti ogni 50' in più (+) o in meno (−) con lui in campo · barre chiare: nei limiti del caso", color:PALETTE_REPORT.muted, font:{size:9.5}}},
+        y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}, autoSkip:false}, grid:{display:false}}}})},
+      Math.max(170, ord.length * 17 + 50));
+  }
+  tabellaReport(pagina, ["Giocatore","Ruolo","Min in campo","Gol subiti con lui","Ogni 50' con lui","Ogni 50' senza","Differenza","Segnale"],
+    a.giocatori.map(g => [esc(g.nome), esc(g.ruolo || "—"), nf0(g.minuti), nf0(g.gol), nf(g.ritmoCon,1),
+      g.valido ? nf(g.ritmoSenza,1) : "—", g.valido ? fmtDiff(g.differenza) : "—", g.segnale ? TESTO_SEGNALE[g.segnale] : "—"]),
+    a.giocatori.map(g => !g.valido));
+  const peggio = a.coppie.filter(c => c.differenza > 0).slice(0, 3);
+  const meglio = a.coppie.filter(c => c.differenza < 0).sort((x, y) => x.differenza - y.differenza).slice(0, 3);
+  if(peggio.length || meglio.length){
+    const lista = peggio.map(c => ["più gol", c]).concat(meglio.map(c => ["meno gol", c]));
+    tabellaReport(pagina, ["Coppia in campo insieme","Verso","Min insieme","Gol subiti insieme","Ogni 50' insieme","Ogni 50' senza","Segnale"],
+      lista.map(([v, c]) => [`${esc(c.x)} e ${esc(c.y)}`, v, nf0(c.minuti), nf0(c.gol), nf(c.ritmoCon,1), nf(c.ritmoSenza,1), TESTO_SEGNALE[c.segnale]]));
+  }
+}
+
 const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
                                    // html2canvas) sia per calcolare, negli stessi px CSS, dove si può
                                    // tagliare una pagina troppo lunga senza spezzare un blocco a metà.
@@ -6933,6 +7354,7 @@ async function generaReportPartita(matchId){
       }
       riconquistaReport(pag, [partita]);
       persaGolReport(pag, [partita], "partita");
+      inCampoReport(pag, [partita], "partita");
       zoneCampoReport(pag, [partita], true);
       golGameCampoReport(pag, [partita]);
       portaGolReport(pag, [partita]);
@@ -6949,6 +7371,9 @@ async function generaReportPartita(matchId){
       // palle perse che sono costate un gol, con i nomi (richiesta dell'utente del 10/10/2026)
       const frasePG = frasePersaGol(analizzaPersaGol([partita], "partita"), "partita", true);
       if(frasePG) bullet.push(frasePG);
+      // chi era in campo quando si è preso gol, con i nomi (richiesta dell'utente del 16/10/2026)
+      const fraseIC = fraseInCampo(analizzaInCampo([partita], "partita"), true);
+      if(fraseIC) bullet.push(fraseIC);
       bulletsReport(pag, bullet);
       titoloSezioneReport(pag, "Contributo dei giocatori");
       tabellaReport(pag, ["Giocatore","Ruolo","Min","Gol","Ast","Prec. pass.","Indice"],
@@ -7088,6 +7513,8 @@ async function generaReportAllenamentoPeriodo(da, a){
       if(!haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha il carico di stanchezza stimato più alto del periodo (proxy da presenza e minuti nelle partitelle, non un vero RPE).`);
       const frasePGAll = frasePersaGol(analizzaPersaGol(periodoCorr.allenamenti, "allenamento"), "allenamento", true);
       if(frasePGAll) bullet.push(frasePGAll);
+      const fraseICAll = fraseInCampo(analizzaInCampo(periodoCorr.allenamenti, "allenamento"), true);
+      if(fraseICAll) bullet.push(fraseICAll);
       bulletsReport(pag, bullet);
       titoloSezioneReport(pag, "Tendenze rispetto al periodo precedente");
       if(!righeAllenPrec.length){
@@ -7118,6 +7545,7 @@ async function generaReportAllenamentoPeriodo(da, a){
       // renderZoneCampo per il perché: le squadre A/B cambiano a ogni allenamento)
       zoneCampoReport(pag, periodoCorr.allenamenti, false, periodoCorr.allenamenti.length === 1);
       persaGolReport(pag, periodoCorr.allenamenti, "allenamento");
+      inCampoReport(pag, periodoCorr.allenamenti, "allenamento");
     }, {piena:true}),
     Object.assign(async (pag) => {
       bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
@@ -7259,6 +7687,7 @@ async function generaReportStagionale(){
       }
       riconquistaReport(pag, ds.partite);
       persaGolReport(pag, ds.partite, "partita");
+      inCampoReport(pag, ds.partite, "partita");
       zoneCampoReport(pag, ds.partite, true);
       golGameCampoReport(pag, ds.partite);
       portaGolReport(pag, ds.partite);
@@ -7275,6 +7704,8 @@ async function generaReportStagionale(){
       bulletStag.push(`Bilancio: ${nf0(vinteStag)} vittorie, ${nf0(pareggiateStag)} pareggi, ${nf0(perseStag)} sconfitte · ${nf0(sq.gol_fatti)} gol fatti e ${nf0(sq.gol_subiti)} subiti.`);
       const frasePGStag = frasePersaGol(analizzaPersaGol(ds.partite, "partita"), "partita", true);
       if(frasePGStag) bulletStag.push(frasePGStag);
+      const fraseICStag = fraseInCampo(analizzaInCampo(ds.partite, "partita"), true);
+      if(fraseICStag) bulletStag.push(fraseICStag);
       bulletsReport(pag, bulletStag);
       titoloSezioneReport(pag, "Contributo dei giocatori in stagione");
       tabellaReport(pag, ["Giocatore","Ruolo","Partite","Min","Gol","Ast","Prec. pass.","Indice tot."],
@@ -7688,6 +8119,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const selPGLA = $("#pgl-sel-allenamento");
   if(selPGLA) selPGLA.addEventListener("change", e => { stato.persaGolAllenamento = e.target.value;
     renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", datiFiltrati().allenamenti, "allenamento"); adattaLarghezzeColonneSchermo(); });
+  const selICP = $("#icp-sel-partita");
+  if(selICP) selICP.addEventListener("change", e => { stato.inCampoPartita = e.target.value;
+    renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", datiFiltrati().partite, "partita"); adattaLarghezzeColonneSchermo(); });
+  const selICA = $("#icp-sel-allenamento");
+  if(selICA) selICA.addEventListener("change", e => { stato.inCampoAllenamento = e.target.value;
+    renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", datiFiltrati().allenamenti, "allenamento"); adattaLarghezzeColonneSchermo(); });
   const cfaA = $("#cfa-sel-a"), cfaB = $("#cfa-sel-b"), cfaBtn = $("#cfa-btn-report");
   if(cfaA) cfaA.addEventListener("change", e => { stato.confrontoAllA = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
   if(cfaB) cfaB.addEventListener("change", e => { stato.confrontoAllB = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
