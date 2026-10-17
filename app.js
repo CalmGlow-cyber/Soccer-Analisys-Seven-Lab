@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.41.0",
+  numero: "1.42.0",
   data: "2026-10-16",
-  note: "Coppie di difensori corrette (16/10/2026): le coppie sono solo fra giocatori che nello stesso momento giocano entrambi in difesa, secondo il ruolo svolto in quel momento (sezione «RUOLI EVENTI» degli export recenti), non il ruolo del tabellino. Un difensore entrato a centrocampo non fa più coppia di difesa, e spariscono le coppie miste (un difensore e un centrocampista). Anche le formazioni mostrano ciascuno nel ruolo svolto. I file caricati prima vanno ricaricati per avere il ruolo svolto. Comprende la 1.40.0 (gli stessi file su PC, iPad e telefono) e la 1.39.0 (formazioni e formazione migliore)."
+  note: "Formazione migliore disegnata nel modulo (16/10/2026): campo vero, nostra porta in basso, ognuno nella casella del modulo impostato in Seven Lab (2-3-1, 3-2-1, 1-2-3…) e il modulo scritto sul campo. Coppie di difensori sul ruolo di partenza (quello del tabellino), non sulla posizione data con un cambio, e mai coppie miste. Messaggio chiaro al posto di «Failed to fetch» quando il cloud non si raggiunge. Comprende la 1.40.0 (gli stessi file su PC, iPad e telefono) e la 1.39.0 (formazioni)."
 };
 
 /* =====================================================================
@@ -788,6 +788,18 @@ function daRispostaAuth(j){
   return {access_token: j.access_token, refresh_token: j.refresh_token, scade: Date.now() + (N(j.expires_in) || 3600)*1000,
     email: (j.user && j.user.email) || ""};
 }
+/** «Failed to fetch» (o «Load failed» su Safari) vuol dire che la richiesta non è nemmeno partita o arrivata:
+ *  succede quando la pagina è una copia aperta fuori dal sito (il file scaricato, un'anteprima) o la rete
+ *  blocca il cloud. Il messaggio lo dice in chiaro invece di riportare il testo tecnico del browser (16/10/2026). */
+const SITO_PUBBLICATO = "calmglow-cyber.github.io/Soccer-Analisys-Seven-Lab";
+function messaggioErroreCloud(err){
+  const testo = String(err && err.message || err || "");
+  if(!/failed to fetch|load failed|networkerror|network request failed/i.test(testo)) return testo;
+  const sulSito = /github\.io$/i.test(location.hostname || "");
+  if(location.protocol === "file:" || !sulSito)
+    return `Da qui il cloud non si raggiunge: questa pagina è una copia aperta fuori dal sito (${location.protocol === "file:" ? "il file scaricato" : "un'anteprima"}). Apri il sito pubblicato, ${SITO_PUBBLICATO}, ed entra da lì.`;
+  return "Non riesco a raggiungere il cloud di SevenLab: controlla la connessione (o un'estensione che blocca i siti esterni) e riprova.";
+}
 async function chiamataAuth(percorso, corpo){
   const r = await fetch(CLOUD.url + "/auth/v1/" + percorso, {method:"POST", headers:{"apikey": CLOUD.chiave, "Content-Type":"application/json"}, body: JSON.stringify(corpo)});
   const j = await r.json().catch(() => ({}));
@@ -900,7 +912,7 @@ async function sincronizza(){
     statoCloud.ultima = new Date();
     statoCloud.riepilogo = {mandate: daMandare.length + daEliminareLa.length, ricevute: daScaricare.length + daEliminareQui.length};
   }catch(e){
-    statoCloud.errore = e && e.message ? e.message : "Sincronizzazione non riuscita.";
+    statoCloud.errore = e && e.message ? messaggioErroreCloud(e) : "Sincronizzazione non riuscita.";
   }finally{
     statoCloud.inCorso = false;
   }
@@ -952,7 +964,7 @@ function initCloud(){
       aggiornaUiCloud();
       await sincronizza();
     }catch(err){
-      msg.textContent = /invalid login|invalid_grant|credentials/i.test(err.message) ? "Email o password non corrette (sono le stesse di SevenLab)." : err.message;
+      msg.textContent = /invalid login|invalid_grant|credentials/i.test(err.message) ? "Email o password non corrette (sono le stesse di SevenLab)." : messaggioErroreCloud(err);
     }
   });
   $("#btn-cloud-ora")?.addEventListener("click", () => sincronizza());
@@ -3233,7 +3245,7 @@ function formazioniSessione(sessione, tipo){
     const r = String(e.raw["Ruolo svolto"] || "").trim(), n = nomeDi(e);
     if(!r || !n || rigaGolSubito(e.raw)) return;
     if(!ruoliSvolti.has(n)) ruoliSvolti.set(n, []);
-    ruoliSvolti.get(n).push({t: e.secondoAssoluto, r});
+    ruoliSvolti.get(n).push({t: e.secondoAssoluto, r, slot: String(e.raw.Slot || "").trim().toUpperCase()});
   });
   const ruoloAl = (n, t) => {
     const l = ruoliSvolti.get(n);
@@ -3242,6 +3254,13 @@ function formazioniSessione(sessione, tipo){
     return r;
   };
   const ruoliIn = (nomi, t) => Object.fromEntries(nomi.map(n => [n, ruoloAl(n, t)]));
+  // casella del modulo impostato in Seven Lab (P, D1, D2, C1…), stessa regola del ruolo svolto
+  const slotAl = (n, t) => {
+    const l = ruoliSvolti.get(n); if(!l || !l.length) return "";
+    let sl = l[0].slot; for(const x of l){ if(x.t <= t) sl = x.slot; else break; }
+    return sl || "";
+  };
+  const slotIn = (nomi, t) => Object.fromEntries(nomi.map(n => [n, slotAl(n, t)]));
   let nomi = tabellino.filter(r => N(r.Minuti_Giocati) > 0).map(r => r.Giocatore);
   const avvisi = [];
   if(!nomi.length){
@@ -3307,7 +3326,7 @@ function formazioniSessione(sessione, tipo){
     const a = punti[i], b = punti[i+1]; if(!(b > a)) continue;
     const f = formazioneAl((a+b)/2);
     if(tipo === "partita") maxInCampo = Math.max(maxInCampo, f.A.length);
-    tratti.push({a, b, f, r: ruoliIn(f.A.concat(f.B), (a+b)/2)});
+    tratti.push({a, b, f, r: ruoliIn(f.A.concat(f.B), (a+b)/2), sl: slotIn(f.A.concat(f.B), (a+b)/2)});
   }
   if(tipo === "partita" && maxInCampo > IN_CAMPO_MAX_IN_CAMPO)
     return {esclusa: `formazione non ricostruibile: risultano fino a ${maxInCampo} giocatori in campo insieme, probabilmente manca un cambio nella timeline`};
@@ -3335,18 +3354,19 @@ function analizzaInCampo(sessioni, tipo){
     const r = formazioniSessione(s, tipo);
     const golFile = golNelFile(s); golFileTot += golFile;
     if(r.esclusa){ escluse.push({etichetta: s.Etichetta || "", motivo: r.esclusa, golFile}); dettaglio.push({etichetta: s.Etichetta || "", data: s.Data, esclusa: r.esclusa, golFile, golTimeline: null}); return; }
-    dettaglio.push({etichetta: s.Etichetta || "", data: s.Data, esclusa: null, golFile, golTimeline: r.gol.length, avvisi: r.avvisi || [], ruoloSvolto: r.ruoloSvolto});
+    dettaglio.push({etichetta: s.Etichetta || "", data: s.Data, esclusa: null, golFile, golTimeline: r.gol.length, avvisi: r.avvisi || []});
     analizzate++;
     secTot += r.durataSec * r.lati.length; golTot += r.gol.length;
     r.senzaSquadra.forEach(n => senzaSquadra.add(n));
     r.ruoli.forEach((ru, n) => { if(!ruoli.has(n)) ruoli.set(n, ru); });
     const g = n => { if(!perG.has(n)) perG.set(n, {sec:0, gol:0}); return perG.get(n); };
-    // Coppie di DIFENSORI (16/10/2026, correzione chiesta dall'utente: «le coppie che mi interessava vedere per
-    // gol subiti sono tra pariruolo in difesa»). Una coppia = due giocatori della stessa squadra che nello stesso
-    // istante giocano entrambi da difensori, secondo il ruolo SVOLTO (Slot D1, D2… di «RUOLI EVENTI»), non quello
-    // del tabellino: se un difensore entra a centrocampo, quei minuti non sono della coppia di difesa. Le coppie
-    // fra ruoli diversi (un difensore e un centrocampista) non si contano più.
-    const difensoreQui = ru => /difens/i.test(ru || "");
+    // Coppie di DIFENSORI (16/10/2026, due correzioni chieste dall'utente: «le coppie che mi interessava vedere per
+    // gol subiti sono tra pariruolo in difesa» e poi «sulla base dello stesso ruolo di partenza, non quello che
+    // assegno quando faccio un cambio»). Una coppia = due giocatori della stessa squadra, entrambi DIFENSORI DI
+    // RUOLO (il ruolo del tabellino, cioè il ruolo naturale), in campo nello stesso momento. Conta anche se uno dei
+    // due in quel momento occupa un'altra casella del modulo; un centrocampista messo in difesa non fa coppia.
+    // Le coppie fra ruoli diversi (un difensore e un centrocampista) non si contano.
+    const difensoreDiRuolo = n => /difens/i.test(r.ruoli.get(n) || "");
     // una coppia con un ospite resta legata al suo allenamento: lo stesso segnaposto non è la stessa persona
     const id = s.Match_ID || s.Sessione_ID;
     const chiaveCoppia = (x, y) => (x.localeCompare(y, "it") < 0 ? x+"\u0001"+y : y+"\u0001"+x) + (nomeOspite(x) || nomeOspite(y) ? "\u0002"+id : "");
@@ -3357,14 +3377,14 @@ function analizzaInCampo(sessioni, tipo){
       r.lati.forEach(l => {
         const f = tr.f[l];
         f.forEach(n => { g(n).sec += d; visti.add(n); });
-        const dif = f.filter(n => difensoreQui(tr.r[n]));
+        const dif = f.filter(difensoreDiRuolo);
         for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++){ const x = c(chiaveCoppia(dif[i], dif[j])); x.sec += d; x.sessioni.add(id); }
       });
     });
     visti.forEach(n => sessioniG.set(n, (sessioniG.get(n)||0) + 1));
     r.gol.forEach(gl => {
       gl.inCampo.forEach(n => g(n).gol++);
-      const dif = gl.inCampo.filter(n => difensoreQui(gl.ruoli[n]));
+      const dif = gl.inCampo.filter(difensoreDiRuolo);
       for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++) c(chiaveCoppia(dif[i], dif[j])).gol++;
     });
   });
@@ -3400,10 +3420,8 @@ function analizzaInCampo(sessioni, tipo){
     return Object.assign(confronto(x+" e "+y, v, IN_CAMPO_MINUTI_MIN), {x, y, sessioni: 1, data: v.data, ospite: true, valido: false, p: null, q: null, segnale: null});
   }).filter(c => c.minuti >= 1).sort((p, q) => q.minuti - p.minuti);
   const coppieDifensori = coppieNormali.concat(coppieConOspite);
-  // sessioni senza ruolo svolto negli eventi: lì «difensore» è il ruolo del tabellino
-  const senzaRuoloSvolto = dettaglio.filter(d => !d.esclusa && !d.ruoloSvolto).map(d => d.data || d.etichetta);
   return {tipo, analizzate, escluse, golTotali: golTot, minutiSquadra: secTot/60, ritmoSquadra: ritmo(golTot, secTot),
-    giocatori, coppieDifensori, senzaRuoloSvolto, senzaSquadra: [...senzaSquadra], ospiti, dettaglio, golFile: golFileTot};
+    giocatori, coppieDifensori, senzaSquadra: [...senzaSquadra], ospiti, dettaglio, golFile: golFileTot};
 }
 
 /** La frase "insight" con i nomi, uguale in dashboard e nei report. `html`: grassetto sui nomi. */
@@ -3423,7 +3441,7 @@ function fraseInCampo(a, html){
       : `con ${elenco(nomi)} in campo la squadra ha subito`;
     return `${soggetto} ${nf0(g.gol)} gol in ${nf0(g.minuti)}', cioè ${r50(g.ritmoCon)} a partita, contro ${r50(g.ritmoSenza)} a partita senza ${piu ? "di loro" : "di lui"}`;
   };
-  const descrCoppia = c => `con ${b(c.x)} e ${b(c.y)} insieme in difesa ${allen ? "la loro squadra ha" : "la squadra ha"} subito ${nf0(c.gol)} gol in ${nf0(c.minuti)}', cioè ${r50(c.ritmoCon)} a partita, contro ${r50(c.ritmoSenza)} senza quella coppia`;
+  const descrCoppia = c => `con i difensori ${b(c.x)} e ${b(c.y)} in campo insieme ${allen ? "la loro squadra ha" : "la squadra ha"} subito ${nf0(c.gol)} gol in ${nf0(c.minuti)}', cioè ${r50(c.ritmoCon)} a partita, contro ${r50(c.ritmoSenza)} senza quella coppia`;
   const peggiori = a.giocatori.filter(g => g.valido && g.differenza > 0);
   const forti = peggiori.filter(g => g.segnale === "chiaro"), occhio = peggiori.filter(g => g.segnale === "occhio");
   const coppieForti = (a.coppieDifensori||[]).filter(c => c.valido && c.differenza > 0 && (c.segnale === "chiaro" || c.segnale === "occhio"))
@@ -3477,7 +3495,7 @@ function analizzaFormazioni(sessioni, tipo){
   const perF = new Map(), escluse = [], ruoli = new Map();
   let secTot = 0, gfTot = 0, gaTot = 0, analizzate = 0;
   const chiave = lista => lista.slice().sort((a, b) => a.localeCompare(b, "it")).join("\u0001");
-  const f = k => { if(!perF.has(k)) perF.set(k, {chiave:k, giocatori:k.split("\u0001"), sec:0, gf:0, ga:0, sessioni:new Set(), ruoliSec:new Map()}); return perF.get(k); };
+  const f = k => { if(!perF.has(k)) perF.set(k, {chiave:k, giocatori:k.split("\u0001"), sec:0, gf:0, ga:0, sessioni:new Set(), ruoliSec:new Map(), slotSec:new Map()}); return perF.get(k); };
   (sessioni||[]).forEach(s => {
     const r = formazioniSessione(s, tipo);
     if(r.esclusa){ escluse.push({etichetta: s.Etichetta || "", data: s.Data, motivo: r.esclusa}); return; }
@@ -3489,6 +3507,8 @@ function analizzaFormazioni(sessioni, tipo){
       const x = f(chiave(tr.f[l])), d = tr.b - tr.a; x.sec += d; x.sessioni.add(id);
       // secondi per ruolo SVOLTO di ciascun giocatore dentro questa formazione (16/10/2026)
       tr.f[l].forEach(n => { const ru = (tr.r && tr.r[n]) || ""; if(!ru) return; if(!x.ruoliSec.has(n)) x.ruoliSec.set(n, new Map()); const m = x.ruoliSec.get(n); m.set(ru, (m.get(ru)||0) + d); });
+      // e per casella del modulo (16/10/2026, per disegnare la formazione nel modulo impostato in Seven Lab)
+      tr.f[l].forEach(n => { const sl = (tr.sl && tr.sl[n]) || ""; if(!/^[PDCA]\d*$/.test(sl)) return; if(!x.slotSec.has(n)) x.slotSec.set(n, new Map()); const m = x.slotSec.get(n); m.set(sl, (m.get(sl)||0) + d); });
     }));
     secTot += r.durataSec * r.lati.length;
     r.golTutti.forEach(g => {
@@ -3503,8 +3523,14 @@ function analizzaFormazioni(sessioni, tipo){
     const gfAdj = (x.gf + rGF*T0)/(min + T0)*P, gaAdj = (x.ga + rGA*T0)/(min + T0)*P;
     // il ruolo con cui ciascuno ha giocato più a lungo in questa formazione; se non c'è, quello del tabellino
     const ruoloIn = n => { const m = x.ruoliSec.get(n); if(!m || !m.size) return ruoli.get(n) || ""; return [...m.entries()].sort((p, q) => q[1] - p[1])[0][0]; };
-    const giocatori = x.giocatori.slice().sort((a, b) => (ORDINE_RUOLI(ruoloIn(a)) - ORDINE_RUOLI(ruoloIn(b))) || cognome(a).localeCompare(cognome(b), "it"));
-    return {chiave: x.chiave, giocatori, ruoli: giocatori.map(ruoloIn), minuti: min, gf: x.gf, ga: x.ga, saldo: x.gf - x.ga,
+    // la casella del modulo tenuta più a lungo in questa formazione: decide linea (P/D/C/A) e ordine nella linea
+    const slotIn = n => { const m = x.slotSec.get(n); if(!m || !m.size) return ""; return [...m.entries()].sort((p, q) => q[1] - p[1])[0][0]; };
+    const ruoloMostrato = n => { const k = slotIn(n).charAt(0); return RUOLO_DA_SLOT[k] || ruoloIn(n); };
+    const numeroSlot = n => { const m = /(\d+)$/.exec(slotIn(n)); return m ? +m[1] : 0; };
+    const giocatori = x.giocatori.slice().sort((a, b) => (ORDINE_RUOLI(ruoloMostrato(a)) - ORDINE_RUOLI(ruoloMostrato(b))) || (numeroSlot(a) - numeroSlot(b)) || cognome(a).localeCompare(cognome(b), "it"));
+    const ruoliF = giocatori.map(ruoloMostrato);
+    return {chiave: x.chiave, giocatori, ruoli: ruoliF, slots: giocatori.map(slotIn), modulo: moduloDaRuoli(ruoliF),
+      moduloDaSlot: giocatori.every(n => slotIn(n)), minuti: min, gf: x.gf, ga: x.ga, saldo: x.gf - x.ga,
       ritmoGF: x.gf/min*P, ritmoGA: x.ga/min*P, gfAdj, gaAdj, saldoAdj: gfAdj - gaAdj, sessioni: x.sessioni.size,
       ospiti: x.giocatori.filter(nomeOspite).length, idoneo: min >= FORMAZIONE_MINUTI_MIN};
   });
@@ -3517,6 +3543,12 @@ function ordinaFormazioni(lista, criterio){
   return (lista||[]).slice().sort((a, b) => (b.idoneo - a.idoneo) || (chiave(b) - chiave(a)) || spareggio(a, b) || (b.minuti - a.minuti));
 }
 /** Elenco compatto dei giocatori di una formazione: cognomi in ordine di ruolo (portiere, difesa, centrocampo, attacco). */
+/** Il modulo di una formazione nella notazione del calcio a 7, senza il portiere: «2-3-1», «3-2-1»… */
+const RUOLO_DA_SLOT = {P:"Portiere", D:"Difensore", C:"Centrocampista", A:"Attaccante"};
+function moduloDaRuoli(ruoli){
+  const conta = [1, 2, 3].map(k => (ruoli||[]).filter(r => ORDINE_RUOLI(r || "") === k).length).filter(v => v > 0);
+  return conta.length >= 2 ? conta.join("-") : "";
+}
 const nomiFormazione = (x, html) => x.giocatori.map(n => html ? esc(cognome(n)) : cognome(n)).join(", ");
 const saldoTxt = v => v > 0 ? "+"+nf0(v) : (v < 0 ? "−"+nf0(Math.abs(v)) : "0");
 
@@ -6100,6 +6132,9 @@ function pillSegnale(x){
   const cls = x.segnale === "caso" ? "neu" : (x.segnale === "occhio" ? "att" : ((x.differenza ?? 0) > 0 ? "neg" : "pos"));
   return `<span class="pill ${cls}">${esc(TESTO_SEGNALE[x.segnale])}</span>`;
 }
+/** Minuti di una coppia: con un decimale quando l'arrotondamento la porterebbe alla soglia senza esserci
+ *  (9,8' scritto «10'» in una riga attenuata «sotto i 10'» confonde). */
+const minutiCoppiaTxt = m => (m < IN_CAMPO_MINUTI_MIN && Math.round(m) >= IN_CAMPO_MINUTI_MIN) ? nf(m, 1) : nf0(m);
 const fmtDiff = v => v === null || v === undefined ? "—" : (v > 0 ? "+" : (v < 0 ? "−" : "")) + nf(Math.abs(v), 1);
 
 /** Una formazione come riga: i cognomi in ordine di ruolo, con un pallino colorato per ruolo, e accanto il
@@ -6166,12 +6201,11 @@ function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo,
   const idGrDif = "gr-incampo-dif-" + tipo;
   const elencoDate = l => l.slice(0, 4).map(d => esc(dataLabel(d) || d)).join(", ") + (l.length > 4 ? ` e altr${allen ? "i" : "e"} ${nf0(l.length - 4)}` : "");
   const noteDif = [];
-  if((a.senzaRuoloSvolto||[]).length) noteDif.push(`${a.senzaRuoloSvolto.length === a.analizzate ? (a.analizzate === 1 ? (allen ? "In questo allenamento" : "In questa partita") : (allen ? "In tutti gli allenamenti scelti" : "In tutte le partite scelte")) : `In ${nf0(a.senzaRuoloSvolto.length)} ${unita(a.senzaRuoloSvolto.length)} (${elencoDate(a.senzaRuoloSvolto)})`} il file salvato non ha il ruolo svolto minuto per minuto, quindi lì «difensore» è il ruolo del tabellino. Gli export recenti di Seven Lab lo hanno (sezione «RUOLI EVENTI»): ${a.senzaRuoloSvolto.length === 1 ? "ricarica il file" : "ricarica quei file"} e le coppie si calcolano sul ruolo vero.`);
   const conOspite = coppieDif.some(c => c.ospite);
   const nomeCoppia = c => `${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` <span class="ruolo-mini">${esc(dataLabel(c.data) || "")}</span>` : ""}`;
   const bloccoDifensori = `<div class="card" style="margin-top:16px">
       <div class="grafico-titolo">Le coppie di difensori</div>
-      <div class="grafico-sub">Due giocatori che nello stesso momento giocavano entrambi in difesa${allen ? ", nella stessa squadra" : ""}. Conta il ruolo svolto in quel momento, non quello del tabellino: un difensore entrato a centrocampo non fa coppia di difesa. Nel grafico le coppie con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme. <strong>Barra rossa</strong>: gol subiti a partita con la coppia in campo; <strong>barra grigia</strong>: senza quella coppia. In cima la coppia con cui si prende di più.</div>
+      <div class="grafico-sub">Due difensori di ruolo in campo nello stesso momento${allen ? ", nella stessa squadra" : ""}. Conta il ruolo di partenza (quello del tabellino), non la posizione data con un cambio: due difensori fanno coppia anche se uno dei due è entrato a centrocampo, e un centrocampista messo in difesa non fa coppia. Nel grafico le coppie con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme. <strong>Barra rossa</strong>: gol subiti a partita con la coppia in campo; <strong>barra grigia</strong>: senza quella coppia. In cima la coppia con cui si prende di più.</div>
       ${difValide.length ? `<div class="grafico-wrap" style="height:${Math.max(200, difValide.length * 44 + 80)}px"><canvas id="${idGrDif}"></canvas></div>` : ""}
       ${difTutte.length ? `${difValide.length ? "" : `<div class="vuoto" style="margin-bottom:10px">${difTutte.every(c => c.ospite)
           ? `In difesa ha sempre giocato almeno un ospite: sotto i numeri delle coppie, senza confronto.`
@@ -6180,12 +6214,12 @@ function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo,
         <caption class="solo-sr">Gol subiti con ciascuna coppia di difensori in campo e senza</caption>
         <thead><tr><th scope="col">Coppia di difesa</th><th scope="col">Minuti insieme</th><th scope="col">Gol subiti insieme</th><th scope="col">A partita, insieme</th><th scope="col">A partita, senza la coppia</th><th scope="col">Differenza</th><th scope="col">Segnale</th></tr></thead>
         <tbody>${difTutte.map(c => `<tr${c.valido ? "" : ' class="riga-attenuata"'}><td class="cella-testo">${nomeCoppia(c)}</td>
-          <td>${nf0(c.minuti)}'</td><td>${nf0(c.gol)}</td><td>${nf(c.ritmoCon,1)}</td>
+          <td>${minutiCoppiaTxt(c.minuti)}'</td><td>${nf0(c.gol)}</td><td>${nf(c.ritmoCon,1)}</td>
           <td>${c.valido ? nf(c.ritmoSenza,1) : "—"}</td><td>${c.valido ? fmtDiff(c.differenza) : "—"}</td><td>${pillSegnale(c)}</td></tr>`).join("")}</tbody>
       </table></div>
       <p class="nota-piccola">${[difTutte.some(c => !c.valido && !c.ospite) ? `Le righe attenuate hanno meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme (o meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' senza): troppo pochi per un confronto.` : "",
         conOspite ? `Le coppie con un ospite hanno solo i loro numeri, ${a.analizzate > 1 ? "una per allenamento, " : ""}senza confronto: lo stesso segnaposto non è la stessa persona da un allenamento all'altro.` : ""].filter(Boolean).join(" ")}</p>`
-        : `<div class="vuoto">Nessuna coppia di difensori${allen ? " nella stessa squadra" : ""}: in nessun momento due giocatori giocavano entrambi in difesa.</div>`}
+        : `<div class="vuoto">Nessuna coppia di difensori${allen ? " nella stessa squadra" : ""}: in nessun momento c'erano in campo insieme due difensori di ruolo (ruolo del tabellino).</div>`}
       ${noteDif.length ? `<div class="avviso attenzione" style="margin-top:12px"><span class="ic" aria-hidden="true">!</span><span>${noteDif.join("<br><br>")}</span></div>` : ""}
     </div>`;
   // Formazioni con più gol subiti e con più gol fatti (16/10/2026)
@@ -6296,22 +6330,50 @@ function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo,
  *  alto). HTML e CSS, non canvas: si adatta da solo al telefono e html2canvas lo porta nei report così com'è.
  *  `pal`: colori espliciti (in dashboard quelli del tema, nei report quelli fissi della carta). */
 function campoFormazioneHtml(x, pal){
-  const righe = [[], [], [], []];
-  x.giocatori.forEach((n, i) => righe[ORDINE_RUOLI(x.ruoli[i] || "")].push({n, r: x.ruoli[i] || ""}));
-  const coloreRuolo = k => [pal.portiere, pal.difesa, pal.centro, pal.attacco][k];
+  // Campo verticale 2:3, la nostra porta in basso (come nelle grafiche delle formazioni). Ogni giocatore sta nella
+  // sua linea del modulo (dalla casella P/D/C/A di Seven Lab, o dal ruolo) a una profondità fissa, e nella linea
+  // da sinistra a destra secondo il numero della casella (D1, D2…). Tutto in percentuale e posizionato in assoluto:
+  // si adatta al telefono e html2canvas lo porta nei report così com'è.
+  const PROFONDITA = [88, 70, 47, 24]; // portiere, difesa, centrocampo, attacco (% dall'alto)
+  const larghezze = n => n === 1 ? [50] : n === 2 ? [30, 70] : n === 3 ? [18, 50, 82] : Array.from({length:n}, (_, i) => 12 + i * 76 / (n - 1));
+  const linee = [[], [], [], []];
+  x.giocatori.forEach((n, i) => linee[ORDINE_RUOLI(x.ruoli[i] || "")].push(n)); // già ordinati per casella
   const iniziali = n => nomeOspite(n) ? "OS" : String(n).trim().split(/\s+/).map(w => w[0] || "").join("").slice(0, 2).toUpperCase();
-  const gioc = (g, k) => `<div class="fz-gioc"><span class="fz-maglia" style="background:${coloreRuolo(k)}; color:${pal.maglia}">${esc(iniziali(g.n))}</span><span class="fz-nome" style="color:${pal.nome}; background:${pal.nomeSfondo}">${esc(cognome(g.n))}</span></div>`;
-  const ordine = [3, 2, 1, 0]; // dall'alto: attacco, centrocampo, difesa, portiere
-  return `<div class="fz-campo" style="background:${pal.prato}; border-color:${pal.linee}">
-    <div class="fz-campo-meta" style="border-color:${pal.linee}"></div><div class="fz-campo-cerchio" style="border-color:${pal.linee}"></div>
-    <div class="fz-campo-area fz-area-alta" style="border-color:${pal.linee}"></div><div class="fz-campo-area fz-area-bassa" style="border-color:${pal.linee}"></div>
-    <div class="fz-campo-righe">${ordine.filter(k => righe[k].length).map(k => `<div class="fz-linea">${righe[k].map(g => gioc(g, k)).join("")}</div>`).join("")}</div>
+  const gioc = (n, k, left, larg) => `<div class="fz-g" style="left:${left.toFixed(1)}%; top:${PROFONDITA[k]}%; width:${larg}%">
+      <span class="fz-maglia" style="background:${k === 0 ? pal.portiere : pal.maglia}; color:${k === 0 ? pal.portiereTesto : pal.magliaTesto}">${esc(iniziali(n))}</span>
+      <span class="fz-nome" style="color:${pal.nome}; background:${pal.nomeSfondo}">${esc(cognome(n))}</span></div>`;
+  const segno = st => `<div class="fz-segno" style="border-color:${pal.linee}; ${st}"></div>`;
+  const punto = (l, t) => `<div class="fz-punto" style="left:${l}%; top:${t}%; background:${pal.linee}"></div>`;
+  const strisce = Array.from({length:8}, (_, i) => `<div class="fz-striscia" style="top:${i*12.5}%; height:12.5%; background:${i % 2 ? pal.striscia : pal.prato}"></div>`).join("");
+  return `<div class="fz-campo" role="img" aria-label="Formazione${x.modulo ? " " + esc(x.modulo) : ""}: ${esc(x.giocatori.map(cognome).join(", "))}" style="background:${pal.prato}">
+    ${strisce}
+    ${segno("left:5%; right:5%; top:3%; bottom:3%")}
+    ${segno("left:5%; right:5%; top:50%; height:0; border-width:2px 0 0 0")}
+    ${segno("left:38%; width:24%; top:50%; aspect-ratio:1; border-radius:50%; transform:translateY(-50%)")}
+    ${segno("left:22%; right:22%; top:3%; height:15%; border-top:none")}
+    ${segno("left:36%; right:36%; top:3%; height:5.5%; border-top:none")}
+    ${segno("left:22%; right:22%; bottom:3%; height:15%; border-bottom:none")}
+    ${segno("left:36%; right:36%; bottom:3%; height:5.5%; border-bottom:none")}
+    ${segno("left:41%; right:41%; top:0.6%; height:2.6%; border-bottom:none")}
+    ${segno("left:41%; right:41%; bottom:0.6%; height:2.6%; border-top:none")}
+    ${punto(50, 50)}${punto(50, 13)}${punto(50, 87)}
+    ${x.modulo ? `<div class="fz-modulo" style="background:${pal.moduloSfondo}; color:${pal.moduloTesto}">${esc(x.modulo)}</div>` : ""}
+    ${linee.map((l, k) => { const pos = larghezze(l.length), larg = [0, 56, 38, 31][l.length] || 24; return l.map((n, i) => gioc(n, k, pos[i], larg)).join(""); }).join("")}
   </div>`;
 }
-const paletteCampoSchermo = () => ({prato: `color-mix(in srgb, ${colore("success")} 16%, ${colore("surface")})`, linee: `color-mix(in srgb, ${colore("success")} 45%, transparent)`,
-  portiere: colore("c6"), difesa: colore("c1"), centro: colore("c3"), attacco: colore("c2"), maglia: "#FFFFFF", nome: colore("text"),
-  nomeSfondo: `color-mix(in srgb, ${colore("surface")} 82%, transparent)`});
-const PALETTE_CAMPO_REPORT = {prato:"#E7F0E1", linee:"rgba(67,122,34,0.45)", portiere:"#C99400", difesa:"#20808D", centro:"#1B474D", attacco:"#A84B2F", maglia:"#FFFFFF", nome:"#28251D", nomeSfondo:"rgba(255,255,255,0.8)"};
+/** Il campo è sempre verde, con le linee bianche, come nelle grafiche delle formazioni: stessi colori in
+ *  dashboard (tema chiaro e scuro) e nei report. Maglie chiare per tutti, gialla per il portiere. */
+const PALETTE_CAMPO = {prato:"#2F6B3B", striscia:"#367444", linee:"rgba(255,255,255,0.62)", portiere:"#F2B33D", portiereTesto:"#2B2108",
+  maglia:"#F7F5EE", magliaTesto:"#1D3B2A", nome:"#FFFFFF", nomeSfondo:"rgba(8,28,16,0.62)", moduloSfondo:"rgba(8,28,16,0.62)", moduloTesto:"#FFFFFF"};
+const paletteCampoSchermo = () => PALETTE_CAMPO;
+const PALETTE_CAMPO_REPORT = PALETTE_CAMPO;
+/** Una riga sotto il campo: il modulo e da dove viene la disposizione. */
+function notaModuloHtml(m){
+  if(!m.modulo) return "";
+  return m.moduloDaSlot
+    ? `Modulo <b>${esc(m.modulo)}</b>: ognuno è nella casella del modulo impostato in Seven Lab in cui ha giocato più a lungo con questa formazione.`
+    : `Modulo <b>${esc(m.modulo)}</b>, ricavato dai ruoli: per qualcuno il file non ha le caselle del modulo di Seven Lab (sezione «RUOLI EVENTI» degli export recenti). Ricaricando il file la disposizione segue il modulo impostato.`;
+}
 
 /** La frase che presenta la formazione migliore: uguale in dashboard e nei report. */
 function fraseFormazioneMigliore(m, fz, criterio, tipo, html){
@@ -6320,7 +6382,7 @@ function fraseFormazioneMigliore(m, fz, criterio, tipo, html){
   const unita = n => allen ? (n === 1 ? "allenamento" : "allenamenti") : (n === 1 ? "partita" : "partite");
   const b = s => html ? `<b>${s}</b>` : s;
   const chi = m.giocatori.map(n => html ? esc(cognome(n)) : cognome(n)).join(", ");
-  let f = `Secondo il criterio «${CRITERI_FORMAZIONE[criterio].breve}» la formazione migliore è ${b(chi)}: in campo insieme ${nf0(m.minuti)}' in ${nf0(m.sessioni)} ${unita(m.sessioni)}, con ${nf0(m.gf)} gol fatti e ${nf0(m.ga)} subiti (saldo ${saldoTxt(m.saldo)}).`;
+  let f = `Secondo il criterio «${CRITERI_FORMAZIONE[criterio].breve}» la formazione migliore${m.modulo ? `, schierata con il ${m.modulo},` : ""} è ${b(chi)}: in campo insieme ${nf0(m.minuti)}' in ${nf0(m.sessioni)} ${unita(m.sessioni)}, con ${nf0(m.gf)} gol fatti e ${nf0(m.ga)} subiti (saldo ${saldoTxt(m.saldo)}).`;
   if(m.saldo > 0) f += ` Nei minuti giocati insieme ha tenuto il vantaggio sull'avversario.`;
   else if(m.saldo === 0) f += ` Nei minuti giocati insieme ha tenuto il pari: nessuna formazione con abbastanza minuti ha chiuso in vantaggio.`;
   else f += ` Nessuna formazione con abbastanza minuti ha chiuso in vantaggio: questa è quella che ha perso meno terreno.`;
@@ -6373,9 +6435,9 @@ function renderFormazioneMigliore(tipo){
     <div class="griglia g-2" style="margin-top:16px">
       <div class="card">
         <div class="grafico-titolo">La formazione migliore</div>
-        <div class="grafico-sub">${singola ? "In questa partita" : (allen ? "Su tutti gli allenamenti del periodo" : "Su tutte le partite del periodo")}, secondo il criterio «${esc(CRITERI_FORMAZIONE[criterio].breve)}». I giocatori sono disposti per il ruolo del tabellino.</div>
-        ${campoFormazioneHtml(m, paletteCampoSchermo())}
-        ${LEGENDA_RUOLI}
+        <div class="grafico-sub">${singola ? "In questa partita" : (allen ? "Su tutti gli allenamenti del periodo" : "Su tutte le partite del periodo")}, secondo il criterio «${esc(CRITERI_FORMAZIONE[criterio].breve)}».</div>
+        <div class="fz-campo-wrap">${campoFormazioneHtml(m, paletteCampoSchermo())}</div>
+        ${notaModuloHtml(m) ? `<p class="nota-piccola fz-nota-modulo">${notaModuloHtml(m)}</p>` : ""}
       </div>
       <div class="card">
         <div class="grafico-titolo">Perché questa</div>
@@ -7612,9 +7674,9 @@ function inCampoReport(pagina, sessioni, tipo){
   // coppie di difensori per ruolo svolto (16/10/2026): le sole coppie dei report
   const difTutte = (a.coppieDifensori||[]).slice().sort((x, y) => (y.valido - x.valido) || (!!x.ospite - !!y.ospite) || (x.valido ? y.differenza - x.differenza : y.minuti - x.minuti));
   if(difTutte.length){
-    etichettaReport(pagina, `Le coppie di difensori: entrambi in difesa nello stesso momento (righe chiare: meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme o con un ospite, senza confronto)`);
+    etichettaReport(pagina, `Le coppie di difensori di ruolo in campo insieme (righe chiare: meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme o con un ospite, senza confronto)`);
     tabellaReport(pagina, ["Coppia di difesa","Min insieme","Gol subiti insieme","A partita insieme","A partita senza","Differenza","Segnale"],
-      difTutte.map(c => [`${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` (${esc(dataLabel(c.data) || "")})` : ""}`, nf0(c.minuti), nf0(c.gol), nf(c.ritmoCon,1), c.valido ? nf(c.ritmoSenza,1) : "—", c.valido ? fmtDiff(c.differenza) : "—", c.segnale ? TESTO_SEGNALE[c.segnale] : "—"]),
+      difTutte.map(c => [`${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` (${esc(dataLabel(c.data) || "")})` : ""}`, minutiCoppiaTxt(c.minuti), nf0(c.gol), nf(c.ritmoCon,1), c.valido ? nf(c.ritmoSenza,1) : "—", c.valido ? fmtDiff(c.differenza) : "—", c.segnale ? TESTO_SEGNALE[c.segnale] : "—"]),
       difTutte.map(c => !c.valido));
   }
   const fzr = analizzaFormazioni(sessioni, tipo);
@@ -7654,9 +7716,7 @@ function formazioneMiglioreReport(pagina, sessioni, tipo){
   const griglia = document.createElement("div");
   griglia.className = "rp-campo-griglia";
   const cellaCampo = document.createElement("div");
-  const legenda = [["Portiere", PALETTE_CAMPO_REPORT.portiere], ["Difensore", PALETTE_CAMPO_REPORT.difesa], ["Centrocampista", PALETTE_CAMPO_REPORT.centro], ["Attaccante", PALETTE_CAMPO_REPORT.attacco]]
-    .map(([t, c]) => `<span style="display:inline-flex; align-items:center; gap:4px; margin-right:10px"><i style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${c}"></i>${t}</span>`).join("");
-  cellaCampo.innerHTML = `<div class="rp-campo-etichetta">In campo</div>${campoFormazioneHtml(m, PALETTE_CAMPO_REPORT)}<div class="rp-nota-campo" style="margin-top:6px">${legenda}</div>`;
+  cellaCampo.innerHTML = `<div class="rp-campo-etichetta">In campo${m.modulo ? ` · ${esc(m.modulo)}` : ""}</div><div class="fz-campo-wrap rp">${campoFormazioneHtml(m, PALETTE_CAMPO_REPORT)}</div><div class="rp-nota-campo" style="margin-top:6px">${notaModuloHtml(m)}</div>`;
   const cellaNumeri = document.createElement("div");
   const r = v => nf(v, 1);
   cellaNumeri.innerHTML = `<div class="rp-campo-etichetta">I numeri</div>
