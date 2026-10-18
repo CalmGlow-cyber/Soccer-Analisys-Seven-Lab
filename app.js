@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.42.0",
-  data: "2026-10-16",
-  note: "Formazione migliore disegnata nel modulo (16/10/2026): campo vero, nostra porta in basso, ognuno nella casella del modulo impostato in Seven Lab (2-3-1, 3-2-1, 1-2-3…) e il modulo scritto sul campo. Coppie di difensori sul ruolo di partenza (quello del tabellino), non sulla posizione data con un cambio, e mai coppie miste. Messaggio chiaro al posto di «Failed to fetch» quando il cloud non si raggiunge. Comprende la 1.40.0 (gli stessi file su PC, iPad e telefono) e la 1.39.0 (formazioni)."
+  numero: "1.43.0",
+  data: "2026-10-18",
+  note: "Possesso palla misurato e momentum (18/10/2026): dalla partita del 18/10 SevenLab scrive i tratti dell'interruttore del possesso, e il tempo degli avversari diventa un dato misurato. Nuova sezione «Possesso palla e momentum» nella dashboard Partita, una partita alla volta: possesso nostro e degli avversari, palla ferma, possessi avversari, e il grafico del momentum ogni 2 minuti con i gol. Anche il Report Partita usa il dato misurato e mostra il momentum; il Report Stagionale separa partite misurate e stimate. Comprende la 1.42.0 (formazione nel modulo, coppie sul ruolo di partenza)."
 };
 
 /* =====================================================================
@@ -365,6 +365,8 @@ function normalizzaTempiDifferita(parsed){
     if(sMm !== null) e["Minutaggio"] = mmssDaSecondi(tempoPartitaDaCronometro(sMm, v, t0));
   });
 
+  (parsed.possessoAvversario || []).forEach(x => { x.inizio = tempoPartitaDaCronometro(x.inizio, v, t0); x.fine = tempoPartitaDaCronometro(x.fine, v, t0); });
+
   if(rt){
     // la durata è un intervallo: si scala e basta, senza togliere t0 (che è un istante, non una durata)
     if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec * v;
@@ -407,6 +409,7 @@ function annullaCorrezioneTempi(sess){
     const mm = secondiDaMMSS(e["Minutaggio"]);
     if(mm !== null) e["Minutaggio"] = mmssDaSecondi(inv(mm));
   });
+  (sess.possessoAvversario || []).forEach(x => { x.inizio = inv(x.inizio); x.fine = inv(x.fine); });
   const rt = sess.riepilogoTempi;
   if(rt){
     if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec / v;
@@ -444,11 +447,12 @@ function rivalutaTempiSessioniSalvate(){
     annullaCorrezioneTempi(copia);
     const parsed = {tipo: copia.tipo, meta: copia.meta, righe: copia.righe, eventi: copia.eventi,
       riepilogoTempi: copia.riepilogoTempi, datiSpaziali: copia.datiSpaziali,
-      statistichePortieriGame: copia.statistichePortieriGame, dettaglioGolGame: copia.dettaglioGolGame};
+      statistichePortieriGame: copia.statistichePortieriGame, dettaglioGolGame: copia.dettaglioGolGame,
+      possessoAvversario: copia.possessoAvversario || null};
     normalizzaTempiDifferita(parsed);
     cambiate++;
     return Object.assign(copia, {meta: parsed.meta, righe: parsed.righe, eventi: parsed.eventi,
-      riepilogoTempi: parsed.riepilogoTempi, scalaTempi: parsed.scalaTempi});
+      riepilogoTempi: parsed.riepilogoTempi, scalaTempi: parsed.scalaTempi, possessoAvversario: parsed.possessoAvversario || null});
   });
   if(cambiate) scriviSessioniSalvate(nuove);
   return cambiate;
@@ -630,9 +634,29 @@ function parsaFileSevenLab(testo){
     });
   }
 
+  // Sezione «POSSESSO AVVERSARIO» (18/10/2026, prima partita: partita_2 del 18/10). È l'«interruttore del
+  // possesso» di SevenLab: chi tagga lo accende quando la palla passa agli avversari e lo spegne quando torna a
+  // noi. Una riga per ogni tratto: Squadra («Team B»), Tempo («1° TEMPO»/«2° TEMPO»), Inizio/Fine in mm:ss e in
+  // secondi, Durata. I secondi sono sullo stesso orologio della timeline (nel primo file l'ultimo tratto finisce
+  // a 3385, l'ultimo evento è a 3381), quindi seguono la stessa correzione dei tempi in differita.
+  let possessoAvversario = null;
+  const titoloPossesso = Object.keys(sezioni).find(t => /possesso/i.test(t));
+  if(titoloPossesso && sezioni[titoloPossesso].length > 1){
+    const [intPos, ...righePos] = sezioni[titoloPossesso];
+    const colP = nome => intPos.findIndex(h => String(h).trim().toLowerCase() === nome);
+    const iSq = colP("squadra"), iTempo = colP("tempo"), iIn = colP("inizio sec"), iFi = colP("fine sec"), iInMm = colP("inizio mm:ss"), iFiMm = colP("fine mm:ss");
+    const sec = (c, iS, iM) => (iS >= 0 && String(c[iS] ?? "").trim() !== "") ? N(c[iS]) : (iM >= 0 ? secondiDaMMSS(c[iM]) : null);
+    possessoAvversario = righePos.map(c => ({
+      squadra: /\ba\s*$/i.test(String(c[iSq] ?? "").trim()) ? "A" : "B",
+      tempo: iTempo >= 0 ? String(c[iTempo] ?? "").trim() : "",
+      inizio: sec(c, iIn, iInMm), fine: sec(c, iFi, iFiMm)
+    })).filter(x => Number.isFinite(x.inizio) && Number.isFinite(x.fine) && x.fine > x.inizio);
+    if(!possessoAvversario.length) possessoAvversario = null;
+  }
+
   // Correzione dei tempi per le sessioni registrate da video: un solo punto, prima che qualunque calcolo
   // tocchi questi secondi (vedi il blocco "TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA" più sopra).
-  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame});
+  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame, possessoAvversario});
 }
 
 /** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
@@ -981,7 +1005,7 @@ function aggiungiSessioneDaTesto(nomeFile, testo){
   const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
     righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali,
     statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame,
-    scalaTempi:parsed.scalaTempi || null};
+    possessoAvversario:parsed.possessoAvversario || null, scalaTempi:parsed.scalaTempi || null};
   const attuali = leggiSessioniSalvate();
   const idx = attuali.findIndex(s => s.id === id);
   if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
@@ -2196,6 +2220,207 @@ function calcolaPossessionKpis(sequences, eventiSquadra){
   };
 }
 
+/* =====================================================================
+   POSSESSO MISURATO CON L'INTERRUTTORE E MOMENTUM (18/10/2026)
+   Dalla partita del 18/10 SevenLab scrive la sezione «POSSESSO AVVERSARIO»: i tratti in cui chi tagga ha
+   tenuto acceso l'interruttore «palla agli avversari». È la metà del possesso che il motore stimato (più su)
+   non poteva vedere: lì l'avversario «aveva palla» solo per 25" dopo una nostra palla persa, poi il tempo
+   diventava non classificabile.
+
+   COME SI LEGGE OGNI SECONDO DI GIOCO (risoluzione 1 secondo):
+   - LORO se cade in un tratto con l'interruttore acceso (dato misurato, non stimato);
+   - NOSTRO se l'interruttore è spento e negli ultimi POSSESSO_MISURATO_GAP_SEC secondi c'è stato un nostro
+     evento con la palla (passaggio, dribbling, tiro, gol, recupero, palla persa) o l'interruttore si è appena
+     spento (la palla è tornata a noi). È la stessa finestra di 12" con cui il motore stimato tiene il possesso;
+   - FERMA O NON CLASSIFICABILE altrimenti: rimesse, falli, esultanze, cambi, o un nostro giro palla senza
+     eventi per più di 12". Non entra nella percentuale, come nelle statistiche ufficiali (che contano solo la
+     palla in gioco). Contarlo come nostro, «tutto quello che non è loro», gonfierebbe il nostro possesso:
+     nel primo file avrebbe dato 63% invece di 54%.
+   Possesso nostro % = nostro / (nostro + loro). La pausa fra i tempi, se il file la segna, è esclusa.
+
+   MOMENTUM (solo partita singola, richiesta di Elisa): la gara divisa in finestre di 2' per tempo; in ogni
+   finestra (secondi nostri − secondi loro) / (secondi nostri + secondi loro), da −100 (palla sempre loro) a +100
+   (sempre nostra). Finestre con meno di 30" classificati restano a zero. I gol sono segnati sopra (fatti) e
+   sotto (subiti), nella finestra in cui cadono.
+   ===================================================================== */
+const POSSESSO_MISURATO_GAP_SEC = 12;
+const MOMENTUM_FINESTRA_SEC = 120;
+const MOMENTUM_MIN_SEC = 30;
+const MOMENTUM_TRATTO_FINESTRE = 3; // il «tratto» migliore e peggiore: 3 finestre di fila, circa 6'
+
+const haInterruttorePossesso = p => !!(p && Array.isArray(p.PossessoAvversario) && p.PossessoAvversario.some(x => x.squadra !== "A"));
+
+function possessoMisuratoPartita(p){
+  if(!haInterruttorePossesso(p)) return null;
+  const iv = p.PossessoAvversario.filter(x => x.squadra !== "A" && Number.isFinite(x.inizio) && x.fine > x.inizio).sort((a, b) => a.inizio - b.inizio);
+  if(!iv.length) return null;
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto));
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const cambio = e => e.raw["Cambio entra"] === "1" || e.raw["Cambio esce"] === "1";
+  const nostri = eventi.filter(e => lato(e) === "A" && String(e.raw.Giocatore || "").trim() && !cambio(e) && !rigaGolSubito(e.raw)
+      && (e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo)))
+    .map(e => e.secondoAssoluto).sort((a, b) => a - b);
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const inizio = rigaInizio ? rigaInizio.secondoAssoluto : Math.min(iv[0].inizio, nostri.length ? nostri[0] : Infinity);
+  const fine = Math.max(Number.isFinite(norm.periodi.tempo2FineSec) ? norm.periodi.tempo2FineSec : 0, iv[iv.length-1].fine, nostri.length ? nostri[nostri.length-1] : 0);
+  if(!(fine > inizio)) return null;
+  const fine1 = Number.isFinite(norm.periodi.tempo1FineSec) && norm.periodi.tempo1FineSec > inizio && norm.periodi.tempo1FineSec < fine ? norm.periodi.tempo1FineSec : null;
+  const rt = p.RiepilogoTempi;
+  const inizio2 = (fine1 !== null && rt && Number.isFinite(rt.inizio2TempoSec) && rt.inizio2TempoSec > fine1 + 5 && rt.inizio2TempoSec < fine) ? rt.inizio2TempoSec : fine1;
+  // stato di ogni secondo: 0 ferma/non classificabile, 1 nostro, 2 loro, 3 pausa
+  const s0 = Math.floor(inizio), n = Math.ceil(fine) - s0;
+  const stati = new Array(n).fill(0);
+  const segni = nostri.concat(iv.map(x => x.fine)).sort((a, b) => a - b);
+  let iI = 0, iS = -1;
+  for(let k = 0; k < n; k++){
+    const x = s0 + k + 0.5;
+    if(fine1 !== null && inizio2 > fine1 && x > fine1 && x < inizio2){ stati[k] = 3; continue; }
+    while(iI < iv.length && iv[iI].fine <= x) iI++;
+    if(iI < iv.length && iv[iI].inizio <= x){ stati[k] = 2; continue; }
+    while(iS + 1 < segni.length && segni[iS + 1] <= x) iS++;
+    stati[k] = (iS >= 0 && x - segni[iS] <= POSSESSO_MISURATO_GAP_SEC) ? 1 : 0;
+  }
+  let noiSec = 0, loroSec = 0, fermaSec = 0;
+  stati.forEach(v => { if(v === 1) noiSec++; else if(v === 2) loroSec++; else if(v === 0) fermaSec++; });
+  const classificato = noiSec + loroSec;
+  const durate = iv.map(x => x.fine - x.inizio);
+  return {inizio, fine, fine1, inizio2, s0, stati, noiSec, loroSec, fermaSec, giocoSec: noiSec + loroSec + fermaSec,
+    pctNoi: classificato ? noiSec / classificato * 100 : null, pctLoro: classificato ? loroSec / classificato * 100 : null,
+    copertura: (noiSec + loroSec + fermaSec) ? classificato / (noiSec + loroSec + fermaSec) * 100 : null,
+    possessiLoro: iv.length, durataMediaLoro: durate.reduce((a, b) => a + b, 0) / iv.length, piuLungoLoro: Math.max(...durate)};
+}
+
+/** Gol fatti e subiti di una partita con il minuto e il punteggio dopo il gol (per il momentum). */
+function golConPunteggio(p){
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo), subisce: latoCheSubisce(e, "partita"), lato: lato(e)}))
+    .sort((a, b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  let noi = 0, loro = 0;
+  return golDaEventiClassificati(eventi, "partita", ["A","B"]).sort((a, b) => a.t - b.t).map(g => {
+    const nostro = g.subisce === "B"; if(nostro) noi++; else loro++;
+    return {t: g.t, nostro, marcatore: g.marcatore, punteggio: noi + "-" + loro};
+  });
+}
+
+function momentumPartita(p, pm){
+  pm = pm || possessoMisuratoPartita(p);
+  if(!pm) return null;
+  const tempi = pm.fine1 !== null ? [[pm.inizio, pm.fine1, 1], [pm.inizio2, pm.fine, 2]] : [[pm.inizio, pm.fine, 1]];
+  const finestre = [];
+  tempi.forEach(([a, b, tempo]) => {
+    for(let t = a; t < b - 0.5; t += MOMENTUM_FINESTRA_SEC){
+      const e = Math.min(b, t + MOMENTUM_FINESTRA_SEC);
+      const ultima = finestre[finestre.length - 1];
+      if(e - t < MOMENTUM_FINESTRA_SEC / 2 && ultima && ultima.tempo === tempo) ultima.b = e; // coda corta: si unisce alla precedente
+      else finestre.push({a: t, b: e, tempo});
+    }
+  });
+  finestre.forEach(w => {
+    let noi = 0, loro = 0;
+    for(let s = Math.floor(w.a); s < Math.ceil(w.b); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) noi++; else if(v === 2) loro++; }
+    w.noi = noi; w.loro = loro;
+    w.valore = (noi + loro) >= MOMENTUM_MIN_SEC ? Math.round((noi - loro) / (noi + loro) * 100) : 0;
+    w.da = Math.round((w.a - pm.inizio) / 60); w.al = Math.round((w.b - pm.inizio) / 60);
+    w.etichetta = w.da + "'";
+  });
+  const gol = golConPunteggio(p).map(g => Object.assign(g, {minuto: Math.max(1, Math.ceil((g.t - pm.inizio) / 60)),
+    indice: Math.max(0, finestre.findIndex(w => g.t >= w.a && g.t < w.b + 1))}));
+  // possesso nei 2 minuti prima di ogni gol
+  gol.forEach(g => {
+    let noi = 0, loro = 0;
+    for(let s = Math.floor(g.t - MOMENTUM_FINESTRA_SEC); s < Math.floor(g.t); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) noi++; else if(v === 2) loro++; }
+    g.primaNoi = noi; g.primaLoro = loro;
+  });
+  // tratto migliore e peggiore: MOMENTUM_TRATTO_FINESTRE finestre di fila nello stesso tempo
+  let migliore = null, peggiore = null;
+  for(let i = 0; i + MOMENTUM_TRATTO_FINESTRE <= finestre.length; i++){
+    const g = finestre.slice(i, i + MOMENTUM_TRATTO_FINESTRE);
+    if(g.some(w => w.tempo !== g[0].tempo)) continue;
+    const noi = g.reduce((t, w) => t + w.noi, 0), loro = g.reduce((t, w) => t + w.loro, 0);
+    if(noi + loro < MOMENTUM_MIN_SEC * MOMENTUM_TRATTO_FINESTRE) continue;
+    const quota = noi / (noi + loro), tratto = {da: g[0].da, al: g[g.length-1].al, quota};
+    if(!migliore || quota > migliore.quota) migliore = tratto;
+    if(!peggiore || quota < peggiore.quota) peggiore = tratto;
+  }
+  const indiceSecondoTempo = finestre.findIndex(w => w.tempo === 2);
+  return {finestre, gol, migliore, peggiore, indiceSecondoTempo: indiceSecondoTempo > 0 ? indiceSecondoTempo : null};
+}
+
+/** Le frasi del possesso misurato e del momentum, uguali in dashboard e nel report. */
+function frasiMomentum(pm, mo, html){
+  const b = s => html ? `<b>${s}</b>` : s;
+  const out = [`Con l'interruttore del possesso la palla è stata ${b("nostra per il " + nf(pm.pctNoi, 0) + "%")} del tempo in cui si sa chi ce l'ha, ${b("loro per il " + nf(pm.pctLoro, 0) + "%")}.`];
+  if(mo && mo.migliore && mo.peggiore && mo.migliore.quota - mo.peggiore.quota >= 0.15)
+    out.push(`Il tratto migliore va dal ${mo.migliore.da}' al ${mo.migliore.al}' (palla nostra per il ${nf(mo.migliore.quota*100, 0)}%), il più difficile dal ${mo.peggiore.da}' al ${mo.peggiore.al}' (palla loro per il ${nf((1-mo.peggiore.quota)*100, 0)}%).`);
+  if(mo){
+    // «dopo due minuti con la palla soprattutto loro/nostra»: secondi di possesso nei 120" prima del gol
+    const conta = (lista, cond) => lista.filter(cond).length;
+    const frase = (lista, tipo, condLoro) => {
+      const n = lista.length; if(!n) return null;
+      const k = conta(lista, condLoro), sub = tipo === "subiti";
+      const nome = sub ? "gol subiti" : "gol fatti";
+      const loro = "dopo due minuti con la palla soprattutto agli avversari", nostra = "dopo due minuti con la palla soprattutto nostra";
+      const tutti = n === 2 ? `Entrambi i ${nome}` : `Tutti i ${nf0(n)} ${nome}`;
+      if(n === 1) return `${sub ? "L'unico gol subito" : "L'unico gol fatto"} è arrivato ${k ? loro : nostra}${sub && !k ? ", quindi in ripartenza o da palla inattiva" : (!sub && k ? ", quindi in ripartenza" : "")}.`;
+      if(k === n) return `${tutti} sono arrivati ${loro}${sub ? "" : ", quindi in ripartenza"}.`;
+      if(k === 0) return `${tutti} sono arrivati ${nostra}${sub ? ", quindi in ripartenza o da palla inattiva" : ""}.`;
+      return sub
+        ? `Dei ${nf0(n)} gol subiti, ${nf0(k)} ${k === 1 ? "è arrivato" : "sono arrivati"} ${loro}, ${nf0(n - k)} mentre la palla era soprattutto nostra (ripartenze o palle inattive).`
+        : `Dei ${nf0(n)} gol fatti, ${nf0(n - k)} ${n - k === 1 ? "è arrivato" : "sono arrivati"} ${nostra}, ${nf0(k)} mentre la palla era soprattutto loro (ripartenze).`;
+    };
+    const fs = frase(mo.gol.filter(g => !g.nostro), "subiti", g => g.primaLoro > g.primaNoi);
+    const ff = frase(mo.gol.filter(g => g.nostro), "fatti", g => g.primaLoro > g.primaNoi);
+    if(fs) out.push(fs);
+    if(ff) out.push(ff);
+  }
+  return out;
+}
+
+/** Configurazione Chart.js del momentum, per la dashboard e per il report. `pal`: {noi, loro, testo, tenue, griglia}. */
+function configMomentum(mo, pal, report){
+  const golIn = (i, nostro) => mo.gol.filter(g => g.indice === i && g.nostro === nostro);
+  const linea = {id: "intervalloMomentum", afterDatasetsDraw(chart){
+    if(mo.indiceSecondoTempo === null) return;
+    const x = chart.scales.x, area = chart.chartArea, ctx = chart.ctx;
+    const px = (x.getPixelForValue(mo.indiceSecondoTempo - 1) + x.getPixelForValue(mo.indiceSecondoTempo)) / 2;
+    ctx.save(); ctx.strokeStyle = pal.tenue; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = pal.tenue; ctx.font = (report ? "9px" : "11px") + " sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("2° tempo", px + 4, area.top + 2); ctx.restore();
+  }};
+  return {
+    type: "bar",
+    data: {labels: mo.finestre.map(w => w.etichetta), datasets: [
+      {type: "bar", label: "Momentum", data: mo.finestre.map(w => w.valore), backgroundColor: mo.finestre.map(w => w.valore >= 0 ? pal.noi : pal.loro),
+        borderRadius: 3, barPercentage: 0.92, categoryPercentage: 0.94, order: 2},
+      {type: "line", label: "Gol fatto", data: mo.finestre.map((w, i) => golIn(i, true).length ? 114 : null), showLine: false,
+        pointStyle: "triangle", pointRadius: report ? 5 : 7, pointHoverRadius: report ? 5 : 9, pointBackgroundColor: pal.noi, pointBorderColor: pal.testo, pointBorderWidth: 1, order: 1},
+      {type: "line", label: "Gol subito", data: mo.finestre.map((w, i) => golIn(i, false).length ? -114 : null), showLine: false,
+        pointStyle: "triangle", rotation: 180, pointRadius: report ? 5 : 7, pointHoverRadius: report ? 5 : 9, pointBackgroundColor: pal.loro, pointBorderColor: pal.testo, pointBorderWidth: 1, order: 1}
+    ]},
+    options: {responsive: true, maintainAspectRatio: false, animation: report ? false : undefined,
+      plugins: {legend: {display: false},
+        tooltip: {enabled: !report, callbacks: {
+          title: it => { const w = mo.finestre[it[0].dataIndex]; return `Dal ${w.da}' al ${w.al}'`; },
+          label: it => {
+            const w = mo.finestre[it.dataIndex];
+            if(it.datasetIndex === 0) return (w.noi + w.loro) >= MOMENTUM_MIN_SEC ? `Palla nostra ${nf(w.noi/(w.noi+w.loro)*100, 0)}% · loro ${nf(w.loro/(w.noi+w.loro)*100, 0)}%` : "Pochi secondi con la palla in gioco";
+            return golIn(it.dataIndex, it.datasetIndex === 1).map(g => `${g.nostro ? "Gol fatto" : "Gol subito"} al ${g.minuto}'${g.marcatore && g.nostro ? " (" + g.marcatore + ")" : ""}: ${g.punteggio}`);
+          }}}},
+      scales: {
+        x: {ticks: {color: pal.tenue, font: {size: report ? 8.5 : 11}, autoSkip: true, maxRotation: 0, autoSkipPadding: 6}, grid: {display: false}, border: {color: pal.griglia}},
+        y: {min: -125, max: 125, afterBuildTicks: ax => { ax.ticks = [-100, -50, 0, 50, 100].map(v => ({value: v})); },
+            ticks: {color: pal.tenue, font: {size: report ? 8.5 : 11},
+              callback: v => v === 100 ? "noi" : (v === -100 ? "loro" : "")},
+            grid: {color: c => c.tick && c.tick.value === 0 ? pal.tenue : pal.griglia, lineWidth: c => c.tick && c.tick.value === 0 ? 1.2 : 1}, border: {display: false}}
+      }},
+    plugins: [linea]
+  };
+}
+
 const COLONNE_PARTITE = ["Match_ID","Data","Avversario","Gol_Fatti","Gol_Subiti"];
 const COLONNE_GIOCATORI = ["Match_ID","Giocatore","Minuti_Giocati","Gol","Assist"];
 
@@ -2232,6 +2457,7 @@ function assemblaDataset(grezzo){
     Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
     StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null,
     ScalaTempi: r.ScalaTempi ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
@@ -2278,6 +2504,7 @@ function assemblaDataset(grezzo){
     Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
     StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null,
     ScalaTempi: r.ScalaTempi ?? null
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
   allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
@@ -2430,6 +2657,7 @@ function costruisciDatasetDaSessioni(sessioniSalvate){
         Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
         DatiSpaziali: s.datiSpaziali || null,
         StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        PossessoAvversario: s.possessoAvversario || null,
         ScalaTempi: scala
       });
       (s.righe||[]).forEach(r => {
@@ -2472,6 +2700,7 @@ function costruisciDatasetDaSessioni(sessioniSalvate){
         Durata_Minuti_Sessione: N(s.meta["Durata minuti"]) * fm, Note: "", Eventi: s.eventi || null,
         DatiSpaziali: s.datiSpaziali || null,
         StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        PossessoAvversario: s.possessoAvversario || null,
         ScalaTempi: scala
       });
       // RPE (03/09/2026): da questa consegna Seven Lab può esportare un voto di durezza 1-10 assegnato
@@ -3278,6 +3507,7 @@ function formazioniSessione(sessione, tipo){
   // un'azione di gioco del giocatore (non un cambio, non un cambio squadra, non la riga «Gol subito» del portiere)
   const azione = e => !!e.cl && !rigaCambio(e) && !cambioSquadra(e) && !rigaGolSubito(e.raw);
   let azioniFuori = 0; const chiFuori = new Set();
+  const tempiCambi = [...new Set(eventi.filter(rigaCambio).map(e => e.secondoAssoluto))].sort((a, b) => a - b);
   nomi.forEach(nome => {
     const sue = eventi.filter(e => nomeDi(e) === nome);
     // in campo / fuori. Titolare = il primo cambio non è un ingresso, OPPURE ha già giocato palloni prima di
@@ -3285,11 +3515,30 @@ function formazioniSessione(sessione, tipo){
     const cambi = sue.filter(rigaCambio).map(e => ({t: e.secondoAssoluto, entra: e.raw["Cambio entra"] === "1"}));
     const primoIngresso = cambi.length && cambi[0].entra ? cambi[0].t : null;
     const giocavaGia = primoIngresso !== null && sue.some(e => azione(e) && e.secondoAssoluto < primoIngresso - 2);
-    let dentro = !(cambi.length && cambi[0].entra) || giocavaGia, da = inizio;
+    // Nei cambi a catena nello stesso secondo (partita del 18/10, 12:27) chi entra può avere PRIMA una riga
+    // «esce» spuria e subito dopo il suo «entra»: senza palloni giocati prima non era titolare.
+    const esceSpurio = cambi.length >= 2 && !cambi[0].entra && cambi[1].entra && cambi[1].t - cambi[0].t <= 2
+      && !sue.some(e => azione(e) && e.secondoAssoluto < cambi[0].t - 2);
+    let dentro = (!(cambi.length && cambi[0].entra) && !esceSpurio) || giocavaGia, da = inizio;
     const iv = [];
     cambi.forEach(c => {
       if(c.entra && !dentro){ dentro = true; da = Math.max(inizio, c.t); }
       else if(!c.entra && dentro){ dentro = false; if(c.t > da) iv.push([da, Math.min(c.t, fine)]); }
+      else if(c.entra && dentro && c.t > da){
+        // ENTRA MENTRE RISULTA GIÀ IN CAMPO (18/10/2026, partita del 18/10): manca la sua uscita. Succede nei
+        // cambi multipli nello stesso secondo, dove SevenLab ha scritto un nome sbagliato nella prima riga della
+        // catena (al 12:27 «Matteo Duino entra» al posto dell'uscita di Burchielli, che non tocca palla fino al
+        // rientro del 23:01). L'uscita si ricostruisce al primo cambio della partita dopo il suo ultimo pallone;
+        // se coincide con questo ingresso non manca niente (è solo una riga in più) e non cambia nulla.
+        const prima = sue.filter(e => azione(e) && e.secondoAssoluto < c.t - 2).map(e => e.secondoAssoluto);
+        const ultima = prima.length ? Math.max(...prima) : da;
+        const tUscita = tempiCambi.find(t => t >= ultima && t <= c.t) ?? ultima;
+        if(tUscita < c.t - 2){
+          if(tUscita > da) iv.push([da, Math.min(tUscita, fine)]);
+          da = Math.max(inizio, c.t);
+          avvisi.push(`${nome} rientra al ${mmssDaSecondi(c.t - inizio)} senza un'uscita registrata: uscita ricostruita al ${mmssDaSecondi(tUscita - inizio)}, il primo cambio dopo il suo ultimo pallone`);
+        }
+      }
     });
     if(dentro && fine > da) iv.push([da, fine]);
     intervalli.set(nome, iv);
@@ -3994,6 +4243,7 @@ const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Pre
   // Sessione singola scelta nella sezione "Zone di recupero e palla persa (allenamento)": "" = tutte.
   // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
   zoneSessione:"",
+  possessoPartita:"", // partita scelta nella sezione «Possesso palla e momentum» (18/10/2026)
   persaGolPartita:"", persaGolAllenamento:"", // selettore partita/allenamento della sezione "palle perse → gol"
   inCampoPartita:"", inCampoAllenamento:"", // selettore della sezione "gol subiti e chi è in campo"
   formazionePartita:"", criterioFormazionePartita:"saldo", criterioFormazioneAllenamento:"saldo", // "la formazione migliore"
@@ -5935,6 +6185,68 @@ function renderPersaGiocatorePartita(f){
 }
 
 /** Sezione "Tempo di riconquista della palla" (Dashboard Partita, 07/10/2026). */
+/* --------- Possesso palla e momentum, partita singola (18/10/2026) --------- */
+const paletteMomentumSchermo = () => ({noi: colore("c1"), loro: colore("c2"), testo: colore("text"), tenue: colore("muted"), griglia: colore("grid")});
+function renderPossessoPartita(f){
+  const cont = $("#contenuto-possesso-partita");
+  if(!cont) return;
+  const sel = $("#pos-sel-partita");
+  const ordinate = (f.partite || []).slice().sort((a, b) => (b.Ordine || 0) - (a.Ordine || 0));
+  if(!ordinate.length){ if(sel) sel.innerHTML = ""; cont.innerHTML = `<div class="vuoto">Nessuna partita nel periodo scelto.</div>`; return; }
+  if(!(stato.possessoPartita && ordinate.some(p => p.Match_ID === stato.possessoPartita)))
+    stato.possessoPartita = (ordinate.find(haInterruttorePossesso) || ordinate[0]).Match_ID;
+  if(sel){
+    sel.innerHTML = ordinate.map(p => `<option value="${esc(p.Match_ID)}">${esc(dataLabel(p.Data))} · vs ${esc(p.Avversario)}${haInterruttorePossesso(p) ? " · possesso misurato" : ""}</option>`).join("");
+    sel.value = stato.possessoPartita;
+  }
+  const p = ordinate.find(x => x.Match_ID === stato.possessoPartita) || ordinate[0];
+  const pm = possessoMisuratoPartita(p);
+  if(!pm){
+    const a = analizzaEventiPartitaSevenLab({id: p.Match_ID, eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+    const x = a.eventiSquadra.length ? analyzePossession(a.eventiSquadra) : null;
+    if(!x || x.confidencePct === null){
+      cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Questa partita non ha l'interruttore del possesso né una timeline eventi utilizzabile.</div>`;
+      return;
+    }
+    const kpi = calcolaPossessionKpis(x.sequences, a.eventiSquadra);
+    cont.innerHTML = `
+      <div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span>Questa partita non ha l'interruttore del possesso (sezione «POSSESSO AVVERSARIO», negli export di SevenLab dal 18/10/2026): il possesso è <strong>stimato</strong> dai soli eventi della nostra squadra, e il momentum non si può costruire. La stima tende a dare a noi più possesso di quello vero, perché non vede quando gli avversari tengono palla a lungo.</span></div>
+      <div class="griglia g-kpi" style="margin-top:14px">
+        <div class="kpi"><div class="kpi-eti">Possesso stimato</div><div class="kpi-valore">${pctTxt(x.ourPossessionWeightedPct, 0)}</div><div class="kpi-nota">dai nostri eventi; la palla contesa conta a metà</div></div>
+        <div class="kpi"><div class="kpi-eti">Copertura del dato</div><div class="kpi-valore">${pctTxt(x.confidencePct, 0)}</div><div class="kpi-nota">${esc(getConfidenceLabelPossesso(x.confidencePct))} · ${mmss(x.unknownSec)} non classificabili</div></div>
+        <div class="kpi"><div class="kpi-eti">Possessi nostri rilevati</div><div class="kpi-valore">${nf0(kpi.possessi)}</div><div class="kpi-nota">${kpi.durataMediaSec ? `in media ${nf0(kpi.durataMediaSec)}"` : ""}</div></div>
+      </div>`;
+    return;
+  }
+  const mo = momentumPartita(p, pm);
+  const frasi = frasiMomentum(pm, mo, true);
+  const tot = pm.giocoSec || 1, w = v => (v / tot * 100).toFixed(1);
+  const pal = paletteMomentumSchermo();
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${frasi.join(" ")}</span></div>
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">Possesso nostro</div><div class="kpi-valore">${pctTxt(pm.pctNoi, 0)}</div><div class="kpi-nota">${mmss(pm.noiSec)} con la palla</div></div>
+      <div class="kpi"><div class="kpi-eti">Possesso avversari</div><div class="kpi-valore">${pctTxt(pm.pctLoro, 0)}</div><div class="kpi-nota">${mmss(pm.loroSec)} con l'interruttore acceso</div></div>
+      <div class="kpi"><div class="kpi-eti">Palla ferma o non classificabile</div><div class="kpi-valore">${mmss(pm.fermaSec)}</div><div class="kpi-nota">${nf0(pm.fermaSec / tot * 100)}% del tempo di gioco: rimesse, falli, gol, cambi</div></div>
+      <div class="kpi"><div class="kpi-eti">Possessi degli avversari</div><div class="kpi-valore">${nf0(pm.possessiLoro)}</div><div class="kpi-nota">in media ${nf0(pm.durataMediaLoro)}", il più lungo ${mmss(pm.piuLungoLoro)}</div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Come si divide il tempo di gioco</div>
+      <div class="pos-barra" role="img" aria-label="Palla nostra ${mmss(pm.noiSec)}, palla loro ${mmss(pm.loroSec)}, ferma o non classificabile ${mmss(pm.fermaSec)}">
+        <span style="width:${w(pm.noiSec)}%; background:var(--c1)"></span><span style="width:${w(pm.loroSec)}%; background:var(--c2)"></span><span style="width:${w(pm.fermaSec)}%; background:var(--grid)"></span>
+      </div>
+      <div class="pos-legenda"><span><i style="background:var(--c1)"></i>Palla nostra ${mmss(pm.noiSec)}</span><span><i style="background:var(--c2)"></i>Palla loro ${mmss(pm.loroSec)}</span><span><i style="background:var(--grid)"></i>Ferma o non classificabile ${mmss(pm.fermaSec)}</span></div>
+    </div>
+    ${mo ? `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Momentum della partita</div>
+      <div class="grafico-sub">Ogni barra sono ${nf0(MOMENTUM_FINESTRA_SEC / 60)} minuti: verso l'alto quando la palla è stata soprattutto nostra, verso il basso quando è stata soprattutto loro; più è lunga, più il possesso è stato netto. I triangoli segnano i gol: in alto i nostri, in basso quelli subiti. Tocca una barra per i numeri.</div>
+      <div class="grafico-wrap" style="height:300px"><canvas id="gr-momentum"></canvas></div>
+      <div class="pos-legenda"><span><i style="background:var(--c1)"></i>Palla soprattutto nostra</span><span><i style="background:var(--c2)"></i>Palla soprattutto loro</span><span><b style="color:var(--c1)">▲</b> Gol fatto</span><span><b style="color:var(--c2)">▼</b> Gol subito</span></div>
+    </div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Come si conta: la palla è degli avversari quando l'interruttore del possesso di SevenLab è acceso (dato misurato); è nostra quando è spento e negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi c'è stato un nostro evento con la palla, o la palla ci è appena tornata. Il resto è palla ferma o non classificabile e non entra nella percentuale, come nelle statistiche ufficiali che contano solo la palla in gioco. Il momentum vale solo per la singola partita: sommato su più gare non vorrebbe dire niente.</p>`;
+  if(mo) creaGrafico("gr-momentum", configMomentum(mo, pal, false));
+}
+
 function renderRiconquista(f){
   const cont = $("#contenuto-riconquista");
   if(!cont) return;
@@ -6507,6 +6819,7 @@ function render(){
   renderGolGameCampo("contenuto-golgame-partita", f.partite);
   renderPortaGol("contenuto-porta-partita", f.partite);
   renderSubentrati(f);
+  renderPossessoPartita(f);
   renderRiconquista(f);
   renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita");
   renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita");
@@ -7992,7 +8305,11 @@ async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partit
 function possessoStagionale(partite){
   const tot = {ourCertainSec:0, opponentEstimatedSec:0, contestedSec:0, unknownSec:0};
   let possessi = 0, recuperi = 0, palleParse = 0, partiteUsate = 0;
+  // partite con l'interruttore del possesso (18/10/2026): contano con il dato misurato, non con la stima
+  let misNoi = 0, misLoro = 0, misFerma = 0, partiteMisurate = 0;
   (partite||[]).forEach(p => {
+    const pm = possessoMisuratoPartita(p);
+    if(pm && pm.noiSec + pm.loroSec > 0){ misNoi += pm.noiSec; misLoro += pm.loroSec; misFerma += pm.fermaSec; partiteMisurate++; return; }
     const analisi = analizzaEventiPartitaSevenLab({id:p.Match_ID, eventi:p.Eventi, riepilogoTempi:p.RiepilogoTempi});
     if(!analisi.eventiSquadra.length) return;
     const pos = analyzePossession(analisi.eventiSquadra);
@@ -8003,12 +8320,17 @@ function possessoStagionale(partite){
     possessi += kpi.possessi; recuperi += kpi.recuperi; palleParse += kpi.palleParse;
     partiteUsate++;
   });
-  if(!partiteUsate) return null;
+  if(!partiteUsate && !partiteMisurate) return null;
   const classificato = tot.ourCertainSec + tot.opponentEstimatedSec + tot.contestedSec;
+  const w = POSSESSION_CONFIG_DEFAULT.contestedWeightForUs;
+  const stimNoi = tot.ourCertainSec + w*tot.contestedSec, stimLoro = tot.opponentEstimatedSec + (1-w)*tot.contestedSec;
   return Object.assign({}, tot, {
-    partiteUsate, possessi, recuperi, palleParse,
-    ourPossessionWeightedPct: percPossesso(tot.ourCertainSec + POSSESSION_CONFIG_DEFAULT.contestedWeightForUs*tot.contestedSec, classificato),
-    confidencePct: percPossesso(classificato, classificato + tot.unknownSec)
+    partiteUsate, partiteMisurate, possessi, recuperi, palleParse, misNoi, misLoro, misFerma,
+    ourPossessionWeightedPct: partiteUsate ? percPossesso(stimNoi, classificato) : null,
+    confidencePct: partiteUsate ? percPossesso(classificato, classificato + tot.unknownSec) : null,
+    pctMisurato: partiteMisurate ? percPossesso(misNoi, misNoi + misLoro) : null,
+    // tutte le partite insieme: misurate con il dato vero, le altre con la stima
+    pctCombinato: percPossesso(stimNoi + misNoi, stimNoi + misNoi + stimLoro + misLoro)
   });
 }
 
@@ -8041,6 +8363,9 @@ async function generaReportPartita(matchId){
   const possessoCalcolato = eventiSquadra.length ? analyzePossession(eventiSquadra) : null;
   const possesso = (possessoCalcolato && possessoCalcolato.confidencePct !== null) ? possessoCalcolato : null;
   const possessoKpi = possesso ? calcolaPossessionKpis(possesso.sequences, eventiSquadra) : null;
+  // possesso MISURATO con l'interruttore (18/10/2026): se c'è, sostituisce la stima nel report
+  const possessoMis = possessoMisuratoPartita(partita);
+  const momentumMis = possessoMis ? momentumPartita(partita, possessoMis) : null;
 
   // Cartellini, angoli, punizioni e rigori di questa partita: letti dalle colonne per giocatore (vedi
   // costruisciDatasetDaSessioni), disponibili solo con l'export Seven Lab aggiornato del 25/08/2026.
@@ -8104,7 +8429,22 @@ async function generaReportPartita(matchId){
         ]
       ]);
       bulletsReport(pag, ["Solo statistiche della tua squadra — un confronto vero con l'avversario (stile SofaScore) richiederebbe di segnare anche i suoi tiri, corner, falli e cartellini, che oggi non tracci."]);
-      if(possesso){
+      if(possessoMis){
+        titoloSezioneReport(pag, "Possesso palla e momentum");
+        kpiRowReport(pag, [
+          {l:"Possesso nostro", v:pctTxt(possessoMis.pctNoi,0)},
+          {l:"Possesso avversari", v:pctTxt(possessoMis.pctLoro,0)},
+          {l:"Palla ferma o n.c.", v:mmss(possessoMis.fermaSec)},
+          {l:"Possessi avversari", v:nf0(possessoMis.possessiLoro)}
+        ]);
+        bulletsReport(pag, frasiMomentum(possessoMis, momentumMis, true).concat([
+          `Palla nostra ${mmss(possessoMis.noiSec)} · palla loro ${mmss(possessoMis.loroSec)} (interruttore acceso; possesso avversario medio ${nf0(possessoMis.durataMediaLoro)}", il più lungo ${mmss(possessoMis.piuLungoLoro)}) · ferma o non classificabile ${mmss(possessoMis.fermaSec)}.`,
+          `Misurato con l'interruttore del possesso di SevenLab: la palla è loro quando è acceso, nostra quando è spento e c'è stato un nostro evento negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi; il resto (rimesse, falli, gol, cambi) non entra nella percentuale.`]));
+        if(momentumMis){
+          etichettaReport(pag, `Momentum: barre di ${nf0(MOMENTUM_FINESTRA_SEC/60)}' verso l'alto quando la palla è stata soprattutto nostra, verso il basso soprattutto loro · ▲ gol fatto, ▼ gol subito`);
+          graficoReport(pag, "rp-chart-momentum", configMomentum(momentumMis, {noi: PALETTE_REPORT.c1, loro: PALETTE_REPORT.c2, testo: PALETTE_REPORT.text, tenue: PALETTE_REPORT.muted, griglia: PALETTE_REPORT.grid}, true), 190);
+        }
+      } else if(possesso){
         titoloSezioneReport(pag, "Possesso palla stimato");
         kpiRowReport(pag, [
           {l:"Possesso stimato", v:pctTxt(possesso.ourPossessionWeightedPct,1)},
@@ -8440,7 +8780,22 @@ async function generaReportStagionale(){
       ]);
       // Possesso palla stimato sull'intera stagione: stessa sezione del report di partita, stessi numeri,
       // riferiti a tutte le gare (vedi possessoStagionale) — richiesta di Elisa del 04/09/2026.
-      if(possessoStag){
+      if(possessoStag && possessoStag.partiteMisurate){
+        // con almeno una partita misurata con l'interruttore (18/10/2026)
+        const ps = possessoStag, misto = ps.partiteUsate > 0;
+        titoloSezioneReport(pag, misto ? "Possesso palla (misurato e stimato)" : "Possesso palla misurato");
+        kpiRowReport(pag, [
+          {l: misto ? "Possesso, tutte le partite" : "Possesso nostro", v:pctTxt(ps.pctCombinato,0)},
+          {l:"Con l'interruttore", v:pctTxt(ps.pctMisurato,0)},
+          {l:"Partite misurate", v:`${nf0(ps.partiteMisurate)} su ${nf0(ps.partiteMisurate + ps.partiteUsate)}`},
+          {l: misto ? "Stimato dagli eventi" : "Palla ferma o n.c.", v: misto ? pctTxt(ps.ourPossessionWeightedPct,0) : mmss(ps.misFerma)}
+        ]);
+        bulletsReport(pag, [
+          `Nelle ${nf0(ps.partiteMisurate)} ${ps.partiteMisurate === 1 ? "partita" : "partite"} con l'interruttore del possesso: palla nostra ${mmss(ps.misNoi)}, palla loro ${mmss(ps.misLoro)}, ferma o non classificabile ${mmss(ps.misFerma)}.`,
+          misto ? `Nelle altre ${nf0(ps.partiteUsate)} il possesso è stimato dai soli nostri eventi, che tendono a dare a noi più possesso di quello vero: il totale mette insieme i due dati, il confronto onesto è fra partite dello stesso tipo.` : `Misurato: la palla è loro quando l'interruttore è acceso, nostra quando è spento e c'è stato un nostro evento negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi; il resto non entra nella percentuale.`,
+          `${nf0(ds.partite.length - ps.partiteMisurate - ps.partiteUsate)} partite su ${nf0(ds.partite.length)} non hanno né l'interruttore né la sezione eventi.`
+        ].filter(t => !/^0 partite/.test(t)));
+      } else if(possessoStag){
         titoloSezioneReport(pag, "Possesso palla stimato");
         kpiRowReport(pag, [
           {l:"Possesso stimato", v:pctTxt(possessoStag.ourPossessionWeightedPct,1)},
@@ -8923,6 +9278,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if(selPGP) selPGP.addEventListener("change", e => { stato.persaAmbitoPartita = e.target.value; renderPersaGiocatorePartita(datiFiltrati()); });
   const selZone = $("#zn-sel-sessione");
   if(selZone) selZone.addEventListener("change", e => { stato.zoneSessione = e.target.value; renderZoneAllenamento(datiFiltrati()); });
+  const selPOS = $("#pos-sel-partita");
+  if(selPOS) selPOS.addEventListener("change", e => { stato.possessoPartita = e.target.value; renderPossessoPartita(datiFiltrati()); adattaLarghezzeColonneSchermo(); });
   const selPGL = $("#pgl-sel-partita");
   if(selPGL) selPGL.addEventListener("change", e => { stato.persaGolPartita = e.target.value;
     renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", datiFiltrati().partite, "partita"); adattaLarghezzeColonneSchermo(); });

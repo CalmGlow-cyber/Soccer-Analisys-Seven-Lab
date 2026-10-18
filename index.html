@@ -361,6 +361,11 @@ th.cella-testo{text-align:left !important}
 .fz-pillole{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:12px; font-size:12.5px; color:var(--muted)}
 .fz-pillole span{display:inline-flex; align-items:center; gap:6px}
 .fz-pillole .pill{text-transform:none; letter-spacing:0; font-size:12px}
+.pos-barra{display:flex; height:16px; border-radius:8px; overflow:hidden; margin-top:12px; background:var(--grid)}
+.pos-barra span{display:block; height:100%}
+.pos-legenda{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:12.5px; color:var(--muted)}
+.pos-legenda span{display:inline-flex; align-items:center; gap:6px}
+.pos-legenda i{display:inline-block; width:10px; height:10px; border-radius:3px}
 .fz-campo-wrap{margin:14px auto 0; width:100%; max-width:340px}
 .fz-campo{position:relative; width:100%; aspect-ratio:2/3; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.18)}
 .fz-striscia{position:absolute; left:0; right:0}
@@ -637,6 +642,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     <a href="#sez-golgame-partita" data-tab="partita">Zone tiro e assist gol</a>
     <a href="#sez-porta-partita" data-tab="partita">Dove entra la palla in porta</a>
     <a href="#sez-subentrati" data-tab="partita">Impatto dei subentrati</a>
+    <a href="#sez-possesso-partita" data-tab="partita">Possesso e momentum</a>
     <a href="#sez-riconquista" data-tab="partita">Tempo di riconquista</a>
     <a href="#sez-persa-gol-partita" data-tab="partita">Palle perse e gol subiti</a>
     <a href="#sez-incampo-partita" data-tab="partita">Gol subiti e chi è in campo</a>
@@ -824,15 +830,26 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     </section>
 
     <!-- 7d. TEMPO DI RICONQUISTA DELLA PALLA (partita) -->
+    <!-- 7c-bis. POSSESSO PALLA E MOMENTUM (partita singola, 18/10/2026) -->
+    <section id="sez-possesso-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">10</span><h2>Possesso palla e momentum</h2></div>
+      <p class="sez-desc">Quanto tempo la palla è stata nostra e quanto degli avversari, e come è cambiato lungo la partita. Con l'interruttore del possesso di SevenLab il tempo degli avversari è misurato; nelle partite senza interruttore il possesso è solo stimato dai nostri eventi e il momentum non c'è. Si guarda una partita alla volta.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pos-sel-partita">Partita</label>
+          <select id="pos-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-possesso-partita"></div>
+    </section>
+
     <section id="sez-riconquista" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">10</span><h2>Tempo di riconquista della palla</h2></div>
+      <div class="sez-testa"><span class="sez-num">11</span><h2>Tempo di riconquista della palla</h2></div>
       <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso: è la misura della reattività nella transizione negativa. Si parte da ogni palla persa e si cerca il primo recupero successivo — nessun dato nuovo da raccogliere, entrambi gli eventi sono già nella timeline di Seven Lab. Le sequenze interrotte da un gol, dalla fine del tempo o che superano il minuto vengono contate a parte invece di entrare nella media.</p>
       <div id="contenuto-riconquista"></div>
     </section>
 
     <!-- 7e. PALLE PERSE CHE DIVENTANO GOL SUBITI (partita) -->
     <section id="sez-persa-gol-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">11</span><h2>Palle perse che diventano gol subiti</h2></div>
+      <div class="sez-testa"><span class="sez-num">12</span><h2>Palle perse che diventano gol subiti</h2></div>
       <p class="sez-desc">Quali palle perse si sono trasformate in un gol avversario entro 15 secondi, e chi le ha perse. Serve a capire quale giocatore tende a sbagliare nei momenti in cui l'avversario aggredisce. Nessun dato nuovo da raccogliere: palla persa e gol subito sono già nella timeline di Seven Lab.</p>
       <div class="toolbar">
         <div class="campo"><label for="pgl-sel-partita">Partita</label>
@@ -843,7 +860,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
 
     <!-- 7f. GOL SUBITI E CHI È IN CAMPO (partita) -->
     <section id="sez-incampo-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">12</span><h2>Gol subiti e chi è in campo</h2></div>
+      <div class="sez-testa"><span class="sez-num">13</span><h2>Gol subiti e chi è in campo</h2></div>
       <p class="sez-desc">Quanti gol prende la squadra quando un giocatore è in campo, rispetto a quando non c'è — e lo stesso per le coppie di difensori di ruolo in campo insieme. Serve a capire se con certi giocatori, o certe coppie di difesa, la squadra regge meno. Nessun dato nuovo da raccogliere: chi è in campo si ricava dai cambi della timeline.</p>
       <div class="toolbar">
         <div class="campo"><label for="icp-sel-partita">Partita</label>
@@ -854,7 +871,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
 
     <!-- 7g. LA FORMAZIONE MIGLIORE (partita) -->
     <section id="sez-formazione-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">13</span><h2>La formazione migliore</h2></div>
+      <div class="sez-testa"><span class="sez-num">14</span><h2>La formazione migliore</h2></div>
       <p class="sez-desc">Fra le formazioni che sono davvero scese in campo insieme, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi. Per tutto il periodo o per una partita sola.</p>
       <div class="toolbar">
         <div class="campo"><label for="fm-sel-partita">Partita</label>
@@ -1064,6 +1081,8 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
           <p><code>Azioni per partita intera = Azioni_Totali / Minuti_Totali × 50</code>, sull'intera stagione. I 50 minuti sono la durata regolamentare di una partita di calcio a 7 (due tempi da 25, recupero escluso perché non registrato e variabile): prima qui c'erano i 90 minuti del calcio a 11, un riferimento che in questo sport non esiste e che gonfiava ogni valore di quasi il doppio. È una stima costruita solo con i dati che questo sistema raccoglie oggi (passaggi, tiri, dribbling tentati): non misura chi riceve più palloni dai compagni, perché non registriamo i passaggi ricevuti né i tocchi. Se in futuro si vuole misurare davvero «chi viene cercato di più», serve aggiungere quella rilevazione ai dati raccolti.</p>
           <h4>Formazioni a confronto</h4>
           <p>Le partite vengono raggruppate per il valore della colonna <code>Modulo</code> (facoltativa, foglio Partite); per ogni modulo si sommano gol fatti/subiti e le azioni dei giocatori di quelle partite, poi si ricalcolano le medie e le percentuali come per l'aggregato di periodo. <strong>Avvertenza importante:</strong> questo confronto non tiene conto della forza dell'avversario affrontato con ciascun modulo — un modulo usato per lo più contro squadre più deboli sembrerà artificialmente migliore. È una lettura preliminare, da usare con cautela e da incrociare con quello che si è visto in campo; un confronto più affidabile richiederebbe di registrare anche una stima della forza dell'avversario partita per partita, cosa che questo sistema non fa ancora.</p>
+          <h4>Possesso palla e momentum</h4>
+          <p>Nelle partite con l'interruttore del possesso di SevenLab (sezione «POSSESSO AVVERSARIO» dell'export) ogni secondo di gioco è degli avversari quando l'interruttore è acceso, nostro quando è spento e negli ultimi 12 secondi c'è stato un nostro evento con la palla (passaggio, dribbling, tiro, gol, recupero, palla persa) o l'interruttore si è appena spento, altrimenti palla ferma o non classificabile, che non entra nella percentuale: <code>possesso nostro = secondi nostri / (secondi nostri + secondi loro)</code>. La pausa fra i tempi, se il file la segna, è esclusa. Momentum: finestre di 2 minuti per tempo, in ognuna <code>(secondi nostri − secondi loro) / (secondi nostri + secondi loro) × 100</code>, a zero se ci sono meno di 30 secondi classificati; il tratto migliore e il peggiore sono 3 finestre di fila nello stesso tempo; per ogni gol si guarda chi ha avuto più palla nei 2 minuti prima. Nelle partite senza interruttore il possesso resta stimato dai soli eventi della nostra squadra, e nel report stagionale le due cose sono tenute separate oltre che sommate.</p>
           <h4>Gol subiti e chi è in campo</h4>
           <p>Chi è in campo si ricostruisce dalla timeline: titolari sono i giocatori con minuti che non hanno come primo cambio un ingresso (o che giocano palloni prima di entrare); ogni «Cambio entra» mette in campo, ogni «Cambio esce» o cartellino rosso toglie. In allenamento la squadra interna è quella scritta sulle righe del giocatore, fino a un eventuale «Cambio squadra». Una partita in cui risultano più di 7 giocatori in campo, o palloni giocati da chi risulta in panchina, viene esclusa: manca un cambio. Per ogni giocatore <code>gol subiti ogni 50' con lui = gol subiti con lui in campo / minuti in campo × 50</code>, e lo stesso «senza di lui» sul tempo restante (in allenamento: le due squadre interne sommate). Lo stesso per le coppie di difensori: due giocatori della stessa squadra, entrambi difensori di ruolo (il ruolo di partenza scritto nel tabellino, non la posizione data con un cambio), in campo nello stesso istante, con almeno 10' insieme e 10' senza. Le coppie con un ospite si mostrano, una per allenamento, ma non si confrontano. Soglie: almeno 10' in campo e 10' senza. Il segnale nasce dal test binomiale esatto a due code (con n gol e una quota q di minuti in campo, i gol «suoi» per puro caso sarebbero Binomiale(n, q)), corretto per il numero di confronti con Benjamini-Hochberg: <strong>chiaro</strong> se la probabilità corretta è sotto 0,10, <strong>da tenere d'occhio</strong> se lo è solo quella grezza. È una correlazione, non un'attribuzione di colpa.</p>
           <h4>Formazioni e formazione migliore</h4>
