@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="it" data-tema="chiaro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Calcio a 7 — Analisi prestazionale</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,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">
+<!-- Logo (16/10/2026): quello di Elisa, «Analysis», scontornato. Nella scheda del browser e nella testata il
+     simbolo è trasparente fuori dal quadrato arrotondato; nella schermata Home iOS riempirebbe di nero le parti
+     trasparenti, quindi apple-touch-icon.png è il simbolo con gli angoli riempiti dal colore del bordo.
+     Icona per la schermata Home di iPhone/iPad (07/10/2026). iOS non usa il favicon qui sopra:
+     vuole un PNG raggiungibile a un indirizzo, e in sua assenza mette uno screenshot della pagina.
+     apple-touch-icon.png va quindi caricato nella repo accanto a index.html e app.js. iOS applica da
+     sé gli angoli arrotondati, perciò il file è quadrato e pieno. -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Analysis">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --bg:#F7F6F2; --surface:#F9F8F5; --surface-alt:#FBFBF9; --border:#D4D1CA;
+  --text:#28251D; --muted:#6E6D68; --faint:#A9A8A3;
+  --primary:#01696F; --primary-hover:#0C4E54; --primary-soft:#E3EEEE;
+  --danger:#A13544; --warning:#964219; --success:#437A22;
+  --c1:#20808D; --c2:#A84B2F; --c3:#1B474D; --c4:#8FC5CD; --c5:#944454; --c6:#C99400;
+  --grid:rgba(40,37,29,.10);
+  --r:12px; --shadow:0 1px 2px rgba(40,37,29,.06), 0 6px 18px rgba(40,37,29,.05);
+  /* Su schermi grandi 1240px lasciavano centinaia di pixel inutilizzati ai lati mentre le tabelle
+     scorrevano in orizzontale: ora il contenuto si allarga fino a 1600px (audit 04/09/2026). I testi
+     lunghi restano comunque limitati a ~80 caratteri dalle loro regole, quindi non diventano illeggibili. */
+  --maxw:min(1600px, 94vw);
+}
+html[data-tema="scuro"]{
+  --bg:#171614; --surface:#1C1B19; --surface-alt:#201F1D; --border:#393836;
+  --text:#E6E5E3; --muted:#9C9B98; --faint:#6A6967;
+  --primary:#4F98A3; --primary-hover:#6FB3BD; --primary-soft:#1E3437;
+  --danger:#DD6974; --warning:#BB653B; --success:#6DAA45;
+  --c1:#4F98A3; --c2:#D08160; --c3:#8FC5CD; --c4:#356E77; --c5:#C98595; --c6:#E8AF34;
+  --grid:rgba(230,229,227,.12);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.28);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Satoshi','General Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:16px; line-height:1.55; -webkit-font-smoothing:antialiased;
+  overscroll-behavior:contain;
+}
+h1,h2,h3,h4{font-family:'Satoshi',system-ui,sans-serif; line-height:1.2; margin:0; letter-spacing:-.015em}
+.num, table td, .kpi-valore, .metrica{font-variant-numeric:tabular-nums lining-nums}
+a{color:var(--primary)}
+button{font-family:inherit}
+em, i{font-style:normal}
+:focus-visible{outline:2px solid var(--primary); outline-offset:2px; border-radius:6px}
+
+/* ---------- topbar ---------- */
+/* La testata è divisa in due: la riga del marchio scorre via normalmente, mentre solo la parte utile
+   durante la lettura (filtri + schede + indice sezioni) resta fissa in alto. Prima restava fissa tutta
+   quanta e occupava 246px su desktop (27% dello schermo), rubando spazio ai dati: audit del 04/09/2026. */
+.topbar{border-bottom:1px solid var(--border)}
+.topbar-pinned{position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(10px); box-shadow:0 1px 0 var(--border)}
+.topbar-inner{max-width:var(--maxw); margin:0 auto; padding:12px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.marchio{display:flex; align-items:center; gap:10px; min-width:0}
+.marchio svg{flex:none; color:var(--primary)}
+.marchio-logo{flex:none; width:38px; height:38px; display:block}
+.marchio .t{font-weight:900; font-size:16px; letter-spacing:-.02em; white-space:nowrap}
+.marchio .s{font-size:12px; color:var(--muted); white-space:nowrap}
+.versione-app{font-size:10.5px; color:var(--muted); opacity:.75; margin-top:2px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; cursor:help}
+.spazio{flex:1 1 auto}
+.btn{border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:9px;
+  padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; transition:background .15s, border-color .15s, transform .1s}
+.btn:hover{border-color:var(--primary); color:var(--primary)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55; cursor:default; transform:none}
+.btn.primario{background:var(--primary); border-color:var(--primary); color:#fff}
+.btn.primario:hover{background:var(--primary-hover); border-color:var(--primary-hover); color:#fff}
+.btn.piccolo{padding:6px 10px; font-size:13px}
+.btn.pericolo{border-color:color-mix(in srgb, var(--danger) 45%, var(--border)); color:var(--danger)}
+.btn.pericolo:hover{background:color-mix(in srgb, var(--danger) 10%, var(--surface)); border-color:var(--danger); color:var(--danger)}
+.lista-file{display:flex; flex-direction:column; gap:8px; margin-top:10px}
+.riga-file{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:9px 12px; border:1px solid var(--border); border-radius:9px; background:var(--surface-alt)}
+.riga-file-nome{font-weight:700; font-size:13.5px}
+.riga-file-dett{font-size:12.5px; color:var(--muted); flex:1; min-width:120px}
+.badge-tipo{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:3px 8px; border-radius:99px; white-space:nowrap}
+.badge-tipo.partita{background:color-mix(in srgb, var(--c1) 18%, transparent); color:var(--c1)}
+.badge-tipo.allenamento{background:color-mix(in srgb, var(--c6) 22%, transparent); color:color-mix(in srgb, var(--c6) 70%, var(--text))}
+/* Metodo di rilevazione del file: pieno se scritto nel file, tratteggiato se dedotto dalla regola
+   "nessuna indicazione = diretta" (file dello storico). */
+.badge-metodo{font-size:11px; font-weight:700; letter-spacing:.02em; padding:2px 8px; border-radius:99px; white-space:nowrap;
+  border:1px solid var(--border); color:var(--muted); background:transparent}
+.badge-metodo.differita{border-color:color-mix(in srgb, var(--c1) 55%, var(--border)); color:var(--c1);
+  background:color-mix(in srgb, var(--c1) 10%, transparent)}
+.badge-metodo.predefinito{border-style:dashed; font-weight:600}
+.riga-file-avviso{flex-basis:100%; font-size:12px; line-height:1.45; color:var(--warning); padding-top:2px}
+.filtri{max-width:var(--maxw); margin:0 auto; padding:0 20px 12px; display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap}
+.campo{display:flex; flex-direction:column; gap:4px}
+.campo label{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:600}
+select{font-family:inherit; font-size:14px; padding:7px 10px; border-radius:9px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text); min-width:170px; max-width:100%}
+.badge{font-size:12px; padding:4px 9px; border-radius:99px; background:var(--primary-soft); color:var(--primary);
+  border:1px solid color-mix(in srgb, var(--primary) 30%, transparent); font-weight:600; white-space:nowrap}
+.nav-sezioni{max-width:var(--maxw); margin:0 auto; padding:0 20px 10px; display:flex; gap:6px; overflow-x:auto; scrollbar-width:thin}
+.nav-sezioni a{font-size:12.5px; color:var(--muted); text-decoration:none; padding:5px 10px; border-radius:99px;
+  border:1px solid transparent; white-space:nowrap}
+.nav-sezioni a:hover{background:var(--surface); border-color:var(--border); color:var(--text)}
+
+/* ---------- tab "Dashboard Partita" / "Dashboard Allenamento" / "Giocatori" ---------- */
+.tab-dashboard{max-width:var(--maxw); margin:0 auto; padding:2px 20px 12px; display:flex; gap:8px; flex-wrap:wrap}
+.tab-btn{border:1px solid var(--border); background:var(--surface); color:var(--muted); border-radius:10px;
+  padding:9px 18px; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s, border-color .15s, color .15s}
+.tab-btn:hover{border-color:var(--primary); color:var(--primary)}
+.tab-btn.attiva{background:var(--primary); border-color:var(--primary); color:#fff}
+.tab-btn .etichetta-corta{display:none}
+
+/* ---------- layout ---------- */
+main{max-width:var(--maxw); margin:0 auto; padding:24px 20px 80px}
+section{margin:0 0 40px}
+.sez-testa{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+.sez-testa h2{font-size:21px}
+.sez-num{font-size:12px; font-weight:700; color:var(--primary); background:var(--primary-soft);
+  border-radius:6px; padding:2px 7px; letter-spacing:.04em}
+.sez-desc{color:var(--muted); font-size:14px; margin:2px 0 16px; max-width:78ch}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px; box-shadow:var(--shadow)}
+.griglia{display:grid; gap:16px}
+.g-kpi{grid-template-columns:repeat(auto-fit,minmax(178px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+/* I riquadri con il campo vanno sempre a 2 colonne (mai 3 + 1 orfano, come capitava a schermo largo):
+   restano più grandi e le percentuali dentro le zone si leggono. Audit del 04/09/2026. */
+.g-campi{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:820px){ .g-campi{grid-template-columns:minmax(0,1fr)} }
+.g-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+
+/* ---------- kpi ---------- */
+.kpi{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:14px 16px; box-shadow:var(--shadow)}
+.kpi-eti{font-size:12px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.06em}
+.kpi-valore{font-size:30px; font-weight:900; color:var(--primary-hover); letter-spacing:-.03em; margin-top:6px; line-height:1.1}
+html[data-tema="scuro"] .kpi-valore{color:var(--primary-hover)}
+.kpi-delta{font-size:12.5px; margin-top:4px; display:flex; align-items:center; gap:5px; font-weight:600}
+.kpi-delta.su{color:var(--success)} .kpi-delta.giu{color:var(--danger)} .kpi-delta.neutro{color:var(--muted)}
+.kpi-nota{font-size:12px; color:var(--faint); margin-top:4px}
+
+/* ---------- grafici ---------- */
+.grafico-wrap{position:relative; width:100%; height:260px}
+.grafico-wrap.alto{height:320px}
+.grafico-wrap-campo{position:relative; width:100%; aspect-ratio:5/3}
+.grafico-wrap-campo canvas{width:100%; height:100%; display:block; border-radius:8px}
+/* Porta da calcio vista di fronte: proporzione 3:1 dello specchio + aria sopra e prato sotto. Nessuna quota
+   a disegno (richiesta esplicita dell'utente, 08/10/2026): il rapporto 7.32x2.44 serve solo al disegno. */
+.grafico-wrap-porta{position:relative; width:100%; aspect-ratio:8/3}
+.grafico-wrap-porta canvas{width:100%; height:100%; display:block; border-radius:8px}
+/* Le schede della sezione "Dove entra la palla in porta" sono impilate a tutta larghezza: il disegno della
+   porta e la matrice dei settori hanno la stessa forma e lo stesso orientamento, e affiancarli li
+   rimpicciolirebbe entrambi senza che nessuno dei due ci guadagni. */
+.porta-card{margin-bottom:16px}
+.porta-card:last-of-type{margin-bottom:0}
+.porta-suggerimento{color:var(--c1); font-weight:700}
+/* Riquadro a comparsa sul pallone cliccato: sostituisce la tabella dei gol che stava sotto il grafico. */
+.porta-popup{position:absolute; z-index:5; min-width:190px; max-width:min(300px, 86%);
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 30px 12px 14px;
+  box-shadow:0 14px 34px rgba(0,0,0,.20); font-size:13px; line-height:1.4}
+.porta-popup .pp-zona{font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--c1); margin-bottom:7px}
+.porta-popup .pp-gol{display:flex; flex-direction:column; gap:1px; padding:5px 0; border-top:1px solid var(--border)}
+.porta-popup .pp-gol:first-of-type{border-top:0; padding-top:0}
+.porta-popup .pp-min{font-size:11.5px; font-weight:700; color:var(--muted); font-variant-numeric:tabular-nums}
+.porta-popup .pp-nome{font-size:15px; font-weight:800; color:var(--text); line-height:1.25}
+.porta-popup .pp-assist, .porta-popup .pp-partita{font-size:11.5px; color:var(--muted)}
+.porta-popup .pp-file{font-size:11px; color:var(--faint); margin-top:2px}
+.porta-popup .pp-nota{font-size:11.5px; color:var(--muted); margin-top:7px; padding-top:7px; border-top:1px solid var(--border)}
+.porta-popup-chiudi{position:absolute; top:5px; right:5px; width:24px; height:24px; line-height:1; padding:0;
+  border:0; border-radius:7px; background:transparent; color:var(--muted); font-size:19px; cursor:pointer}
+.porta-popup-chiudi:hover{background:var(--surface-alt); color:var(--text)}
+/* L'elenco dei gol resta nel documento per i lettori di schermo, che un canvas non lo leggono. */
+.porta-elenco-accessibile{position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%);
+  white-space:nowrap; margin:0; padding:0}
+/* Matrice dei nove settori: ogni nono di porta è a sua volta 3:1, come lo specchio intero, quindi la
+   matrice ha la stessa forma del disegno sopra. Le etichette stanno FUORI dalle caselle: dentro resta
+   solo il dato. */
+.porta-matrice{display:grid; grid-template-columns:auto minmax(0,1fr); grid-template-rows:auto auto;
+  gap:8px 10px; align-items:stretch}
+.porta-matrice .pm-assi-y{grid-column:1; grid-row:1; display:grid; grid-template-rows:repeat(3,1fr); gap:6px}
+.porta-matrice .pm-assi-y span{display:flex; align-items:center; justify-content:flex-end; font-size:10.5px;
+  font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.porta-matrice .pm-griglia{grid-column:2; grid-row:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(3,minmax(0,1fr)); gap:6px; aspect-ratio:3/1;
+  border:2px solid var(--border); border-radius:10px; padding:6px; background:var(--surface-alt)}
+.porta-matrice .pm-assi-x{grid-column:2; grid-row:2; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px}
+.porta-matrice .pm-assi-x span{text-align:center; font-size:10.5px; font-weight:800; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted)}
+.pm-cella{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  border-radius:7px; min-height:48px; background:var(--surface-alt)}
+.pm-cella .pm-pct{font-size:clamp(17px, 2.4vw, 30px); font-weight:900; line-height:1; color:var(--text);
+  font-variant-numeric:tabular-nums}
+.pm-cella .pm-n{font-size:11.5px; font-weight:700; color:var(--muted)}
+.pm-cella.pm-vuota{border:1px dashed var(--border)}
+.pm-cella.pm-vuota .pm-pct{color:var(--faint)}
+/* Riga di sintesi sotto la matrice: le letture che contano (altezza e larghezza) già sommate. */
+.porta-sintesi{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-top:14px}
+.porta-sintesi > div{border:1px solid var(--border); border-radius:9px; padding:9px 11px; background:var(--surface-alt);
+  display:flex; flex-direction:column; gap:2px}
+.porta-sintesi .pz-l{font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--muted)}
+.porta-sintesi .pz-v{font-size:21px; font-weight:900; color:var(--text); font-variant-numeric:tabular-nums}
+.porta-sintesi .pz-v small{font-size:12.5px; font-weight:700; color:var(--muted)}
+/* Sotto una certa larghezza la forma 3:1 darebbe righe più basse del contenuto (su telefono una riga
+   sarebbe alta una quarantina di pixel): lì la matrice smette di tenere la proporzione e si allunga, che
+   è l'unico modo di restare leggibile. Sopra, la proporzione è quella della porta. */
+@media (max-width:720px){
+  .porta-matrice .pm-griglia{aspect-ratio:auto; grid-auto-rows:minmax(54px,auto); grid-template-rows:none}
+}
+@media (max-width:620px){
+  .porta-matrice{grid-template-columns:minmax(0,1fr)}
+  .porta-matrice .pm-assi-y{display:none}
+  .porta-matrice .pm-griglia{grid-column:1; grid-row:1}
+  .porta-matrice .pm-assi-x{grid-column:1; grid-row:2}
+  .pm-cella .pm-n{font-size:10px}
+}
+/* Su schermo stretto il riquadro a comparsa sarebbe più alto del grafico stesso: invece di sbordare sopra
+   la scheda successiva, scende sotto il disegno e resta dentro la scheda. */
+.porta-popup.porta-popup-sotto{position:relative; left:auto !important; top:auto !important; max-width:none;
+  width:100%; margin-top:10px; box-shadow:none; z-index:auto}
+.grafico-titolo{font-size:14.5px; font-weight:700; margin-bottom:2px}
+.grafico-sub{font-size:12.5px; color:var(--muted); margin-bottom:12px}
+
+/* ---------- radar della vista giocatore: grafico e numeri veri affiancati ----------
+   Con 9 assi il radar ha bisogno di spazio (le etichette stanno fuori dalla circonferenza), e i numeri
+   veri vanno letti accanto alla forma, non cercati altrove: la card occupa quindi tutta la riga e si
+   divide in due colonne, che tornano impilate quando lo schermo è stretto. */
+.card-radar{grid-column:1 / -1}
+.radar-affianco{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr); gap:18px; align-items:start}
+.radar-affianco .grafico-wrap{height:400px}
+@media (max-width:900px){ .radar-affianco{grid-template-columns:minmax(0,1fr)} .radar-affianco .grafico-wrap{height:340px} }
+
+/* ---------- tabella dei valori del radar (vista giocatore) ---------- */
+.tabella-radar{border:1px solid var(--border); border-radius:10px; overflow-x:auto; background:var(--surface)}
+.tabella-radar table{min-width:0; width:100%; font-size:13px}
+/* le intestazioni possono andare a capo: su telefono, restando su una riga sola, l'ultima colonna
+   ("Media pari ruolo") finiva tagliata fuori dalla card (audit 04/09/2026) */
+.tabella-radar thead th{position:static; padding:8px 10px; font-size:10.5px; text-align:right; cursor:default; white-space:normal}
+.tabella-radar thead th:first-child{text-align:left}
+.tabella-radar tbody td{padding:7px 10px; white-space:nowrap}
+.tabella-radar tbody td:first-child{position:static; background:transparent; font-weight:600; text-align:left; white-space:normal}
+.tabella-radar tbody td.num{text-align:right; font-variant-numeric:tabular-nums}
+.tabella-radar tbody td.forte{font-weight:800; color:var(--text)}
+.tabella-radar tbody tr:last-child td{border-bottom:none}
+
+/* ---------- tabella ---------- */
+/* --altezza-fissa è misurata da app.js (aggiornaAltezzaBarraFissa): è l'altezza reale della barra che
+   resta in alto. Serve per due cose: far atterrare i link dell'indice SOTTO la barra invece che dietro,
+   e non far mai crescere una tabella oltre lo spazio che le resta davvero sullo schermo. */
+section[id]{scroll-margin-top:calc(var(--altezza-fissa, 0px) + 14px)}
+.tabella-scroll{overflow:auto; max-height:min(66vh, calc(100vh - var(--altezza-fissa, 0px) - 120px)); border:1px solid var(--border); border-radius:var(--r); background:var(--surface);
+  /* ombre laterali che compaiono solo quando c'è altro da vedere scorrendo in orizzontale: senza, su
+     telefono non si capisce che la tabella continua oltre il bordo (audit 04/09/2026). */
+  background-image:linear-gradient(to right, var(--surface) 30%, transparent),
+                   linear-gradient(to left, var(--surface) 30%, transparent),
+                   linear-gradient(to right, rgba(0,0,0,.13), transparent 14px),
+                   linear-gradient(to left, rgba(0,0,0,.13), transparent 14px);
+  background-position:left center, right center, left center, right center;
+  background-repeat:no-repeat; background-size:36px 100%, 36px 100%, 14px 100%, 14px 100%;
+  background-attachment:local, local, scroll, scroll}
+/* min-width più basso e table-layout fisso: le larghezze delle colonne vengono decise da
+   adattaLarghezzeColonneSchermo() sul contenuto reale, invece di essere dettate dall'intestazione più
+   lunga (era il motivo per cui colonne con dentro "83,3%" erano larghe 144px). */
+table{border-collapse:separate; border-spacing:0; width:100%; min-width:680px; font-size:13.5px; table-layout:fixed}
+thead th{position:sticky; top:0; z-index:2; background:var(--surface-alt); border-bottom:1px solid var(--border);
+  padding:10px 10px; text-align:right; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--muted); cursor:pointer; white-space:normal; overflow-wrap:normal; word-break:keep-all; vertical-align:bottom}
+thead th:first-child, tbody td:first-child{text-align:left; position:sticky; left:0; z-index:1; background:var(--surface-alt); max-width:190px; white-space:normal}
+thead th:first-child{z-index:3}
+tbody td:first-child{background:var(--surface); font-weight:600}
+thead th[aria-sort="descending"]::after{content:" ▾"; color:var(--primary)}
+thead th[aria-sort="ascending"]::after{content:" ▴"; color:var(--primary)}
+tbody td{padding:9px 10px; text-align:right; border-bottom:1px solid color-mix(in srgb, var(--border) 60%, transparent); white-space:nowrap}
+tbody tr:hover td{background:var(--primary-soft)}
+tbody tr:hover td:first-child{background:var(--primary-soft)}
+.ruolo{font-size:11.5px; color:var(--muted); font-weight:500; display:block}
+td.conf-migliore{font-weight:800; color:var(--primary); background:var(--primary-soft)}
+.conf-testata{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border)}
+.conf-testata .nome{font-weight:800; font-size:15px}
+.conf-testata .ruolo-badge{font-size:11.5px; color:var(--muted); font-weight:600}
+.barra-wrap{display:flex; align-items:center; gap:8px; min-width:140px}
+.barra-wrap .barra{height:9px; border-radius:99px; min-width:3px}
+.barra-wrap span{font-size:12.5px; font-weight:700; white-space:nowrap}
+
+/* ---------- caricamento ---------- */
+.dropzone{border:2px dashed var(--border); border-radius:18px; background:var(--surface);
+  padding:48px 28px; text-align:center; transition:border-color .15s, background .15s}
+.dropzone.attivo{border-color:var(--primary); background:var(--primary-soft)}
+.dropzone h2{font-size:24px; margin-bottom:8px}
+.dropzone p{color:var(--muted); font-size:14.5px; max-width:56ch; margin:0 auto 18px}
+.azioni{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+.privacy{font-size:12.5px; color:var(--muted); margin-top:18px; display:flex; gap:7px; align-items:center; justify-content:center}
+.istruzioni{margin-top:26px}
+.istruzioni ul{margin:8px 0 0; padding-left:20px; color:var(--muted); font-size:13.5px}
+.istruzioni code{font-family:ui-monospace,'JetBrains Mono',monospace; font-size:12.5px; background:var(--surface-alt);
+  border:1px solid var(--border); border-radius:5px; padding:1px 5px; color:var(--text)}
+
+/* ---------- avvisi / vuoti ---------- */
+.vuoto{border:1px dashed var(--border); border-radius:var(--r); padding:22px; color:var(--muted); font-size:14px; background:var(--surface-alt)}
+.vuoto strong{color:var(--text)}
+.avviso{display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border-radius:10px; font-size:13.5px;
+  border:1px solid var(--border); background:var(--surface); margin-bottom:8px}
+.avviso .ic{flex:none; font-weight:900; width:20px; text-align:center}
+.avviso.attenzione{border-color:color-mix(in srgb, var(--warning) 45%, var(--border)); background:color-mix(in srgb, var(--warning) 8%, var(--surface))}
+.avviso.errore{border-color:color-mix(in srgb, var(--danger) 45%, var(--border)); background:color-mix(in srgb, var(--danger) 8%, var(--surface))}
+.avviso.ok{border-color:color-mix(in srgb, var(--success) 45%, var(--border)); background:color-mix(in srgb, var(--success) 8%, var(--surface))}
+.griglia-avvisi{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:8px}
+.griglia-avvisi .avviso{margin-bottom:0}
+/* max-width: una riga di testo lunga quanto tutto lo schermo è faticosa da seguire (si perde il rigo
+   tornando a capo). Le note restano larghe al massimo ~80 caratteri, come già faceva .sez-desc. */
+/* righe con campione troppo piccolo per essere lette come un segnale: restano, ma in secondo piano */
+tbody tr.riga-attenuata td{opacity:.6}
+.nota-piccola{font-size:12.5px; color:var(--muted); margin:12px 0 0; line-height:1.5; max-width:80ch}
+.pill{font-size:11px; font-weight:700; padding:2px 7px; border-radius:99px; text-transform:uppercase; letter-spacing:.05em}
+.pill.pos{background:color-mix(in srgb, var(--success) 16%, transparent); color:var(--success)}
+.pill.neg{background:color-mix(in srgb, var(--danger) 16%, transparent); color:var(--danger)}
+.pill.neu{background:color-mix(in srgb, var(--muted) 16%, transparent); color:var(--muted)}
+.pill.att{background:color-mix(in srgb, var(--warning) 16%, transparent); color:var(--warning)}
+td .pill{white-space:nowrap; text-transform:none; letter-spacing:0; font-size:12px}
+th.cella-testo{text-align:left !important}
+.ruolo-mini{font-size:11.5px; color:var(--muted); font-weight:600}
+.kpi-unita{font-size:14px; font-weight:600; color:var(--muted)}
+/* sincronizzazione (16/10/2026) */
+#btn-cloud{white-space:nowrap}
+#btn-cloud.cloud-fuori{border-color:color-mix(in srgb, var(--primary) 55%, var(--border)); color:var(--primary)}
+#btn-cloud.cloud-ok::before{content:"✓ "; color:var(--success)}
+#btn-cloud.cloud-errore{border-color:var(--danger); color:var(--danger)}
+#btn-cloud.cloud-lavoro{color:var(--muted)}
+#dlg-cloud{border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); padding:20px; width:min(440px, calc(100vw - 32px)); box-shadow:0 18px 50px rgba(0,0,0,.25)}
+#dlg-cloud::backdrop{background:rgba(20,18,15,.45)}
+.dlg-testa{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.dlg-testa h2{font-size:18px; margin:0}
+.dlg-testo{font-size:14px; line-height:1.5; color:var(--muted); margin:10px 0 14px}
+.dlg-form{display:grid; gap:6px}
+.dlg-form label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-top:6px}
+.dlg-form input{font:inherit; font-size:16px; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--surface-alt); color:var(--text)}
+.dlg-form .btn{margin-top:12px}
+.dlg-msg{font-size:13px; color:var(--danger); min-height:1em}
+.azioni-dlg{display:flex; gap:10px; flex-wrap:wrap}
+.dlg-stato{font-size:13.5px; line-height:1.5; margin:14px 0 0}
+.cloud-msg-errore{color:var(--danger)}
+.dlg-nota{font-size:12px; color:var(--faint); margin:10px 0 0}
+/* formazioni (16/10/2026) */
+.fz-legenda{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--muted); margin-top:10px}
+.fz-legenda span{display:inline-flex; align-items:center; gap:6px}
+.fz-ruolo{display:inline-block; width:9px; height:9px; border-radius:50%; flex:none}
+.fz-r0{background:var(--c6)} .fz-r1{background:var(--c1)} .fz-r2{background:var(--c3)} .fz-r3{background:var(--c2)}
+.fz-titoletto{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:4px}
+.fz-riga{display:flex; flex-direction:column; gap:7px; padding:11px 0; border-top:1px solid var(--border)}
+.fz-titoletto + .fz-riga{border-top:none}
+.fz-nomi{display:flex; flex-wrap:wrap; gap:5px}
+.fz-chip{display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; padding:2px 9px 2px 7px; border-radius:99px; background:var(--surface-alt); border:1px solid var(--border)}
+.fz-numeri{display:grid; grid-template-columns:minmax(70px,1fr) auto; align-items:center; gap:10px; font-size:12.5px; color:var(--muted)}
+.fz-numeri .barra-wrap{min-width:0}
+.fz-pillole{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:12px; font-size:12.5px; color:var(--muted)}
+.fz-pillole span{display:inline-flex; align-items:center; gap:6px}
+.fz-pillole .pill{text-transform:none; letter-spacing:0; font-size:12px}
+.pos-barra{display:flex; height:16px; border-radius:8px; overflow:hidden; margin-top:12px; background:var(--grid)}
+.pos-barra span{display:block; height:100%}
+.pos-legenda{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:10px; font-size:12.5px; color:var(--muted)}
+.pos-legenda span{display:inline-flex; align-items:center; gap:6px}
+.pos-legenda i{display:inline-block; width:10px; height:10px; border-radius:3px}
+.fz-campo-wrap{margin:14px auto 0; width:100%; max-width:340px}
+.fz-campo{position:relative; width:100%; aspect-ratio:2/3; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.fz-striscia{position:absolute; left:0; right:0}
+.fz-segno{position:absolute; border:2px solid; box-sizing:border-box}
+.fz-punto{position:absolute; width:5px; height:5px; border-radius:50%; transform:translate(-50%,-50%)}
+.fz-modulo{position:absolute; left:8px; top:8px; font-size:13px; font-weight:800; letter-spacing:.06em; padding:3px 9px; border-radius:6px; font-variant-numeric:tabular-nums}
+.fz-g{position:absolute; transform:translate(-50%,-19px); display:flex; flex-direction:column; align-items:center; gap:3px}
+.fz-maglia{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:12.5px; letter-spacing:.02em; box-shadow:0 2px 5px rgba(0,0,0,.35)}
+.fz-nome{font-size:11.5px; font-weight:700; text-align:center; line-height:1.15; white-space:nowrap; padding:1px 6px; border-radius:5px}
+.fz-nota-modulo{max-width:340px; margin:8px auto 0; text-align:center}
+.fz-campo-wrap.rp{max-width:250px; margin:4px 0 0}
+.fz-campo-wrap.rp .fz-maglia{width:32px; height:32px; font-size:11px} .fz-campo-wrap.rp .fz-g{transform:translate(-50%,-16px)} .fz-campo-wrap.rp .fz-nome{font-size:10px; padding:1px 4px} .fz-campo-wrap.rp .fz-modulo{font-size:11px; left:6px; top:6px; padding:2px 7px}
+
+/* ---------- tendenze ---------- */
+.sotto-tit{font-size:17px; margin:28px 0 4px; padding-top:20px; border-top:1px solid var(--border)}
+.sotto-tit:first-of-type{border-top:none; padding-top:0; margin-top:18px}
+.trend-blocco{margin-bottom:26px}
+.trend-blocco h3{font-size:16px; margin-bottom:2px}
+.trend-blocco .meta{font-size:12.5px; color:var(--muted); margin-bottom:12px}
+.trend-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:16px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px}
+.trend-testa{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+.trend-nome{font-weight:700; font-size:15px}
+.trend-frase{font-size:13.5px; color:var(--text); line-height:1.5}
+.trend-stat{font-size:12px; color:var(--muted)}
+
+/* ---------- metodologia / IA ---------- */
+details.metodo{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:0 18px; box-shadow:var(--shadow)}
+details.metodo summary{cursor:pointer; padding:16px 0; font-weight:700; font-size:15px}
+details.metodo .corpo{padding-bottom:18px; font-size:13.5px; color:var(--muted)}
+details.metodo .corpo h4{font-size:13.5px; color:var(--text); margin:14px 0 4px}
+details.metodo .corpo code{font-family:ui-monospace,'JetBrains Mono',monospace; font-size:12.5px; background:var(--surface-alt);
+  border:1px solid var(--border); border-radius:5px; padding:1px 5px; color:var(--text); word-break:break-word}
+input[type=text],input[type=password],textarea{font-family:inherit; font-size:14px; padding:9px 11px; border-radius:9px;
+  border:1px solid var(--border); background:var(--surface-alt); color:var(--text); width:100%}
+textarea{resize:vertical; min-height:72px}
+.ia-risposta{white-space:pre-wrap; font-size:14px; background:var(--surface-alt); border:1px solid var(--border);
+  border-radius:10px; padding:14px; margin-top:12px}
+footer{border-top:1px solid var(--border); padding:22px 20px 40px; text-align:center; color:var(--faint); font-size:12.5px}
+.nascosto{display:none !important}
+.solo-sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+/* Frase di sintesi in testa a una sezione: la lettura da portarsi via, con i nomi in grassetto. */
+.insight-riga{display:flex; gap:10px; align-items:flex-start; padding:12px 14px; border-radius:10px; font-size:14.5px; line-height:1.5;
+  border:1px solid color-mix(in srgb, var(--c1) 40%, var(--border)); background:color-mix(in srgb, var(--c1) 7%, var(--surface))}
+.insight-riga .ic{flex:none; font-weight:900; color:var(--c1)}
+/* Cella con una frase intera (il motivo di un gol non attribuito): va a capo e si legge da sinistra. */
+td.cella-testo{white-space:normal !important; text-align:left !important; line-height:1.45}
+
+/* ---------- report esportabili ---------- */
+.report-toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
+.report-status{font-size:12.5px; color:var(--muted); margin-top:10px}
+.report-status.attivo{color:var(--primary); font-weight:600}
+.report-status a{color:var(--primary); font-weight:700; text-decoration:underline}
+#report-stage{position:fixed; left:-99999px; top:0; width:794px; background:#FFFFFF; z-index:-1}
+.rp-page{width:794px; min-height:1123px; background:#FFFFFF; color:#221F19; padding:44px 50px 56px;
+  font-family:'Satoshi','General Sans',system-ui,sans-serif; box-sizing:border-box; position:relative}
+.rp-kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px}
+.rp-kpi{border:1px solid #D4D1CA; border-radius:10px; padding:12px 14px; background:#F9F8F5}
+.rp-kpi .l{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:#6E6D68; font-weight:700}
+.rp-kpi .v{font-size:22px; font-weight:900; color:#0C4E54; margin-top:4px}
+.rp-kpi .d{font-size:10.5px; font-weight:700; margin-top:3px}
+.rp-kpi .d.up{color:#2E7D32}
+.rp-kpi .d.down{color:#A13544}
+.rp-kpi .d.flat{color:#6E6D68; font-weight:600}
+/* Interruttore "numeri dietro le percentuali" sopra le classifiche (19/09/2026). */
+.riga-interruttore{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; margin:0 0 10px}
+.interruttore{display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-weight:600; font-size:13.5px; white-space:nowrap}
+.interruttore input{width:16px; height:16px; accent-color:var(--c1); cursor:pointer}
+.riga-interruttore .nota-piccola{margin:0; flex:1 1 320px; min-width:0}
+.rp-section-title{font-size:14.5px; font-weight:800; color:#171614; margin:22px 0 10px; padding-bottom:6px; border-bottom:1px solid #D4D1CA}
+/* Ripresa di una sezione che continua sulla pagina successiva: stessa gerarchia, tono più leggero, così si
+   distingue da un titolo nuovo senza far perdere il riferimento a cosa si sta leggendo. */
+.rp-section-title.rp-continua{margin-top:0; color:#5A574E; font-weight:700; font-style:italic; border-bottom-style:dashed}
+.rp-bullets{margin:0; padding-left:18px; font-size:13px; color:#28251D; line-height:1.6}
+.rp-bullets li{margin-bottom:7px}
+.rp-bullets li b{color:#01696F}
+/* tabular-nums: le cifre hanno tutte la stessa larghezza, così le colonne di numeri si leggono incolonnate
+   invece che frastagliate (audit 04/09/2026). */
+.rp-table{width:100%; min-width:0; border-collapse:collapse; font-size:12.5px; table-layout:fixed; font-variant-numeric:tabular-nums}
+.rp-table th{text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:#6E6D68; border-bottom:1px solid #D4D1CA; padding:7px 9px; overflow-wrap:break-word; white-space:normal}
+.rp-table td{padding:7px 9px; border-bottom:1px solid #EDEBE4; color:#28251D; overflow-wrap:break-word; white-space:normal; text-align:left; line-height:1.35}
+.rp-table tr td:first-child, .rp-table tr th:first-child{padding-left:0}
+.rp-table td:first-child, .rp-table th:first-child{width:22%}
+/* le tabelle dei report ereditano per errore da "thead th"/"tbody td:first-child" (pensate per le tabelle
+   interattive scorrevoli, .tabella-scroll) sia la posizione "sticky" sia uno sfondo legato al tema chiaro/scuro
+   dell'app: nei report va tolta entrambe le cose, perché il report è statico, sempre a sfondo bianco, e in
+   certi contesti di cattura un'intestazione "sticky" può finire disegnata fuori posto invece che in cima alla
+   tabella. Il grassetto della prima colonna (font-weight, ereditato dalla stessa regola) resta invece voluto. */
+/* !important perché il selettore da battere, "thead th:first-child", è più specifico di ".rp-table th":
+   fino alla v1.20.0 la correzione qui sotto NON si applicava proprio alla prima intestazione di ogni
+   tabella dei report, che restava "sticky". html2canvas la disegnava allora in un punto sbagliato — la
+   parola "GIOCATORE"/"PORTIERE" finiva sopra un'altra intestazione e l'ultima colonna restava senza
+   titolo (visibile in ogni tabella dei PDF reali di Elisa, 04/09/2026; è anche la spiegazione del
+   riquadro scuro "GIOCATORE" segnalato il 03/09 e non riproducibile in test, perché nei test html2canvas
+   è sostituito da uno stub che ignora "sticky"). */
+.rp-table th, .rp-table td{position:static !important; top:auto !important; left:auto !important; z-index:auto !important}
+.rp-table th, .rp-table td:first-child{background:transparent !important}
+/* dentro la colonna principale del report stile "CV" c'è meno spazio orizzontale: tabelle un po' più compatte,
+   ma restano leggibili — prima erano troppo piccole (9.5px/8px) ed è stato segnalato come "schiacciato" */
+.rp2-body .rp-table, .rp3-body .rp-table{font-size:10.5px}
+.rp2-body .rp-table th, .rp3-body .rp-table th{font-size:9px; padding:3px 6px 7px}
+.rp2-body .rp-table td, .rp3-body .rp-table td{padding:6px 6px; line-height:1.3}
+.rp-flag{display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:99px; text-transform:uppercase; letter-spacing:.03em; white-space:nowrap}
+.rp-flag.up{background:#E6F1DD; color:#437A22}
+.rp-flag.down{background:#F5E2E4; color:#A13544}
+.rp-flag.watch{background:#F7E9DA; color:#964219}
+.rp-flag.flat{background:#EDEBE4; color:#6E6D68}
+.rp-flag-list{margin-bottom:6px}
+.rp-flag-riga{font-size:12.5px; color:#28251D; padding:7px 0; border-bottom:1px solid #EDEBE4; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.rp-flag-riga:last-child{border-bottom:none}
+/* La "bozza" che il generatore riempie prima dell'impaginazione: stessa larghezza e stesso stile della
+   pagina finale (così le misure delle tabelle sono già quelle definitive) ma libera di crescere in altezza. */
+.rp-page.rp-doc{min-height:0}
+.rp-chart-wrap{width:100%; height:230px; position:relative; margin-bottom:6px}
+.rp-campo-griglia{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px}
+.rp-nota-campo{font-size:10.5px; line-height:1.45; color:#6E6D68; margin-top:6px}
+.rp-campo-etichetta{font-size:11px; font-weight:700; color:#28251D; margin-bottom:5px}
+.rp-porta-wrap{width:100%; aspect-ratio:8/3; position:relative; margin-bottom:12px}
+.rp-porta-wrap canvas{width:100%; height:100%; display:block; border-radius:6px}
+.rp-campo-wrap{width:100%; aspect-ratio:5/3; position:relative}
+.rp-campo-wrap canvas{width:100%; height:100%; display:block; border-radius:6px}
+
+/* ---------- report stile "CV": colonna laterale scura + fascia colorata ---------- */
+.rp-page.rp2-page{padding:0; display:flex; align-items:flex-start}
+.rp2-side{width:230px; flex:none; background:#152A28; color:#EFEBE0; padding:30px 24px 26px; box-sizing:border-box; border-radius:0 0 14px 14px}
+.rp2-main{flex:1; min-width:0; display:flex; flex-direction:column}
+.rp2-band{background:#01696F; color:#fff; padding:26px 34px 20px}
+.rp2-band .eyebrow{font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.85; font-weight:700}
+.rp2-band-row{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-top:6px}
+.rp2-band .tt{font-size:26px; font-weight:900; letter-spacing:-.01em}
+.rp2-band .sub{font-size:13px; opacity:.92; margin-top:4px}
+.rp2-band .risultato{font-size:24px; font-weight:900; background:rgba(255,255,255,.18); padding:6px 16px; border-radius:8px; white-space:nowrap}
+.rp2-tabellone{padding:22px 34px 24px}
+.rp2-tab-riga{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:18px; margin-top:10px}
+.rp2-tab-sq{font-size:22px; font-weight:900; line-height:1.15; letter-spacing:-.01em}
+.rp2-tab-sq.destra{text-align:right}
+.rp2-tab-ris{font-size:38px; font-weight:900; background:rgba(255,255,255,.18); padding:4px 20px; border-radius:10px; white-space:nowrap; font-variant-numeric:tabular-nums}
+.rp-marcatori{display:flex; flex-wrap:wrap; align-items:center; gap:6px 16px; font-size:12.5px; color:#28251D; margin:0 0 16px}
+.rp-marcatori-tit{font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#6E6D68}
+.rp-marcatore i{font-style:normal; display:inline-grid; place-items:center; width:16px; height:16px; border-radius:50%; background:#20808D; color:#fff; font-size:10px; margin-right:5px}
+.rp-kpi .v small{font-size:12px; font-weight:700; color:#6E6D68; margin-left:4px}
+.rp-elenco-gol{margin:4px 0 0; padding-left:20px; font-size:12.5px; line-height:1.45; color:#28251D}
+.rp-elenco-gol li{margin-bottom:8px}
+.rp-elenco-gol span{color:#6E6D68}
+.rp2-body{padding:22px 34px 4px; flex:1; min-width:0; box-sizing:border-box}
+.rp2-eyebrow{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:#A9CFC9; text-align:center; margin-bottom:12px; font-weight:700}
+.rp2-avatar{width:68px; height:68px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; font-size:22px; font-weight:900; color:#152A28; border:3px solid #C99400; background:#EFEBE0}
+.rp2-nome{font-size:16px; font-weight:900; text-align:center}
+.rp2-ruolo{font-size:12px; color:#B9C9C4; text-align:center; margin-bottom:6px}
+.rp2-side h4{font-size:11px; font-weight:900; letter-spacing:.07em; text-transform:uppercase; color:#A9CFC9; margin:22px 0 12px; padding-top:18px; border-top:1px solid rgba(239,235,224,.18)}
+.rp2-side h4:first-of-type{border-top:none; padding-top:0}
+.rp2-bar-row{margin-bottom:12px}
+.rp2-bar-row .lbl{display:flex; justify-content:space-between; font-size:11.5px; margin-bottom:5px; color:#EFEBE0}
+.rp2-bar-row .lbl b{color:#fff; font-weight:700}
+.rp2-bar-track{height:6px; border-radius:99px; background:rgba(239,235,224,.18)}
+.rp2-bar-fill{height:100%; border-radius:99px}
+.rp2-mini{display:flex; justify-content:space-between; gap:8px; font-size:12px; margin-bottom:9px; color:#EFEBE0}
+.rp2-mini b{color:#fff; font-weight:800}
+.rp2-mini span:first-child{color:#F3F1E7; font-weight:600}
+.rp-foot-b{margin:14px 34px 0; padding:10px 0 18px; border-top:1px solid #EDEBE4; display:flex; justify-content:space-between; font-size:9.5px; color:#A9A8A3}
+
+/* --- report a tre colonne: confronto tra due giocatori (giocatore A | radar+tabella | giocatore B) --- */
+.rp-page.rp3-page{padding:0; display:flex; align-items:flex-start}
+.rp3-page .rp2-side.rp3-side{width:172px; padding:26px 16px 22px}
+.rp3-center{flex:1; min-width:0; display:flex; flex-direction:column}
+.rp3-body{padding:20px 22px 4px; flex:1; min-width:0; box-sizing:border-box}
+.rp3-page .rp-foot-b{margin-left:22px; margin-right:22px}
+.rp-table.rp-table-confronto th:first-child, .rp-table.rp-table-confronto td:first-child{width:46%}
+
+/* --- Report Confronto: due schede affiancate dentro la pagina (04/09/2026). Prima erano due colonne
+   laterali alte quanto il foglio: sbordavano sulla pagina dopo e mostravano contenuti diversi a destra e a
+   sinistra. Le schede hanno per costruzione le stesse righe, quindi si leggono davvero a confronto. --- */
+.rp-cf-schede{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:2px 0 14px}
+.rp-cf-scheda{background:#152A28; color:#EFEBE0; border-radius:12px; padding:16px 18px 14px}
+.rp-cf-eyebrow{font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; color:#A9CFC9; font-weight:700; margin-bottom:10px}
+.rp-cf-testa{display:flex; align-items:center; gap:12px; margin-bottom:12px}
+.rp-cf-avatar{width:46px; height:46px; flex:none; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; color:#152A28; background:#EFEBE0; border:3px solid #C99400}
+.rp-cf-nome{font-size:15px; font-weight:900; line-height:1.2}
+.rp-cf-ruolo{font-size:11.5px; color:#B9C9C4}
+.rp-cf-riga{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:11.5px;
+  padding:5px 0; border-top:1px solid rgba(239,235,224,.14)}
+.rp-cf-riga span{color:#D6D2C6}
+.rp-cf-riga b{color:#fff; font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums}
+.rp-cf-forze{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:6px}
+.rp-cf-forza-tit{font-size:12px; font-weight:800; color:#28251D; margin-bottom:4px}
+.rp-cf-forza .rp-bullets{margin:0}
+.rp-cf-nessuno{font-size:12px; color:#6E6D68; margin:2px 0 0}
+.rp-table td.rp-migliore{background:#E3F2EF !important; color:#01696F; font-weight:800} /* !important: deve battere la regola qui sopra che azzera gli sfondi ereditati */
+/* Righe di giocatori che non sono scesi in campo: restano nel report ma in secondo piano, così l'occhio
+   trova subito chi ha giocato davvero invece di attraversare dieci righe di zeri (audit 04/09/2026). */
+.rp-table tr.rp-riga-spenta td{color:#9A9892}
+.rp-table tr.rp-riga-spenta td:first-child{font-weight:600}
+
+/* --- statistiche di squadra, stile SofaScore: solo la propria squadra --- */
+.stat-squadra-grid{display:grid; grid-template-columns:1fr 1fr; column-gap:26px}
+.stat-riga{padding:8px 0; border-bottom:1px solid #EDEBE4}
+.stat-riga:last-child{border-bottom:none}
+.stat-riga .r-top{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:12.5px}
+.stat-riga .r-top .lab{color:#6E6D68}
+.stat-riga .r-top .val{font-weight:900; font-size:15px; color:#171614; white-space:nowrap}
+.stat-riga .r-bar{height:5px; border-radius:99px; background:#EBE8DE; margin-top:6px; overflow:hidden}
+.stat-riga .r-bar-fill{height:100%; border-radius:99px}
+
+@media (max-width:640px){
+  main{padding:18px 14px 60px}
+  .topbar-inner,.filtri,.nav-sezioni{padding-left:14px; padding-right:14px}
+  .kpi-valore{font-size:26px}
+  .sez-testa h2{font-size:18px}
+  .dropzone{padding:30px 16px}
+  .dropzone h2{font-size:20px}
+  select{min-width:0; width:100%}
+  .campo{flex:1 1 140px}
+  .grafico-wrap{height:230px}
+
+  /* --- intestazione più compatta su telefono: la barra in alto (fissa durante lo scroll) occupava
+     troppo schermo, lasciando poco spazio ai contenuti sotto. Sul telefono smette di restare fissa
+     durante lo scroll (si vede solo in cima alla pagina) e i suoi elementi si stringono. --- */
+  .topbar-pinned{position:static; box-shadow:none}
+  .topbar-inner{padding:10px 14px; gap:10px}
+  .marchio .s, .versione-app{display:none}
+  #nav-sezioni{display:none}
+  .filtri{gap:8px; padding-bottom:8px}
+  .tab-dashboard{padding:2px 14px 10px; gap:6px; flex-wrap:nowrap}
+  .tab-btn{flex:1 1 0; padding:8px 4px; font-size:12px; text-align:center; white-space:nowrap}
+  .tab-btn .etichetta-lunga{display:none}
+  .tab-btn .etichetta-corta{display:inline}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="marchio">
+      <img class="marchio-logo" src="data:image/png;base64,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" width="38" height="38" alt="Logo Analysis">
+      <div>
+        <div class="t">Dashboard Calcio a 7</div>
+        <div class="s">Analisi prestazionale di squadra e individuale</div>
+        <div class="versione-app" id="versione-app" title="Passa il dito o il mouse per vedere cosa contiene questa versione"></div>
+      </div>
+    </div>
+    <div class="spazio"></div>
+    <span id="badge-dataset" class="badge nascosto">Nessun dato</span>
+    <button class="btn piccolo cloud-fuori" id="btn-cloud" type="button" aria-haspopup="dialog">Sincronizza i dispositivi</button>
+    <button class="btn piccolo" id="btn-tema" aria-label="Cambia tema">Tema scuro</button>
+    <button class="btn piccolo nascosto" id="btn-nuovo">Carica un altro file</button>
+  </div>
+</header>
+
+<!-- Barra che resta fissa in alto durante lo scroll. Sta FUORI da <header> di proposito: un elemento
+     "sticky" può restare attaccato solo dentro il riquadro del suo genitore, quindi lasciandola dentro
+     l'intestazione sarebbe scivolata via insieme a quella appena finita l'altezza dell'intestazione. -->
+<div class="topbar-pinned">
+  <div class="filtri nascosto" id="barra-filtri">
+    <div class="campo">
+      <label for="sel-periodo">Periodo</label>
+      <select id="sel-periodo"></select>
+    </div>
+    <div class="campo">
+      <label for="sel-giocatore">Giocatore (vista individuale)</label>
+      <select id="sel-giocatore"></select>
+    </div>
+    <div class="campo" style="align-self:flex-end">
+      <span id="riepilogo-filtri" class="badge">—</span>
+    </div>
+  </div>
+  <div class="tab-dashboard nascosto" id="tab-switcher" role="tablist" aria-label="Scegli la dashboard">
+    <button type="button" class="tab-btn attiva" data-tab="partita" role="tab" aria-selected="true">
+      <span class="etichetta-lunga">Dashboard Partita</span><span class="etichetta-corta">Partita</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="allenamento" role="tab" aria-selected="false">
+      <span class="etichetta-lunga">Dashboard Allenamento</span><span class="etichetta-corta">Allenamento</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="giocatori" role="tab" aria-selected="false">
+      <span class="etichetta-lunga">Giocatori</span><span class="etichetta-corta">Giocatori</span>
+    </button>
+  </div>
+  <nav class="nav-sezioni nascosto" id="nav-sezioni" aria-label="Sezioni della dashboard">
+    <a href="#sez-kpi" data-tab="partita">KPI di squadra</a>
+    <a href="#sez-andamento" data-tab="partita">Andamento stagionale</a>
+    <a href="#sez-classifica" data-tab="partita">Classifica giocatori</a>
+    <a href="#sez-tendenze" data-tab="partita">Tendenze individuali</a>
+    <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
+    <a href="#sez-zone-partita" data-tab="partita">Zone recupero/palla persa</a>
+    <a href="#sez-golgame-partita" data-tab="partita">Zone tiro e assist gol</a>
+    <a href="#sez-porta-partita" data-tab="partita">Dove entra la palla in porta</a>
+    <a href="#sez-subentrati" data-tab="partita">Impatto dei subentrati</a>
+    <a href="#sez-possesso-partita" data-tab="partita">Possesso e momentum</a>
+    <a href="#sez-riconquista" data-tab="partita">Tempo di riconquista</a>
+    <a href="#sez-persa-gol-partita" data-tab="partita">Palle perse e gol subiti</a>
+    <a href="#sez-incampo-partita" data-tab="partita">Gol subiti e chi è in campo</a>
+    <a href="#sez-formazione-partita" data-tab="partita">La formazione migliore</a>
+    <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
+    <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
+    <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
+    <a href="#sez-classifica-stat-allenamento" data-tab="allenamento">Classifica da allenamento</a>
+    <a href="#sez-tendenze-stat-allenamento" data-tab="allenamento">Tendenze da allenamento</a>
+    <a href="#sez-allenamenti" data-tab="allenamento">Carico e stanchezza</a>
+    <a href="#sez-incroci" data-tab="allenamento">Segnali incrociati</a>
+    <a href="#sez-zone-allenamento" data-tab="allenamento">Zone recupero/palla persa</a>
+    <a href="#sez-confronto-allenamento" data-tab="allenamento">Confronto giocatori</a>
+    <a href="#sez-persa-giocatore-allenamento" data-tab="allenamento">Dove perde palla</a>
+    <a href="#sez-persa-gol-allenamento" data-tab="allenamento">Palle perse e gol</a>
+    <a href="#sez-incampo-allenamento" data-tab="allenamento">Gol subiti e chi è in campo</a>
+    <a href="#sez-formazione-allenamento" data-tab="allenamento">La formazione migliore</a>
+    <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
+    <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
+    <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
+    <a href="#sez-confronto" data-tab="giocatori">Confronto giocatori</a>
+    <a href="#sez-persa-giocatore-partita" data-tab="giocatori">Dove perde palla</a>
+    <a href="#sez-qualita">Qualità dei dati</a>
+    <a href="#sez-metodo">Metodologia</a>
+    <a href="#sez-ia">Assistente IA</a>
+  </nav>
+</div>
+
+<main>
+  <div id="pannello-file" class="card nascosto" style="margin:16px auto; max-width:var(--maxw)"></div>
+  <!-- 1. CARICAMENTO -->
+  <section id="sez-caricamento">
+    <div class="dropzone" id="dropzone">
+      <h2>Carica i file esportati da Seven Lab</h2>
+      <p>Trascina qui i file <code>.csv</code> esportati da Seven Lab — uno per ogni partita e uno per ogni allenamento. Il sistema riconosce da solo di che tipo è ciascun file (lo legge dentro il file stesso) e li mette insieme. Puoi selezionarne più di uno alla volta e aggiungerne altri quando vuoi: restano tutti salvati in questo browser, con la possibilità di eliminarli qui sopra.</p>
+      <div class="azioni">
+        <button class="btn primario" id="btn-scegli">Scegli file</button>
+        <button class="btn" id="btn-demo">Prova con dati di esempio</button>
+      </div>
+      <input type="file" id="input-file" accept=".xlsx,.xls,.csv" multiple class="solo-sr" aria-label="Scegli i file esportati da Seven Lab">
+      <div class="privacy">
+        <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><rect x="4" y="11" width="16" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <span>Il calcolo avviene sul tuo dispositivo. Senza accesso i file restano in questo browser; se entri con il tuo account SevenLab («Sincronizza i dispositivi», in alto) vengono salvati anche nel cloud di SevenLab, così li ritrovi su PC, iPad e telefono. Li vedono solo gli account autorizzati.</span>
+      </div>
+    </div>
+    <div id="errore-caricamento" class="nascosto" style="margin-top:16px"></div>
+    <div class="card istruzioni" style="margin-top:20px">
+      <h3 style="font-size:15px">Cosa serve nei file</h3>
+      <ul>
+        <li>Un file <code>.csv</code> esportato da Seven Lab per ogni <strong>partita</strong> e uno per ogni <strong>allenamento</strong>: il tipo viene letto dalla riga «Tipo» dentro il file, quindi il nome che gli dai (es. <code>partita_1.csv</code>, <code>allenamento_1.csv</code>) è solo per tua comodità.</li>
+        <li>Al momento il carico di allenamento (sRPE) è disattivato: l'export di Seven Lab non include l'RPE percepito, quindi presenze e minuti restano disponibili ma non il carico di lavoro. Se in futuro avrai una fonte per l'RPE, si potrà riattivare.</li>
+        <li>In alternativa, resta possibile caricare un unico file <code>.xlsx</code> con i fogli <code>Partite</code>, <code>Statistiche_Giocatori</code> e, facoltativi, <code>Allenamenti</code> e <code>Presenze_Allenamento</code> (con RPE incluso) — utile se in futuro vorrai compilare i dati a mano.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div id="dashboard" class="nascosto">
+    <!-- ===================== DASHBOARD PARTITA ===================== -->
+    <!-- 3. KPI -->
+    <section id="sez-kpi" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">01</span><h2>KPI di squadra</h2></div>
+      <p class="sez-desc" id="kpi-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
+      <div class="griglia g-kpi" id="griglia-kpi"></div>
+    </section>
+
+    <!-- 4. ANDAMENTO -->
+    <section id="sez-andamento" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">02</span><h2>Andamento stagionale</h2></div>
+      <p class="sez-desc">Una partita per punto, in ordine cronologico. La linea tratteggiata è la media del periodo.</p>
+      <div id="contenuto-andamento" class="griglia g-2"></div>
+    </section>
+
+    <!-- 5. CLASSIFICA -->
+    <section id="sez-classifica" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori</h2></div>
+      <p class="sez-desc">Clicca su un'intestazione per ordinare. Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole partite. La sparkline mostra l'indice prestazione partita per partita.</p>
+      <div id="contenuto-classifica"></div>
+    </section>
+
+    <!-- 6. TENDENZE -->
+    <section id="sez-tendenze" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Tendenze individuali con retta di interpolazione</h2></div>
+      <p class="sez-desc">Per ogni giocatore i punti sono le sue partite in ordine cronologico; la retta tratteggiata è la retta di interpolazione (regressione lineare ai minimi quadrati) che riassume la direzione dell'andamento. Servono almeno 3 partite giocate.</p>
+      <div id="contenuto-tendenze"></div>
+    </section>
+
+    <!-- 6b. COINVOLGIMENTO E FORMAZIONI (sempre tutta la stagione) -->
+    <section id="sez-coinvolgimento-formazioni" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">05</span><h2>Coinvolgimento e formazioni</h2></div>
+      <p class="sez-desc">Vista sempre riferita a tutta la stagione, indipendente dal filtro periodo qui sopra: chi tocca più palloni in proporzione al tempo in campo, e quale modulo tattico rende di più.</p>
+
+      <h3 class="sotto-tit">Giocatori più coinvolti nel gioco</h3>
+      <p class="sez-desc">Azioni totali (passaggi tentati + tiri tentati + dribbling tentati) rapportate a una partita intera di calcio a 7 — 50 minuti, due tempi da 25 — su tutta la stagione. È una stima di quanto un giocatore è coinvolto nella manovra con i dati che raccogli oggi: non misura chi riceve più palloni dai compagni (servirebbe registrare anche i passaggi ricevuti, dato che al momento non hai), ma chi il pallone lo tocca e lo gioca di più in proporzione al tempo in campo.</p>
+      <div id="contenuto-coinvolgimento"></div>
+
+      <h3 class="sotto-tit">Formazioni a confronto</h3>
+      <p class="sez-desc">Confronta il rendimento di squadra per modulo tattico. Per usarla, aggiungi una colonna <strong>Modulo</strong> al foglio Partite del tuo Excel (es. «2-3-1», «3-2-1»): finché non la compili, le partite restano in un unico gruppo «Non indicato». <strong>Attenzione ai falsi positivi:</strong> un modulo può risultare migliore solo perché usato contro avversari più deboli, non perché sia davvero il modulo più efficace — con poche partite per modulo questo confronto va letto con cautela, e stiamo valutando come tenere conto anche della forza dell'avversario.</p>
+      <div id="contenuto-formazioni"></div>
+
+      <h3 class="sotto-tit">Convocazioni e minutaggio stagionale</h3>
+      <p class="sez-desc">Per «convocazioni» si intende il numero di partite in cui il giocatore risulta sceso in campo (una scheda statistiche registrata per quella partita): i file che carichi non distinguono chi è stato convocato ma è rimasto sempre in panchina, quindi questo è il dato più vicino disponibile. La classifica incrocia le convocazioni con i minuti totali giocati nella stagione, per vedere chi ha giocato di più durante l'anno.</p>
+      <div id="contenuto-convocazioni"></div>
+    </section>
+
+    <!-- 6b2. ZONE DI RECUPERO E PALLA PERSA -->
+    <section id="sez-zone-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">06</span><h2>Zone di recupero e palla persa</h2></div>
+      <p class="sez-desc">Su richiesta del mister: in quali zone del campo avvengono i recuperi e le palle perse, sul periodo selezionato in alto. Richiede che i file caricati includano la posizione (coordinate X/Y) di questi eventi — un dato che Seven Lab non esporta ancora oggi.</p>
+      <div id="contenuto-zone-partita"></div>
+    </section>
+
+    <!-- 6b3. ZONE DI TIRO E ASSIST DEI GOL (Game) -->
+    <section id="sez-golgame-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di tiro e assist dei gol</h2></div>
+      <p class="sez-desc">Su richiesta del mister: da dove si segna di più e da dove arrivano di più gli assist che portano al gol, sul periodo selezionato in alto. Richiede che i file caricati includano la sezione «DETTAGLIO GOL GAME» — un dato che Seven Lab non esporta ancora in tutti gli export.</p>
+      <div id="contenuto-golgame-partita"></div>
+    </section>
+
+    <!-- 6b4. DOVE ENTRA LA PALLA IN PORTA (punto d'ingresso dei gol fatti) -->
+    <section id="sez-porta-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Dove entra la palla in porta</h2></div>
+      <p class="sez-desc">Su richiesta del mister: una porta da calcio disegnata in proporzione, con un pallone su ogni punto in cui la palla è entrata sui gol fatti, sul periodo selezionato in alto. Richiede che l'export Seven Lab includa, nella sezione «DETTAGLIO GOL GAME», le coordinate del punto d'ingresso in porta — un dato nuovo, che i file più vecchi non hanno.</p>
+      <div id="contenuto-porta-partita"></div>
+    </section>
+
+    <!-- 6b4. IMPATTO DEI SUBENTRATI -->
+    <section id="sez-subentrati" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Impatto dei subentrati</h2></div>
+      <p class="sez-desc">Chi, entrando a partita in corso, non solo rende bene ma sposta davvero la gara. Incrocia il minuto d'ingresso (dall'evento «Cambio entra» della timeline), i minuti giocati da subentrato, le convocazioni e il contributo ai gol, e mette a confronto il rendimento del giocatore quando entra con quello che ha quando parte titolare.</p>
+      <div id="contenuto-subentrati"></div>
+    </section>
+
+    <!-- ===================== DASHBOARD ALLENAMENTO ===================== -->
+    <!-- 7. KPI DA ALLENAMENTO (statistiche di gioco raccolte nelle partitelle) -->
+    <section id="sez-kpi-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">01</span><h2>KPI da allenamento (partitelle)</h2></div>
+      <p class="sez-desc" id="kpi-stat-allenamento-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
+      <div class="griglia g-kpi" id="griglia-kpi-stat-allenamento"></div>
+      <p class="sez-desc">Statistiche di gioco (gol, tiri, passaggi, dribbling, recuperi, parate) registrate durante le partitelle di allenamento: un cluster tenuto sempre separato dalle statistiche di partita vera qui sopra, anche quando Seven Lab le esporta con le stesse colonne.</p>
+    </section>
+
+    <!-- 7b. ANDAMENTO DA ALLENAMENTO -->
+    <section id="sez-andamento-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">02</span><h2>Andamento nel tempo (allenamento)</h2></div>
+      <p class="sez-desc">Una sessione di allenamento con statistiche per punto, in ordine cronologico. La linea tratteggiata è la media del periodo.</p>
+      <div id="contenuto-andamento-stat-allenamento" class="griglia g-2"></div>
+    </section>
+
+    <!-- 7c. CLASSIFICA DA ALLENAMENTO -->
+    <section id="sez-classifica-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori (allenamento)</h2></div>
+      <p class="sez-desc">Clicca su un'intestazione per ordinare. Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole sessioni. La sparkline mostra l'indice prestazione sessione per sessione.</p>
+      <div id="contenuto-classifica-stat-allenamento"></div>
+    </section>
+
+    <!-- 7d. TENDENZE DA ALLENAMENTO -->
+    <section id="sez-tendenze-stat-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Tendenze individuali (allenamento)</h2></div>
+      <p class="sez-desc">Per ogni giocatore i punti sono le sue sessioni di allenamento con statistiche, in ordine cronologico; la retta tratteggiata è la retta di interpolazione (regressione lineare ai minimi quadrati) che riassume la direzione dell'andamento. Servono almeno 3 sessioni con dati.</p>
+      <div id="contenuto-tendenze-stat-allenamento"></div>
+    </section>
+
+    <!-- 8. ALLENAMENTI -->
+    <section id="sez-allenamenti" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">05</span><h2>Carico di allenamento e stanchezza stimata</h2></div>
+      <p class="sez-desc">Il carico vero si calcola con il metodo session-RPE (minuti × RPE percepito, un valore soggettivo che il giocatore o lo staff assegnano a fine seduta): quando è disponibile lo vedi qui sotto. Le presenze non compaiono più a schermo — restano solo nel Report PDF, per lo staff — mentre qui trovi una stima di chi accumula più carico, incrociando quanto spesso un giocatore è presente con quanti minuti gioca davvero nelle partitelle. Il periodo qui sotto è indipendente dal filtro Periodo in alto.</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; max-width:420px; margin-bottom:14px">
+        <div class="campo" style="flex:1; min-width:150px">
+          <label for="sel-all-da">Da</label>
+          <select id="sel-all-da"><option value="">Inizio stagione</option></select>
+        </div>
+        <div class="campo" style="flex:1; min-width:150px">
+          <label for="sel-all-a">A</label>
+          <select id="sel-all-a"><option value="">Fine stagione</option></select>
+        </div>
+      </div>
+      <div id="contenuto-allenamenti"></div>
+    </section>
+
+    <!-- 8b. SEGNALI INCROCIATI -->
+    <section id="sez-incroci" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">06</span><h2>Segnali incrociati: carico e rendimento</h2></div>
+      <p class="sez-desc">Confronta, mese su mese, la variazione del carico di allenamento di ogni giocatore con la variazione del suo indice prestazione medio in partita. Non è un cluster nuovo di dati: è una lettura che mette insieme gli allenamenti e le partite, gli unici due cluster che raccogli.</p>
+      <div id="contenuto-incroci"></div>
+    </section>
+
+    <!-- 7d. TEMPO DI RICONQUISTA DELLA PALLA (partita) -->
+    <!-- 7c-bis. POSSESSO PALLA E MOMENTUM (partita singola, 18/10/2026) -->
+    <section id="sez-possesso-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">10</span><h2>Possesso palla e momentum</h2></div>
+      <p class="sez-desc">Quanto tempo la palla è stata nostra e quanto degli avversari, e come è cambiato lungo la partita. Con l'interruttore del possesso di SevenLab il tempo degli avversari è misurato; nelle partite senza interruttore il possesso è solo stimato dai nostri eventi e il momentum non c'è. Si guarda una partita alla volta.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pos-sel-partita">Partita</label>
+          <select id="pos-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-possesso-partita"></div>
+    </section>
+
+    <section id="sez-riconquista" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">11</span><h2>Tempo di riconquista della palla</h2></div>
+      <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso: è la misura della reattività nella transizione negativa. Si parte da ogni palla persa e si cerca il primo recupero successivo — nessun dato nuovo da raccogliere, entrambi gli eventi sono già nella timeline di Seven Lab. Le sequenze interrotte da un gol, dalla fine del tempo o che superano il minuto vengono contate a parte invece di entrare nella media.</p>
+      <div id="contenuto-riconquista"></div>
+    </section>
+
+    <!-- 7e. PALLE PERSE CHE DIVENTANO GOL SUBITI (partita) -->
+    <section id="sez-persa-gol-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">12</span><h2>Palle perse che diventano gol subiti</h2></div>
+      <p class="sez-desc">Quali palle perse si sono trasformate in un gol avversario entro 15 secondi, e chi le ha perse. Serve a capire quale giocatore tende a sbagliare nei momenti in cui l'avversario aggredisce. Nessun dato nuovo da raccogliere: palla persa e gol subito sono già nella timeline di Seven Lab.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pgl-sel-partita">Partita</label>
+          <select id="pgl-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-persa-gol-partita"></div>
+    </section>
+
+    <!-- 7f. GOL SUBITI E CHI È IN CAMPO (partita) -->
+    <section id="sez-incampo-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">13</span><h2>Gol subiti e chi è in campo</h2></div>
+      <p class="sez-desc">Quanti gol prende la squadra quando un giocatore è in campo, rispetto a quando non c'è — e lo stesso per le coppie di difensori di ruolo in campo insieme. Serve a capire se con certi giocatori, o certe coppie di difesa, la squadra regge meno. Nessun dato nuovo da raccogliere: chi è in campo si ricava dai cambi della timeline.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="icp-sel-partita">Partita</label>
+          <select id="icp-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-incampo-partita"></div>
+    </section>
+
+    <!-- 7g. LA FORMAZIONE MIGLIORE (partita) -->
+    <section id="sez-formazione-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">14</span><h2>La formazione migliore</h2></div>
+      <p class="sez-desc">Fra le formazioni che sono davvero scese in campo insieme, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi. Per tutto il periodo o per una partita sola.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="fm-sel-partita">Partita</label>
+          <select id="fm-sel-partita"></select></div>
+        <div class="campo"><label for="fm-sel-criterio-partita">Criterio</label>
+          <select id="fm-sel-criterio-partita"></select></div>
+      </div>
+      <div id="contenuto-formazione-partita"></div>
+    </section>
+
+    <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) — spostata in fondo alla scheda partita il 16/10/2026 -->
+    <section id="sez-report-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
+      <p class="sez-desc">Il report di una singola partita e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="card">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="rp-sel-partita">Partita</label>
+            <select id="rp-sel-partita"></select>
+          </div>
+          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
+          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
+        </div>
+        <div class="report-status" id="rp-stato-partita">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo.</div>
+      </div>
+    </section>
+
+    <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->
+    <section id="sez-zone-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di recupero e palla persa (allenamento)</h2></div>
+      <p class="sez-desc">Le stesse zone di recupero e palla persa, calcolate sulle partitelle di allenamento nel periodo selezionato in alto (Team A/B interni contano entrambi, sono comunque tuoi giocatori). Richiede la posizione (coordinate X/Y) di questi eventi nei file caricati. Il confronto tra Squadra A e Squadra B compare solo scegliendo una singola sessione qui sotto: le due squadre vengono rifatte a ogni allenamento, quindi sommarle su più sessioni non direbbe niente.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="zn-sel-sessione">Sessione</label>
+          <select id="zn-sel-sessione"></select></div>
+      </div>
+      <div id="contenuto-zone-allenamento"></div>
+    </section>
+
+    <!-- 8b3. CONFRONTO TRA DUE GIOCATORI SUGLI ALLENAMENTI -->
+    <section id="sez-confronto-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Confronto tra due giocatori (allenamento)</h2></div>
+      <p class="sez-desc">Lo stesso confronto della scheda Giocatori, ma costruito sulle partitelle di allenamento invece che sulle partite ufficiali. Serve soprattutto per i giocatori che in stagione giocano poco o non giocano affatto: in allenamento i dati ci sono comunque, ed è l'unico modo per valutarli prima di decidere una convocazione. Usa il periodo scelto nel filtro in alto.</p>
+      <div class="card" style="margin-bottom:16px">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="cfa-sel-a">Giocatore A</label>
+            <select id="cfa-sel-a"></select>
+          </div>
+          <div class="campo">
+            <label for="cfa-sel-b">Giocatore B</label>
+            <select id="cfa-sel-b"></select>
+          </div>
+          <button class="btn primario" id="cfa-btn-report" style="margin-left:18px">Scarica report PDF</button>
+        </div>
+        <div class="report-status" id="cfa-rp-stato">Stesso impianto del report di confronto sulle partite — schede affiancate, punti di forza, radar e tabella completa — ma con i dati delle partitelle di allenamento.</div>
+      </div>
+      <div id="contenuto-confronto-allenamento"></div>
+    </section>
+
+    <!-- 8b4. DOVE PERDE PALLA UN GIOCATORE (allenamento) -->
+    <section id="sez-persa-giocatore-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Dove perde palla un giocatore (allenamento)</h2></div>
+      <p class="sez-desc">Scegli un giocatore e vedi in quali zone del campo perde più palloni, sul totale delle partitelle del periodo selezionato in alto. Stessa doppia vista delle altre sezioni di campo: griglia a nove zone con le percentuali e heatmap della densità reale, più l'elenco delle zone in numeri assoluti — che su un singolo giocatore è la lettura più solida.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pg-sel-giocatore">Giocatore</label>
+          <select id="pg-sel-giocatore"></select></div>
+      </div>
+      <div id="contenuto-persa-giocatore-allenamento"></div>
+    </section>
+
+    <!-- 8b5. PALLE PERSE CHE DIVENTANO GOL (allenamento) -->
+    <section id="sez-persa-gol-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">10</span><h2>Palle perse che diventano gol (allenamento)</h2></div>
+      <p class="sez-desc">Le palle perse nelle partitelle da cui è nato un gol della squadra avversaria entro 15 secondi. Le due squadre sono entrambe tue, quindi contano i gol di tutte e due: ogni gol ha dall'altra parte un tuo giocatore che ha perso il pallone.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pgl-sel-allenamento">Allenamento</label>
+          <select id="pgl-sel-allenamento"></select></div>
+      </div>
+      <div id="contenuto-persa-gol-allenamento"></div>
+    </section>
+
+    <!-- 8b6. GOL SUBITI E CHI È IN CAMPO (allenamento) -->
+    <section id="sez-incampo-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">11</span><h2>Gol subiti e chi è in campo (allenamento)</h2></div>
+      <p class="sez-desc">Quanti gol prende la squadra interna in cui gioca ciascun giocatore, rispetto a quando non c'è lui — e lo stesso per le coppie di difensori della stessa squadra. Con le squadre che cambiano da un allenamento all'altro, sulla stagione si vede se con certi giocatori, o certe coppie di difesa, si prende più gol.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="icp-sel-allenamento">Allenamento</label>
+          <select id="icp-sel-allenamento"></select></div>
+      </div>
+      <div id="contenuto-incampo-allenamento"></div>
+    </section>
+
+    <!-- 8b7. LA FORMAZIONE MIGLIORE (allenamento) -->
+    <section id="sez-formazione-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">12</span><h2>La formazione migliore (allenamento)</h2></div>
+      <p class="sez-desc">Fra le squadre interne che hanno giocato insieme nelle partitelle del periodo, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="fm-sel-criterio-allenamento">Criterio</label>
+          <select id="fm-sel-criterio-allenamento"></select></div>
+      </div>
+      <div id="contenuto-formazione-allenamento"></div>
+    </section>
+
+    <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
+    <section id="sez-report-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><h2>Report PDF: allenamenti</h2></div>
+      <p class="sez-desc">Il report di un periodo a tua scelta — un mese solo o un arco più ampio, lascia vuoto Da/A per tutta la stagione — e il report della stagione intera, sempre aggiornati. Includono anche le presenze per giocatore, che non compaiono più nella dashboard a schermo qui sopra. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
+      <div class="card">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="rp-sel-all-da">Da</label>
+            <select id="rp-sel-all-da"><option value="">Inizio stagione</option></select>
+          </div>
+          <div class="campo">
+            <label for="rp-sel-all-a">A</label>
+            <select id="rp-sel-all-a"><option value="">Fine stagione</option></select>
+          </div>
+          <button class="btn primario" id="rp-btn-periodo-allenamento">Scarica Report Periodo</button>
+          <button class="btn primario" id="rp-btn-stagionale-allenamento" style="margin-left:18px">Scarica Report Stagionale</button>
+        </div>
+        <div class="report-status" id="rp-stato-allenamento">Scegli un periodo (o lascia Da/A vuoti per tutta la stagione): il PDF viene generato e scaricato sul tuo dispositivo.</div>
+      </div>
+    </section>
+
+    <!-- ===================== GIOCATORI ===================== -->
+    <!-- 6c. ANDAMENTO NEL TEMPO PER GIOCATORE (sempre tutta la stagione) -->
+    <section id="sez-andamento-giocatore" data-tab-sezione="giocatori">
+      <div class="sez-testa"><span class="sez-num">01</span><h2>Andamento nel tempo per giocatore</h2></div>
+      <p class="sez-desc">Vista sempre riferita a tutta la stagione, indipendente dal filtro periodo qui sopra: mette insieme, per il giocatore scelto nel filtro «Giocatore» qui sopra, come sta andando in campo e come sta andando il suo carico di allenamento.</p>
+      <div id="contenuto-andamento-individuale"></div>
+    </section>
+
+    <!-- 7. GIOCATORE -->
+    <section id="sez-giocatore" data-tab-sezione="giocatori">
+      <div class="sez-testa"><span class="sez-num">02</span><h2>Vista singolo giocatore</h2><span class="badge" id="badge-giocatore">—</span></div>
+      <p class="sez-desc">Confronto delle percentuali del giocatore con la media di squadra e andamento delle sue partite. Cambia giocatore dal filtro in alto.</p>
+      <div id="contenuto-giocatore"></div>
+    </section>
+
+    <!-- 7b. CONFRONTO TRA DUE GIOCATORI -->
+    <section id="sez-confronto" data-tab-sezione="giocatori">
+      <div class="sez-testa"><span class="sez-num">03</span><h2>Confronto tra due giocatori</h2></div>
+      <p class="sez-desc">Metti a confronto due giocatori a scelta, anche di ruoli diversi: utile per capire chi, per caratteristiche statistiche, può coprire un ruolo al posto di un altro. Il confronto usa lo stesso periodo scelto nel filtro in alto.</p>
+      <div class="card" style="margin-bottom:16px">
+        <div class="report-toolbar">
+          <div class="campo">
+            <label for="cf-sel-a">Giocatore A</label>
+            <select id="cf-sel-a"></select>
+          </div>
+          <div class="campo">
+            <label for="cf-sel-b">Giocatore B</label>
+            <select id="cf-sel-b"></select>
+          </div>
+          <button class="btn primario" id="cf-btn-report" style="margin-left:18px">Scarica report PDF</button>
+        </div>
+        <div class="report-status" id="cf-rp-stato">Il report mette le due schede giocatore affiancate con le stesse voci, i punti di forza dell'uno sull'altro, il radar di confronto e la tabella completa di tutti gli indicatori.</div>
+      </div>
+      <div id="contenuto-confronto"></div>
+    </section>
+
+    <!-- 9d. DOVE PERDE PALLA (partite) -->
+    <section id="sez-persa-giocatore-partita" data-tab-sezione="giocatori">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Dove perde palla</h2></div>
+      <p class="sez-desc">Le zone in cui il giocatore scelto in alto perde più palloni nelle partite: puoi guardare tutta la stagione oppure una singola partita. Griglia a nove zone, heatmap della densità reale ed elenco delle zone in numeri assoluti.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="pgp-sel-ambito">Ambito</label>
+          <select id="pgp-sel-ambito"></select></div>
+      </div>
+      <div id="contenuto-persa-giocatore-partita"></div>
+    </section>
+
+    <!-- ===================== SEZIONI COMUNI (visibili in ogni scheda) ===================== -->
+    <!-- 10. QUALITÀ DATI -->
+    <section id="sez-qualita">
+      <div class="sez-testa"><h2>Qualità dei dati</h2></div>
+      <p class="sez-desc">Controlli automatici sulle righe caricate. Sono avvisi, non blocchi: la dashboard funziona comunque.</p>
+      <div id="contenuto-qualita"></div>
+    </section>
+
+    <!-- 11. METODOLOGIA -->
+    <section id="sez-metodo">
+      <div class="sez-testa"><h2>Metodologia e avvertenze</h2></div>
+      <p class="sez-desc">Come è calcolato ogni numero che vedi, e come va letto.</p>
+      <details class="metodo">
+        <summary>Apri le formule e le avvertenze</summary>
+        <div class="corpo">
+          <h4>Metriche per singola partita</h4>
+          <p><code>Tiri_Totali = Tiri_In_Porta + Tiri_Fuori</code> · <code>Passaggi_Totali = Passaggi_Corretti + Passaggi_Sbagliati</code> · <code>Dribbling_Riusciti = Dribbling_Tentati − Dribbling_Falliti</code> · <code>Coinvolgimento_Gol = Gol + Assist</code>.</p>
+          <p><code>Precisione al tiro % = Tiri_In_Porta / Tiri_Totali × 100</code> · <code>Efficacia realizzativa % = Gol / Tiri_Totali × 100</code> · <code>Precisione passaggi % = Passaggi_Corretti / Passaggi_Totali × 100</code> · <code>Successo dribbling % = Dribbling_Riusciti / Dribbling_Tentati × 100</code>. Se il denominatore è 0 la percentuale non è definita e viene mostrata come «—», non come zero. Se nei file il tiro in porta non è segnato a parte (in tutte le partite, o in tutti gli allenamenti, i tiri in porta coincidono con i gol) la precisione al tiro sarebbe identica all'efficacia realizzativa: in quel caso non viene mostrata e al suo posto compare la sola realizzazione.</p>
+          <p><code>Errori_Totali = Passaggi_Sbagliati + Dribbling_Falliti</code> · <code>Azioni_Totali = Passaggi_Totali + Dribbling_Tentati + Tiri_Totali</code> · <code>Tasso di errore % = Errori_Totali / Azioni_Totali × 100</code>. Le metriche «per 60'» sono <code>valore / Minuti_Giocati × 60</code>.</p>
+          <h4>Indice prestazione sintetico</h4>
+          <p><code>Gol×4 + Assist×3 + Dribbling_Riusciti×0,5 − Dribbling_Falliti×0,3 + Recuperi×0,4 + Passaggi_Corretti×0,05 − Passaggi_Sbagliati×0,05 + Parate×1,5</code>.</p>
+          <p>I tiri non entrano nell'indice: del tiro conta solo l'esito, cioè il gol. Il tiro in porta non viene segnato a parte, quindi non si può distinguere un tiro parato da uno fuori; e il solo numero di tiri non dice se si tratta di un attaccante propositivo o di chi non passa mai la palla.</p>
+          <p><strong>Avvertenza:</strong> non è una metrica ufficiale del calcio. È una somma pesata scelta per dare un ordine di grandezza confrontabile all'interno della stessa squadra: pesi diversi darebbero classifiche diverse. Le celle vuote valgono 0, quindi la colonna Parate vuota per i non-portieri non azzera il loro indice.</p>
+          <h4>Aggregato di periodo</h4>
+          <p>I conteggi vengono sommati su tutte le partite del periodo e poi si ricalcolano le percentuali sui totali. Non si fa la media delle percentuali, che darebbe più peso alle partite con pochi tentativi.</p>
+          <h4>Retta di interpolazione delle tendenze</h4>
+          <p>Le partite di ogni giocatore sono numerate 1…N in ordine di data; sulla coppia (ordine, metrica) si stima una regressione lineare ai minimi quadrati. <code>delta totale = retta(N) − retta(1)</code> e <code>r</code> è il coefficiente di correlazione di Pearson. La tendenza è segnalata come rilevante se <code>|delta| ≥ soglia</code> e <code>|r| ≥ 0,35</code>; le soglie sono 10 minuti, 8 punti di precisione al tiro, 6 punti di tasso di errore. Sotto il 30% della soglia la tendenza è considerata stabile.</p>
+          <p><strong>Avvertenza:</strong> con poche partite una retta si sposta facilmente per una sola gara fuori standard. Sono indicazioni statistiche da leggere insieme allo staff tecnico e a quello che si è visto in campo, non giudizi definitivi sui giocatori.</p>
+          <h4>Allenamenti</h4>
+          <p>Carico = <code>Minuti_Allenamento × RPE</code> (session-RPE, metodo di Foster). Se il giocatore è assente il carico è 0. <code>Tasso di presenza % = sessioni presenti / sessioni svolte dalla squadra nel periodo × 100</code>. Il confronto tra carico di un mese e quello precedente richiama il concetto di rapporto carico acuto/cronico: qui è solo un segnale da valutare con lo staff, non una previsione di infortunio.</p>
+          <h4>Segnali incrociati carico↔rendimento</h4>
+          <p>Per ogni giocatore, in ogni coppia di mesi consecutivi con almeno una partita in entrambi, si confronta la variazione dell'indice prestazione medio con il rapporto tra il carico di allenamento del mese corrente e quello del mese precedente. Un rapporto di carico ≥1,4 insieme a un calo di indice prestazione è segnalato come possibile affaticamento; un carico stabile insieme a un indice in crescita è segnalato come segnale positivo. Sono correlazioni, non nessi causali: vanno lette insieme allo staff.</p>
+          <h4>Parate e gol subiti</h4>
+          <p>La percentuale di parate mostrata per il portiere è una <strong>stima</strong>: i tiri subiti sono approssimati come <code>parate + gol subiti</code>, perché il foglio non registra i tiri avversari fuori porta.</p>
+          <h4>Coinvolgimento nel gioco</h4>
+          <p><code>Azioni per partita intera = Azioni_Totali / Minuti_Totali × 50</code>, sull'intera stagione. I 50 minuti sono la durata regolamentare di una partita di calcio a 7 (due tempi da 25, recupero escluso perché non registrato e variabile): prima qui c'erano i 90 minuti del calcio a 11, un riferimento che in questo sport non esiste e che gonfiava ogni valore di quasi il doppio. È una stima costruita solo con i dati che questo sistema raccoglie oggi (passaggi, tiri, dribbling tentati): non misura chi riceve più palloni dai compagni, perché non registriamo i passaggi ricevuti né i tocchi. Se in futuro si vuole misurare davvero «chi viene cercato di più», serve aggiungere quella rilevazione ai dati raccolti.</p>
+          <h4>Formazioni a confronto</h4>
+          <p>Le partite vengono raggruppate per il valore della colonna <code>Modulo</code> (facoltativa, foglio Partite); per ogni modulo si sommano gol fatti/subiti e le azioni dei giocatori di quelle partite, poi si ricalcolano le medie e le percentuali come per l'aggregato di periodo. <strong>Avvertenza importante:</strong> questo confronto non tiene conto della forza dell'avversario affrontato con ciascun modulo — un modulo usato per lo più contro squadre più deboli sembrerà artificialmente migliore. È una lettura preliminare, da usare con cautela e da incrociare con quello che si è visto in campo; un confronto più affidabile richiederebbe di registrare anche una stima della forza dell'avversario partita per partita, cosa che questo sistema non fa ancora.</p>
+          <h4>Possesso palla e momentum</h4>
+          <p>Nelle partite con l'interruttore del possesso di SevenLab (sezione «POSSESSO AVVERSARIO» dell'export) ogni secondo di gioco è degli avversari quando l'interruttore è acceso, nostro quando è spento e negli ultimi 12 secondi c'è stato un nostro evento con la palla (passaggio, dribbling, tiro, gol, recupero, palla persa) o l'interruttore si è appena spento, altrimenti palla ferma o non classificabile, che non entra nella percentuale: <code>possesso nostro = secondi nostri / (secondi nostri + secondi loro)</code>. La pausa fra i tempi, se il file la segna, è esclusa. Momentum: finestre di 2 minuti per tempo, in ognuna <code>(secondi nostri − secondi loro) / (secondi nostri + secondi loro) × 100</code>, a zero se ci sono meno di 30 secondi classificati; il tratto migliore e il peggiore sono 3 finestre di fila nello stesso tempo; per ogni gol si guarda chi ha avuto più palla nei 2 minuti prima. Nelle partite senza interruttore il possesso resta stimato dai soli eventi della nostra squadra, e nel report stagionale le due cose sono tenute separate oltre che sommate.</p>
+          <h4>Gol subiti e chi è in campo</h4>
+          <p>Chi è in campo si ricostruisce dalla timeline: titolari sono i giocatori con minuti che non hanno come primo cambio un ingresso (o che giocano palloni prima di entrare); ogni «Cambio entra» mette in campo, ogni «Cambio esce» o cartellino rosso toglie. In allenamento la squadra interna è quella scritta sulle righe del giocatore, fino a un eventuale «Cambio squadra». Una partita in cui risultano più di 7 giocatori in campo, o palloni giocati da chi risulta in panchina, viene esclusa: manca un cambio. Per ogni giocatore <code>gol subiti ogni 50' con lui = gol subiti con lui in campo / minuti in campo × 50</code>, e lo stesso «senza di lui» sul tempo restante (in allenamento: le due squadre interne sommate). Lo stesso per le coppie di difensori: due giocatori della stessa squadra, entrambi difensori di ruolo (il ruolo di partenza scritto nel tabellino, non la posizione data con un cambio), in campo nello stesso istante, con almeno 10' insieme e 10' senza. Le coppie con un ospite si mostrano, una per allenamento, ma non si confrontano. Soglie: almeno 10' in campo e 10' senza. Il segnale nasce dal test binomiale esatto a due code (con n gol e una quota q di minuti in campo, i gol «suoi» per puro caso sarebbero Binomiale(n, q)), corretto per il numero di confronti con Benjamini-Hochberg: <strong>chiaro</strong> se la probabilità corretta è sotto 0,10, <strong>da tenere d'occhio</strong> se lo è solo quella grezza. È una correlazione, non un'attribuzione di colpa.</p>
+          <h4>Formazioni e formazione migliore</h4>
+          <p>Formazione = l'insieme dei giocatori in campo nello stesso momento per la stessa squadra (in allenamento: la squadra interna), ricavato dagli stessi tratti a formazione costante della sezione precedente; se torna in campo, anche in partite diverse, somma minuti e gol. Per ogni formazione: minuti insieme, gol fatti e gol subiti mentre era in campo. Per scegliere la migliore il criterio consigliato è il <strong>saldo reti</strong> (gol fatti − gol subiti), a parità meno gol subiti, poi più minuti; si possono scegliere anche «meno gol subiti» o «più gol fatti». Servono almeno 5' insieme, e per la scelta ogni formazione parte come se avesse già giocato 10' al ritmo medio della squadra: <code>stima = (gol + media al minuto × 10) / (minuti + 10) × 50</code>. Chi ha giocato tanto insieme resta quasi com'è, chi ha giocato poco viene riportato verso la media. I numeri mostrati sono quelli veri. Sul campo ognuno è nella casella del modulo impostato in Seven Lab (P, D1, D2, C1…: colonna «Slot» della sezione «RUOLI EVENTI») tenuta più a lungo in quella formazione; il modulo (2-3-1, 3-2-1…) si conta dalle caselle, senza il portiere. Senza quella sezione si usano i ruoli.</p>
+          <h4>Nessun dato biometrico richiesto</h4>
+          <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
+          <h4>Pulizia dei dati</h4>
+          <p>Vengono escluse le righe vuote e quelle con «ESEMPIO» nelle note. Le celle vuote sono trattate come 0 nelle somme. Le date in formato numerico di Excel vengono convertite in date reali.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 12. IA -->
+    <section id="sez-ia">
+      <div class="sez-testa"><h2>Assistente IA (opzionale)</h2></div>
+      <p class="sez-desc">Fai una domanda in italiano sui tuoi dati. La chiave API OpenAI resta sul tuo dispositivo e viene usata solo per chiamare OpenAI; all'IA vengono inviati soltanto i dati già aggregati (classifica, tendenze, aggregati mensili, carico di allenamento), non il file.</p>
+      <div class="card">
+        <div class="griglia g-2" style="align-items:end">
+          <div class="campo" style="width:100%">
+            <label for="ia-chiave">Chiave API OpenAI</label>
+            <input type="password" id="ia-chiave" placeholder="sk-..." autocomplete="off">
+            <span class="kpi-nota" id="ia-stato-chiave"></span>
+          </div>
+          <div class="campo" style="width:100%">
+            <label for="ia-domanda">La tua domanda</label>
+            <textarea id="ia-domanda" placeholder="Es. Su cosa dovremmo lavorare in allenamento questo mese?"></textarea>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
+          <button class="btn primario" id="ia-invia">Chiedi all'assistente</button>
+          <button class="btn" id="ia-salva">Ricorda la chiave su questo dispositivo</button>
+          <button class="btn" id="ia-dimentica">Dimentica la chiave</button>
+        </div>
+        <div id="ia-risposta" class="ia-risposta nascosto"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="report-stage" aria-hidden="true"></div>
+</main>
+
+<footer>
+  Dashboard costruita per l'analisi prestazionale di una squadra di calcio a 7 · I calcoli avvengono nel browser · Con l'accesso, i file caricati si sincronizzano fra i tuoi dispositivi
+</footer>
+
+<!-- Sincronizzazione fra dispositivi (16/10/2026) -->
+<dialog id="dlg-cloud" aria-labelledby="dlg-cloud-titolo">
+  <div class="dlg-testa"><h2 id="dlg-cloud-titolo">Gli stessi file su PC, iPad e telefono</h2>
+    <button type="button" class="btn piccolo" id="btn-cloud-chiudi" aria-label="Chiudi">Chiudi</button></div>
+  <p class="dlg-testo">Entra con <strong>la stessa email e la stessa password di SevenLab</strong>. Da quel momento ogni file che carichi o elimini su un dispositivo arriva da solo anche sugli altri, quando li apri.</p>
+  <form id="cloud-form" class="dlg-form" autocomplete="on">
+    <label for="cloud-email">Email</label>
+    <input id="cloud-email" type="email" autocomplete="username" inputmode="email" required>
+    <label for="cloud-password">Password</label>
+    <input id="cloud-password" type="password" autocomplete="current-password" required>
+    <button type="submit" class="btn primario">Entra e sincronizza</button>
+    <div id="cloud-msg" class="dlg-msg" role="status"></div>
+  </form>
+  <div id="cloud-collegato" class="nascosto">
+    <div class="azioni-dlg">
+      <button type="button" class="btn primario" id="btn-cloud-ora">Sincronizza ora</button>
+      <button type="button" class="btn" id="btn-cloud-esci">Esci</button>
+    </div>
+  </div>
+  <p id="cloud-stato" class="dlg-stato" role="status"></p>
+  <p class="dlg-nota">Su ogni dispositivo basta entrare una volta. Uscire non cancella i file da questo dispositivo né dal cloud.</p>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

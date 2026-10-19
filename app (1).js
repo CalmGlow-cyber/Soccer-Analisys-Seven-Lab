@@ -1,0 +1,9450 @@
+/* =====================================================================
+   DATI DEMO (stagione di esempio, usati dal pulsante "Prova con dati di esempio")
+   ===================================================================== */
+const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":"Cannobio FC","Competizione":"Campionato","Gol_Fatti":2,"Gol_Subiti":4,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P1","Data":"2026-04-19","Avversario":"Real Verbania","Competizione":"Campionato","Gol_Fatti":5,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null},{"Match_ID":"P2","Data":"2026-05-03","Avversario":"Bee United","Competizione":"Campionato","Gol_Fatti":4,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"1-3-2","Note":null},{"Match_ID":"P3","Data":"2026-05-17","Avversario":"Stresa Calcio","Competizione":"Campionato","Gol_Fatti":5,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-2-2","Note":null},{"Match_ID":"P4","Data":"2026-05-31","Avversario":"Omegna Sport","Competizione":"Campionato","Gol_Fatti":6,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P5","Data":"2026-06-14","Avversario":"Baveno Calcio","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null},{"Match_ID":"P6","Data":"2026-06-28","Avversario":"Gravellona FC","Competizione":"Campionato","Gol_Fatti":1,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"1-3-2","Note":null},{"Match_ID":"P7","Data":"2026-07-12","Avversario":"Arona United","Competizione":"Campionato","Gol_Fatti":6,"Gol_Subiti":3,"Durata_Minuti":60,"Modulo":"2-2-2","Note":null},{"Match_ID":"P8","Data":"2026-07-26","Avversario":"Verbano Team","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":5,"Durata_Minuti":60,"Modulo":"2-3-1","Note":null},{"Match_ID":"P9","Data":"2026-08-09","Avversario":"Pallanza Sport","Competizione":"Campionato","Gol_Fatti":3,"Gol_Subiti":2,"Durata_Minuti":60,"Modulo":"3-2-1","Note":null}],"Statistiche_Giocatori":[{"Match_ID":"P0","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":10,"Note":null},{"Match_ID":"P0","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":3,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":36,"Gol":2,"Assist":2,"Tiri_In_Porta":5,"Tiri_Fuori":2,"Passaggi_Corretti":9,"Passaggi_Sbagliati":9,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":26,"Passaggi_Sbagliati":3,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":25,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":43,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P0","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":59,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":9,"Note":null},{"Match_ID":"P1","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":47,"Gol":2,"Assist":1,"Tiri_In_Porta":5,"Tiri_Fuori":4,"Passaggi_Corretti":12,"Passaggi_Sbagliati":8,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":59,"Gol":2,"Assist":2,"Tiri_In_Porta":5,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":55,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":36,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":25,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":4,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":5,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P1","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":45,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5,"Note":null},{"Match_ID":"P2","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":53,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":4,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":43,"Gol":0,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":9,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":38,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":35,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":15,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P2","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":5,"Note":null},{"Match_ID":"P3","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":3,"Assist":1,"Tiri_In_Porta":5,"Tiri_Fuori":3,"Passaggi_Corretti":11,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":25,"Passaggi_Sbagliati":3,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":7,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":18,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P3","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":22,"Passaggi_Sbagliati":8,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":12,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":8,"Note":null},{"Match_ID":"P4","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":3,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":1,"Passaggi_Corretti":11,"Passaggi_Sbagliati":4,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":44,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":10,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":53,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":23,"Passaggi_Sbagliati":5,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":42,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":21,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":35,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":36,"Gol":1,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P4","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":3,"Dribbling_Tentati":2,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":5,"Note":null},{"Match_ID":"P5","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":37,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":5,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":2,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":4,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":39,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":49,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":49,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":54,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":3,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P5","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":39,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":10,"Note":null},{"Match_ID":"P6","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":14,"Passaggi_Sbagliati":2,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":38,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":8,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":3,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P6","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":4,"Note":null},{"Match_ID":"P7","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":38,"Gol":3,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":15,"Passaggi_Sbagliati":4,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":51,"Gol":1,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":3,"Passaggi_Corretti":15,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":46,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":17,"Passaggi_Sbagliati":9,"Dribbling_Tentati":2,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null,"Note":null},{"Match_ID":"P7","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":59,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":7,"Note":null},{"Match_ID":"P8","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":55,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":15,"Passaggi_Sbagliati":9,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":45,"Gol":2,"Assist":0,"Tiri_In_Porta":5,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":40,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":25,"Passaggi_Sbagliati":3,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":19,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":19,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P8","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":40,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":9,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":4,"Note":null},{"Match_ID":"P9","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":43,"Gol":1,"Assist":1,"Tiri_In_Porta":4,"Tiri_Fuori":3,"Passaggi_Corretti":8,"Passaggi_Sbagliati":4,"Dribbling_Tentati":7,"Dribbling_Falliti":3,"Recuperi":1,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":47,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":3,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":49,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":24,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":56,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":8,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":6,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":5,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null,"Note":null},{"Match_ID":"P9","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":54,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":9,"Dribbling_Tentati":7,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null,"Note":null}],"Allenamenti":[{"Sessione_ID":"T1","Data":"2026-04-01","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":61,"Note":null},{"Sessione_ID":"T2","Data":"2026-04-05","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":66,"Note":null},{"Sessione_ID":"T3","Data":"2026-04-09","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":75,"Note":null},{"Sessione_ID":"T4","Data":"2026-04-13","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":50,"Note":null},{"Sessione_ID":"T5","Data":"2026-04-17","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T6","Data":"2026-04-21","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T7","Data":"2026-04-25","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":63,"Note":null},{"Sessione_ID":"T8","Data":"2026-05-01","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":65,"Note":null},{"Sessione_ID":"T9","Data":"2026-05-05","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":49,"Note":null},{"Sessione_ID":"T10","Data":"2026-05-09","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":61,"Note":null},{"Sessione_ID":"T11","Data":"2026-05-13","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":65,"Note":null},{"Sessione_ID":"T12","Data":"2026-05-17","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":62,"Note":null},{"Sessione_ID":"T13","Data":"2026-05-21","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":63,"Note":null},{"Sessione_ID":"T14","Data":"2026-05-25","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":53,"Note":null},{"Sessione_ID":"T15","Data":"2026-06-01","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":69,"Note":null},{"Sessione_ID":"T16","Data":"2026-06-05","Tipo_Allenamento":"Tecnico","Durata_Minuti_Sessione":69,"Note":null},{"Sessione_ID":"T17","Data":"2026-06-09","Tipo_Allenamento":"Tattico","Durata_Minuti_Sessione":70,"Note":null},{"Sessione_ID":"T18","Data":"2026-06-13","Tipo_Allenamento":"Partitella","Durata_Minuti_Sessione":68,"Note":null},{"Sessione_ID":"T19","Data":"2026-06-17","Tipo_Allenamento":"Fisico","Durata_Minuti_Sessione":44,"Note":null},{"Sessione_ID":"T20","Data":"2026-06-21","Tipo_Allenamento":"Misto","Durata_Minuti_Sessione":70,"Note":null}],"Presenze_Allenamento":[{"Sessione_ID":"T1","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":58,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":46,"RPE":4,"Note":null},{"Sessione_ID":"T1","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":56,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":58,"RPE":9,"Note":null},{"Sessione_ID":"T1","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":60,"RPE":4,"Note":null},{"Sessione_ID":"T1","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":50,"RPE":6,"Note":null},{"Sessione_ID":"T1","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":57,"RPE":3,"Note":null},{"Sessione_ID":"T1","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T1","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":47,"RPE":7,"Note":null},{"Sessione_ID":"T2","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T2","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":48,"RPE":8,"Note":null},{"Sessione_ID":"T2","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":62,"RPE":6,"Note":null},{"Sessione_ID":"T2","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":46,"RPE":7,"Note":null},{"Sessione_ID":"T2","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":49,"RPE":5,"Note":null},{"Sessione_ID":"T2","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":60,"RPE":5,"Note":null},{"Sessione_ID":"T2","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":66,"RPE":9,"Note":null},{"Sessione_ID":"T2","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":6,"Note":null},{"Sessione_ID":"T2","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":57,"RPE":6,"Note":null},{"Sessione_ID":"T3","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":60,"RPE":7,"Note":null},{"Sessione_ID":"T3","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":61,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":58,"RPE":5,"Note":null},{"Sessione_ID":"T3","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":72,"RPE":5,"Note":null},{"Sessione_ID":"T3","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":73,"RPE":7,"Note":null},{"Sessione_ID":"T3","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":75,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":71,"RPE":8,"Note":null},{"Sessione_ID":"T3","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":54,"RPE":9,"Note":null},{"Sessione_ID":"T3","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":61,"RPE":3,"Note":null},{"Sessione_ID":"T4","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":48,"RPE":6,"Note":null},{"Sessione_ID":"T4","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":36,"RPE":6,"Note":null},{"Sessione_ID":"T4","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":44,"RPE":5,"Note":null},{"Sessione_ID":"T4","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":46,"RPE":4,"Note":null},{"Sessione_ID":"T4","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":49,"RPE":8,"Note":null},{"Sessione_ID":"T4","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":4,"Note":null},{"Sessione_ID":"T4","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":39,"RPE":3,"Note":null},{"Sessione_ID":"T4","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T4","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":46,"RPE":6,"Note":null},{"Sessione_ID":"T5","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":52,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":67,"RPE":5,"Note":null},{"Sessione_ID":"T5","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":67,"RPE":4,"Note":null},{"Sessione_ID":"T5","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":57,"RPE":7,"Note":null},{"Sessione_ID":"T5","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":50,"RPE":7,"Note":null},{"Sessione_ID":"T5","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T5","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":61,"RPE":8,"Note":null},{"Sessione_ID":"T5","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":55,"RPE":4,"Note":null},{"Sessione_ID":"T6","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":69,"RPE":9,"Note":null},{"Sessione_ID":"T6","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":50,"RPE":8,"Note":null},{"Sessione_ID":"T6","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T6","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":60,"RPE":3,"Note":null},{"Sessione_ID":"T6","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":63,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":69,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":66,"RPE":5,"Note":null},{"Sessione_ID":"T6","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T6","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":70,"RPE":3,"Note":null},{"Sessione_ID":"T7","Giocatore":"Luca Bianchi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T7","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":54,"RPE":6,"Note":null},{"Sessione_ID":"T7","Giocatore":"Andrea Verdi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T7","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":53,"RPE":6,"Note":null},{"Sessione_ID":"T7","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":56,"RPE":7,"Note":null},{"Sessione_ID":"T7","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T7","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":58,"RPE":3,"Note":null},{"Sessione_ID":"T7","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":4,"Note":null},{"Sessione_ID":"T7","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":47,"RPE":7,"Note":null},{"Sessione_ID":"T8","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":60,"RPE":3,"Note":null},{"Sessione_ID":"T8","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":54,"RPE":9,"Note":null},{"Sessione_ID":"T8","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":64,"RPE":9,"Note":null},{"Sessione_ID":"T8","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":54,"RPE":7,"Note":null},{"Sessione_ID":"T8","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":56,"RPE":5,"Note":null},{"Sessione_ID":"T8","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":64,"RPE":3,"Note":null},{"Sessione_ID":"T8","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":52,"RPE":4,"Note":null},{"Sessione_ID":"T8","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":52,"RPE":6,"Note":null},{"Sessione_ID":"T8","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":58,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":41,"RPE":9,"Note":null},{"Sessione_ID":"T9","Giocatore":"Mario Rossi","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T9","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":35,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":41,"RPE":7,"Note":null},{"Sessione_ID":"T9","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":40,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":40,"RPE":8,"Note":null},{"Sessione_ID":"T9","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":46,"RPE":3,"Note":null},{"Sessione_ID":"T9","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":35,"RPE":9,"Note":null},{"Sessione_ID":"T9","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":44,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":51,"RPE":7,"Note":null},{"Sessione_ID":"T10","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":61,"RPE":3,"Note":null},{"Sessione_ID":"T10","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":43,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":52,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":43,"RPE":9,"Note":null},{"Sessione_ID":"T10","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T10","Giocatore":"Alessio Galli","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T10","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T10","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T11","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":3,"Note":null},{"Sessione_ID":"T11","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":48,"RPE":5,"Note":null},{"Sessione_ID":"T11","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":63,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T11","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":59,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":56,"RPE":4,"Note":null},{"Sessione_ID":"T11","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":50,"RPE":6,"Note":null},{"Sessione_ID":"T11","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":49,"RPE":9,"Note":null},{"Sessione_ID":"T11","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":62,"RPE":9,"Note":null},{"Sessione_ID":"T12","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":56,"RPE":7,"Note":null},{"Sessione_ID":"T12","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":8,"Note":null},{"Sessione_ID":"T12","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":58,"RPE":4,"Note":null},{"Sessione_ID":"T12","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":59,"RPE":4,"Note":null},{"Sessione_ID":"T12","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":52,"RPE":5,"Note":null},{"Sessione_ID":"T12","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":9,"Note":null},{"Sessione_ID":"T12","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":47,"RPE":5,"Note":null},{"Sessione_ID":"T12","Giocatore":"Paolo Marino","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T12","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":44,"RPE":8,"Note":null},{"Sessione_ID":"T13","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":48,"RPE":3,"Note":null},{"Sessione_ID":"T13","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":53,"RPE":3,"Note":null},{"Sessione_ID":"T13","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":63,"RPE":8,"Note":null},{"Sessione_ID":"T13","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":51,"RPE":7,"Note":null},{"Sessione_ID":"T13","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":50,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":52,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":51,"RPE":4,"Note":null},{"Sessione_ID":"T13","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T13","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":53,"RPE":4,"Note":null},{"Sessione_ID":"T14","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":44,"RPE":5,"Note":null},{"Sessione_ID":"T14","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":43,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":46,"RPE":9,"Note":null},{"Sessione_ID":"T14","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":44,"RPE":8,"Note":null},{"Sessione_ID":"T14","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T14","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":45,"RPE":9,"Note":null},{"Sessione_ID":"T14","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":45,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":42,"RPE":7,"Note":null},{"Sessione_ID":"T14","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":41,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":67,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":50,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":67,"RPE":9,"Note":null},{"Sessione_ID":"T15","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":54,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":48,"RPE":4,"Note":null},{"Sessione_ID":"T15","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":63,"RPE":5,"Note":null},{"Sessione_ID":"T15","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":48,"RPE":7,"Note":null},{"Sessione_ID":"T15","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":61,"RPE":9,"Note":null},{"Sessione_ID":"T15","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":51,"RPE":6,"Note":null},{"Sessione_ID":"T16","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T16","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":59,"RPE":3,"Note":null},{"Sessione_ID":"T16","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":48,"RPE":9,"Note":null},{"Sessione_ID":"T16","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":57,"RPE":8,"Note":null},{"Sessione_ID":"T16","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":51,"RPE":3,"Note":null},{"Sessione_ID":"T16","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":61,"RPE":4,"Note":null},{"Sessione_ID":"T16","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":52,"RPE":7,"Note":null},{"Sessione_ID":"T16","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":55,"RPE":7,"Note":null},{"Sessione_ID":"T16","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":57,"RPE":9,"Note":null},{"Sessione_ID":"T17","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":63,"RPE":9,"Note":null},{"Sessione_ID":"T17","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":56,"RPE":6,"Note":null},{"Sessione_ID":"T17","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":57,"RPE":5,"Note":null},{"Sessione_ID":"T17","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":53,"RPE":8,"Note":null},{"Sessione_ID":"T17","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T17","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":54,"RPE":8,"Note":null},{"Sessione_ID":"T17","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":51,"RPE":4,"Note":null},{"Sessione_ID":"T17","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":66,"RPE":3,"Note":null},{"Sessione_ID":"T17","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":64,"RPE":8,"Note":null},{"Sessione_ID":"T18","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":57,"RPE":8,"Note":null},{"Sessione_ID":"T18","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":52,"RPE":6,"Note":null},{"Sessione_ID":"T18","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":68,"RPE":4,"Note":null},{"Sessione_ID":"T18","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":63,"RPE":6,"Note":null},{"Sessione_ID":"T18","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":51,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":65,"RPE":4,"Note":null},{"Sessione_ID":"T18","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":58,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":63,"RPE":9,"Note":null},{"Sessione_ID":"T18","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":55,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":31,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":33,"RPE":5,"Note":null},{"Sessione_ID":"T19","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":42,"RPE":7,"Note":null},{"Sessione_ID":"T19","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":37,"RPE":3,"Note":null},{"Sessione_ID":"T19","Giocatore":"Davide Ferri","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"},{"Sessione_ID":"T19","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":31,"RPE":9,"Note":null},{"Sessione_ID":"T19","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":44,"RPE":6,"Note":null},{"Sessione_ID":"T19","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":34,"RPE":4,"Note":null},{"Sessione_ID":"T19","Giocatore":"Luca Conti","Presente":"Sì","Minuti_Allenamento":34,"RPE":6,"Note":null},{"Sessione_ID":"T20","Giocatore":"Luca Bianchi","Presente":"Sì","Minuti_Allenamento":67,"RPE":3,"Note":null},{"Sessione_ID":"T20","Giocatore":"Mario Rossi","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T20","Giocatore":"Andrea Verdi","Presente":"Sì","Minuti_Allenamento":60,"RPE":9,"Note":null},{"Sessione_ID":"T20","Giocatore":"Marco Neri","Presente":"Sì","Minuti_Allenamento":69,"RPE":5,"Note":null},{"Sessione_ID":"T20","Giocatore":"Davide Ferri","Presente":"Sì","Minuti_Allenamento":58,"RPE":7,"Note":null},{"Sessione_ID":"T20","Giocatore":"Simone Colombo","Presente":"Sì","Minuti_Allenamento":63,"RPE":7,"Note":null},{"Sessione_ID":"T20","Giocatore":"Alessio Galli","Presente":"Sì","Minuti_Allenamento":55,"RPE":8,"Note":null},{"Sessione_ID":"T20","Giocatore":"Paolo Marino","Presente":"Sì","Minuti_Allenamento":70,"RPE":3,"Note":null},{"Sessione_ID":"T20","Giocatore":"Luca Conti","Presente":"No","Minuti_Allenamento":0,"RPE":null,"Note":"assente"}],"Statistiche_Allenamento":[{"Sessione_ID":"T3","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":3},{"Sessione_ID":"T3","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":61,"Gol":1,"Assist":1,"Tiri_In_Porta":3,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":58,"Gol":2,"Assist":2,"Tiri_In_Porta":3,"Tiri_Fuori":3,"Passaggi_Corretti":12,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":72,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":73,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":75,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":12,"Passaggi_Sbagliati":4,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":71,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":18,"Passaggi_Sbagliati":5,"Dribbling_Tentati":3,"Dribbling_Falliti":2,"Recuperi":3,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T3","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":61,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":12,"Passaggi_Sbagliati":5,"Dribbling_Tentati":5,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":52,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5},{"Sessione_ID":"T5","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":64,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":14,"Passaggi_Sbagliati":7,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":1,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":57,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":4,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":50,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":5,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":61,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T5","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":5},{"Sessione_ID":"T8","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":54,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":2,"Passaggi_Corretti":14,"Passaggi_Sbagliati":3,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":64,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":7,"Passaggi_Sbagliati":6,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":5,"Dribbling_Falliti":1,"Recuperi":5,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":56,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":24,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":64,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":6,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":5,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T8","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":51,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":7,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":6},{"Sessione_ID":"T10","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":61,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":8,"Passaggi_Sbagliati":8,"Dribbling_Tentati":4,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":43,"Gol":2,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":1,"Passaggi_Corretti":7,"Passaggi_Sbagliati":2,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":1,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":52,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":21,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":2,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":43,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":22,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":4,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":7,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":6,"Parate":null},{"Sessione_ID":"T10","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":60,"Gol":0,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":6,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":2,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":5},{"Sessione_ID":"T13","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":53,"Gol":1,"Assist":0,"Tiri_In_Porta":3,"Tiri_Fuori":0,"Passaggi_Corretti":9,"Passaggi_Sbagliati":3,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":2,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":63,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":3,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":0,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":2,"Passaggi_Corretti":22,"Passaggi_Sbagliati":5,"Dribbling_Tentati":4,"Dribbling_Falliti":0,"Recuperi":5,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":50,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":52,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":2,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":7,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":6,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":6,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":60,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":2,"Passaggi_Corretti":16,"Passaggi_Sbagliati":4,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T13","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":53,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":7,"Dribbling_Tentati":3,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":67,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":1,"Parate":9},{"Sessione_ID":"T15","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":50,"Gol":1,"Assist":0,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":14,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":67,"Gol":1,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":12,"Passaggi_Sbagliati":7,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":54,"Gol":0,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":6,"Dribbling_Tentati":6,"Dribbling_Falliti":3,"Recuperi":5,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":48,"Gol":1,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":6,"Dribbling_Tentati":1,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":63,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":6,"Dribbling_Tentati":3,"Dribbling_Falliti":0,"Recuperi":7,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":48,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":20,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":3,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":61,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":0,"Passaggi_Corretti":16,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":4,"Parate":null},{"Sessione_ID":"T15","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":51,"Gol":1,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":19,"Passaggi_Sbagliati":2,"Dribbling_Tentati":4,"Dribbling_Falliti":3,"Recuperi":4,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":57,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":15,"Passaggi_Sbagliati":6,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":9},{"Sessione_ID":"T18","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":52,"Gol":0,"Assist":2,"Tiri_In_Porta":1,"Tiri_Fuori":3,"Passaggi_Corretti":13,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":68,"Gol":0,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":8,"Passaggi_Sbagliati":7,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":63,"Gol":1,"Assist":1,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":24,"Passaggi_Sbagliati":7,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":51,"Gol":1,"Assist":2,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":3,"Dribbling_Tentati":3,"Dribbling_Falliti":1,"Recuperi":4,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":65,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":20,"Passaggi_Sbagliati":8,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":58,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":17,"Passaggi_Sbagliati":5,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":7,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":63,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":16,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T18","Giocatore":"Luca Conti","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":1,"Passaggi_Corretti":15,"Passaggi_Sbagliati":7,"Dribbling_Tentati":5,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Luca Bianchi","Ruolo":"Portiere","Minuti_Giocati":67,"Gol":0,"Assist":0,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":10,"Passaggi_Sbagliati":5,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":0,"Parate":2},{"Sessione_ID":"T20","Giocatore":"Mario Rossi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":0,"Tiri_In_Porta":4,"Tiri_Fuori":1,"Passaggi_Corretti":8,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":1,"Recuperi":0,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Andrea Verdi","Ruolo":"Attaccante","Minuti_Giocati":60,"Gol":2,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":7,"Passaggi_Sbagliati":4,"Dribbling_Tentati":0,"Dribbling_Falliti":0,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Marco Neri","Ruolo":"Centrocampista","Minuti_Giocati":69,"Gol":1,"Assist":0,"Tiri_In_Porta":2,"Tiri_Fuori":0,"Passaggi_Corretti":21,"Passaggi_Sbagliati":4,"Dribbling_Tentati":2,"Dribbling_Falliti":1,"Recuperi":3,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Davide Ferri","Ruolo":"Centrocampista","Minuti_Giocati":58,"Gol":0,"Assist":1,"Tiri_In_Porta":1,"Tiri_Fuori":1,"Passaggi_Corretti":21,"Passaggi_Sbagliati":6,"Dribbling_Tentati":4,"Dribbling_Falliti":2,"Recuperi":2,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Simone Colombo","Ruolo":"Difensore","Minuti_Giocati":63,"Gol":1,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":18,"Passaggi_Sbagliati":8,"Dribbling_Tentati":2,"Dribbling_Falliti":2,"Recuperi":5,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Alessio Galli","Ruolo":"Difensore","Minuti_Giocati":55,"Gol":0,"Assist":1,"Tiri_In_Porta":0,"Tiri_Fuori":0,"Passaggi_Corretti":17,"Passaggi_Sbagliati":7,"Dribbling_Tentati":1,"Dribbling_Falliti":0,"Recuperi":3,"Parate":null},{"Sessione_ID":"T20","Giocatore":"Paolo Marino","Ruolo":"Centrocampista","Minuti_Giocati":70,"Gol":0,"Assist":2,"Tiri_In_Porta":2,"Tiri_Fuori":1,"Passaggi_Corretti":23,"Passaggi_Sbagliati":8,"Dribbling_Tentati":6,"Dribbling_Falliti":2,"Recuperi":5,"Parate":null}]};
+
+/* =====================================================================
+   VERSIONE — da aggiornare a ogni consegna, così l'utente può verificare a colpo d'occhio, aprendo il
+   sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
+   ===================================================================== */
+const VERSIONE_APP = {
+  numero: "1.44.0",
+  data: "2026-10-19",
+  note: "Report Partita essenziale (19/10/2026): risultato e nomi delle squadre in alto, marcatori con assist, possesso, tiri generati e subiti, passaggi e dribbling riusciti/sbagliati, momentum, heatmap di palle recuperate e perse, zone di tiro e assist dei gol, e in fondo «Considerazioni e miglioramenti suggeriti». Tolti migliore in campo, sostituzioni, dati completi dei giocatori, statistiche totali e testi di spiegazione. Report Stagionale e Confronto invariati. Comprende la 1.43.0 (possesso misurato e momentum)."
+};
+
+/* =====================================================================
+   UTILITÀ
+   ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+function N(v){
+  if(v===null || v===undefined || v==="") return 0;
+  if(typeof v === "number") return isFinite(v) ? v : 0;
+  const n = parseFloat(String(v).replace(",", ".").replace(/[^\d.\-]/g, ""));
+  return isFinite(n) ? n : 0;
+}
+const perc = (num, den) => (den > 0 ? (num/den)*100 : null);
+const nf = (v, d=1) => (v===null || v===undefined || !isFinite(v)) ? "—" :
+  v.toLocaleString("it-IT", {minimumFractionDigits:d, maximumFractionDigits:d});
+const nf0 = v => nf(v, 0);
+const pctTxt = (v, d=1) => (v===null||v===undefined||!isFinite(v)) ? "—" : nf(v,d)+"%";
+const MESI_IT = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+function meseLabel(m){ if(!m) return "—"; const [a,me]=m.split("-"); return MESI_IT[parseInt(me,10)-1]+" "+a; }
+function meseBreve(m){ if(!m) return "—"; const [,me]=m.split("-"); return MESI_IT[parseInt(me,10)-1]; }
+/** Sposta una chiave mese "YYYY-MM" di n mesi (n può essere negativo). Usato per calcolare il periodo
+ *  precedente "equivalente" quando il periodo scelto per gli allenamenti è un arco di più mesi, non un
+ *  singolo mese: es. se scelgo aprile-giugno (3 mesi), il periodo precedente equivalente sono i 3 mesi
+ *  immediatamente prima, gennaio-marzo, calcolati sul calendario indipendentemente da dove ci sono dati. */
+function meseAggiungi(m, n){
+  const [a,me] = m.split("-").map(Number);
+  const d = new Date(a, (me-1)+n, 1);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+}
+/** true se il mese m (chiave "YYYY-MM") cade nell'intervallo [da,a] incluso; da/a null = nessun limite
+ *  su quel lato (da null e a null insieme = "tutta la stagione"). */
+function meseNelPeriodo(m, da, a){
+  if(!m) return false;
+  if(da && m < da) return false;
+  if(a && m > a) return false;
+  return true;
+}
+/** Etichetta leggibile per un periodo allenamenti: un solo mese, un arco di mesi, o tutta la stagione. */
+function etichettaPeriodoAllenamento(da, a){
+  if(!da && !a) return "Tutta la stagione";
+  if(da === a) return meseLabel(da);
+  if(!da) return "Fino a " + meseLabel(a);
+  if(!a) return "Da " + meseLabel(da);
+  return meseLabel(da) + " – " + meseLabel(a);
+}
+/** Calcola il periodo precedente "equivalente" (stessa durata in mesi di calendario, subito prima) a un
+ *  periodo [da,a] scelto per gli allenamenti. Restituisce null se non c'è un periodo precedente sensato
+ *  (periodo "tutta la stagione", oppure da/a mancanti). */
+function periodoAllenamentoPrecedente(da, a){
+  if(!da || !a) return null;
+  const [ya,ma] = da.split("-").map(Number), [yb,mb] = a.split("-").map(Number);
+  const durataMesi = (yb*12+mb) - (ya*12+ma) + 1;
+  return {da: meseAggiungi(da, -durataMesi), a: meseAggiungi(da, -1)};
+}
+function dataLabel(d){
+  if(!(d instanceof Date) || isNaN(d)) return "—";
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
+}
+function dataCorta(d){
+  if(!(d instanceof Date) || isNaN(d)) return "—";
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
+}
+function meseKey(d){ return (d instanceof Date && !isNaN(d)) ? d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0") : null; }
+function toDate(v){
+  if(v instanceof Date) return isNaN(v) ? null : v;
+  if(typeof v === "number"){
+    const ms = Math.round((v - 25569) * 86400 * 1000);
+    const d = new Date(ms); return isNaN(d) ? null : d;
+  }
+  if(typeof v === "string" && v.trim()){
+    const s = v.trim();
+    let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m) return new Date(+m[1], +m[2]-1, +m[3]);
+    m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    if(m) return new Date(+m[3], +m[2]-1, +m[1]);
+    const d = new Date(s); return isNaN(d) ? null : d;
+  }
+  return null;
+}
+const esc = s => String(s===null||s===undefined?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const isEsempio = r => /esempio/i.test(String(r.Note ?? ""));
+const rigaVuota = r => Object.values(r).every(v => v===null || v===undefined || String(v).trim()==="");
+const presenteBool = v => ["sì","si","s","true","1","x"].includes(String(v ?? "").trim().toLowerCase());
+
+/* =====================================================================
+   INGESTIONE FILE SEVEN LAB (più file, uno per partita o per allenamento)
+   ===================================================================== */
+const CHIAVE_SESSIONI = "calcio7-sessioni-v1";
+
+/** Seven Lab scrive date come "martedì 25/08/2026": ci interessa solo la parte gg/mm/aaaa,
+ *  il nome del giorno lo ignoriamo (cambia a seconda della lingua/locale del telefono). */
+function parseDataSevenLab(v){
+  if(!v) return null;
+  const m = String(v).match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+  if(m) return new Date(+m[3], +m[2]-1, +m[1]);
+  return toDate(v);
+}
+
+/** Spezza una riga CSV con celle tra virgolette e separatore ";" (formato di export di Seven Lab),
+ *  gestendo le virgolette raddoppiate ("") come virgoletta letterale dentro il valore. */
+function parsaRigaCSV(riga){
+  const campi = [];
+  let cur = "", inQuote = false;
+  for(let i=0; i<riga.length; i++){
+    const c = riga[i];
+    if(inQuote){
+      if(c === '"'){
+        if(riga[i+1] === '"'){ cur += '"'; i++; }
+        else inQuote = false;
+      } else cur += c;
+    } else {
+      if(c === '"') inQuote = true;
+      else if(c === ";"){ campi.push(cur); cur = ""; }
+      else cur += c;
+    }
+  }
+  campi.push(cur);
+  return campi.map(c => c.trim());
+}
+
+/** Converte una durata "m:ss" (come scritta nella sezione RIEPILOGO TEMPI) in secondi. Torna null se il
+ *  testo non è in questo formato (campo assente/vuoto). */
+function secondiDaMMSS(v){
+  const m = String(v||"").trim().match(/^(\d+):(\d{1,2})$/);
+  if(!m) return null;
+  return parseInt(m[1],10)*60 + parseInt(m[2],10);
+}
+
+/* =====================================================================
+   TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA (07/10/2026)
+   Seven Lab misura il tempo con un cronometro che parte e si ferma su comando. Dal vivo quel cronometro
+   coincide col tempo di partita. Taggando da video rallentato NO: misura il tempo di LAVORO di chi tagga.
+   Un tempo da 25' rivisto a metà velocità produce 50' di cronometro, e tutto ciò che a valle legge i secondi
+   (possesso, periodi, minuto d'ingresso dei subentrati, intervalli fra eventi) li prende per buoni.
+   La correzione si applica UNA VOLTA SOLA, in fase di lettura del file, su OGNI evento singolarmente — non
+   sul totale da ridistribuire. È questo che fa tornare giusti anche gli INTERVALLI: due eventi distanti 8
+   secondi reali stanno a 16 sul cronometro a 0,5×, e dopo la correzione tornano a 8. Senza, ogni metrica di
+   transizione (vedi "tempo di riconquista" più sotto) risulterebbe gonfiata del fattore di rallentamento.
+   Tutto il resto del sistema non sa niente di questa correzione: riceve secondi già di partita.
+
+   CONDIZIONE DI VALIDITÀ: la riproduzione deve essere stata UNIFORME — stessa velocità, nessuna pausa. Una
+   pausa inserisce tempo morto in un punto preciso, e un fattore globale lo spalma su tutta la partita:
+   aggiusta il totale e sbaglia i singoli intervalli, cioè rovina proprio ciò per cui si fa. I controlli in
+   "Qualità dei dati" servono ad accorgersene invece di fidarsi.
+
+   CONVENZIONE DEL NUMERO, fissata il 07/10/2026 con l'utente: il campo contiene la VELOCITÀ DI RIPRODUZIONE,
+   lo stesso numero che si imposta nel lettore video (0,25 · 0,5 · 0,75 · 1). Quindi t_reale = t_crono × v.
+   NON è un "fattore di rallentamento" (che sarebbe il reciproco): scambiarli sbaglia di un fattore 4.
+   ===================================================================== */
+const VELOCITA_MIN_VIDEO = 0.1, VELOCITA_MAX_VIDEO = 4;
+
+/* METODO DI RILEVAZIONE MANCANTE = DIRETTA (10/10/2026). Regola chiesta esplicitamente dall'utente: tutti i
+   file raccolti prima che Seven Lab scrivesse "Diretta"/"Differita" sono stati registrati dal vivo, e lo
+   storico non va perso né trattato come un caso a parte. Quindi: se il file non dice in modo riconoscibile
+   come è stato registrato, è DIRETTA. Il campo `predefinito` ricorda che non l'ha detto il file ma la
+   regola, così chi in futuro conterà "quante sessioni dal vivo e quante da video" sa da dove viene il dato.
+   L'unico caso in cui la regola si accompagna a un avviso è quello che un file vecchio non può produrre:
+   un file che dichiara una velocità di riproduzione ma non il metodo. Lì la regola si applica comunque
+   (diretta, tempi non toccati), ma il fatto viene detto, perché è il segno di un file nuovo il cui metodo
+   è scritto in un modo che il sistema non riconosce — e un file da video letto come diretta tiene i tempi
+   del cronometro di lavoro, cioè sbagliati del fattore di rallentamento. */
+const CHIAVI_METODO_NOTE = ["Metodo rilevazione","Metodo di rilevazione","Modalità rilevazione","Modalita rilevazione",
+  "Modalità","Modalita","Metodo","Rilevazione"];
+/** Riconosce il valore del metodo, con i sinonimi plausibili. null se non riconosciuto. */
+function interpretaMetodo(valore){
+  const v = String(valore||"").trim().toLowerCase();
+  if(!v) return null;
+  const differita = /differit|da video|^video$/.test(v), diretta = /dirett|^live$|dal vivo|^vivo$/.test(v);
+  if(differita && !diretta) return "differita";
+  if(diretta && !differita) return "diretta";
+  return null; // assente, sconosciuto o contraddittorio
+}
+/** "diretta" (tagging dal vivo) oppure "differita" (tagging da video). Cerca il campo prima fra i nomi
+ *  noti, poi fra qualunque chiave dei metadati che parli di metodo/modalità/rilevazione, poi — se Seven Lab
+ *  lo scrivesse riga per riga invece che in testa al file (punto ancora da chiarire nel playbook) — fra le
+ *  colonne della timeline, a maggioranza. Ritorna sempre un metodo: in assenza di un'indicazione
+ *  riconoscibile è "diretta" (regola dell'utente), con `predefinito:true`. */
+function metodoRilevazione(meta, eventi){
+  const esito = {metodo:"diretta", predefinito:true, letto:null, fonte:null, misto:false};
+  if(meta){
+    const chiaviMeta = Object.keys(meta).filter(k => k !== "_titoloApp");
+    const candidate = CHIAVI_METODO_NOTE.filter(k => meta[k] !== undefined)
+      .concat(chiaviMeta.filter(k => /metod|modalit|rilevazion/i.test(k) && !CHIAVI_METODO_NOTE.includes(k)));
+    for(const k of candidate){
+      const grezzo = String(meta[k]||"").trim();
+      if(!grezzo) continue;
+      const m = interpretaMetodo(grezzo);
+      if(m) return {metodo:m, predefinito:false, letto:grezzo, fonte:"metadati «"+k+"»", misto:false};
+      if(esito.letto === null){ esito.letto = grezzo; esito.fonte = "metadati «"+k+"»"; } // presente ma non riconosciuto
+    }
+  }
+  // riga per riga, nella timeline
+  const righe = Array.isArray(eventi) ? eventi : [];
+  if(righe.length){
+    const colonna = Object.keys(righe[0]||{}).find(k => /metod|modalit|rilevazion/i.test(k));
+    if(colonna){
+      const conteggio = {diretta:0, differita:0};
+      righe.forEach(r => { const m = interpretaMetodo(r[colonna]); if(m) conteggio[m]++; });
+      const tot = conteggio.diretta + conteggio.differita;
+      if(tot){
+        const m = conteggio.differita >= conteggio.diretta ? "differita" : "diretta";
+        return {metodo:m, predefinito:false, letto:m, fonte:"timeline, colonna «"+colonna+"»",
+          misto: conteggio.diretta > 0 && conteggio.differita > 0, conteggio};
+      }
+    }
+  }
+  return esito;
+}
+
+/** Velocità di riproduzione dichiarata nei metadati. null se assente o implausibile: in quel caso NON si
+ *  corregge niente e lo si dichiara, invece di indovinare un fattore. Accetta "0,5", "0.5", "0,5x", "×0,5"
+ *  e "50%"; cerca il campo anche sotto nomi non previsti che parlino di velocità/rallentamento. */
+function velocitaRiproduzione(meta){
+  if(!meta) return null;
+  let grezzo = meta["Velocità riproduzione"] ?? meta["Velocita riproduzione"] ?? meta["Velocità video"] ?? meta["Velocita video"] ?? meta["Fattore rallentamento"];
+  if(grezzo === undefined){
+    const k = Object.keys(meta).find(c => /velocit|rallent|playback/i.test(c));
+    if(k) grezzo = meta[k];
+  }
+  if(grezzo === undefined || grezzo === null || String(grezzo).trim() === "") return null;
+  const testo = String(grezzo).replace(",", ".");
+  const num = testo.match(/\d+(?:\.\d+)?/);
+  if(!num) return null;
+  let v = parseFloat(num[0]);
+  if(/%/.test(testo)) v = v / 100;
+  if(!isFinite(v) || v < VELOCITA_MIN_VIDEO || v > VELOCITA_MAX_VIDEO) return null;
+  return v;
+}
+
+/** Trasformazione affine dal cronometro di lavoro al tempo di partita.
+ *  t_reale = (t_crono − t0) × v — t0 è il cronometro al calcio d'inizio, così un avvio anticipato del
+ *  cronometro non si propaga (e non viene scalato lui stesso). Con t0 = 0 è la moltiplicazione semplice. */
+function tempoPartitaDaCronometro(tCrono, v, t0){
+  if(!isFinite(tCrono)) return tCrono;
+  return (tCrono - (t0 || 0)) * v;
+}
+
+/** Una durata in minuti scritta da Seven Lab ("52", "37,5") riportata al tempo di partita. Torna la stringa
+ *  com'era se non è un numero (campo vuoto), così una colonna assente resta assente. */
+function scalaMinutiTesto(grezzo, v){
+  if(grezzo === undefined || grezzo === null || String(grezzo).trim() === "") return grezzo;
+  const n = parseFloat(String(grezzo).replace(",", "."));
+  if(!isFinite(n)) return grezzo;
+  return String(Math.round(n * v * 10) / 10);
+}
+
+/* CHI HA SCRITTO I TEMPI: IL CRONOMETRO O IL VIDEO? (12/10/2026)
+   Primo file vero in differita (partita_1.csv, 11/10/2026 contro OLC, e allenamento_1.csv del 10/10): la timeline
+   della partita va da 0:00 a 51:21 e il primo tempo finisce a 25:47 — cioè un tempo regolamentare da 25' più
+   47" di recupero. Sono già TEMPI DI PARTITA, non tempi di lavoro: il file dichiara «Velocità riproduzione 0.75x»
+   ma il programma con cui è stato registrato, SevenLab Video, scrive il tempo di ogni evento sulla posizione del
+   video. Lo conferma anche l'orologio da parete del riepilogo (due ore per registrare 51 minuti di gioco) e, a
+   parità di gioco, l'intervallo tipico fra due eventi: 3 secondi nella partita e 3 nell'allenamento «a 0.50x».
+   La versione 1.27.0-1.33.1 correggeva comunque: riduceva la partita a 38 minuti e l'allenamento alla metà,
+   con minuti giocati, carico e intervalli ridotti dello stesso fattore. Ora la correzione si applica solo quando
+   i dati dimostrano un cronometro di lavoro; nel dubbio i tempi restano come sono e lo si dice. */
+const TEMPO_PLAUSIBILE_MIN_SEC = 20*60, TEMPO_PLAUSIBILE_MAX_SEC = 33*60;   // 25' + recupero, con margine
+const PARTITA_PLAUSIBILE_MIN_SEC = 44*60, PARTITA_PLAUSIBILE_MAX_SEC = 62*60; // 50' + recupero, con margine
+/** Fine del primo tempo e fine dei dati, in secondi del file, prima di qualunque correzione. */
+function duratePrimaDellaCorrezione(parsed){
+  const eventi = parsed.eventi || [];
+  const sec = e => { const v = (e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "") ? e["Secondo totale"] : e["Secondo"]; const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : null; };
+  let fine1 = parsed.riepilogoTempi && isFinite(parsed.riepilogoTempi.fine1TempoSec) ? parsed.riepilogoTempi.fine1TempoSec : null;
+  if(fine1 === null){ const r = eventi.find(e => e["Fine 1° tempo"] === "1"); if(r) fine1 = sec(r); }
+  const tutti = eventi.map(sec).filter(x => x !== null);
+  return {fine1, fine: tutti.length ? Math.max(...tutti) : null};
+}
+/** Decide se i tempi del file sono quelli del video (già di partita) o quelli del cronometro di lavoro.
+ *  Ritorna {orologio: "video"|"cronometro"|"incerto", motivi:[...]}. */
+function orologioDelFile(parsed, v){
+  const motivi = [];
+  const dg = parsed.dettaglioGolGame;
+  if(Array.isArray(dg) && dg.length && Object.keys(dg[0]).some(k => /^porta\s*[xy]/i.test(String(k).trim())))
+    motivi.push("il dettaglio dei gol ha le colonne «Porta X/Y m», che scrive solo SevenLab Video");
+  if((parsed.eventi||[]).some(e => /cambio squadra/i.test(String(e["Dettaglio"]||""))))
+    motivi.push("la timeline ha righe «Cambio squadra», che scrive solo SevenLab Video");
+  const {fine1, fine} = duratePrimaDellaCorrezione(parsed);
+  const dentro = (x, a, b) => x !== null && x >= a && x <= b;
+  if(parsed.tipo === "partita"){
+    if(dentro(fine1, TEMPO_PLAUSIBILE_MIN_SEC, TEMPO_PLAUSIBILE_MAX_SEC))
+      motivi.push(`il primo tempo finisce a ${mmssDaSecondi(fine1)}: è già la durata di un tempo vero (25' più recupero)`);
+    else if(fine1 === null && dentro(fine, PARTITA_PLAUSIBILE_MIN_SEC, PARTITA_PLAUSIBILE_MAX_SEC))
+      motivi.push(`la partita dura ${mmssDaSecondi(fine)}: è già la durata di una partita vera`);
+    if(motivi.length) return {orologio:"video", motivi};
+    // nessuna impronta del video: il cronometro di lavoro è dimostrato se SOLO i tempi corretti sono plausibili
+    if(fine1 !== null && dentro(fine1 * v, TEMPO_PLAUSIBILE_MIN_SEC, TEMPO_PLAUSIBILE_MAX_SEC))
+      return {orologio:"cronometro", motivi:[`il primo tempo finisce a ${mmssDaSecondi(fine1)} sul cronometro, ${mmssDaSecondi(fine1*v)} riportato alla velocità del video: è un cronometro di lavoro`]};
+    if(fine1 === null && dentro(fine * v, PARTITA_PLAUSIBILE_MIN_SEC, PARTITA_PLAUSIBILE_MAX_SEC))
+      return {orologio:"cronometro", motivi:[`la partita dura ${mmssDaSecondi(fine)} sul cronometro, ${mmssDaSecondi(fine*v)} riportata alla velocità del video: è un cronometro di lavoro`]};
+    return {orologio:"incerto", motivi:[]};
+  }
+  return motivi.length ? {orologio:"video", motivi} : {orologio:"incerto", motivi:[]};
+}
+
+/** Applica la correzione a un risultato di parsaFileSevenLab. Muta `eventi`, `riepilogoTempi`, i minuti
+ *  della tabella giocatori e la durata della sessione, e torna la diagnostica, che viene conservata sulla
+ *  sessione (campo `scalaTempi`) per poterla dichiarare a schermo e nei report — e per non riapplicarla mai
+ *  due volte su una sessione riletta dalla memoria del browser. */
+function normalizzaTempiDifferita(parsed){
+  const met = metodoRilevazione(parsed.meta, parsed.eventi);
+  const diag = {metodo: met.metodo, predefinito: met.predefinito, metodoLetto: met.letto, fonteMetodo: met.fonte,
+    applicata:false, minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[],
+    orologio:null, motiviOrologio:[], regolaOrologio:2};
+  const v = velocitaRiproduzione(parsed.meta);
+  const chiudi = () => { diag.avviso = diag.avvisi.length ? diag.avvisi.join(" ") : null; parsed.scalaTempi = diag; return parsed; };
+
+  if(met.letto && met.predefinito)
+    diag.avvisi.push(`Il file indica il metodo di rilevazione come «${met.letto}», che il sistema non riconosce: la sessione è stata trattata come registrata in diretta. Se era da video, segnalacelo: basta insegnare all'app questa scritta.`);
+  if(met.misto)
+    diag.avvisi.push(`La timeline mescola eventi registrati in diretta (${nf0(met.conteggio.diretta)}) e in differita (${nf0(met.conteggio.differita)}): la sessione è stata trattata come ${met.metodo}, quella in maggioranza. Una correzione dei tempi per singola riga non è ancora prevista.`);
+
+  if(diag.metodo !== "differita"){
+    // Regola dell'utente: senza metodo è diretta. Ma un file che dichiara una velocità di riproduzione non
+    // può essere un file dello storico, che quel campo non l'ha mai avuto: va detto.
+    if(met.predefinito && v !== null && v !== 1)
+      diag.avvisi.push(`Il file dichiara una velocità di riproduzione (${String(v).replace(".", ",")}×) ma non dice se è stato registrato in diretta o in differita: per regola è stato trattato come diretta e i tempi NON sono stati corretti. Se è stato registrato da video, i tempi e i minuti di questa sessione sono gonfiati: segnalacelo.`);
+    return chiudi();
+  }
+
+  if(v === null){
+    diag.avvisi.push("Sessione registrata in differita ma senza velocità di riproduzione dichiarata nel file: i tempi non sono stati corretti. Conteggi e posizioni restano validi; minuti giocati, possesso palla, divisione dei tempi, minuto d'ingresso dei subentrati e tempo di riconquista NON sono affidabili per questa sessione.");
+    return chiudi();
+  }
+  diag.velocita = v;
+  if(v === 1) return chiudi();
+  const oro = orologioDelFile(parsed, v);
+  diag.orologio = oro.orologio; diag.motiviOrologio = oro.motivi; diag.regolaOrologio = 2;
+  if(oro.orologio === "video") return chiudi(); // tempi già di partita: niente da correggere
+  if(oro.orologio === "incerto"){
+    diag.avvisi.push(`Velocità di riproduzione dichiarata (${String(v).replace(".", ",")}×), ma dal file non si capisce se i tempi seguono il video o il cronometro: sono stati lasciati come sono. SevenLab Video li scrive già sul tempo del video; se questa sessione è stata registrata con il cronometro di SevenLab, tempi e minuti sono gonfiati: segnalacelo.`);
+    return chiudi();
+  }
+  if(v > 1)
+    diag.avvisi.push(`Velocità di riproduzione dichiarata superiore a 1 (${String(v).replace(".", ",")}×): vuol dire video più veloce del reale, insolito per registrare. Se il numero nel file è un «fattore di rallentamento» (2 = metà velocità) invece della velocità del lettore, i tempi sono sbagliati di un fattore ${String(Math.round(v*v*10)/10).replace(".", ",")}: segnalacelo.`);
+
+  const rt = parsed.riepilogoTempi;
+  const t0 = (rt && isFinite(rt.inizioPartitaSec)) ? rt.inizioPartitaSec : 0;
+  diag.t0 = t0;
+
+  (parsed.eventi || []).forEach(e => {
+    // formato nuovo: "Secondo totale" è il tempo assoluto; "Secondo"/"Minuto" sono derivati dello stesso
+    // cronometro; "Minutaggio" è la sua scrittura in m:ss. Formato vecchio: solo "Secondo".
+    if(e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "")
+      e["Secondo totale"] = tempoPartitaDaCronometro(N(e["Secondo totale"]), v, t0);
+    else if(e["Secondo"] !== undefined && String(e["Secondo"]).trim() !== "")
+      e["Secondo"] = tempoPartitaDaCronometro(N(e["Secondo"]), v, t0);
+    if(e["Minuto"] !== undefined && String(e["Minuto"]).trim() !== "")
+      e["Minuto"] = tempoPartitaDaCronometro(N(e["Minuto"])*60, v, t0) / 60;
+    const sMm = secondiDaMMSS(e["Minutaggio"]);
+    if(sMm !== null) e["Minutaggio"] = mmssDaSecondi(tempoPartitaDaCronometro(sMm, v, t0));
+  });
+
+  (parsed.possessoAvversario || []).forEach(x => { x.inizio = tempoPartitaDaCronometro(x.inizio, v, t0); x.fine = tempoPartitaDaCronometro(x.fine, v, t0); });
+
+  if(rt){
+    // la durata è un intervallo: si scala e basta, senza togliere t0 (che è un istante, non una durata)
+    if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec * v;
+    ["inizioPartitaSec","fine1TempoSec","inizio2TempoSec","finePartitaSec"].forEach(k => {
+      if(rt[k] !== null && rt[k] !== undefined && isFinite(rt[k])) rt[k] = tempoPartitaDaCronometro(rt[k], v, t0);
+    });
+  }
+
+  // MINUTI GIOCATI E DURATA DELLA SESSIONE (10/10/2026). Seven Lab calcola i minuti di ciascun giocatore
+  // sommando i tratti in cui è in campo, misurati sullo stesso cronometro di lavoro (vedi la mappa del
+  // codice di Seven Lab nel progetto, modulo 063, e il debito annotato lì: "velocità video registrata ma
+  // non usata per correggere tempi/minuti"). La versione 1.27.0 correggeva i tempi degli eventi ma non
+  // questi: in un allenamento a 0,5× un giocatore presente per tutti i 25' risultava averne giocati 50, e il
+  // carico (minuti × RPE) raddoppiava. Sono durate, non istanti: si scalano e basta, senza t0.
+  (parsed.righe || []).forEach(r => {
+    if(r["Minuti giocati"] !== undefined) r["Minuti giocati"] = scalaMinutiTesto(r["Minuti giocati"], v);
+    const mm = secondiDaMMSS(r["Minutaggio"]);
+    if(mm !== null) r["Minutaggio"] = mmssDaSecondi(mm * v);
+  });
+  if(parsed.meta && parsed.meta["Durata minuti"] !== undefined)
+    parsed.meta["Durata minuti"] = scalaMinutiTesto(parsed.meta["Durata minuti"], v);
+  diag.minutiCorretti = true;
+  diag.applicata = true;
+  return chiudi();
+}
+
+/** Riporta una sessione salvata ai tempi scritti nel file, annullando la correzione applicata dalla 1.27.0 in
+ *  poi (è una trasformazione affine: si inverte esattamente, salvo l'arrotondamento a 0,1 dei minuti giocati).
+ *  Serve a rivalutare con la regola del 12/10/2026 le sessioni già salvate nel browser, senza chiedere di
+ *  ricaricare i file. Muta l'oggetto passato. */
+function annullaCorrezioneTempi(sess){
+  const sc = sess.scalaTempi;
+  if(!sc || !sc.applicata || !(sc.velocita > 0)) return sess;
+  const v = sc.velocita, t0 = sc.t0 || 0;
+  const inv = t => Math.round((t / v + t0) * 1000) / 1000;
+  (sess.eventi || []).forEach(e => {
+    if(e["Secondo totale"] !== undefined && String(e["Secondo totale"]).trim() !== "") e["Secondo totale"] = inv(N(e["Secondo totale"]));
+    else if(e["Secondo"] !== undefined && String(e["Secondo"]).trim() !== "") e["Secondo"] = inv(N(e["Secondo"]));
+    if(e["Minuto"] !== undefined && String(e["Minuto"]).trim() !== "") e["Minuto"] = inv(N(e["Minuto"])*60) / 60;
+    const mm = secondiDaMMSS(e["Minutaggio"]);
+    if(mm !== null) e["Minutaggio"] = mmssDaSecondi(inv(mm));
+  });
+  (sess.possessoAvversario || []).forEach(x => { x.inizio = inv(x.inizio); x.fine = inv(x.fine); });
+  const rt = sess.riepilogoTempi;
+  if(rt){
+    if(isFinite(rt.durataEffettivaSec)) rt.durataEffettivaSec = rt.durataEffettivaSec / v;
+    ["inizioPartitaSec","fine1TempoSec","inizio2TempoSec","finePartitaSec"].forEach(k => {
+      if(rt[k] !== null && rt[k] !== undefined && isFinite(rt[k])) rt[k] = inv(rt[k]);
+    });
+  }
+  if(sc.minutiCorretti){
+    const indietro = g => { const n = parseFloat(String(g).replace(",", ".")); return isFinite(n) ? String(Math.round(n / v * 100) / 100) : g; };
+    (sess.righe || []).forEach(r => {
+      if(r["Minuti giocati"] !== undefined && String(r["Minuti giocati"]).trim() !== "") r["Minuti giocati"] = indietro(r["Minuti giocati"]);
+      const mm = secondiDaMMSS(r["Minutaggio"]);
+      if(mm !== null){
+        const sec = Math.round(mm / v);
+        r["Minutaggio"] = mmssDaSecondi(sec);
+        // il minutaggio m:ss era arrotondato al secondo, i minuti giocati al decimo: il primo si inverte
+        // esatto, quindi i minuti si ricavano da lì (48:15 → 48,25 invece di 48,27)
+        if(r["Minuti giocati"] !== undefined) r["Minuti giocati"] = String(Math.round(sec / 60 * 100) / 100);
+      }
+    });
+    if(sess.meta && sess.meta["Durata minuti"] !== undefined) sess.meta["Durata minuti"] = indietro(sess.meta["Durata minuti"]);
+  }
+  sess.scalaTempi = Object.assign({}, sc, {applicata:false, minutiCorretti:false});
+  return sess;
+}
+/** Una volta sola, all'avvio: le sessioni in differita salvate con la regola vecchia (correzione sempre
+ *  applicata) vengono riportate ai tempi del file e rivalutate con quella nuova. Torna quante ne ha cambiate. */
+function rivalutaTempiSessioniSalvate(){
+  const sessioni = leggiSessioniSalvate();
+  let cambiate = 0;
+  const nuove = sessioni.map(sess => {
+    const sc = sess.scalaTempi;
+    if(!sc || sc.metodo !== "differita" || sc.regolaOrologio === 2) return sess;
+    const copia = JSON.parse(JSON.stringify(sess));
+    annullaCorrezioneTempi(copia);
+    const parsed = {tipo: copia.tipo, meta: copia.meta, righe: copia.righe, eventi: copia.eventi,
+      riepilogoTempi: copia.riepilogoTempi, datiSpaziali: copia.datiSpaziali,
+      statistichePortieriGame: copia.statistichePortieriGame, dettaglioGolGame: copia.dettaglioGolGame,
+      possessoAvversario: copia.possessoAvversario || null};
+    normalizzaTempiDifferita(parsed);
+    cambiate++;
+    return Object.assign(copia, {meta: parsed.meta, righe: parsed.righe, eventi: parsed.eventi,
+      riepilogoTempi: parsed.riepilogoTempi, scalaTempi: parsed.scalaTempi, possessoAvversario: parsed.possessoAvversario || null});
+  });
+  if(cambiate) scriviSessioniSalvate(nuove);
+  return cambiate;
+}
+
+/** Diagnostica dei tempi di una sessione GIÀ SALVATA nel browser, letta con la regola di oggi. Le sessioni
+ *  caricate con una versione precedente possono non averla affatto (prima della 1.27.0) o averla con
+ *  metodo null (dalla 1.27.0 alla 1.31.0, quando "nessun metodo" restava indeterminato): per la regola
+ *  dell'utente sono diretta. Non tocca l'oggetto salvato. */
+function scalaTempiEffettiva(sc){
+  if(!sc) return {metodo:"diretta", predefinito:true, metodoLetto:null, fonteMetodo:null, applicata:false,
+    minutiCorretti:false, velocita:null, t0:0, avviso:null, avvisi:[]};
+  if(sc.metodo === "diretta" || sc.metodo === "differita") return sc;
+  return Object.assign({}, sc, {metodo:"diretta", predefinito:true});
+}
+/** Fattore da applicare ai minuti di una sessione salvata con la 1.27.0-1.31.0: tempi degli eventi già
+ *  corretti, minuti giocati no (vedi sopra). 1 in tutti gli altri casi. */
+function fattoreMinutiArretrati(sc){
+  return (sc && sc.applicata && !sc.minutiCorretti && isFinite(sc.velocita) && sc.velocita > 0) ? sc.velocita : 1;
+}
+
+/** m:ss da secondi — speculare a secondiDaMMSS, serve a riscrivere "Minutaggio" dopo la correzione. */
+function mmssDaSecondi(sec){
+  const s = Math.max(0, Math.round(N(sec)));
+  return String(Math.floor(s/60)) + ":" + String(s%60).padStart(2,"0");
+}
+
+/** Legge un file .csv esportato da Seven Lab (una partita o un allenamento): un blocco iniziale di
+ *  metadati chiave;valore, una riga vuota, la tabella dei giocatori di quella sessione, e poi zero o più
+ *  sezioni facoltative — ciascuna introdotta da una riga con un solo campo (il titolo) — tra cui, per le
+ *  partite, la timeline eventi (chiamata "EVENTI PARTITA" nel primo export di prova, "TIMELINE EVENTI"
+ *  in quello aggiornato del 25/08/2026: stesso ruolo, formato colonne diverso — vedi i classificatori più
+ *  sotto) e, solo nell'export aggiornato, "RIEPILOGO TEMPI" con i secondi di fine 1° tempo/fine partita
+ *  già pronti. Ritorna {tipo, meta, righe, eventi, riepilogoTempi}. Lancia un errore leggibile se manca
+ *  "Tipo" o la tabella giocatori. */
+function parsaFileSevenLab(testo){
+  const righeGrezze = testo.split(/\r\n|\n|\r/).map(r => r.trimEnd());
+  // Una riga "vuota" separa i blocchi del file. Seven Lab non è coerente su come la scrive: a volte è una
+  // riga davvero vuota, a volte è un campo tra virgolette vuoto (il testo letterale «""»). Consideriamo
+  // vuota qualunque riga i cui campi, una volta separati, sono tutti stringa vuota — copre entrambi i casi.
+  const rigaVuota = r => parsaRigaCSV(r).every(c => c === "");
+  const meta = {};
+  let i = 0;
+  // blocco metadati: righe "Chiave";"Valore" finché non troviamo una riga vuota o la tabella
+  for(; i<righeGrezze.length; i++){
+    if(rigaVuota(righeGrezze[i])){ i++; break; }
+    const campi = parsaRigaCSV(righeGrezze[i]);
+    if(campi.length >= 2 && campi.slice(2).every(c => c === "")) meta[campi[0]] = campi[1];
+    else if(campi.length === 1 && !meta["_titoloApp"]) meta["_titoloApp"] = campi[0];
+  }
+  const tipo = String(meta["Tipo"] || "").trim().toLowerCase();
+  if(tipo !== "partita" && tipo !== "allenamento")
+    throw new Error("Non riconosco il tipo di file (manca o non è valida la riga «Tipo»;«partita»/«allenamento»). Controlla che sia un export di Seven Lab non modificato.");
+
+  // tabella giocatori: prossima riga non vuota è l'intestazione; finisce alla riga vuota o al titolo
+  // della sezione successiva (una riga con un solo campo, es. "TIMELINE EVENTI").
+  while(i<righeGrezze.length && rigaVuota(righeGrezze[i])) i++;
+  if(i>=righeGrezze.length) throw new Error("Nel file manca la tabella dei giocatori.");
+  const intestazione = parsaRigaCSV(righeGrezze[i]); i++;
+  const righe = [];
+  for(; i<righeGrezze.length; i++){
+    const campi = parsaRigaCSV(righeGrezze[i]);
+    if(campi.every(c => c === "")) break;
+    if(campi.length === 1) break;
+    const obj = {};
+    intestazione.forEach((h,idx) => obj[h] = campi[idx] ?? "");
+    if(obj[intestazione[0]]) righe.push(obj);
+  }
+  if(righe.length === 0) throw new Error("La tabella dei giocatori nel file è vuota.");
+
+  // sezioni successive, facoltative: titolo su una riga da solo + le sue righe fino alla prossima vuota.
+  const sezioni = {};
+  while(i<righeGrezze.length){
+    while(i<righeGrezze.length && rigaVuota(righeGrezze[i])) i++;
+    if(i>=righeGrezze.length) break;
+    const campiTitolo = parsaRigaCSV(righeGrezze[i]);
+    if(campiTitolo.length !== 1){ i++; continue; } // riga anomala/inattesa: la saltiamo per sicurezza
+    const titolo = campiTitolo[0]; i++;
+    const righeSezione = [];
+    while(i<righeGrezze.length && !rigaVuota(righeGrezze[i])){ righeSezione.push(parsaRigaCSV(righeGrezze[i])); i++; }
+    sezioni[titolo] = righeSezione;
+  }
+
+  let eventi = null;
+  // «RUOLI EVENTI» (export di ottobre 2026) contiene anche lei la parola «eventi»: la timeline si cerca prima
+  // per nome, poi fra le altre sezioni di eventi escludendo quella dei ruoli.
+  const titoloEventi = Object.keys(sezioni).find(t => /timeline/i.test(t))
+    || Object.keys(sezioni).find(t => /eventi/i.test(t) && !/ruoli/i.test(t));
+  if(titoloEventi && sezioni[titoloEventi].length){
+    const [intEventi, ...righeEventi] = sezioni[titoloEventi];
+    eventi = righeEventi.map(campi => {
+      const obj = {}; intEventi.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  // RUOLO SVOLTO (16/10/2026). Gli export recenti hanno la sezione «RUOLI EVENTI»: per ogni evento il ruolo
+  // che il giocatore stava davvero facendo e la sua casella nel modulo («Slot»: P, D1, D2, C1, C2, C3, A).
+  // Un difensore che entra a centrocampo lì risulta «Centrocampista», C2. La si attacca alla riga della timeline
+  // con lo stesso secondo e lo stesso giocatore (nei file reali si abbinano tutte): così segue da sola le
+  // correzioni dei tempi in differita e resta salvata con la sessione.
+  const titoloRuoli = Object.keys(sezioni).find(t => /ruoli/i.test(t) && /eventi/i.test(t));
+  if(eventi && titoloRuoli && sezioni[titoloRuoli].length > 1){
+    const [intRuoli, ...righeRuoli] = sezioni[titoloRuoli];
+    const col = nome => intRuoli.findIndex(h => String(h).trim().toLowerCase() === nome);
+    const iSec = col("secondo"), iGioc = col("giocatore"), iRuolo = col("ruolo svolto"), iSlot = col("slot");
+    if(iSec >= 0 && iGioc >= 0 && iRuolo >= 0){
+      const chiave = (sec, nome) => N(sec) + "\u0001" + String(nome || "").trim().toLowerCase();
+      const perChiave = new Map();
+      righeRuoli.forEach(c => { const r = String(c[iRuolo] || "").trim(); if(r) perChiave.set(chiave(c[iSec], c[iGioc]), {r, slot: iSlot >= 0 ? String(c[iSlot] || "").trim() : ""}); });
+      eventi.forEach(e => {
+        if(e["Secondo totale"] === undefined) return;
+        const v = perChiave.get(chiave(e["Secondo totale"], e.Giocatore));
+        if(v){ e["Ruolo svolto"] = v.r; if(v.slot) e["Slot"] = v.slot; }
+      });
+    }
+  }
+
+  let riepilogoTempi = null;
+  const titoloRiepilogo = Object.keys(sezioni).find(t => /riepilogo.*tempi/i.test(t));
+  if(titoloRiepilogo){
+    const chiavi = {};
+    sezioni[titoloRiepilogo].forEach(campi => { if(campi[0]) chiavi[campi[0]] = campi[1]; });
+    riepilogoTempi = {
+      durataEffettivaSec: secondiDaMMSS(chiavi["Durata effettiva"]),
+      inizioPartitaSec: secondiDaMMSS(chiavi["Inizio partita"]),
+      fine1TempoSec: secondiDaMMSS(chiavi["Fine 1° tempo"]),
+      inizio2TempoSec: secondiDaMMSS(chiavi["Inizio 2° tempo"]),
+      finePartitaSec: secondiDaMMSS(chiavi["Fine partita"])
+    };
+  }
+
+  // Sezione "DATI SPAZIALI" (comparsa per la prima volta in un file reale il 02/09/2026, allenamento_3.csv):
+  // una riga per ogni evento di Recupero/Palla persa con posizione registrata sul campo, del tutto separata
+  // dalla timeline eventi — non colonne X/Y aggiunte lì come inizialmente ipotizzato. Vedi il blocco "ZONE DI
+  // RECUPERO E PALLA PERSA" più sotto per come viene usata.
+  let datiSpaziali = null;
+  const titoloSpaziale = Object.keys(sezioni).find(t => /dati.*spazial/i.test(t));
+  if(titoloSpaziale && sezioni[titoloSpaziale].length){
+    const [intSpaziale, ...righeSpaziale] = sezioni[titoloSpaziale];
+    datiSpaziali = righeSpaziale.map(campi => {
+      const obj = {}; intSpaziale.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  // Sezione "STATISTICHE PORTIERI GAME" (comparsa per la prima volta il 03/09/2026, partita_3.csv): tiri
+  // affrontati da ciascun portiere, già suddivisi da Seven Lab in tre esiti DISTINTI e disgiunti — verificato
+  // sui dati reali: "Tiri subiti" + "Parate" + "Gol subiti" = "Totale tiri affrontati" (es. 2+1+1=4), quindi
+  // non due categorie che si sovrappongono ma tre conteggi separati dello stesso evento "tiro verso la
+  // nostra porta". "Tiri subiti" qui è quindi un terzo esito (né parato né gol, es. fuori misura o bloccato
+  // da un difensore) — diverso dalla stima che l'app faceva finora in mancanza di questo dato reale (parate
+  // + gol subiti, vedi renderGiocatore/parateTxt). Include una riga "TOTALE SQUADRA": lasciata nei dati
+  // grezzi, filtrata in statistichePortieriDaSessione più sotto.
+  let statistichePortieriGame = null;
+  const titoloPortieriGame = Object.keys(sezioni).find(t => /statistiche.*portier/i.test(t));
+  if(titoloPortieriGame && sezioni[titoloPortieriGame].length){
+    const [intPortieri, ...righePortieri] = sezioni[titoloPortieriGame];
+    statistichePortieriGame = righePortieri.map(campi => {
+      const obj = {}; intPortieri.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  // Sezione "DETTAGLIO GOL GAME" (stessa comparsa, partita_3.csv): una riga per ogni gol FATTO dalla nostra
+  // squadra (non i subiti — nel file di prova "Gol subiti"=1 ma qui compaiono solo le 8 righe corrispondenti
+  // a "Gol fatti"=8), con le coordinate del tiro e, quando c'è, dell'assist. ATTENZIONE assi: qui sono
+  // SCAMBIATI rispetto a "DATI SPAZIALI" (dove X 0-50 è la lunghezza del campo, 0=porta propria→50=porta
+  // avversaria, e Y 0-30 è la larghezza — verificato al punto 24 del playbook). Qui invece "Tiro X m"/
+  // "Assist X m" cadono sempre nel range 0-30 (quindi sono la LARGHEZZA) e "Tiro Y m"/"Assist Y m" nel range
+  // 0-50, quasi sempre 40-48 cioè vicino alla porta avversaria a 50 (quindi sono la LUNGHEZZA) — coerente
+  // con "Zona mappa"="metà campo avversaria" su ogni riga solo se Y è la lunghezza. A differenza di DATI
+  // SPAZIALI, qui non c'è nessuna colonna descrittiva di Seven Lab (tipo "Terzo campo") per un controllo
+  // incrociato: è una deduzione dai valori numerici del primo file reale visto, non una certezza verificata
+  // — va ricontrollata se un file futuro mostrasse pattern diversi (vedi estraiPuntiGolGameDaSessione).
+  let dettaglioGolGame = null;
+  const titoloGolGame = Object.keys(sezioni).find(t => /dettaglio.*gol/i.test(t));
+  if(titoloGolGame && sezioni[titoloGolGame].length){
+    const [intGolGame, ...righeGolGame] = sezioni[titoloGolGame];
+    dettaglioGolGame = righeGolGame.map(campi => {
+      const obj = {}; intGolGame.forEach((h,idx) => obj[h] = campi[idx] ?? ""); return obj;
+    });
+  }
+
+  // Sezione «POSSESSO AVVERSARIO» (18/10/2026, prima partita: partita_2 del 18/10). È l'«interruttore del
+  // possesso» di SevenLab: chi tagga lo accende quando la palla passa agli avversari e lo spegne quando torna a
+  // noi. Una riga per ogni tratto: Squadra («Team B»), Tempo («1° TEMPO»/«2° TEMPO»), Inizio/Fine in mm:ss e in
+  // secondi, Durata. I secondi sono sullo stesso orologio della timeline (nel primo file l'ultimo tratto finisce
+  // a 3385, l'ultimo evento è a 3381), quindi seguono la stessa correzione dei tempi in differita.
+  let possessoAvversario = null;
+  const titoloPossesso = Object.keys(sezioni).find(t => /possesso/i.test(t));
+  if(titoloPossesso && sezioni[titoloPossesso].length > 1){
+    const [intPos, ...righePos] = sezioni[titoloPossesso];
+    const colP = nome => intPos.findIndex(h => String(h).trim().toLowerCase() === nome);
+    const iSq = colP("squadra"), iTempo = colP("tempo"), iIn = colP("inizio sec"), iFi = colP("fine sec"), iInMm = colP("inizio mm:ss"), iFiMm = colP("fine mm:ss");
+    const sec = (c, iS, iM) => (iS >= 0 && String(c[iS] ?? "").trim() !== "") ? N(c[iS]) : (iM >= 0 ? secondiDaMMSS(c[iM]) : null);
+    possessoAvversario = righePos.map(c => ({
+      squadra: /\ba\s*$/i.test(String(c[iSq] ?? "").trim()) ? "A" : "B",
+      tempo: iTempo >= 0 ? String(c[iTempo] ?? "").trim() : "",
+      inizio: sec(c, iIn, iInMm), fine: sec(c, iFi, iFiMm)
+    })).filter(x => Number.isFinite(x.inizio) && Number.isFinite(x.fine) && x.fine > x.inizio);
+    if(!possessoAvversario.length) possessoAvversario = null;
+  }
+
+  // Correzione dei tempi per le sessioni registrate da video: un solo punto, prima che qualunque calcolo
+  // tocchi questi secondi (vedi il blocco "TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA" più sopra).
+  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame, possessoAvversario});
+}
+
+/** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
+function idDaNomeFile(nomeFile){
+  return String(nomeFile||"").replace(/\.[^.]+$/, "").trim() || ("sessione-" + Math.abs(hashStringa(nomeFile)));
+}
+function hashStringa(s){ let h=0; for(let i=0;i<String(s).length;i++){ h = (h*31 + String(s).charCodeAt(i))|0; } return h; }
+
+/* =====================================================================
+   ARCHIVIO DELLE SESSIONI: MEMORIA DEL DISPOSITIVO + CLOUD (16/10/2026)
+   Richiesta dell'utente: «se carico un CSV dal pc, devo averlo anche su telefono e su iPad! Si deve tenere
+   tutto aggiornato in automatico!». Fino alla 1.39.0 le sessioni vivevano solo nel localStorage del browser:
+   ogni dispositivo aveva i suoi file. Inoltre il localStorage di Safari tiene circa 5 MB e una sessione ne
+   occupa 300-400 KB: dopo una quindicina di file il telefono smetteva di salvare, senza dirlo.
+
+   DUE LIVELLI.
+   1. Sul dispositivo: IndexedDB (spazio ampio), con il localStorage come ripiego se IndexedDB non c'è. Le
+      sessioni già salvate nel localStorage vengono spostate in IndexedDB al primo avvio. In memoria c'è una
+      copia (archivio.sessioni): leggiSessioniSalvate/scriviSessioniSalvate restano sincrone come prima, così
+      il resto dell'app non cambia; il salvataggio su disco avviene subito dopo, in background.
+   2. Nel cloud: la tabella analysis_sessions del progetto Supabase di SevenLab, con lo stesso accesso di
+      SevenLab (email e password; possono leggere e scrivere solo le email in authorized_users). Ogni
+      sessione è una riga; i dati viaggiano compattati in colonne (vedi compatta/espandi) per pesare meno.
+
+   COME SI METTONO D'ACCORDO (sincronizza). Per ogni sessione il dispositivo ricorda l'impronta dell'ultima
+   versione che ha scambiato con il cloud (archivio.sinc). Confrontando tre cose — com'è qui, com'è nel cloud,
+   com'era l'ultima volta — si capisce chi l'ha cambiata:
+   - cambiata qui (o nuova qui) → si manda al cloud;
+   - cambiata nel cloud e non qui → si scarica;
+   - eliminata qui → si segna come eliminata nel cloud (non si cancella la riga: così l'eliminazione arriva
+     anche agli altri dispositivi, invece di essere ricaricata da loro);
+   - eliminata nel cloud e non toccata qui → si elimina anche qui.
+   Si sincronizza all'avvio, subito dopo ogni caricamento o eliminazione, quando l'app torna in primo piano
+   e con il pulsante «Sincronizza ora».
+   ===================================================================== */
+const CLOUD = {
+  url: "https://xkpjuevmygvsuhqvhqvx.supabase.co",
+  chiave: "sb_publishable_YwcEhLvfxVtQtaichsSSUw_nKVsCuzv", // chiave pubblica: l'accesso ai dati lo decidono login e RLS
+  tabella: "analysis_sessions"
+};
+const CHIAVE_ACCESSO_CLOUD = "analysis-cloud-accesso-v1";
+const archivio = {sessioni: [], sinc: {}, pronto: false, db: null};
+
+/* ---- memoria del dispositivo ---- */
+function apriDbLocale(){
+  return new Promise(resolve => {
+    try{
+      if(!window.indexedDB){ resolve(null); return; }
+      const req = indexedDB.open("analysis-calcio7", 1);
+      req.onupgradeneeded = () => { try{ req.result.createObjectStore("kv"); }catch(e){} };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+      req.onblocked = () => resolve(null);
+    }catch(e){ resolve(null); }
+  });
+}
+function dbLeggi(chiave){
+  return new Promise(resolve => {
+    try{
+      const tx = archivio.db.transaction("kv", "readonly"), r = tx.objectStore("kv").get(chiave);
+      r.onsuccess = () => resolve(r.result); r.onerror = () => resolve(undefined);
+    }catch(e){ resolve(undefined); }
+  });
+}
+function dbScrivi(chiave, valore){
+  return new Promise(resolve => {
+    try{
+      const tx = archivio.db.transaction("kv", "readwrite"); tx.objectStore("kv").put(valore, chiave);
+      tx.oncomplete = () => resolve(true); tx.onerror = () => resolve(false); tx.onabort = () => resolve(false);
+    }catch(e){ resolve(false); }
+  });
+}
+/** Carica l'archivio all'avvio: IndexedDB se c'è, altrimenti (o la prima volta) il localStorage di prima. */
+async function avviaArchivio(){
+  archivio.db = await apriDbLocale();
+  let sessioni = null, sinc = null;
+  if(archivio.db){ sessioni = await dbLeggi("sessioni"); sinc = await dbLeggi("sinc"); }
+  if(!Array.isArray(sessioni)){
+    // primo avvio con questa versione: si prende quello che c'era nel localStorage e lo si sposta
+    try{ const g = memoriaLeggi(CHIAVE_SESSIONI); const arr = g ? JSON.parse(g) : []; sessioni = Array.isArray(arr) ? arr : []; }catch(e){ sessioni = []; }
+    if(archivio.db && await dbScrivi("sessioni", sessioni)) memoriaRimuovi(CHIAVE_SESSIONI);
+  }
+  if(!sinc || typeof sinc !== "object"){ try{ sinc = JSON.parse(memoriaLeggi(CHIAVE_SESSIONI + "-sinc") || "{}"); }catch(e){ sinc = {}; } }
+  archivio.sessioni = sessioni; archivio.sinc = sinc || {}; archivio.pronto = true;
+}
+let salvataggioInCorso = Promise.resolve();
+function salvaArchivioLocale(){
+  const sessioni = archivio.sessioni.slice(), sinc = Object.assign({}, archivio.sinc);
+  salvataggioInCorso = salvataggioInCorso.then(async () => {
+    if(archivio.db && await dbScrivi("sessioni", sessioni) && await dbScrivi("sinc", sinc)) return;
+    // ripiego: localStorage (può non bastare per molte sessioni: lo si dice nel pannello cloud)
+    archivio.salvataggioFallito = !memoriaScrivi(CHIAVE_SESSIONI, JSON.stringify(sessioni));
+    memoriaScrivi(CHIAVE_SESSIONI + "-sinc", JSON.stringify(sinc));
+  });
+  return salvataggioInCorso;
+}
+function leggiSessioniSalvate(){ return archivio.sessioni.slice(); }
+function scriviSessioniSalvate(arr){
+  archivio.sessioni = (arr || []).slice();
+  salvaArchivioLocale();
+  pianificaSincronizzazione(800);
+  return true;
+}
+
+/* ---- compattazione: le tabelle di oggetti diventano colonne + righe (stessi dati, un terzo del peso) ---- */
+const MANCA = "__manca__"; // jsonb non accetta il carattere nullo: serve un segnaposto che nei CSV non compare
+function compatta(v){
+  if(Array.isArray(v)){
+    if(v.length >= 3 && v.every(x => x && typeof x === "object" && !Array.isArray(x))){
+      const c = []; const vista = new Set();
+      v.forEach(o => Object.keys(o).forEach(k => { if(!vista.has(k)){ vista.add(k); c.push(k); } }));
+      return {__tab: 1, c, r: v.map(o => c.map(k => (k in o) ? compatta(o[k]) : MANCA))};
+    }
+    return v.map(compatta);
+  }
+  if(v && typeof v === "object"){ const o = {}; Object.keys(v).forEach(k => { o[k] = compatta(v[k]); }); return o; }
+  return v;
+}
+function espandi(v){
+  if(Array.isArray(v)) return v.map(espandi);
+  if(v && typeof v === "object"){
+    if(v.__tab === 1 && Array.isArray(v.c) && Array.isArray(v.r))
+      return v.r.map(riga => { const o = {}; v.c.forEach((k, i) => { if(riga[i] !== MANCA) o[k] = espandi(riga[i]); }); return o; });
+    const o = {}; Object.keys(v).forEach(k => { o[k] = espandi(v[k]); }); return o;
+  }
+  return v;
+}
+/** JSON con le chiavi in ordine alfabetico: Postgres (jsonb) riordina le chiavi, e l'impronta deve restare uguale
+ *  dopo il viaggio nel cloud, altrimenti ogni dispositivo crederebbe di avere una versione diversa. */
+function jsonOrdinato(v){
+  if(Array.isArray(v)) return "[" + v.map(jsonOrdinato).join(",") + "]";
+  if(v && typeof v === "object") return "{" + Object.keys(v).sort().filter(k => v[k] !== undefined).map(k => JSON.stringify(k) + ":" + jsonOrdinato(v[k])).join(",") + "}";
+  return JSON.stringify(v === undefined ? null : v);
+}
+/** Impronta di una sessione (hash a 53 bit del suo JSON compattato e ordinato): uguale = stessa versione. */
+const cacheImpronte = new WeakMap();
+function improntaSessione(s){
+  if(cacheImpronte.has(s)) return cacheImpronte.get(s);
+  const t = jsonOrdinato(compatta(s));
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for(let i = 0; i < t.length; i++){ const ch = t.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  const imp = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36) + "-" + t.length.toString(36);
+  cacheImpronte.set(s, imp);
+  return imp;
+}
+
+/* ---- accesso (Supabase Auth, senza librerie: solo fetch) ---- */
+function accessoCloud(){ try{ return JSON.parse(memoriaLeggi(CHIAVE_ACCESSO_CLOUD) || "null"); }catch(e){ return null; } }
+function salvaAccessoCloud(a){ if(a) memoriaScrivi(CHIAVE_ACCESSO_CLOUD, JSON.stringify(a)); else memoriaRimuovi(CHIAVE_ACCESSO_CLOUD); }
+function daRispostaAuth(j){
+  return {access_token: j.access_token, refresh_token: j.refresh_token, scade: Date.now() + (N(j.expires_in) || 3600)*1000,
+    email: (j.user && j.user.email) || ""};
+}
+/** «Failed to fetch» (o «Load failed» su Safari) vuol dire che la richiesta non è nemmeno partita o arrivata:
+ *  succede quando la pagina è una copia aperta fuori dal sito (il file scaricato, un'anteprima) o la rete
+ *  blocca il cloud. Il messaggio lo dice in chiaro invece di riportare il testo tecnico del browser (16/10/2026). */
+const SITO_PUBBLICATO = "calmglow-cyber.github.io/Soccer-Analisys-Seven-Lab";
+function messaggioErroreCloud(err){
+  const testo = String(err && err.message || err || "");
+  if(!/failed to fetch|load failed|networkerror|network request failed/i.test(testo)) return testo;
+  const sulSito = /github\.io$/i.test(location.hostname || "");
+  if(location.protocol === "file:" || !sulSito)
+    return `Da qui il cloud non si raggiunge: questa pagina è una copia aperta fuori dal sito (${location.protocol === "file:" ? "il file scaricato" : "un'anteprima"}). Apri il sito pubblicato, ${SITO_PUBBLICATO}, ed entra da lì.`;
+  return "Non riesco a raggiungere il cloud di SevenLab: controlla la connessione (o un'estensione che blocca i siti esterni) e riprova.";
+}
+async function chiamataAuth(percorso, corpo){
+  const r = await fetch(CLOUD.url + "/auth/v1/" + percorso, {method:"POST", headers:{"apikey": CLOUD.chiave, "Content-Type":"application/json"}, body: JSON.stringify(corpo)});
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(j.error_description || j.msg || j.message || ("Errore di accesso (" + r.status + ")"));
+  return j;
+}
+async function entraCloud(email, password){
+  const j = await chiamataAuth("token?grant_type=password", {email, password});
+  salvaAccessoCloud(daRispostaAuth(j));
+}
+async function esciCloud(){
+  const a = accessoCloud();
+  salvaAccessoCloud(null);
+  if(a) try{ await fetch(CLOUD.url + "/auth/v1/logout", {method:"POST", headers:{"apikey": CLOUD.chiave, "Authorization":"Bearer " + a.access_token}}); }catch(e){}
+}
+/** Token valido, rinnovato se sta per scadere. null se non si è entrati o se il rinnovo non riesce. */
+async function tokenCloud(){
+  const a = accessoCloud();
+  if(!a || !a.refresh_token) return null;
+  if(a.access_token && a.scade - Date.now() > 60000) return a.access_token;
+  try{
+    const j = await chiamataAuth("token?grant_type=refresh_token", {refresh_token: a.refresh_token});
+    const n = daRispostaAuth(j); if(!n.email) n.email = a.email; salvaAccessoCloud(n); return n.access_token;
+  }catch(e){
+    if(/invalid|expired|revoked|not found/i.test(e.message)) salvaAccessoCloud(null); // accesso non più valido: si rientra
+    return null;
+  }
+}
+async function restCloud(metodo, query, corpo, prefer){
+  const t = await tokenCloud();
+  if(!t) throw new Error("Accesso scaduto: rientra con email e password.");
+  const h = {"apikey": CLOUD.chiave, "Authorization": "Bearer " + t};
+  if(corpo !== undefined) h["Content-Type"] = "application/json";
+  if(prefer) h["Prefer"] = prefer;
+  const r = await fetch(CLOUD.url + "/rest/v1/" + CLOUD.tabella + query, {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)});
+  if(!r.ok){
+    const j = await r.json().catch(() => ({}));
+    if(r.status === 401 || r.status === 403 || j.code === "42501") throw new Error("Questo account non è autorizzato a salvare i dati dell'app (serve la stessa email abilitata in SevenLab).");
+    throw new Error(j.message || ("Errore del cloud (" + r.status + ")"));
+  }
+  return r.status === 204 ? null : r.json().catch(() => null);
+}
+
+/* ---- sincronizzazione ---- */
+const statoCloud = {inCorso: false, ultima: null, errore: null, ancora: false};
+let timerSinc = null, ultimaSincAuto = 0;
+function pianificaSincronizzazione(ritardo){
+  if(!accessoCloud()) return;
+  clearTimeout(timerSinc);
+  timerSinc = setTimeout(() => sincronizza(), ritardo || 0);
+}
+async function sincronizza(){
+  if(!archivio.pronto || !accessoCloud()) { aggiornaUiCloud(); return; }
+  if(statoCloud.inCorso){ statoCloud.ancora = true; return; }
+  statoCloud.inCorso = true; statoCloud.errore = null; aggiornaUiCloud();
+  let cambiateQui = false;
+  try{
+    const remote = await restCloud("GET", "?select=id,impronta,eliminata") || [];
+    const perId = new Map(remote.map(r => [r.id, r]));
+    const locali = new Map(archivio.sessioni.map(s => [s.id, s]));
+    const sinc = archivio.sinc;
+    const daMandare = [], daScaricare = [], daEliminareQui = [], daEliminareLa = [];
+    locali.forEach((s, id) => {
+      const imp = improntaSessione(s), r = perId.get(id), base = sinc[id];
+      const cambiataQui = !base || base.impronta !== imp || base.eliminata;
+      if(cambiataQui){ if(!r || r.eliminata || r.impronta !== imp) daMandare.push(s); else sinc[id] = {impronta: imp}; return; }
+      if(!r) { daMandare.push(s); return; }                // sparita dal cloud: la si rimanda
+      if(r.eliminata) daEliminareQui.push(id);
+      else if(r.impronta !== imp) daScaricare.push(id);
+    });
+    perId.forEach((r, id) => {
+      if(locali.has(id)) return;
+      const base = sinc[id];
+      if(r.eliminata){ sinc[id] = {eliminata: true}; return; }
+      if(base && !base.eliminata && base.impronta === r.impronta) daEliminareLa.push(id); // eliminata qui
+      else daScaricare.push(id);                                                           // nuova, da un altro dispositivo
+    });
+    // 1. invii, uno alla volta (le sessioni sono grandi)
+    for(const s of daMandare){
+      const imp = improntaSessione(s);
+      await restCloud("POST", "", {id: s.id, tipo: s.tipo || null, nome_file: s.nomeFile || null,
+        data_sessione: (s.meta && s.meta["Data"]) || null, payload: compatta(s), impronta: imp, eliminata: false},
+        "resolution=merge-duplicates,return=minimal");
+      sinc[s.id] = {impronta: imp};
+    }
+    // 2. eliminazioni fatte qui
+    for(const id of daEliminareLa){
+      await restCloud("PATCH", "?id=eq." + encodeURIComponent(id), {eliminata: true, payload: null}, "return=minimal");
+      sinc[id] = {eliminata: true};
+    }
+    // 3. scaricamenti e eliminazioni arrivate dagli altri dispositivi
+    const scaricate = [];
+    for(const id of daScaricare){
+      const righe = await restCloud("GET", "?select=payload,impronta&id=eq." + encodeURIComponent(id)) || [];
+      const r = righe[0]; if(!r || !r.payload) continue;
+      const s = espandi(r.payload);
+      cacheImpronte.set(s, r.impronta);
+      scaricate.push(s); sinc[id] = {impronta: r.impronta};
+    }
+    daEliminareQui.forEach(id => { sinc[id] = {eliminata: true}; });
+    if(scaricate.length || daEliminareQui.length){
+      // applicate alla versione ATTUALE dell'archivio: se intanto è stato caricato un file, resta
+      let nuove = archivio.sessioni.filter(s => !daEliminareQui.includes(s.id));
+      scaricate.forEach(s => { const i = nuove.findIndex(x => x.id === s.id); if(i >= 0) nuove[i] = s; else nuove.push(s); });
+      archivio.sessioni = nuove;
+      cambiateQui = true;
+    }
+    archivio.sinc = sinc;
+    await salvaArchivioLocale();
+    statoCloud.ultima = new Date();
+    statoCloud.riepilogo = {mandate: daMandare.length + daEliminareLa.length, ricevute: daScaricare.length + daEliminareQui.length};
+  }catch(e){
+    statoCloud.errore = e && e.message ? messaggioErroreCloud(e) : "Sincronizzazione non riuscita.";
+  }finally{
+    statoCloud.inCorso = false;
+  }
+  if(cambiateQui) ricaricaDaSessioni();
+  aggiornaUiCloud();
+  if(statoCloud.ancora){ statoCloud.ancora = false; pianificaSincronizzazione(300); }
+}
+/** Quando l'app torna in primo piano (cambio di scheda, telefono sbloccato) si guarda se ci sono novità. */
+function sincronizzaAlRitorno(){
+  if(document.visibilityState !== "visible" || !accessoCloud()) return;
+  if(Date.now() - ultimaSincAuto < 15000) return;
+  ultimaSincAuto = Date.now();
+  sincronizza();
+}
+
+/* ---- interfaccia: pulsante nella testata e finestra di accesso ---- */
+function aggiornaUiCloud(){
+  const btn = $("#btn-cloud"), a = accessoCloud();
+  if(btn){
+    btn.classList.remove("cloud-ok", "cloud-errore", "cloud-lavoro", "cloud-fuori");
+    if(!a){ btn.textContent = "Sincronizza i dispositivi"; btn.classList.add("cloud-fuori"); }
+    else if(statoCloud.inCorso){ btn.textContent = "Sincronizzo…"; btn.classList.add("cloud-lavoro"); }
+    else if(statoCloud.errore){ btn.textContent = "Sincronizzazione: errore"; btn.classList.add("cloud-errore"); }
+    else { btn.textContent = "Sincronizzato"; btn.classList.add("cloud-ok"); }
+  }
+  const box = $("#cloud-stato");
+  if(box){
+    if(!a) box.innerHTML = `Non sei collegato: i file caricati restano solo su questo dispositivo.`;
+    else box.innerHTML = `Collegato come <strong>${esc(a.email || "—")}</strong>. ${statoCloud.inCorso ? "Sincronizzazione in corso…"
+      : statoCloud.errore ? `<span class="cloud-msg-errore">${esc(statoCloud.errore)}</span>`
+      : statoCloud.ultima ? `Ultima sincronizzazione alle ${statoCloud.ultima.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"})}${statoCloud.riepilogo && (statoCloud.riepilogo.mandate || statoCloud.riepilogo.ricevute) ? ` (${nf0(statoCloud.riepilogo.mandate)} inviate, ${nf0(statoCloud.riepilogo.ricevute)} ricevute)` : ""}: su questo dispositivo ci sono ${nf0(archivio.sessioni.length)} file.` : ""}`;
+  }
+  const fEntra = $("#cloud-form"), fDentro = $("#cloud-collegato");
+  if(fEntra) fEntra.classList.toggle("nascosto", !!a);
+  if(fDentro) fDentro.classList.toggle("nascosto", !a);
+}
+function initCloud(){
+  const dlg = $("#dlg-cloud");
+  $("#btn-cloud")?.addEventListener("click", () => { aggiornaUiCloud(); if(dlg && dlg.showModal) dlg.showModal(); else if(dlg) dlg.setAttribute("open", ""); });
+  $("#btn-cloud-chiudi")?.addEventListener("click", () => { if(dlg && dlg.close) dlg.close(); else if(dlg) dlg.removeAttribute("open"); });
+  $("#cloud-form")?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const msg = $("#cloud-msg"), email = $("#cloud-email").value.trim(), pw = $("#cloud-password").value;
+    if(!email || !pw){ msg.textContent = "Scrivi email e password."; return; }
+    msg.textContent = "Accesso in corso…";
+    try{
+      await entraCloud(email, pw);
+      $("#cloud-password").value = ""; msg.textContent = "";
+      aggiornaUiCloud();
+      await sincronizza();
+    }catch(err){
+      msg.textContent = /invalid login|invalid_grant|credentials/i.test(err.message) ? "Email o password non corrette (sono le stesse di SevenLab)." : messaggioErroreCloud(err);
+    }
+  });
+  $("#btn-cloud-ora")?.addEventListener("click", () => sincronizza());
+  $("#btn-cloud-esci")?.addEventListener("click", async () => { await esciCloud(); aggiornaUiCloud(); });
+  document.addEventListener("visibilitychange", sincronizzaAlRitorno);
+  window.addEventListener("focus", sincronizzaAlRitorno);
+  aggiornaUiCloud();
+}
+
+/** Aggiunge (o sostituisce, se stesso nome file) una sessione letta da un File .csv. Ritorna la sessione creata. */
+function aggiungiSessioneDaTesto(nomeFile, testo){
+  const parsed = parsaFileSevenLab(testo);
+  const id = idDaNomeFile(nomeFile);
+  const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
+    righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali,
+    statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame,
+    possessoAvversario:parsed.possessoAvversario || null, scalaTempi:parsed.scalaTempi || null};
+  const attuali = leggiSessioniSalvate();
+  const idx = attuali.findIndex(s => s.id === id);
+  if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
+  scriviSessioniSalvate(attuali);
+  return sessione;
+}
+function eliminaSessioneSalvata(id){
+  const attuali = leggiSessioniSalvate().filter(s => s.id !== id);
+  scriviSessioniSalvate(attuali);
+  return attuali;
+}
+
+/* ---- Adattatore eventi Seven Lab → vocabolario dell'algoritmo di possesso (vedi motore più sotto) ----
+ * Seven Lab ha cambiato formato tra i due export di prova ricevuti: quello iniziale (partita_1.csv,
+ * sezione "EVENTI PARTITA") scriveva una singola colonna "Tipo" testuale ("Pass +", "Dribbling riuscito");
+ * quello aggiornato del 25/08/2026 (sezione "TIMELINE EVENTI") usa invece una colonna separata per ogni
+ * tipo di evento, valorizzata a "1" quando è successo ("Passaggio corretto", "Cartellino giallo", ecc.),
+ * più un tempo assoluto continuo in "Secondo totale" (non più in "Secondo", che nel nuovo formato è solo
+ * la componente "secondi" di "Minutaggio"). Manteniamo il riconoscimento del vecchio formato per non
+ * rompere i file già in uso, e aggiungiamo quello nuovo. */
+function classificaEventoSevenLab(tipoGrezzo){
+  const t = String(tipoGrezzo||"").trim().toLowerCase();
+  const successo = /riuscit|success|\+/.test(t);
+  const fallito = /fallit|sbagliat|error|\-/.test(t);
+  if(/pass/.test(t)) return {type:"PASS", outcome: successo ? "SUCCESS" : (fallito ? "FAIL" : null)};
+  if(/dribbl/.test(t)) return {type:"DRIBBLE", outcome: successo ? "SUCCESS" : (fallito ? "FAIL" : null)};
+  if(/^persa$|palla persa|ball.?lost/.test(t)) return {type:"BALL_LOST", outcome:null};
+  if(/recuper/.test(t)) return {type:"RECOVERY", outcome:null};
+  if(/^tiro$|shot/.test(t)) return {type:"SHOT", outcome:null};
+  if(/^gol$/.test(t)) return {type:"GOAL", outcome:null}; // "Gol subito" è dell'avversario (Team B), già escluso a monte
+  return null; // Assist, Parata, Gol subito, ecc: fuori dal vocabolario dell'algoritmo, ignorati qui
+}
+/** Stessa logica di classificaEventoSevenLab ma per una riga del formato nuovo (colonne one-hot).
+ *  Aggiornato il 03/09/2026 sul primo file di partita reale con avversario vero (partita_2.csv): la vecchia
+ *  nota qui sotto ("un gol su rigore/punizione/corner NON accende anche Gol", dedotta dai dati del
+ *  25/08/2026) si è rivelata sbagliata — un gol da rigore ha acceso ENTRAMBI i flag, su due righe distinte
+ *  della timeline a pochi secondi di distanza (confermato: 5 "Gol fatti" dichiarati nei metadati = esattamente
+ *  5 righe con "Gol"=1 nel file, la sesta era la riga "Rigore segnato" separata per lo stesso gol). La
+ *  colonna "Gol" generica si è quindi vista accendersi correttamente anche su gol da azione aperta (i 4
+ *  senza flag rigore/punizione/corner) — la domanda aperta del punto 11 del playbook è risolta. Il flag
+ *  rigore/punizione/corner resta comunque qui come rete di sicurezza per file dove "Gol" non si accendesse;
+ *  la deduplica del doppio conteggio che ne risulta è gestita più sotto, in eventiPossessoDaSessione(). */
+function classificaEventoRigaNuovoFormato(riga){
+  const f = k => riga[k] === "1";
+  if(f("Passaggio corretto")) return {type:"PASS", outcome:"SUCCESS"};
+  if(f("Passaggio sbagliato")) return {type:"PASS", outcome:"FAIL"};
+  if(f("Dribbling riuscito")) return {type:"DRIBBLE", outcome:"SUCCESS"};
+  if(f("Dribbling fallito")) return {type:"DRIBBLE", outcome:"FAIL"};
+  if(f("Palla persa")) return {type:"BALL_LOST", outcome:null};
+  if(f("Recupero")) return {type:"RECOVERY", outcome:null};
+  if(f("Gol") || f("Rigore segnato") || f("Punizione segnata") || f("Corner con gol")) return {type:"GOAL", outcome:null};
+  if(f("Tiro") || f("Tiro in porta")) return {type:"SHOT", outcome:null};
+  return null; // cartellini, calci piazzati non a segno, cambi, gol subito: fuori dal vocabolario del possesso
+}
+
+/** Durata regolamentare di un tempo, in secondi (calcio a 7: due tempi da 25'). Usata solo per calcolare
+ *  il recupero per differenza — vedi calcolaRecuperiSevenLab(). Se in futuro cambia il formato partita,
+ *  basta aggiornare questa costante. */
+const DURATA_TEMPO_REGOLAMENTARE_SEC = 25*60;
+
+/** Riconosce, tra gli eventi grezzi in formato vecchio, il tasto "pausa" (fine 1° tempo). Serve solo come
+ *  ultimo ripiego per file che non hanno né la sezione RIEPILOGO TEMPI né i marcatori dedicati del nuovo
+ *  formato timeline (vedi normalizzaEventiSevenLab). */
+function classificaMarcatorePeriodoVecchio(tipoGrezzo){
+  const t = String(tipoGrezzo||"").trim().toLowerCase();
+  if(/pausa|intervallo|fine.*primo tempo|half.?time/.test(t)) return "PAUSA";
+  return null;
+}
+
+/** Un evento grezzo è nel formato "nuovo" (TIMELINE EVENTI) se ha la colonna "Secondo totale"; altrimenti
+ *  si assume il vecchio formato (EVENTI PARTITA, colonna "Tipo" testuale, "Secondo" già assoluto). */
+function formatoEventiSevenLab(eventiGrezzi){
+  if(!eventiGrezzi || !eventiGrezzi.length) return "nessuno";
+  return ("Secondo totale" in eventiGrezzi[0]) ? "nuovo" : "vecchio";
+}
+
+/** Normalizza gli eventi grezzi di una sessione partita: individua la pausa (fine 1° tempo) e la fine
+ *  registrazione, assegna un periodo (1/2) e un tempo assoluto ("secondoAssoluto") a ogni evento.
+ *  Formato nuovo: il tempo assoluto è già continuo su tutta la partita ("Secondo totale", verificato sui
+ *  dati reali — non si azzera al 2° tempo), e il momento della pausa arriva, in ordine di affidabilità,
+ *  dalla sezione RIEPILOGO TEMPI se il file la contiene, altrimenti dai marcatori "Fine 1° tempo"/
+ *  "Fine partita" dentro la timeline stessa. Formato vecchio: nessuno di questi esiste ancora nei file che
+ *  li usano, quindi resta il riconoscimento per parole chiave su "Tipo", con la stessa gestione di un
+ *  eventuale contatore "Secondo" che riparte da 0 nel 2° tempo invece di continuare a salire. Se non si
+ *  trova nessuna pausa in nessuno dei due formati, la partita resta un tempo unico (comportamento
+ *  invariato per i file già in uso, come partita_1.csv). */
+function normalizzaEventiSevenLab(sessione){
+  const grezzi = (sessione && Array.isArray(sessione.eventi)) ? sessione.eventi : [];
+  const formato = formatoEventiSevenLab(grezzi);
+  if(formato === "nessuno") return {eventi:[], formato, periodi:{haPausa:false, tempo1FineSec:null, tempo2FineSec:null}};
+
+  if(formato === "nuovo"){
+    const rt = sessione.riepilogoTempi;
+    let tempo1FineSec = (rt && rt.fine1TempoSec !== null && rt.fine1TempoSec !== undefined) ? rt.fine1TempoSec : null;
+    let tempo2FineSec = (rt && rt.finePartitaSec !== null && rt.finePartitaSec !== undefined) ? rt.finePartitaSec : null;
+    if(tempo1FineSec === null){
+      const rigaFine1 = grezzi.find(e => e["Fine 1° tempo"] === "1");
+      if(rigaFine1) tempo1FineSec = N(rigaFine1["Secondo totale"]);
+    }
+    if(tempo2FineSec === null){
+      const rigaFinePartita = grezzi.find(e => e["Fine partita"] === "1");
+      const ultimoGrezzo = grezzi[grezzi.length-1];
+      tempo2FineSec = rigaFinePartita ? N(rigaFinePartita["Secondo totale"]) : (ultimoGrezzo ? N(ultimoGrezzo["Secondo totale"]) : null);
+    }
+    // «Fine partita» scritta nello stesso istante della fine del primo tempo (file vero dell'11/10/2026: tutti e
+    // tre i marcatori a 25:47, e la timeline che prosegue fino a 51:21). Se dopo quel punto ci sono ancora
+    // più di un minuto di eventi, la fine vera è l'ultimo evento, altrimenti il secondo tempo durerebbe zero.
+    const ultimoSec = grezzi.reduce((m, e) => { const t = N(e["Secondo totale"]); return isFinite(t) && t > m ? t : m; }, 0);
+    if(tempo1FineSec !== null && tempo2FineSec !== null && tempo2FineSec <= tempo1FineSec + 30 && ultimoSec > tempo2FineSec + 60)
+      tempo2FineSec = ultimoSec;
+    const haPausa = tempo1FineSec !== null;
+    const eventi = grezzi.map((e, idx) => {
+      const secondoAssoluto = N(e["Secondo totale"]);
+      const periodo = (haPausa && secondoAssoluto > tempo1FineSec) ? 2 : 1;
+      return {idxOriginale:idx, formato, raw:e, periodo, secondoAssoluto};
+    });
+    return {eventi, formato, periodi:{haPausa, tempo1FineSec, tempo2FineSec}};
+  }
+
+  // formato vecchio: invariato rispetto a prima di questa modifica
+  const idxPausa = grezzi.findIndex(e => classificaMarcatorePeriodoVecchio(e.Tipo) === "PAUSA");
+  let offset = 0, tempo1FineSec = null;
+  if(idxPausa !== -1){
+    tempo1FineSec = N(grezzi[idxPausa].Secondo);
+    const successivo = grezzi.slice(idxPausa+1).find(e => Number.isFinite(N(e.Secondo)));
+    if(successivo && N(successivo.Secondo) < tempo1FineSec) offset = tempo1FineSec;
+  }
+  const eventi = grezzi.map((e, idx) => {
+    const periodo = idxPausa === -1 ? 1 : (idx <= idxPausa ? 1 : 2);
+    const secondoAssoluto = N(e.Secondo) + (periodo === 2 ? offset : 0);
+    return {idxOriginale:idx, formato, raw:e, periodo, secondoAssoluto};
+  });
+  const ultimo = eventi[eventi.length-1];
+  return {eventi, formato, periodi:{haPausa: idxPausa !== -1, tempo1FineSec,
+    tempo2FineSec: (ultimo && Number.isFinite(ultimo.secondoAssoluto)) ? ultimo.secondoAssoluto : null}};
+}
+
+/** Dal momento della pausa e dalla fine registrazione ricava il tempo di gioco effettivo dei due tempi e,
+ *  per differenza con i 25' regolamentari, il recupero giocato in ciascuno (richiesta esplicita: il
+ *  recupero non si può prevedere, si desume solo a posteriori dai timestamp). Torna null se nel file non
+ *  è stata trovata nessuna pausa (partita trattata come tempo unico). */
+function calcolaRecuperiSevenLab(periodi){
+  if(!periodi || !periodi.haPausa || periodi.tempo1FineSec===null || periodi.tempo2FineSec===null) return null;
+  const durataTempo1Sec = periodi.tempo1FineSec;
+  const durataTempo2Sec = Math.max(0, periodi.tempo2FineSec - periodi.tempo1FineSec);
+  return {
+    durataTempo1Sec, durataTempo2Sec,
+    recupero1Sec: Math.max(0, durataTempo1Sec - DURATA_TEMPO_REGOLAMENTARE_SEC),
+    recupero2Sec: Math.max(0, durataTempo2Sec - DURATA_TEMPO_REGOLAMENTARE_SEC)
+  };
+}
+
+/** Converte gli eventi grezzi di una sessione (partita) nel formato atteso da analyzePossession(): tiene
+ *  solo gli eventi della nostra squadra (Team "A") e solo i tipi che l'algoritmo sa interpretare, in
+ *  qualunque dei due formati Seven Lab si trovino (vedi normalizzaEventiSevenLab). Se viene rilevata una
+ *  pausa, inserisce anche i marcatori PERIOD_END/PERIOD_START che il motore usa per non far proseguire un
+ *  possesso aperto oltre l'intervallo.
+ *  Bug scoperto sul primo file di partita reale con avversario vero (partita_2.csv, 03/09/2026): un gol
+ *  segnato su rigore/punizione/corner accende SIA il flag specifico (es. "Rigore segnato") SIA, su una riga
+ *  distinta della timeline pochi secondi dopo, il flag generico "Gol" — le due righe sono lo stesso gol reale
+ *  ma classificaEventoRigaNuovoFormato() le classifica indipendentemente, producendo due eventi GOAL invece
+ *  di uno solo (confermato: 6 GOAL classificati contro 5 "Gol fatti" dichiarati nei metadati del file).
+ *  Senza deduplica, l'algoritmo di possesso conta un "possesso" fantasma in più (chiude una sequenza sul
+ *  primo GOAL, poi ne apre e richiude una seconda di durata zero sul secondo GOAL pochi secondi dopo),
+ *  gonfiando "Possessi rilevati" nel Report Partita. Dedup: per lo stesso giocatore, tiene solo il primo
+ *  evento GOAL entro una finestra di 15 secondi, scarta gli altri. */
+function eventiPossessoDaSessione(sessione){
+  if(!sessione || !Array.isArray(sessione.eventi)) return [];
+  const {eventi, periodi} = normalizzaEventiSevenLab(sessione);
+  const grezzi = eventi
+    .filter(e => String(e.raw.Team||"").trim().toUpperCase() === "A")
+    .map(e => {
+      const cls = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
+      if(!cls || !Number.isFinite(e.secondoAssoluto)) return null;
+      return {id: sessione.id+"-ev"+e.idxOriginale, timestampSec: e.secondoAssoluto, type: cls.type,
+        outcome: cls.outcome, teamId:"noi", playerId: e.raw.Giocatore || null, period: e.periodo};
+    })
+    .filter(Boolean);
+  const FINESTRA_DEDUP_GOAL_SEC = 15;
+  const base = [];
+  grezzi.forEach(e => {
+    if(e.type === "GOAL"){
+      const doppione = base.find(x => x.type === "GOAL" && x.playerId === e.playerId &&
+        Math.abs(x.timestampSec - e.timestampSec) <= FINESTRA_DEDUP_GOAL_SEC);
+      if(doppione) return; // stesso gol già contato una volta
+    }
+    base.push(e);
+  });
+  if(!periodi.haPausa || periodi.tempo1FineSec===null) return base; // tempo unico: comportamento invariato
+  return [...base,
+    {id: sessione.id+"-fine-t1", timestampSec: periodi.tempo1FineSec, type:"PERIOD_END", outcome:null, teamId:"noi", playerId:null, period:1},
+    {id: sessione.id+"-inizio-t2", timestampSec: periodi.tempo1FineSec, type:"PERIOD_START", outcome:null, teamId:"noi", playerId:null, period:2}
+  ];
+}
+
+/** Riepilogo eventi di possesso + rilevamento periodi/recuperi per una partita, usato dal report. */
+function analizzaEventiPartitaSevenLab(sessione){
+  const {periodi} = normalizzaEventiSevenLab(sessione);
+  return {eventiSquadra: eventiPossessoDaSessione(sessione), periodi, recuperi: calcolaRecuperiSevenLab(periodi)};
+}
+
+/* =====================================================================
+   ZONE DI RECUPERO E PALLA PERSA (coordinate X/Y sul campo, 02/09/2026)
+   Richiesta esplicita dell'utente, su indicazione del mister: sapere IN QUALE ZONA del campo avvengono i
+   recuperi e le palle perse, sia in partita sia in allenamento (partitelle) — non solo quanti sono.
+   FORMATO CONFERMATO su un file reale (allenamento_3.csv, ricevuto il 02/09/2026) — corregge l'assunzione
+   iniziale (colonne "X"/"Y" dentro la timeline eventi), rivelatasi sbagliata. Seven Lab scrive invece una
+   sezione tutta a sé, "DATI SPAZIALI" (parsata in parsaFileSevenLab, vedi sopra), con una riga per ogni
+   evento di Recupero/Palla persa che ha una posizione: colonne "Tipo evento" ("Recupero"/"Palla persa"),
+   "Giocatore", "Team" (A/B), "X metri"/"Y metri" (coordinate in metri — confermato un campo 50×30, come
+   già assunto), più "X %"/"Y %" (le stesse coordinate già convertite in percentuale, non usate qui),
+   "Terzo campo" (difensivo/centrale/offensivo) e "Fascia" (sinistra/centro/destra) — Seven Lab stessa
+   calcola già una griglia 3×3 equivalente alla nostra, utile come controllo incrociato ma non necessaria:
+   ricalcoliamo la zona dalle coordinate in metri, così restiamo coerenti anche se in futuro cambiassero
+   queste etichette. "Evento collegato"/"Nessun recupero" (id di abbinamento fra una palla persa e il
+   recupero avversario corrispondente) non sono ancora usati — utile spunto per un'analisi futura sulle
+   transizioni, non richiesta oggi. Se Seven Lab cambierà ancora nomi di colonna o unità di misura, basta
+   aggiornare estraiEventiZonaDaSessione qui sotto: il resto (calcolo zone, disegno, dashboard, report)
+   resta valido. */
+const CAMPO_LUNGHEZZA_M = 50, CAMPO_LARGHEZZA_M = 30;
+function coordinataValida(v){
+  if(v===null || v===undefined || v==="") return null;
+  const n = parseFloat(String(v).replace(",", "."));
+  return Number.isFinite(n) ? n : null;
+}
+/** Estrae, dalla sezione "DATI SPAZIALI" di una sessione (partita o allenamento), i punti
+ *  {tipo, x, y, giocatore} di Recupero/Palla persa con coordinate valide. `soloSquadraA`: per le partite
+ *  tiene solo gli eventi della propria squadra (Team "A", stesso filtro usato dal possesso, vedi
+ *  eventiPossessoDaSessione) — la squadra "B" nei file partita è l'avversario, i suoi recuperi/palle perse
+ *  non sono nostri dati da graficare. Per gli allenamenti (partitelle 7 contro 7 interne — Team A/B sono
+ *  due squadre interne, entrambe sue, vedi punto 11 del playbook) NON filtra per squadra: contano i
+ *  recuperi/palle perse di ogni giocatore. */
+/** Come estraiEventiZonaDaSessione, ma senza filtro squadra e con `team` incluso in ogni punto — usata solo
+ *  da estraiEventiZonaDaSessione stessa e da assegnaPeriodoEventiZona (più sotto), che ha bisogno di sapere
+ *  la squadra per costruire la chiave di abbinamento con la TIMELINE EVENTI. Tenuta separata per non
+ *  cambiare la forma dei punti restituiti da estraiEventiZonaDaSessione (usata ovunque altro), evitando
+ *  ogni rischio di regressione sulle zone/heatmap già in produzione. */
+function estraiEventiZonaGrezzi(sessione){
+  const righe = (sessione && Array.isArray(sessione.datiSpaziali)) ? sessione.datiSpaziali : [];
+  const punti = [];
+  righe.forEach(r => {
+    const tipoEvento = String(r["Tipo evento"]||"").trim().toLowerCase();
+    let tipo = null;
+    if(tipoEvento === "recupero") tipo = "recupero";
+    else if(tipoEvento === "palla persa") tipo = "persa";
+    else return;
+    // Nomi colonna X/Y: "normalizzati" (0=porta propria del giocatore che compie l'azione, 50=porta
+    // avversaria — coerente con "Terzo campo"/"Fascia" che Seven Lab scrive nello stesso file, verificato di
+    // nuovo su allenamento_4.csv) è il nome usato dal 03/09/2026 in poi; "X metri"/"Y metri" (senza
+    // "normalizzati") resta come ripiego per non rompere il primo file reale visto (allenamento_3.csv,
+    // punto 24), che usava ancora quel nome. "X/Y campo fisica" (stesso file, coordinate sullo stesso
+    // riferimento fisico per entrambe le squadre, utile in futuro per un'unica vista di campo con A e B
+    // insieme) non è ancora usato qui.
+    const xGrezza = r["X metri normalizzati"] !== undefined ? r["X metri normalizzati"] : r["X metri"];
+    const yGrezza = r["Y metri normalizzati"] !== undefined ? r["Y metri normalizzati"] : r["Y metri"];
+    const x = coordinataValida(xGrezza), y = coordinataValida(yGrezza);
+    if(x===null || y===null) return;
+    punti.push({tipo, x, y, giocatore: r["Giocatore"] || null, team: String(r["Team"]||"").trim().toUpperCase()});
+  });
+  return punti;
+}
+function estraiEventiZonaDaSessione(sessione, soloSquadraA){
+  return estraiEventiZonaGrezzi(sessione)
+    .filter(p => !(soloSquadraA && p.team === "B"))
+    .map(p => ({tipo:p.tipo, x:p.x, y:p.y, giocatore:p.giocatore, team:p.team}));
+}
+/** Abbina ogni punto di zona (DATI SPAZIALI: ha la posizione ma non il tempo) al periodo (1° o 2° tempo)
+ *  del suo evento corrispondente nella TIMELINE EVENTI (ha il tempo ma non la posizione) — richiesta
+ *  dell'utente del 03/09/2026 (vedi playbook punto 25) per vedere se il baricentro di recupero si sposta
+ *  col passare della partita. Non esiste un identificativo comune fra le due sezioni: l'abbinamento è per
+ *  giocatore + squadra + tipo evento, nello stesso ordine di comparizione in ciascuna sezione (assunto lo
+ *  stesso ordine cronologico in entrambe, ragionevole perché Seven Lab scrive entrambe le sezioni mano a
+ *  mano che gli eventi accadono dal vivo) — un abbinamento per posizione in coda, non per un id preciso, che
+ *  può quindi sbagliare in rari casi limite (es. la stessa coppia giocatore/squadra/tipo capita più volte
+ *  molto ravvicinata e le due sezioni la registrano in un ordine leggermente diverso). Ritorna gli stessi
+ *  punti di estraiEventiZonaGrezzi con in più `periodo` (1, 2, o null se non abbinabile — sessione senza
+ *  timeline/pausa individuata). */
+function assegnaPeriodoEventiZona(sessione){
+  const punti = estraiEventiZonaGrezzi(sessione);
+  if(!punti.length) return punti;
+  const norm = normalizzaEventiSevenLab(sessione);
+  if(!norm.periodi.haPausa || norm.formato === "nessuno")
+    return punti.map(p => Object.assign({}, p, {periodo:null}));
+  const codiceTipo = tipo => tipo === "recupero" ? "RECOVERY" : "BALL_LOST";
+  const code = new Map();
+  norm.eventi.forEach(e => {
+    const cl = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
+    if(!cl || (cl.type !== "RECOVERY" && cl.type !== "BALL_LOST")) return;
+    const chiave = String(e.raw["Giocatore"]||"").trim()+"|"+String(e.raw["Team"]||"").trim().toUpperCase()+"|"+cl.type;
+    if(!code.has(chiave)) code.set(chiave, []);
+    code.get(chiave).push(e.periodo);
+  });
+  return punti.map(p => {
+    const chiave = String(p.giocatore||"").trim()+"|"+p.team+"|"+codiceTipo(p.tipo);
+    const coda = code.get(chiave);
+    return Object.assign({}, p, {periodo: (coda && coda.length) ? coda.shift() : null});
+  });
+}
+
+/* =====================================================================
+   GOL GAME: ZONE DI TIRO E DI ASSIST (coordinate X/Y sul campo, sezione "DETTAGLIO GOL GAME", 03/09/2026)
+   Richiesta esplicita dell'utente: sapere da dove si segna di più e da dove arrivano di più gli assist che
+   portano al gol, sullo stesso campo 50×30 già usato per le zone di recupero/palla persa. Vedi la nota su
+   parsaFileSevenLab per l'evidenza dello scambio di assi rispetto a DATI SPAZIALI.
+   ===================================================================== */
+/** Estrae dalla sezione "DETTAGLIO GOL GAME" di una sessione (solo partite: i gol fatti sono sempre nostri)
+ *  i punti {x,y} nello stesso riferimento usato altrove nell'app (X 0-50 = lunghezza, 0=porta propria→50=
+ *  porta avversaria; Y 0-30 = larghezza) — qui i nomi di colonna hanno gli assi scambiati, quindi si
+ *  rimappa "Y m" (lunghezza reale) su x e "X m" (larghezza reale) su y. `tipo`: "gol" usa Tiro X/Y m (una
+ *  riga per gol, sempre presente); "assist" usa Assist X/Y m e scarta le righe senza assist (gol non
+ *  assistiti, colonne vuote in quel caso). */
+function estraiPuntiGolGameDaSessione(sessione, tipo){
+  const righe = (sessione && Array.isArray(sessione.DettaglioGolGame)) ? sessione.DettaglioGolGame : [];
+  const campoX = tipo === "assist" ? "Assist X m" : "Tiro X m";
+  const campoY = tipo === "assist" ? "Assist Y m" : "Tiro Y m";
+  const punti = [];
+  righe.forEach(r => {
+    const xGrezza = coordinataValida(r[campoX]), yGrezza = coordinataValida(r[campoY]);
+    if(xGrezza === null || yGrezza === null) return; // gol senza assist, o riga incompleta
+    punti.push({x: yGrezza, y: xGrezza, marcatore: r["Marcatore"] || null, assist: r["Assist"] || null, secondo: N(r["Secondo"])});
+  });
+  return punti;
+}
+
+/* =====================================================================
+   DOVE ENTRA LA PALLA IN PORTA (punto d'ingresso in porta dei gol fatti, 08/10/2026)
+   Richiesta esplicita dell'utente: "nel csv game ti arriveranno anche le coordinate geografiche relative a
+   dove il tiro finisce nella porta da calcio dopo un goal fatto! quindi nella dashboard delle partite e nel
+   report dovrai mostrare un grafico con una porta da calcio e con un pallone indicare il punto relativo alle
+   coordinate [...] la porta di calcio a 7 è 7.32*2.44, ma ti serve solo come indicazione, perché a me non
+   interessano le quote con le misure esatte, ma solo graficamente".
+   Quindi: le misure servono SOLO a tenere la proporzione del disegno (3:1), e NON vengono mai scritte a
+   schermo né nei report — nessuna quota, nessun "7.32 m".
+
+   NOMI DI COLONNA: ASSUNZIONE, NON CERTEZZA. Al momento in cui questa funzione è stata scritta nessun file
+   reale con queste coordinate era ancora stato visto. Il punto 24 del playbook ricorda che il formato dei
+   DATI SPAZIALI era stato indovinato sbagliato la prima volta, e il punto 26 che Seven Lab ha poi rinominato
+   "X metri" in "X metri normalizzati": quindi qui NON si cerca un nome preciso, si riconoscono le colonne per
+   come sono fatte (individuaColonnePorta) e si deduce l'unità di misura dai valori stessi (scalaAssePorta).
+   Tutto quello che viene dedotto è scritto in chiaro sotto il grafico, così il primo file reale lo conferma
+   o lo smentisce a vista invece di produrre un grafico plausibile e sbagliato.
+
+   VERSO DELL'ASSE VERTICALE: non viene mai raddrizzato in automatico. Se Seven Lab misurasse l'altezza dalla
+   traversa verso il basso invece che da terra verso l'alto, i gol finirebbero disegnati capovolti; il sistema
+   lo SEGNALA quando il sospetto è forte (quasi tutti i gol sotto la traversa) invece di correggere da solo —
+   stessa linea tenuta per la convenzione sulla velocità di riproduzione dei file in differita: un dato
+   ambiguo si dichiara, non si aggiusta a indovinare.
+   ===================================================================== */
+const PORTA_LARGHEZZA_M = 7.32, PORTA_ALTEZZA_M = 2.44; // solo per la PROPORZIONE del disegno (3:1)
+const PORTA_GOL_INDICATIVI = 10; // sotto questo numero di gol il disegno vale come indizio, non come tendenza
+
+/** Riconosce, fra le colonne di "DETTAGLIO GOL GAME", la coppia che contiene il punto d'ingresso in porta.
+ *  Non cerca un nome preciso (vedi la nota sopra): tiene le colonne che parlano della porta/dello specchio
+ *  e, fra quelle, individua quella orizzontale e quella verticale. Richiede che la colonna contenga almeno
+ *  un numero nelle righe passate, così una colonna descrittiva (es. "Zona porta" = "angolo basso sinistro")
+ *  non viene mai scambiata per una coordinata. Ritorna null se non trova la coppia. */
+function individuaColonnePorta(righe){
+  if(!Array.isArray(righe) || !righe.length) return null;
+  const chiavi = Object.keys(righe[0] || {});
+  const haNumeri = k => righe.some(r => coordinataValida(r[k]) !== null);
+  // Candidate: colonne che parlano della porta (o dell'ingresso/della rete/dello specchio), escluse quelle
+  // che descrivono il campo ("Larghezza campo m") o che sono etichette testuali ("Zona porta", "Settore").
+  const candidate = chiavi.filter(k => {
+    const s = String(k).toLowerCase();
+    if(!/port|ingress|rete|specchio/.test(s)) return false;
+    if(/campo|zona|settore|lato|descri|angolo|portiere/.test(s)) return false;
+    return haNumeri(k);
+  });
+  const orizzontale = candidate.find(k => /(^|[^a-z])x([^a-z]|$)|largh|orizz/i.test(String(k)));
+  const verticale   = candidate.find(k => /(^|[^a-z])y([^a-z]|$)|altez|vertic|alt\b/i.test(String(k)));
+  if(!orizzontale || !verticale || orizzontale === verticale) return null;
+  // Etichetta testuale di Seven Lab sul settore di porta, se c'è: non serve per disegnare, ma è un
+  // controllo incrociato gratuito sulla nostra griglia 3x3 (come "Terzo campo"/"Fascia" per le zone campo).
+  const etichetta = chiavi.find(k => /(zona|settore|angolo).*(port|rete|specchio)|(port|rete|specchio).*(zona|settore|angolo)/i.test(String(k)));
+  return {orizzontale, verticale, etichetta: etichetta || null};
+}
+
+/** Deduce dai valori l'unità di misura di un asse del punto d'ingresso in porta: normalizzata 0-1, metri
+ *  (0 = palo sinistro / terra), metri centrati sul palo (negativi a sinistra del centro) o percentuale
+ *  0-100. `massimoMetri` è la misura dell'asse (7.32 in larghezza, 2.44 in altezza). Torna anche `ambigua`
+ *  quando i punti sono troppo pochi perché la deduzione sia solida: in quel caso l'avviso lo dice. */
+function scalaAssePorta(valori, massimoMetri){
+  const validi = valori.filter(v => Number.isFinite(v));
+  if(!validi.length) return {tipo:"ignota", ambigua:true};
+  const max = Math.max(...validi), min = Math.min(...validi);
+  if(min < -0.01) return {tipo:"metri-centrati", ambigua: validi.length < 3};
+  if(max <= 1.0001) return {tipo:"normalizzata", ambigua: max < 0.2 || validi.length < 3};
+  if(max <= massimoMetri*1.08) return {tipo:"metri", ambigua: validi.length < 3};
+  if(max <= 100.5) return {tipo:"percentuale", ambigua: validi.length < 3};
+  return {tipo:"ignota", ambigua:true};
+}
+const ETICHETTA_SCALA_PORTA = {
+  "normalizzata": "valori da 0 a 1",
+  "metri": "metri dal palo/da terra",
+  "metri-centrati": "metri dal centro della porta",
+  "percentuale": "percentuale 0-100",
+  "ignota": "unità non riconosciuta"
+};
+/** Porta un valore grezzo sull'intervallo 0-1 dell'asse (0 = palo sinistro / terra, 1 = palo destro /
+ *  traversa), secondo la scala dedotta. Fuori intervallo viene tagliato ai bordi invece di essere scartato:
+ *  un tiro sul palo registrato a 7.4 invece di 7.32 è un gol vero, non un dato da buttare. */
+function normalizzaValorePorta(v, scala, massimoMetri){
+  if(!Number.isFinite(v)) return null;
+  let t;
+  if(scala === "normalizzata") t = v;
+  else if(scala === "metri") t = v / massimoMetri;
+  else if(scala === "metri-centrati") t = (v + massimoMetri/2) / massimoMetri;
+  else if(scala === "percentuale") t = v / 100;
+  else return null;
+  return Math.min(1, Math.max(0, t));
+}
+
+/** Estrae da una sessione i punti d'ingresso in porta dei gol fatti. Ritorna sempre
+ *  {punti, diagnostica}: `punti` = [{x01, y01, marcatore, assist, secondo, zonaFile}] con x01 0=palo
+ *  sinistro → 1=palo destro (porta vista da chi tira) e y01 0=terra → 1=traversa; `diagnostica` dice quali
+ *  colonne sono state usate, con quale unità, e gli eventuali avvisi da mostrare all'utente. */
+function estraiPuntiPortaDaSessione(sessione){
+  const righe = (sessione && Array.isArray(sessione.DettaglioGolGame)) ? sessione.DettaglioGolGame : [];
+  const vuoto = {punti: [], diagnostica: null};
+  if(!righe.length) return vuoto;
+  const col = individuaColonnePorta(righe);
+  if(!col) return vuoto;
+  const grezzi = righe.map(r => ({
+    vx: coordinataValida(r[col.orizzontale]), vy: coordinataValida(r[col.verticale]),
+    marcatore: r["Marcatore"] || null, assist: r["Assist"] || null, secondo: N(r["Secondo"]),
+    zonaFile: col.etichetta ? (String(r[col.etichetta]||"").trim() || null) : null
+  })).filter(g => g.vx !== null && g.vy !== null);
+  if(!grezzi.length) return vuoto;
+  const scalaX = scalaAssePorta(grezzi.map(g=>g.vx), PORTA_LARGHEZZA_M);
+  const scalaY = scalaAssePorta(grezzi.map(g=>g.vy), PORTA_ALTEZZA_M);
+  const punti = grezzi.map(g => ({
+    x01: normalizzaValorePorta(g.vx, scalaX.tipo, PORTA_LARGHEZZA_M),
+    y01: normalizzaValorePorta(g.vy, scalaY.tipo, PORTA_ALTEZZA_M),
+    marcatore: g.marcatore, assist: g.assist, secondo: g.secondo, zonaFile: g.zonaFile
+  })).filter(p => p.x01 !== null && p.y01 !== null);
+  const avvisi = [];
+  if(scalaX.tipo === "ignota" || scalaY.tipo === "ignota")
+    avvisi.push(`Unità di misura non riconosciuta nelle colonne «${col.orizzontale}» / «${col.verticale}»: i punti sono comunque disegnati, ma la posizione potrebbe non essere corretta. Mandaci il file così sistemiamo la lettura.`);
+  else if(scalaX.ambigua || scalaY.ambigua)
+    avvisi.push(`Unità di misura dedotta da pochi valori (${ETICHETTA_SCALA_PORTA[scalaX.tipo]} in larghezza, ${ETICHETTA_SCALA_PORTA[scalaY.tipo]} in altezza): con pochi gol la deduzione è fragile e si consolida da sé man mano che arrivano altre partite.`);
+  // Sospetto "asse verticale al rovescio": se quasi tutti i gol risultano nel terzo alto della porta è più
+  // probabile che l'altezza sia misurata dalla traversa verso il basso che non che si segni sempre sotto
+  // l'incrocio. Si segnala, non si corregge (vedi la nota di testa).
+  const alti = punti.filter(p => p.y01 > 2/3).length;
+  if(punti.length >= 4 && alti / punti.length >= 0.8)
+    avvisi.push(`Attenzione: ${nf0(alti)} gol su ${nf0(punti.length)} risultano nel terzo alto della porta. Può essere vero, ma è il segnale tipico di un'altezza misurata dalla traversa verso il basso invece che da terra: se nel tuo file è così, segnalacelo e ribaltiamo l'asse.`);
+  return {punti, diagnostica: {
+    colonnaX: col.orizzontale, colonnaY: col.verticale, colonnaEtichetta: col.etichetta,
+    scalaX: scalaX.tipo, scalaY: scalaY.tipo, avvisi
+  }};
+}
+
+/* Settori della porta: la stessa griglia 3x3 già usata per le zone di campo, applicata allo specchio della
+   porta. Sinistra/destra sono dal punto di vista di chi tira (la porta vista di fronte, come nel disegno). */
+const PORTA_RIGHE = ["Alto", "Mezza", "Basso"];      // indice 0 = sotto la traversa
+const PORTA_COLONNE = ["sinistra", "centro", "destra"];
+function zonaPorta(x01, y01){
+  const col = x01 < 1/3 ? 0 : (x01 < 2/3 ? 1 : 2);
+  const riga = y01 >= 2/3 ? 0 : (y01 >= 1/3 ? 1 : 2);
+  return {riga, col, indice: riga*3+col, etichetta: PORTA_RIGHE[riga]+" · "+PORTA_COLONNE[col]};
+}
+/** Conteggio e percentuale dei gol per ciascuno dei 9 settori della porta. Restituisce sempre i valori
+ *  ASSOLUTI accanto alle percentuali (richiesta dell'utente del 04/09/2026: una percentuale deve poter
+ *  essere interrogata risalendo ai numeri che la generano). */
+function calcolaSettoriPorta(punti){
+  const celle = Array.from({length:9}, (_,i) => ({indice:i, riga:Math.floor(i/3), col:i%3,
+    etichetta: PORTA_RIGHE[Math.floor(i/3)]+" · "+PORTA_COLONNE[i%3], n:0, pct:0}));
+  (punti||[]).forEach(p => { celle[zonaPorta(p.x01, p.y01).indice].n++; });
+  const totale = (punti||[]).length;
+  celle.forEach(c => { c.pct = totale ? (c.n/totale)*100 : 0; });
+  return {celle, totale};
+}
+
+/** Disegna un pallone da calcio: sfera bianca, pentagono scuro al centro e cuciture verso il bordo. A raggio
+ *  piccolo il pentagono resta l'unico dettaglio leggibile, ed è quello che fa riconoscere la palla. */
+function disegnaPallone(ctx, cx, cy, r, opts){
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.shadowColor = "rgba(0,0,0,0.30)"; ctx.shadowBlur = r*0.6; ctx.shadowOffsetY = r*0.20;
+  ctx.fillStyle = opts.palloneFondo; ctx.fill();
+  ctx.shadowColor = "transparent"; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  const vertice = i => { const a = -Math.PI/2 + i*2*Math.PI/5; return [Math.cos(a), Math.sin(a)]; };
+  ctx.beginPath();
+  for(let i=0;i<5;i++){ const [ux,uy] = vertice(i); const px = cx+ux*r*0.44, py = cy+uy*r*0.44;
+    i ? ctx.lineTo(px,py) : ctx.moveTo(px,py); }
+  ctx.closePath(); ctx.fillStyle = opts.palloneMacchia; ctx.fill();
+  ctx.strokeStyle = opts.palloneMacchia; ctx.lineWidth = Math.max(0.7, r*0.11); ctx.lineCap = "round";
+  for(let i=0;i<5;i++){ const [ux,uy] = vertice(i);
+    ctx.beginPath(); ctx.moveTo(cx+ux*r*0.44, cy+uy*r*0.44); ctx.lineTo(cx+ux*r*0.90, cy+uy*r*0.90); ctx.stroke(); }
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.strokeStyle = opts.palloneBordo; ctx.lineWidth = Math.max(1, r*0.13); ctx.stroke();
+  ctx.restore();
+}
+
+/** Disegna una porta da calcio vista di fronte (proporzione 7.32x2.44 = 3:1, nessuna quota a schermo) con un
+ *  pallone su ogni punto d'ingresso. `punti`: [{x01, y01}] con 0-1 su ciascun asse (0 = palo sinistro / terra).
+ *  `opts`: {sfondo, erba, telaio, lineaPorta, rete, testo, palloneFondo, palloneMacchia, palloneBordo,
+ *  numera} — `numera:true` scrive accanto a ogni pallone il numero con cui compare nell'elenco sotto il
+ *  grafico (solo quando i gol sono pochi: oltre, i numeri coprirebbero i palloni). */
+function disegnaPortaCalcio(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  // Geometria: la porta tiene la proporzione reale, centrata, con un po' d'aria sopra e la fascia di prato
+  // sotto. Le misure in metri servono SOLO qui, per il rapporto larghezza/altezza.
+  // Le scritte e i palloni vanno dimensionati su quanto il canvas viene MOSTRATO, non su quanti pixel ha:
+  // lo stesso disegno serve la dashboard (canvas grande, rimpicciolito poco) e i report (canvas grande
+  // rimpicciolito a meno della metà per la stampa). Senza questa correzione le etichette uscivano enormi a
+  // schermo e minuscole in stampa.
+  const scalaCss = (canvas.clientWidth && canvas.clientWidth > 0) ? (canvas.clientWidth / w) : 1;
+  const px = mostrati => Math.max(7, mostrati / scalaCss); // px di canvas per N px davvero visti
+  // La fascia sotto la linea di fondo deve bastare alle etichette, che sono dimensionate in pixel VISTI:
+  // su uno schermo stretto occupano una fetta ben più grande del canvas, e con una fascia proporzionale
+  // finivano sopra la porta.
+  const padLat = w*0.07, sopra = h*0.06, sotto = Math.max(h*0.075, px(27));
+  const disponibileH = h - sopra - sotto;
+  let gh = (w - padLat*2) * (PORTA_ALTEZZA_M/PORTA_LARGHEZZA_M), gw;
+  if(gh > disponibileH) gh = disponibileH;
+  gw = gh * (PORTA_LARGHEZZA_M/PORTA_ALTEZZA_M);
+  // la porta è appoggiata in basso, non centrata: lo spazio che avanza va SOPRA la traversa (dove si legge
+  // come cielo) invece che sotto la linea di fondo, dove sarebbe solo prato vuoto
+  const x0 = (w - gw)/2, y0 = sopra + Math.max(0, disponibileH - gh), y1 = y0 + gh;
+  const spessore = Math.max(2, gh*0.066);
+  // prato
+  ctx.fillStyle = opts.erba; ctx.fillRect(0, y1, w, h-y1);
+  // specchio della porta: velo con un filo di profondità (più scuro verso il basso, dove la rete è più
+  // fitta e in ombra) e rete a maglie fini
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x0, y0, gw, gh); ctx.clip();
+  const velo = ctx.createLinearGradient(0, y0, 0, y1);
+  velo.addColorStop(0, opts.rete.veloAlto); velo.addColorStop(1, opts.rete.veloBasso);
+  ctx.fillStyle = velo; ctx.fillRect(x0, y0, gw, gh);
+  ctx.strokeStyle = opts.rete.filo; ctx.lineWidth = Math.max(0.5, gh*0.005);
+  const passo = gh/10;
+  for(let x=x0; x<=x0+gw+0.1; x+=passo){ ctx.beginPath(); ctx.moveTo(x,y0); ctx.lineTo(x,y1); ctx.stroke(); }
+  for(let y=y0; y<=y1+0.1; y+=passo){ ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x0+gw,y); ctx.stroke(); }
+  ctx.restore();
+  // i 9 settori, tratteggiati e discreti: servono a leggere il disegno, non a dominarlo
+  ctx.save();
+  ctx.strokeStyle = opts.lineaSettori; ctx.lineWidth = Math.max(0.8, gh*0.009);
+  ctx.setLineDash([gh*0.045, gh*0.04]);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(x0+gw*i/3, y0); ctx.lineTo(x0+gw*i/3, y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x0, y0+gh*i/3); ctx.lineTo(x0+gw, y0+gh*i/3); ctx.stroke();
+  }
+  ctx.restore();
+  // linea di fondo
+  ctx.strokeStyle = opts.lineaPorta; ctx.lineWidth = Math.max(1, gh*0.016);
+  ctx.beginPath(); ctx.moveTo(w*0.015, y1); ctx.lineTo(w*0.985, y1); ctx.stroke();
+  // telaio: pali e traversa, fuori dallo specchio (così lo specchio è esattamente l'area di porta)
+  ctx.save();
+  ctx.fillStyle = opts.telaio; ctx.strokeStyle = opts.telaioBordo; ctx.lineWidth = Math.max(1, gh*0.011);
+  ctx.lineJoin = "miter";
+  const bar = (bx, by, bw, bh) => { ctx.beginPath(); ctx.rect(bx, by, bw, bh); ctx.fill(); ctx.stroke(); };
+  bar(x0-spessore, y0-spessore, spessore, gh+spessore);
+  bar(x0+gw,       y0-spessore, spessore, gh+spessore);
+  bar(x0-spessore, y0-spessore, gw+spessore*2, spessore);
+  ctx.restore();
+  // palloni
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x01) && Number.isFinite(p.y01));
+  const r = Math.max(4, gh*0.068);
+  const evidenziati = opts.evidenziati || [];
+  const posizioni = validi.map((p, i) => ({indice:i, punto:p, cx: x0 + p.x01*gw, cy: y1 - p.y01*gh, r}));
+  posizioni.forEach(pos => {
+    if(evidenziati.indexOf(pos.indice) >= 0){
+      ctx.save();
+      ctx.beginPath(); ctx.arc(pos.cx, pos.cy, r*1.55, 0, Math.PI*2);
+      ctx.fillStyle = opts.alone; ctx.fill();
+      ctx.beginPath(); ctx.arc(pos.cx, pos.cy, r*1.42, 0, Math.PI*2);
+      ctx.strokeStyle = opts.aloneBordo; ctx.lineWidth = Math.max(1.5, r*0.16); ctx.stroke();
+      ctx.restore();
+    }
+    disegnaPallone(ctx, pos.cx, pos.cy, r, opts);
+  });
+  if(opts.numera) posizioni.forEach(pos => {
+    ctx.save();
+    ctx.font = `800 ${Math.round(r*1.05)}px Satoshi, system-ui, sans-serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    const rb = r*0.72;
+    // il numero sta in alto a destra del pallone, ma rientra a sinistra/in basso se finirebbe fuori
+    let bx = pos.cx + r*1.25, by = pos.cy - r*1.05;
+    if(bx + rb > w - 2) bx = pos.cx - r*1.25;
+    if(by - rb < 2) by = pos.cy + r*1.05;
+    ctx.beginPath(); ctx.arc(bx, by, rb, 0, Math.PI*2);
+    ctx.fillStyle = opts.badgeFondo; ctx.fill();
+    ctx.fillStyle = opts.badgeTesto; ctx.fillText(String(pos.indice+1), bx, by);
+    ctx.restore();
+  });
+  if(!validi.length){
+    ctx.save();
+    ctx.font = `600 ${Math.round(px(13))}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = opts.testo; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("Nessun punto d'ingresso registrato", w/2, y0+gh/2);
+    ctx.restore();
+  }
+  // orientamento: senza questa riga non si capisce da che parte si guarda la porta
+  ctx.save();
+  const corpoEt = Math.min(px(10.5), gh*0.105);
+  ctx.font = `700 ${Math.round(corpoEt)}px Satoshi, system-ui, sans-serif`;
+  ctx.fillStyle = opts.testo; ctx.textBaseline = "bottom";
+  const yEt = Math.min(h - px(6), y1 + corpoEt*2);
+  ctx.textAlign = "left";  ctx.fillText("SINISTRA", w*0.025, yEt);
+  ctx.textAlign = "right"; ctx.fillText("DESTRA", w-w*0.025, yEt);
+  // la didascalia centrale sparisce sugli schermi stretti, dove finirebbe addosso alle due laterali
+  if(canvas.clientWidth === 0 || canvas.clientWidth > 430){
+    ctx.font = `500 ${Math.round(corpoEt*0.95)}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = opts.testoTenue || opts.testo;
+    ctx.textAlign = "center"; ctx.fillText(opts.didascalia || "porta vista da chi tira", w/2, yEt);
+  }
+  ctx.restore();
+  // la geometria resta attaccata al canvas: serve a capire su quale pallone si è cliccato
+  canvas.__porta = {posizioni, x0, y0, gw, gh, r};
+  return canvas.__porta;
+}
+
+/** Rende cliccabili i palloni del grafico della porta — richiesta dell'utente (09/10/2026): invece di una
+ *  tabella sotto il grafico, il nome del marcatore e il minuto compaiono in un riquadro a comparsa quando si
+ *  tocca il pallone. Gestisce anche il caso di più gol finiti quasi nello stesso punto: il riquadro li
+ *  elenca tutti, perché a quel punto un solo tocco non potrebbe distinguerli.
+ *  Funziona identico con mouse e con dito (`pointerdown`), e le coordinate si convertono passando per il
+ *  rettangolo del canvas, quindi resta giusto a qualunque larghezza di schermo senza ridisegnare nulla. */
+function collegaPortaInterattiva(canvas, punti, opts, conPartita){
+  const wrap = canvas.parentElement;
+  if(!wrap) return;
+  const pop = document.createElement("div");
+  pop.className = "porta-popup nascosto";
+  pop.setAttribute("role", "dialog");
+  wrap.appendChild(pop);
+  let apertiOra = [];
+  const ridisegna = evidenziati => disegnaPortaCalcio(canvas, punti, Object.assign({}, opts, {evidenziati}));
+  const chiudi = () => { apertiOra = []; pop.classList.add("nascosto"); ridisegna([]); };
+  const coordinateCanvas = ev => {
+    const rect = canvas.getBoundingClientRect();
+    if(!rect.width || !rect.height) return null;
+    return {x: (ev.clientX - rect.left) * (canvas.width / rect.width),
+            y: (ev.clientY - rect.top) * (canvas.height / rect.height), rect};
+  };
+  const colpiti = c => {
+    const g = canvas.__porta;
+    if(!g) return [];
+    // raggio di tocco più generoso del pallone: su telefono il dito non è preciso al pixel
+    const soglia = g.r * 1.6;
+    return g.posizioni
+      .map(p => ({p, d: Math.hypot(p.cx - c.x, p.cy - c.y)}))
+      .filter(o => o.d <= soglia)
+      .sort((a,b) => a.d - b.d)
+      .map(o => o.p);
+  };
+  canvas.addEventListener("pointermove", ev => {
+    if(ev.pointerType !== "mouse") return;
+    const c = coordinateCanvas(ev);
+    canvas.style.cursor = (c && colpiti(c).length) ? "pointer" : "default";
+  });
+  canvas.addEventListener("pointerdown", ev => {
+    const c = coordinateCanvas(ev);
+    if(!c) return;
+    const sotto = colpiti(c);
+    if(!sotto.length){ chiudi(); return; }
+    const indici = sotto.map(p => p.indice);
+    if(apertiOra.length === indici.length && apertiOra.every((v,i) => v === indici[i]) && !pop.classList.contains("nascosto")){
+      chiudi(); return; // secondo tocco sullo stesso pallone: si richiude
+    }
+    apertiOra = indici;
+    const zona = zonaPorta(sotto[0].punto.x01, sotto[0].punto.y01).etichetta;
+    pop.innerHTML = `
+      <button type="button" class="porta-popup-chiudi" aria-label="Chiudi">×</button>
+      <div class="pp-zona">${esc(zona)}</div>
+      ${sotto.map(p => {
+        const d = p.punto;
+        return `<div class="pp-gol">
+          <span class="pp-min">${d.secondo ? esc(mmssDaSecondi(d.secondo)) : "—"}</span>
+          <span class="pp-nome">${esc(d.marcatore || "Marcatore non indicato")}</span>
+          ${d.assist ? `<span class="pp-assist">assist di ${esc(d.assist)}</span>` : ""}
+          ${conPartita ? `<span class="pp-partita">${esc(d.partita || "")}</span>` : ""}
+          ${d.zonaFile ? `<span class="pp-file">Seven Lab: ${esc(d.zonaFile)}</span>` : ""}
+        </div>`; }).join("")}
+      ${sotto.length > 1 ? `<div class="pp-nota">${nf0(sotto.length)} gol entrati quasi nello stesso punto.</div>` : ""}`;
+    pop.querySelector(".porta-popup-chiudi").addEventListener("click", e => { e.stopPropagation(); chiudi(); });
+    pop.classList.remove("nascosto");
+    pop.classList.remove("porta-popup-sotto");
+    pop.style.left = ""; pop.style.top = "";
+    ridisegna(indici);
+    // Posizione: sopra il pallone, rientrata nei bordi del disegno. Se però il riquadro è più alto del
+    // disegno stesso (succede su telefono, dove il grafico è alto poco più di cento pixel) non esiste
+    // nessuna posizione che lo tenga dentro: allora scende sotto il grafico, dentro la scheda.
+    const scala = c.rect.width / canvas.width;
+    const altezzaPop = pop.offsetHeight;
+    if(altezzaPop > c.rect.height - 16){ pop.classList.add("porta-popup-sotto"); return; }
+    const cxCss = sotto[0].cx * scala, cyCss = sotto[0].cy * (c.rect.height / canvas.height);
+    const larghezzaPop = pop.offsetWidth;
+    let left = cxCss - larghezzaPop/2;
+    left = Math.max(6, Math.min(c.rect.width - larghezzaPop - 6, left));
+    let top = cyCss - altezzaPop - canvas.__porta.r*scala - 10;
+    if(top < 6) top = cyCss + canvas.__porta.r*scala + 10;
+    top = Math.max(6, Math.min(c.rect.height - altezzaPop - 6, top));
+    pop.style.left = Math.round(left)+"px";
+    pop.style.top = Math.round(top)+"px";
+  });
+  document.addEventListener("pointerdown", ev => {
+    if(!wrap.contains(ev.target) && !pop.classList.contains("nascosto")) chiudi();
+  });
+}
+
+/** Raccoglie i punti d'ingresso in porta di più sessioni, tenendo per ogni punto l'etichetta della partita
+ *  (serve nell'elenco quando il periodo scelto contiene più di una gara) e ordinandoli in ordine di gara e
+ *  di minuto, così la numerazione del disegno e quella dell'elenco coincidono. */
+function raccogliPuntiPorta(sessioni){
+  const fuori = [];
+  (sessioni||[]).forEach(s => (s.PuntiPorta||[]).forEach(p => fuori.push(Object.assign({}, p, {
+    // `idPartita` è l'identificativo vero: due gare possono avere la stessa etichetta (stessa data, stesso
+    // avversario) e contarle come una sola farebbe sparire la colonna "Partita" proprio quando serve.
+    idPartita: s.Match_ID || s.Sessione_ID || String(s.Ordine||""),
+    partita: s.Etichetta || s.Match_ID || "", ordinePartita: s.Ordine || 0}))));
+  return fuori.sort((a,b) => (a.ordinePartita - b.ordinePartita) || ((a.secondo||0) - (b.secondo||0)));
+}
+/** Elenco delle colonne che la sezione «DETTAGLIO GOL GAME» porta davvero nei file caricati. Serve quando
+ *  il punto d'ingresso in porta NON viene riconosciuto: invece di un generico "dato non disponibile", la
+ *  schermata mostra i nomi di colonna veri del file, così si capisce a vista se il dato c'è con un nome che
+ *  non abbiamo previsto (vedi la nota di testa sulla fragilità dei nomi di colonna) e basta segnalarlo.
+ *  Esclude le colonne già usate dall'app, che non aggiungono informazione. */
+const COLONNE_GOLGAME_NOTE = ["secondo","marcatore","assist","assist x m","assist y m","tiro x m","tiro y m",
+  "larghezza campo m","lunghezza campo m","zona mappa"];
+function colonneGolGameSconosciute(sessioni){
+  const viste = new Set();
+  (sessioni||[]).forEach(s => {
+    const righe = Array.isArray(s.DettaglioGolGame) ? s.DettaglioGolGame : [];
+    if(righe.length) Object.keys(righe[0]).forEach(k => {
+      const nome = String(k).trim();
+      if(nome && !COLONNE_GOLGAME_NOTE.includes(nome.toLowerCase())) viste.add(nome);
+    });
+  });
+  return Array.from(viste);
+}
+/** Primo blocco di diagnostica non vuoto fra le sessioni passate (le colonne e l'unità sono le stesse per
+ *  tutti i file dello stesso export: non serve ripetere l'avviso una volta per partita). */
+function diagnosticaPorta(sessioni){
+  for(const s of (sessioni||[])) if(s.DiagnosticaPorta) return s.DiagnosticaPorta;
+  return null;
+}
+/** Settore di porta preferito da ciascun marcatore, dal più prolifico in giù — la lettura che ha senso sul
+ *  periodo (dove un marcatore ha più gol), non sulla singola partita. */
+function settoriPerMarcatore(punti){
+  const mappa = new Map();
+  (punti||[]).forEach(p => {
+    const nome = String(p.marcatore||"").trim() || "Non indicato";
+    const acc = mappa.get(nome) || {marcatore:nome, gol:0, celle:Array(9).fill(0)};
+    acc.gol++; acc.celle[zonaPorta(p.x01, p.y01).indice]++;
+    mappa.set(nome, acc);
+  });
+  return Array.from(mappa.values()).map(a => {
+    let best = 0; a.celle.forEach((n,i) => { if(n > a.celle[best]) best = i; });
+    const riga = Math.floor(best/3), col = best%3;
+    return {marcatore:a.marcatore, gol:a.gol, settore: PORTA_RIGHE[riga]+" · "+PORTA_COLONNE[col],
+      nSettore: a.celle[best], altezzaBassa: a.celle.slice(6,9).reduce((x,y)=>x+y,0)};
+  }).sort((a,b) => b.gol - a.gol || a.marcatore.localeCompare(b.marcatore,"it"));
+}
+
+/* =====================================================================
+   STATISTICHE PORTIERI GAME (sezione "STATISTICHE PORTIERI GAME", 03/09/2026)
+   ===================================================================== */
+/** Righe di "STATISTICHE PORTIERI GAME" di una sessione, normalizzate a numeri, con la somma "tiri subiti"
+ *  secondo la definizione esplicita dell'utente (tiro subito + parata, ESCLUSI i gol subiti) accanto al
+ *  "Totale tiri affrontati" che calcola Seven Lab stesso (che invece include anche i gol subiti) — le due
+ *  letture sono legittimamente diverse (una misura i tiri neutralizzati, l'altra tutti i tiri affrontati) e
+ *  vengono entrambe mostrate, mai una al posto dell'altra. Esclude dall'elenco portieri la riga di riepilogo
+ *  "TOTALE SQUADRA", restituita a parte in `totaleSquadra`. */
+function statistichePortieriDaSessione(sessione){
+  const righe = (sessione && Array.isArray(sessione.StatistichePortieriGame)) ? sessione.StatistichePortieriGame : [];
+  const mappa = r => ({
+    portiere: String(r["Portiere"] || "").trim(),
+    tiriSubiti: N(r["Tiri subiti"]), parate: N(r["Parate"]), golSubiti: N(r["Gol subiti"]),
+    totaleAffrontati: N(r["Totale tiri affrontati"]),
+    tiriSubitiSommaUtente: N(r["Tiri subiti"]) + N(r["Parate"])
+  });
+  const portieri = righe.filter(r => String(r["Portiere"]||"").trim().toUpperCase() !== "TOTALE SQUADRA").map(mappa);
+  const rigaTotale = righe.find(r => String(r["Portiere"]||"").trim().toUpperCase() === "TOTALE SQUADRA");
+  return {portieri, totaleSquadra: rigaTotale ? mappa(rigaTotale) : null};
+}
+/** Aggrega "STATISTICHE PORTIERI GAME" di più partite per portiere (somma su tutte le sessioni passate). */
+function aggregaPortieriGame(sessioni){
+  const mappa = new Map();
+  (sessioni||[]).forEach(s => {
+    statistichePortieriDaSessione(s).portieri.forEach(p => {
+      if(!p.portiere) return;
+      const acc = mappa.get(p.portiere) || {portiere:p.portiere, tiriSubiti:0, parate:0, golSubiti:0, totaleAffrontati:0, partite:0};
+      acc.tiriSubiti += p.tiriSubiti; acc.parate += p.parate; acc.golSubiti += p.golSubiti;
+      acc.totaleAffrontati += p.totaleAffrontati; acc.partite++;
+      mappa.set(p.portiere, acc);
+    });
+  });
+  return Array.from(mappa.values()).map(a => Object.assign(a, {tiriSubitiSommaUtente: a.tiriSubiti + a.parate}));
+}
+/** Baricentro di recupero (solo Team A) diviso tra 1° e 2° tempo, su un elenco di sessioni partita —
+ *  richiesta dell'utente del 03/09/2026 per capire se si alza/abbassa col passare della gara (vedi
+ *  calcolaBaricentroMetri per i limiti dichiarati sul concetto di "baricentro"). Solo partite: gli
+ *  allenamenti restano fuori per ora anche se i dati di prova mostrano che possono avere anch'essi una
+ *  struttura a tempi — da valutare se estendere in futuro. Torna null se non c'è nessun recupero abbinabile
+ *  a un periodo in nessuna delle sessioni passate. */
+function calcolaBaricentroPerTempo(sessioniPartita){
+  const p1 = [], p2 = [];
+  (sessioniPartita||[]).forEach(s => {
+    assegnaPeriodoEventiZona({datiSpaziali:s.DatiSpaziali, eventi:s.Eventi, riepilogoTempi:s.RiepilogoTempi}).forEach(p => {
+      if(p.tipo !== "recupero" || p.team === "B") return;
+      if(p.periodo === 1) p1.push(p); else if(p.periodo === 2) p2.push(p);
+    });
+  });
+  const baricentro1 = calcolaBaricentroMetri(p1), baricentro2 = calcolaBaricentroMetri(p2);
+  if(baricentro1===null && baricentro2===null) return null;
+  return {baricentro1, n1:p1.length, baricentro2, n2:p2.length};
+}
+/** Raggruppa in due liste separate (recupero/persa) i punti di zona da un elenco di sessioni (partite o
+ *  allenamenti, ciascuna con `.EventiZona` già calcolato in assemblaDataset). */
+function raccogliEventiZona(sessioni){
+  const recupero = [], persa = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => (p.tipo==="recupero"?recupero:persa).push(p)));
+  return {recupero, persa};
+}
+/** Come raccogliEventiZona, ma spezzato per squadra interna (A/B) — richiesta esplicita dell'utente
+ *  (03/09/2026): negli allenamenti, dove entrambe le squadre partitella contano (punto 23), il grafico
+ *  "totalità" che somma A+B resta il dato più importante (tutti gli eventi già nello stesso orientamento
+ *  0=propria porta→50=porta avversaria, vedi disegnaEtichettePorte), ma vuole anche vedere l'andamento
+ *  delle due squadre separatamente. Non usata per le partite (lì l'unica squadra rilevante è già A, un
+ *  confronto A/B non avrebbe senso — la squadra "B" in un file partita è l'avversario). Torna null se una
+ *  sessione non porta il campo `team` sui suoi punti di zona (non dovrebbe succedere su dati aggiornati). */
+function raccogliEventiZonaPerSquadra(sessioni){
+  const out = {A:{recupero:[], persa:[]}, B:{recupero:[], persa:[]}};
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    const squadra = (p.team === "A" || p.team === "B") ? p.team : null;
+    if(!squadra) return;
+    (p.tipo==="recupero" ? out[squadra].recupero : out[squadra].persa).push(p);
+  }));
+  return out;
+}
+/** "Baricentro stimato" (03/09/2026, richiesta dell'utente): la posizione media in metri (asse X, 0=propria
+ *  porta → 50=porta avversaria, stesso riferimento usato per le zone) di un elenco di eventi di
+ *  recupero/palla persa con coordinate. Deliberatamente NON un baricentro squadra vero (richiederebbe le
+ *  posizioni di tutte le azioni o un tracciamento GPS/posizionale, che non abbiamo — l'utente stessa ha
+ *  concordato di non inseguire quella metrica, vedi playbook): è solo la media delle posizioni dei recuperi
+ *  (o delle palle perse), un indicatore più stretto ma corretto al 100% con i dati disponibili. Torna null
+ *  se non ci sono punti con coordinate. */
+function calcolaBaricentroMetri(punti){
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x));
+  if(!validi.length) return null;
+  return validi.reduce((somma,p) => somma+p.x, 0) / validi.length;
+}
+/** Divide il campo (50×30) in una griglia 3×3 (terzi di lunghezza × terzi di larghezza) e calcola, per un
+ *  elenco di punti, quanti cadono in ciascuna delle 9 zone e la percentuale sul totale di punti con
+ *  coordinate valide. Celle in ordine riga per riga (Y crescente) da sinistra (X crescente) a destra. */
+function calcolaZoneCampo(punti){
+  const celle = Array.from({length:9}, () => 0);
+  let totale = 0;
+  (punti||[]).forEach(p => {
+    if(!Number.isFinite(p.x) || !Number.isFinite(p.y)) return;
+    const col = Math.min(2, Math.max(0, Math.floor((p.x / CAMPO_LUNGHEZZA_M) * 3)));
+    const riga = Math.min(2, Math.max(0, Math.floor((p.y / CAMPO_LARGHEZZA_M) * 3)));
+    celle[riga*3+col]++; totale++;
+  });
+  return {celle: celle.map(c => ({conteggio:c, pct: totale ? (c/totale*100) : 0})), totale};
+}
+function hexToRgbArr(hex){
+  const h = String(hex||"#888888").replace("#","").trim();
+  const norm = h.length===3 ? h.split("").map(c=>c+c).join("") : h;
+  const n = parseInt(norm, 16);
+  const v = Number.isFinite(n) ? n : 0x888888;
+  return [(v>>16)&255, (v>>8)&255, v&255];
+}
+function hexRgba(hex, alpha){ const [r,g,b] = hexToRgbArr(hex); return `rgba(${r},${g},${b},${alpha})`; }
+/** Sagoma essenziale di un campo da calcio a 7 (contorno, linea di metà campo, cerchio di centrocampo,
+ *  due aree di porta stilizzate), disegnata sopra il livello colorato per dare un riferimento visivo. */
+function disegnaSagomaCampo(ctx, w, h, coloreLinee){
+  ctx.save();
+  ctx.strokeStyle = coloreLinee; ctx.lineWidth = Math.max(1.5, w*0.004);
+  ctx.strokeRect(ctx.lineWidth/2, ctx.lineWidth/2, w-ctx.lineWidth, h-ctx.lineWidth);
+  ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+  ctx.beginPath(); ctx.arc(w/2, h/2, h*0.16, 0, Math.PI*2); ctx.stroke();
+  const areaW = w*0.10, areaH = h*0.5;
+  ctx.strokeRect(ctx.lineWidth, (h-areaH)/2, areaW, areaH);
+  ctx.strokeRect(w-areaW-ctx.lineWidth, (h-areaH)/2, areaW, areaH);
+  ctx.restore();
+}
+/** Etichette "Porta propria"/"Porta avversaria" lungo il bordo inferiore del campo — richiesta esplicita
+ *  dell'utente (03/09/2026): senza un'indicazione esplicita non si capisce guardando il grafico quale lato
+ *  è la propria porta e quale quella avversaria. Le coordinate X che alimentano questi grafici sono già,
+ *  per ogni evento, normalizzate dal punto di vista di chi lo compie (0 = propria porta, 50 = porta
+ *  avversaria — verificato sui dati reali al punto 24 del playbook), quindi disegnare X=0 sempre a sinistra
+ *  e X=50 sempre a destra basta a dare UN SOLO orientamento coerente per tutti gli eventi disegnati insieme
+ *  — anche in allenamento con due squadre interne che in realtà giocano verso porte fisiche opposte (la
+ *  richiesta dell'utente di "un solo lato, tralasciando la porta attaccata dalle due squadre" è quindi già
+ *  soddisfatta dal dato stesso: qui serve solo rendere esplicito quale lato è quale). Porta avversaria a
+ *  destra, come richiesto esplicitamente dall'utente, sia per le partite sia per gli allenamenti. */
+function disegnaEtichettePorte(ctx, w, h, coloreTesto){
+  ctx.save();
+  ctx.font = `600 ${Math.max(10, Math.round(h*0.042))}px Satoshi, system-ui, sans-serif`;
+  ctx.fillStyle = coloreTesto;
+  ctx.textBaseline = "bottom";
+  const yBase = h - h*0.015, pad = w*0.018;
+  ctx.textAlign = "left"; ctx.fillText("‹ Porta propria", pad, yBase);
+  ctx.textAlign = "right"; ctx.fillText("Porta avversaria ›", w-pad, yBase);
+  ctx.restore();
+}
+/** Grafico a 9 zone (griglia 3×3) con la percentuale di eventi in ciascuna, colorata dal più chiaro (zona
+ *  fredda) al colore pieno (zona con più eventi in proporzione alle altre). `opts`: {sfondo, lineaCampo,
+ *  testo, testoChiaro, colore} — `colore` è l'hex della scala usata per questo grafico. */
+function disegnaCampoZone(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  const {celle, totale} = calcolaZoneCampo(punti);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const maxPct = Math.max(1, ...celle.map(c=>c.pct));
+  celle.forEach((c,i) => {
+    const riga = Math.floor(i/3), col = i%3;
+    const x = col*(w/3), y = riga*(h/3), cw = w/3, ch = h/3;
+    const intensita = totale ? (c.pct / maxPct) : 0;
+    ctx.fillStyle = hexRgba(opts.colore, 0.10 + intensita*0.72);
+    ctx.fillRect(x, y, cw, ch);
+    ctx.fillStyle = intensita > 0.5 ? opts.testoChiaro : opts.testo;
+    ctx.font = `700 ${Math.round(h*0.1)}px Satoshi, system-ui, sans-serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(totale ? nf0(c.pct)+"%" : "—", x+cw/2, y+ch/2);
+  });
+  ctx.strokeStyle = hexRgba(opts.lineaCampo, 0.35); ctx.lineWidth = Math.max(1, w*0.003);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(i*w/3,0); ctx.lineTo(i*w/3,h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i*h/3); ctx.lineTo(w,i*h/3); ctx.stroke();
+  }
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+/** Heatmap della densità degli eventi sul campo — RIFATTA il 12/10/2026 su richiesta dell'utente («le zone
+ *  colorate devono essere necessariamente così ampie?»). La versione precedente disegnava un alone di raggio
+ *  fisso (5,5 m) attorno a ogni evento e sommava le opacità fino a un tetto: con le decine di eventi della
+ *  registrazione da video il tetto si raggiungeva quasi ovunque, e il campo diventava due macchie rosse più un
+ *  velo azzurro su tutto il resto, cioè l'opposto di una mappa che indica DOVE.
+ *  Ora: (1) la densità è calcolata in metri su una griglia del campo, con una campana gaussiana la cui ampiezza
+ *  si STRINGE quando gli eventi aumentano (molti eventi = la mappa può permettersi di essere precisa; pochi =
+ *  resta più morbida per non disegnare un puntino per evento); (2) la densità è rapportata al suo massimo, così
+ *  il colore pieno c'è solo dove gli eventi si concentrano davvero; (3) sotto il 18% del massimo il campo resta
+ *  pulito invece di velarsi; (4) sopra la mappa, i punti veri, piccoli: si vede subito se una macchia è fatta
+ *  di due eventi o di venti. `opts.rampa`: tappe [stop 0-1, [r,g,b]] crescenti, dalla densità bassa all'alta. */
+const HEATMAP_SOGLIA = 0.18;
+/** Rampa calda della heatmap: ambra dove gli eventi cominciano a esserci, ruggine, rosso pieno dove si
+ *  concentrano. Niente tappa azzurra iniziale: era quella che velava tutto il campo. */
+function rampaHeatmap(ambra, ruggine, rosso){
+  return [[0, hexToRgbArr(ambra)], [0.55, hexToRgbArr(ruggine)], [1, hexToRgbArr(rosso)]];
+}
+function ampiezzaHeatmapMetri(n){ return Math.max(1.6, Math.min(4, 5 * Math.pow(Math.max(1, n), -0.2))); }
+function disegnaCampoHeatmap(canvas, punti, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const validi = (punti||[]).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+  if(validi.length){
+    // griglia di 25 cm: 200×120 celle per il campo 50×30 (più rada, il bordo delle macchie veniva a gradini)
+    const GX = 200, GY = 120, passoX = CAMPO_LUNGHEZZA_M / GX, passoY = CAMPO_LARGHEZZA_M / GY;
+    const sigma = ampiezzaHeatmapMetri(validi.length), due2 = 2 * sigma * sigma, raggio = 3 * sigma;
+    const dens = new Float32Array(GX * GY);
+    validi.forEach(p => {
+      const px = Math.min(CAMPO_LUNGHEZZA_M, Math.max(0, p.x)), py = Math.min(CAMPO_LARGHEZZA_M, Math.max(0, p.y));
+      const i0 = Math.max(0, Math.floor((px - raggio) / passoX)), i1 = Math.min(GX-1, Math.ceil((px + raggio) / passoX));
+      const j0 = Math.max(0, Math.floor((py - raggio) / passoY)), j1 = Math.min(GY-1, Math.ceil((py + raggio) / passoY));
+      for(let j = j0; j <= j1; j++){
+        const dy = (j + 0.5) * passoY - py;
+        for(let i = i0; i <= i1; i++){
+          const dx = (i + 0.5) * passoX - px;
+          dens[j*GX + i] += Math.exp(-(dx*dx + dy*dy) / due2);
+        }
+      }
+    });
+    let max = 0; for(let k = 0; k < dens.length; k++) if(dens[k] > max) max = dens[k];
+    const buf = document.createElement("canvas"); buf.width = GX; buf.height = GY;
+    const bctx = buf.getContext("2d");
+    const img = bctx.createImageData(GX, GY);
+    const rampa = opts.rampa;
+    const bordo = HEATMAP_SOGLIA * 0.55; // da qui il colore entra in dissolvenza, invece di comparire di colpo
+    for(let k = 0; k < dens.length; k++){
+      const t = max > 0 ? dens[k] / max : 0;
+      if(t < bordo) continue;
+      const e = Math.min(1, (t - bordo) / (HEATMAP_SOGLIA - bordo)), dissolvenza = e * e * (3 - 2 * e);
+      // 0 al bordo della macchia, 1 al centro; la radice leggera alza i toni intermedi, che altrimenti
+      // restavano tutti color sabbia
+      const u = Math.pow(Math.max(0, (t - HEATMAP_SOGLIA) / (1 - HEATMAP_SOGLIA)), 0.8);
+      let a = rampa[0], b = rampa[rampa.length-1], f = 1;
+      for(let s = 0; s < rampa.length-1; s++){
+        if(u >= rampa[s][0] && u <= rampa[s+1][0]){ a = rampa[s]; b = rampa[s+1]; f = (u - a[0]) / ((b[0] - a[0]) || 1); break; }
+      }
+      img.data[k*4]   = Math.round(a[1][0] + (b[1][0]-a[1][0])*f);
+      img.data[k*4+1] = Math.round(a[1][1] + (b[1][1]-a[1][1])*f);
+      img.data[k*4+2] = Math.round(a[1][2] + (b[1][2]-a[1][2])*f);
+      img.data[k*4+3] = Math.round((0.26 + 0.66 * u) * dissolvenza * 255);   // bordo sfumato, centro quasi pieno
+    }
+    bctx.putImageData(img, 0, 0);
+    ctx.save();
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(buf, 0, 0, w, h);
+    ctx.restore();
+  }
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  // i punti veri, sopra: piccoli, scuri, con un filo chiaro attorno per staccarsi dal colore pieno
+  if(validi.length){
+    const r = Math.max(1.6, Math.min(w, h) * 0.0085);
+    ctx.save();
+    validi.forEach(p => {
+      const px = Math.min(w, Math.max(0, (p.x / CAMPO_LUNGHEZZA_M) * w));
+      const py = Math.min(h, Math.max(0, (p.y / CAMPO_LARGHEZZA_M) * h));
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2);
+      ctx.fillStyle = opts.punto || "rgba(40,37,29,0.72)"; ctx.fill();
+      ctx.lineWidth = Math.max(0.8, r * 0.45); ctx.strokeStyle = opts.puntoBordo || "rgba(255,255,255,0.85)"; ctx.stroke();
+    });
+    ctx.restore();
+  }
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
+/* =====================================================================
+   MOTORE DI CALCOLO
+   ===================================================================== */
+/* I TIRI NON PESANO PIÙ (12/10/2026, decisione dell'utente). Fino alla 1.36.0 c'erano anche +0,3 per tiro in porta
+   e −0,2 per tiro fuori. Ma il tiro in porta non viene segnato (solo il tiro e il gol, vedi segnaTiriPorta), quindi
+   ogni tiro non diventato gol — anche se parato — contava come «fuori» e toglieva punti. E il solo numero di tiri
+   non si può leggere: tanti tiri possono essere un attaccante propositivo o uno che non passa mai la palla, e oggi
+   il dato non permette di distinguerli. Del tiro conta quindi solo l'esito: il gol (×4). Vale per partite e
+   allenamenti, e anche per i dati di esempio. */
+function indicePrestazione(r){
+  return N(r.Gol)*4 + N(r.Assist)*3 + N(r.Dribbling_Riusciti)*0.5 + N(r.Dribbling_Falliti)*(-0.3)
+    + N(r.Recuperi)*0.4
+    + N(r.Passaggi_Corretti)*0.05 + N(r.Passaggi_Sbagliati)*(-0.05) + N(r.Parate)*1.5;
+}
+
+/* =====================================================================
+   POSSESSO PALLA STIMATO (macchina a stati su eventi di partita)
+   Porting fedele della specifica fornita dall'utente (25/08/2026): stima il possesso dagli eventi
+   della propria squadra senza trattare un errore tecnico come perdita certa del possesso — il possesso
+   passa all'avversario solo con un evento BALL_LOST esplicito. Vedi playbook di progetto per i dettagli.
+   ===================================================================== */
+const POSSESSION_CONFIG_DEFAULT = {
+  contestedAfterError: true,
+  certainGapSec: 12,
+  unknownGapSec: 25,
+  contestedWeightForUs: 0.5,
+  ownPositiveEventConfirmsPossession: true,
+  closeOnGoal: true,
+};
+function round2Possesso(v){ return Math.round(v*100)/100; }
+function percPossesso(numeratore, denominatore){
+  if(denominatore <= 0.0001) return null;
+  return round2Possesso((numeratore/denominatore)*100);
+}
+function mmss(sec){
+  const s = Math.max(0, Math.round(N(sec)));
+  return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+function getConfidenceLabelPossesso(confidencePct){
+  if(confidencePct === null || confidencePct === undefined) return "Non disponibile";
+  if(confidencePct >= 90) return "Alta";
+  if(confidencePct >= 75) return "Media";
+  return "Bassa";
+}
+function isPositiveOwnEventPossesso(event){
+  return (
+    event.type === "RECOVERY" || event.type === "SHOT" || event.type === "GOAL" ||
+    (event.type === "PASS" && event.outcome === "SUCCESS") ||
+    (event.type === "DRIBBLE" && event.outcome === "SUCCESS")
+  );
+}
+function isTechnicalErrorPossesso(event){
+  return (event.type === "PASS" && event.outcome === "FAIL") || (event.type === "DRIBBLE" && event.outcome === "FAIL");
+}
+/** Analizza una sequenza di eventi (già filtrati sulla nostra squadra) e produce la stima del possesso:
+ *  tempo certo nostro/avversario/conteso/non classificabile, percentuale ponderata e copertura del dato. */
+function analyzePossession(rawEvents, config = POSSESSION_CONFIG_DEFAULT){
+  const events = [...rawEvents]
+    .filter(event => Number.isFinite(event.timestampSec))
+    .sort((a,b) => a.timestampSec - b.timestampSec || String(a.id).localeCompare(String(b.id)));
+
+  const intervals = [];
+  const sequences = [];
+  let state = "UNKNOWN";
+  let activePossessionId = null;
+  let sequenceCounter = 0;
+  let currentSequence = null;
+
+  const closeSequence = (endSec, endReason) => {
+    if(!currentSequence) return;
+    currentSequence.endSec = endSec;
+    currentSequence.durationSec = Math.max(0, endSec - currentSequence.startSec);
+    currentSequence.endReason = endReason;
+    sequences.push(currentSequence);
+    currentSequence = null;
+    activePossessionId = null;
+  };
+  const openSequence = (startSec, startReason) => {
+    if(currentSequence) return;
+    sequenceCounter += 1;
+    activePossessionId = sequenceCounter;
+    currentSequence = {id:sequenceCounter, startSec, endSec:null, durationSec:0, startReason, endReason:"OPEN",
+      eventCount:0, successfulPasses:0, failedPasses:0, successfulDribbles:0, failedDribbles:0, shots:0, goals:0};
+  };
+  const addEventToSequence = (event) => {
+    if(!currentSequence) return;
+    currentSequence.eventCount += 1;
+    if(event.type === "PASS" && event.outcome === "SUCCESS") currentSequence.successfulPasses += 1;
+    if(event.type === "PASS" && event.outcome === "FAIL") currentSequence.failedPasses += 1;
+    if(event.type === "DRIBBLE" && event.outcome === "SUCCESS") currentSequence.successfulDribbles += 1;
+    if(event.type === "DRIBBLE" && event.outcome === "FAIL") currentSequence.failedDribbles += 1;
+    if(event.type === "SHOT") currentSequence.shots += 1;
+    if(event.type === "GOAL") currentSequence.goals += 1;
+  };
+  const addInterval = (startSec, endSec, intervalState) => {
+    const durationSec = Math.max(0, endSec - startSec);
+    if(durationSec <= 0.0001) return;
+    intervals.push({startSec, endSec, durationSec, state:intervalState,
+      possessionId: intervalState === "OUR_POSSESSION" ? activePossessionId : null, triggerEventId:null});
+  };
+
+  for(let i=0; i<events.length; i+=1){
+    const event = events[i];
+    const nextEvent = events[i+1] ?? null;
+
+    if(event.type === "PERIOD_START"){ closeSequence(event.timestampSec, "PERIOD_END"); state = "UNKNOWN"; }
+    else if(event.type === "PERIOD_END"){ closeSequence(event.timestampSec, "PERIOD_END"); state = "DEAD_BALL"; }
+    else if(event.type === "BALL_LOST"){
+      addEventToSequence(event);
+      closeSequence(event.timestampSec, "BALL_LOST");
+      state = "OPPONENT_POSSESSION";
+    } else if(event.type === "RECOVERY"){
+      if(currentSequence) closeSequence(event.timestampSec, "DATA_GAP");
+      openSequence(event.timestampSec, "RECOVERY");
+      addEventToSequence(event);
+      state = "OUR_POSSESSION";
+    } else if(isPositiveOwnEventPossesso(event)){
+      if(!currentSequence) openSequence(event.timestampSec, "POSITIVE_EVENT");
+      addEventToSequence(event);
+      state = "OUR_POSSESSION";
+      if(event.type === "GOAL" && config.closeOnGoal){ closeSequence(event.timestampSec, "GOAL"); state = "UNKNOWN"; }
+    } else if(isTechnicalErrorPossesso(event)){
+      if(!currentSequence && state !== "OPPONENT_POSSESSION") openSequence(event.timestampSec, "POSITIVE_EVENT");
+      addEventToSequence(event);
+      state = config.contestedAfterError ? "CONTESTED" : "OUR_POSSESSION";
+    }
+
+    if(!nextEvent || event.type === "PERIOD_END") continue;
+    const gapSec = Math.max(0, nextEvent.timestampSec - event.timestampSec);
+
+    if(state === "OUR_POSSESSION"){
+      if(gapSec <= config.certainGapSec){
+        addInterval(event.timestampSec, nextEvent.timestampSec, "OUR_POSSESSION");
+      } else {
+        addInterval(event.timestampSec, event.timestampSec + config.certainGapSec, "OUR_POSSESSION");
+        addInterval(event.timestampSec + config.certainGapSec, nextEvent.timestampSec, "UNKNOWN");
+        closeSequence(event.timestampSec + config.certainGapSec, "DATA_GAP");
+        state = "UNKNOWN";
+      }
+    } else if(state === "CONTESTED"){
+      if(gapSec <= config.unknownGapSec){
+        addInterval(event.timestampSec, nextEvent.timestampSec, "CONTESTED");
+      } else {
+        addInterval(event.timestampSec, event.timestampSec + config.unknownGapSec, "CONTESTED");
+        addInterval(event.timestampSec + config.unknownGapSec, nextEvent.timestampSec, "UNKNOWN");
+        closeSequence(event.timestampSec + config.unknownGapSec, "DATA_GAP");
+        state = "UNKNOWN";
+      }
+    } else if(state === "OPPONENT_POSSESSION"){
+      if(gapSec <= config.unknownGapSec){
+        addInterval(event.timestampSec, nextEvent.timestampSec, "OPPONENT_POSSESSION");
+      } else {
+        addInterval(event.timestampSec, event.timestampSec + config.unknownGapSec, "OPPONENT_POSSESSION");
+        addInterval(event.timestampSec + config.unknownGapSec, nextEvent.timestampSec, "UNKNOWN");
+        state = "UNKNOWN";
+      }
+    } else if(state === "UNKNOWN"){
+      addInterval(event.timestampSec, nextEvent.timestampSec, "UNKNOWN");
+    }
+  }
+
+  const finalEvent = events[events.length-1];
+  if(finalEvent && currentSequence) closeSequence(finalEvent.timestampSec, "OPEN");
+
+  const totali = intervals.reduce((acc, interval) => {
+    if(interval.state === "OUR_POSSESSION") acc.ourCertainSec += interval.durationSec;
+    if(interval.state === "OPPONENT_POSSESSION") acc.opponentEstimatedSec += interval.durationSec;
+    if(interval.state === "CONTESTED") acc.contestedSec += interval.durationSec;
+    if(interval.state === "UNKNOWN") acc.unknownSec += interval.durationSec;
+    if(interval.state === "DEAD_BALL") acc.deadBallSec += interval.durationSec;
+    return acc;
+  }, {ourCertainSec:0, opponentEstimatedSec:0, contestedSec:0, unknownSec:0, deadBallSec:0});
+
+  const classifiedInPlaySec = totali.ourCertainSec + totali.opponentEstimatedSec + totali.contestedSec;
+  const ourPossessionWeightedPct = percPossesso(
+    totali.ourCertainSec + config.contestedWeightForUs * totali.contestedSec, classifiedInPlaySec);
+  const confidencePct = percPossesso(classifiedInPlaySec, classifiedInPlaySec + totali.unknownSec);
+
+  return {...totali, classifiedInPlaySec, ourPossessionWeightedPct, confidencePct, intervals, sequences};
+}
+
+/** KPI aggiuntivi calcolati dalle sequenze di possesso (numero possessi, durata media, ecc. — vedi spec). */
+function calcolaPossessionKpis(sequences, eventiSquadra){
+  const chiuse = sequences.filter(s => s.endSec !== null);
+  const n = chiuse.length;
+  const durate = chiuse.map(s=>s.durationSec).sort((a,b)=>a-b);
+  const durataMediaSec = n ? durate.reduce((a,b)=>a+b,0)/n : null;
+  const recuperi = (eventiSquadra||[]).filter(e=>e.type==="RECOVERY").length;
+  const palleParse = (eventiSquadra||[]).filter(e=>e.type==="BALL_LOST").length;
+  return {
+    possessi:n, durataMediaSec,
+    possessiConTiroPct: n ? percPossesso(chiuse.filter(s=>s.shots>0).length, n) : null,
+    possessiConGolPct: n ? percPossesso(chiuse.filter(s=>s.goals>0).length, n) : null,
+    recuperi, palleParse,
+    recuperoSuPerditaRatio: palleParse>0 ? round2Possesso(recuperi/palleParse) : null
+  };
+}
+
+/* =====================================================================
+   POSSESSO MISURATO CON L'INTERRUTTORE E MOMENTUM (18/10/2026)
+   Dalla partita del 18/10 SevenLab scrive la sezione «POSSESSO AVVERSARIO»: i tratti in cui chi tagga ha
+   tenuto acceso l'interruttore «palla agli avversari». È la metà del possesso che il motore stimato (più su)
+   non poteva vedere: lì l'avversario «aveva palla» solo per 25" dopo una nostra palla persa, poi il tempo
+   diventava non classificabile.
+
+   COME SI LEGGE OGNI SECONDO DI GIOCO (risoluzione 1 secondo):
+   - LORO se cade in un tratto con l'interruttore acceso (dato misurato, non stimato);
+   - NOSTRO se l'interruttore è spento e negli ultimi POSSESSO_MISURATO_GAP_SEC secondi c'è stato un nostro
+     evento con la palla (passaggio, dribbling, tiro, gol, recupero, palla persa) o l'interruttore si è appena
+     spento (la palla è tornata a noi). È la stessa finestra di 12" con cui il motore stimato tiene il possesso;
+   - FERMA O NON CLASSIFICABILE altrimenti: rimesse, falli, esultanze, cambi, o un nostro giro palla senza
+     eventi per più di 12". Non entra nella percentuale, come nelle statistiche ufficiali (che contano solo la
+     palla in gioco). Contarlo come nostro, «tutto quello che non è loro», gonfierebbe il nostro possesso:
+     nel primo file avrebbe dato 63% invece di 54%.
+   Possesso nostro % = nostro / (nostro + loro). La pausa fra i tempi, se il file la segna, è esclusa.
+
+   MOMENTUM (solo partita singola, richiesta di Elisa): la gara divisa in finestre di 2' per tempo; in ogni
+   finestra (secondi nostri − secondi loro) / (secondi nostri + secondi loro), da −100 (palla sempre loro) a +100
+   (sempre nostra). Finestre con meno di 30" classificati restano a zero. I gol sono segnati sopra (fatti) e
+   sotto (subiti), nella finestra in cui cadono.
+   ===================================================================== */
+const POSSESSO_MISURATO_GAP_SEC = 12;
+const MOMENTUM_FINESTRA_SEC = 120;
+const MOMENTUM_MIN_SEC = 30;
+const MOMENTUM_TRATTO_FINESTRE = 3; // il «tratto» migliore e peggiore: 3 finestre di fila, circa 6'
+
+const haInterruttorePossesso = p => !!(p && Array.isArray(p.PossessoAvversario) && p.PossessoAvversario.some(x => x.squadra !== "A"));
+
+function possessoMisuratoPartita(p){
+  if(!haInterruttorePossesso(p)) return null;
+  const iv = p.PossessoAvversario.filter(x => x.squadra !== "A" && Number.isFinite(x.inizio) && x.fine > x.inizio).sort((a, b) => a.inizio - b.inizio);
+  if(!iv.length) return null;
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto));
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const cambio = e => e.raw["Cambio entra"] === "1" || e.raw["Cambio esce"] === "1";
+  const nostri = eventi.filter(e => lato(e) === "A" && String(e.raw.Giocatore || "").trim() && !cambio(e) && !rigaGolSubito(e.raw)
+      && (e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo)))
+    .map(e => e.secondoAssoluto).sort((a, b) => a - b);
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const inizio = rigaInizio ? rigaInizio.secondoAssoluto : Math.min(iv[0].inizio, nostri.length ? nostri[0] : Infinity);
+  const fine = Math.max(Number.isFinite(norm.periodi.tempo2FineSec) ? norm.periodi.tempo2FineSec : 0, iv[iv.length-1].fine, nostri.length ? nostri[nostri.length-1] : 0);
+  if(!(fine > inizio)) return null;
+  const fine1 = Number.isFinite(norm.periodi.tempo1FineSec) && norm.periodi.tempo1FineSec > inizio && norm.periodi.tempo1FineSec < fine ? norm.periodi.tempo1FineSec : null;
+  const rt = p.RiepilogoTempi;
+  const inizio2 = (fine1 !== null && rt && Number.isFinite(rt.inizio2TempoSec) && rt.inizio2TempoSec > fine1 + 5 && rt.inizio2TempoSec < fine) ? rt.inizio2TempoSec : fine1;
+  // stato di ogni secondo: 0 ferma/non classificabile, 1 nostro, 2 loro, 3 pausa
+  const s0 = Math.floor(inizio), n = Math.ceil(fine) - s0;
+  const stati = new Array(n).fill(0);
+  const segni = nostri.concat(iv.map(x => x.fine)).sort((a, b) => a - b);
+  let iI = 0, iS = -1;
+  for(let k = 0; k < n; k++){
+    const x = s0 + k + 0.5;
+    if(fine1 !== null && inizio2 > fine1 && x > fine1 && x < inizio2){ stati[k] = 3; continue; }
+    while(iI < iv.length && iv[iI].fine <= x) iI++;
+    if(iI < iv.length && iv[iI].inizio <= x){ stati[k] = 2; continue; }
+    while(iS + 1 < segni.length && segni[iS + 1] <= x) iS++;
+    stati[k] = (iS >= 0 && x - segni[iS] <= POSSESSO_MISURATO_GAP_SEC) ? 1 : 0;
+  }
+  let noiSec = 0, loroSec = 0, fermaSec = 0;
+  stati.forEach(v => { if(v === 1) noiSec++; else if(v === 2) loroSec++; else if(v === 0) fermaSec++; });
+  const classificato = noiSec + loroSec;
+  const durate = iv.map(x => x.fine - x.inizio);
+  return {inizio, fine, fine1, inizio2, s0, stati, noiSec, loroSec, fermaSec, giocoSec: noiSec + loroSec + fermaSec,
+    pctNoi: classificato ? noiSec / classificato * 100 : null, pctLoro: classificato ? loroSec / classificato * 100 : null,
+    copertura: (noiSec + loroSec + fermaSec) ? classificato / (noiSec + loroSec + fermaSec) * 100 : null,
+    possessiLoro: iv.length, durataMediaLoro: durate.reduce((a, b) => a + b, 0) / iv.length, piuLungoLoro: Math.max(...durate)};
+}
+
+/** Gol fatti e subiti di una partita con il minuto e il punteggio dopo il gol (per il momentum). */
+function golConPunteggio(p){
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo), subisce: latoCheSubisce(e, "partita"), lato: lato(e)}))
+    .sort((a, b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  let noi = 0, loro = 0;
+  return golDaEventiClassificati(eventi, "partita", ["A","B"]).sort((a, b) => a.t - b.t).map(g => {
+    const nostro = g.subisce === "B"; if(nostro) noi++; else loro++;
+    return {t: g.t, nostro, marcatore: g.marcatore, punteggio: noi + "-" + loro};
+  });
+}
+
+function momentumPartita(p, pm){
+  pm = pm || possessoMisuratoPartita(p);
+  if(!pm) return null;
+  const tempi = pm.fine1 !== null ? [[pm.inizio, pm.fine1, 1], [pm.inizio2, pm.fine, 2]] : [[pm.inizio, pm.fine, 1]];
+  const finestre = [];
+  tempi.forEach(([a, b, tempo]) => {
+    for(let t = a; t < b - 0.5; t += MOMENTUM_FINESTRA_SEC){
+      const e = Math.min(b, t + MOMENTUM_FINESTRA_SEC);
+      const ultima = finestre[finestre.length - 1];
+      if(e - t < MOMENTUM_FINESTRA_SEC / 2 && ultima && ultima.tempo === tempo) ultima.b = e; // coda corta: si unisce alla precedente
+      else finestre.push({a: t, b: e, tempo});
+    }
+  });
+  finestre.forEach(w => {
+    let noi = 0, loro = 0;
+    for(let s = Math.floor(w.a); s < Math.ceil(w.b); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) noi++; else if(v === 2) loro++; }
+    w.noi = noi; w.loro = loro;
+    w.valore = (noi + loro) >= MOMENTUM_MIN_SEC ? Math.round((noi - loro) / (noi + loro) * 100) : 0;
+    w.da = Math.round((w.a - pm.inizio) / 60); w.al = Math.round((w.b - pm.inizio) / 60);
+    w.etichetta = w.da + "'";
+  });
+  const gol = golConPunteggio(p).map(g => Object.assign(g, {minuto: Math.max(1, Math.ceil((g.t - pm.inizio) / 60)),
+    indice: Math.max(0, finestre.findIndex(w => g.t >= w.a && g.t < w.b + 1))}));
+  // possesso nei 2 minuti prima di ogni gol
+  gol.forEach(g => {
+    let noi = 0, loro = 0;
+    for(let s = Math.floor(g.t - MOMENTUM_FINESTRA_SEC); s < Math.floor(g.t); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) noi++; else if(v === 2) loro++; }
+    g.primaNoi = noi; g.primaLoro = loro;
+  });
+  // tratto migliore e peggiore: MOMENTUM_TRATTO_FINESTRE finestre di fila nello stesso tempo
+  let migliore = null, peggiore = null;
+  for(let i = 0; i + MOMENTUM_TRATTO_FINESTRE <= finestre.length; i++){
+    const g = finestre.slice(i, i + MOMENTUM_TRATTO_FINESTRE);
+    if(g.some(w => w.tempo !== g[0].tempo)) continue;
+    const noi = g.reduce((t, w) => t + w.noi, 0), loro = g.reduce((t, w) => t + w.loro, 0);
+    if(noi + loro < MOMENTUM_MIN_SEC * MOMENTUM_TRATTO_FINESTRE) continue;
+    const quota = noi / (noi + loro), tratto = {da: g[0].da, al: g[g.length-1].al, quota};
+    if(!migliore || quota > migliore.quota) migliore = tratto;
+    if(!peggiore || quota < peggiore.quota) peggiore = tratto;
+  }
+  const indiceSecondoTempo = finestre.findIndex(w => w.tempo === 2);
+  return {finestre, gol, migliore, peggiore, indiceSecondoTempo: indiceSecondoTempo > 0 ? indiceSecondoTempo : null};
+}
+
+/** Le frasi del possesso misurato e del momentum, uguali in dashboard e nel report. */
+function frasiMomentum(pm, mo, html){
+  const b = s => html ? `<b>${s}</b>` : s;
+  const out = [`Con l'interruttore del possesso la palla è stata ${b("nostra per il " + nf(pm.pctNoi, 0) + "%")} del tempo in cui si sa chi ce l'ha, ${b("loro per il " + nf(pm.pctLoro, 0) + "%")}.`];
+  if(mo && mo.migliore && mo.peggiore && mo.migliore.quota - mo.peggiore.quota >= 0.15)
+    out.push(`Il tratto migliore va dal ${mo.migliore.da}' al ${mo.migliore.al}' (palla nostra per il ${nf(mo.migliore.quota*100, 0)}%), il più difficile dal ${mo.peggiore.da}' al ${mo.peggiore.al}' (palla loro per il ${nf((1-mo.peggiore.quota)*100, 0)}%).`);
+  if(mo){
+    // «dopo due minuti con la palla soprattutto loro/nostra»: secondi di possesso nei 120" prima del gol
+    const conta = (lista, cond) => lista.filter(cond).length;
+    const frase = (lista, tipo, condLoro) => {
+      const n = lista.length; if(!n) return null;
+      const k = conta(lista, condLoro), sub = tipo === "subiti";
+      const nome = sub ? "gol subiti" : "gol fatti";
+      const loro = "dopo due minuti con la palla soprattutto agli avversari", nostra = "dopo due minuti con la palla soprattutto nostra";
+      const tutti = n === 2 ? `Entrambi i ${nome}` : `Tutti i ${nf0(n)} ${nome}`;
+      if(n === 1) return `${sub ? "L'unico gol subito" : "L'unico gol fatto"} è arrivato ${k ? loro : nostra}${sub && !k ? ", quindi in ripartenza o da palla inattiva" : (!sub && k ? ", quindi in ripartenza" : "")}.`;
+      if(k === n) return `${tutti} sono arrivati ${loro}${sub ? "" : ", quindi in ripartenza"}.`;
+      if(k === 0) return `${tutti} sono arrivati ${nostra}${sub ? ", quindi in ripartenza o da palla inattiva" : ""}.`;
+      return sub
+        ? `Dei ${nf0(n)} gol subiti, ${nf0(k)} ${k === 1 ? "è arrivato" : "sono arrivati"} ${loro}, ${nf0(n - k)} mentre la palla era soprattutto nostra (ripartenze o palle inattive).`
+        : `Dei ${nf0(n)} gol fatti, ${nf0(n - k)} ${n - k === 1 ? "è arrivato" : "sono arrivati"} ${nostra}, ${nf0(k)} mentre la palla era soprattutto loro (ripartenze).`;
+    };
+    const fs = frase(mo.gol.filter(g => !g.nostro), "subiti", g => g.primaLoro > g.primaNoi);
+    const ff = frase(mo.gol.filter(g => g.nostro), "fatti", g => g.primaLoro > g.primaNoi);
+    if(fs) out.push(fs);
+    if(ff) out.push(ff);
+  }
+  return out;
+}
+
+/** Configurazione Chart.js del momentum, per la dashboard e per il report. `pal`: {noi, loro, testo, tenue, griglia}. */
+function configMomentum(mo, pal, report){
+  const golIn = (i, nostro) => mo.gol.filter(g => g.indice === i && g.nostro === nostro);
+  const linea = {id: "intervalloMomentum", afterDatasetsDraw(chart){
+    if(mo.indiceSecondoTempo === null) return;
+    const x = chart.scales.x, area = chart.chartArea, ctx = chart.ctx;
+    const px = (x.getPixelForValue(mo.indiceSecondoTempo - 1) + x.getPixelForValue(mo.indiceSecondoTempo)) / 2;
+    ctx.save(); ctx.strokeStyle = pal.tenue; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(px, area.top); ctx.lineTo(px, area.bottom); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = pal.tenue; ctx.font = (report ? "9px" : "11px") + " sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("2° tempo", px + 4, area.top + 2); ctx.restore();
+  }};
+  return {
+    type: "bar",
+    data: {labels: mo.finestre.map(w => w.etichetta), datasets: [
+      {type: "bar", label: "Momentum", data: mo.finestre.map(w => w.valore), backgroundColor: mo.finestre.map(w => w.valore >= 0 ? pal.noi : pal.loro),
+        borderRadius: 3, barPercentage: 0.92, categoryPercentage: 0.94, order: 2},
+      {type: "line", label: "Gol fatto", data: mo.finestre.map((w, i) => golIn(i, true).length ? 114 : null), showLine: false,
+        pointStyle: "triangle", pointRadius: report ? 5 : 7, pointHoverRadius: report ? 5 : 9, pointBackgroundColor: pal.noi, pointBorderColor: pal.testo, pointBorderWidth: 1, order: 1},
+      {type: "line", label: "Gol subito", data: mo.finestre.map((w, i) => golIn(i, false).length ? -114 : null), showLine: false,
+        pointStyle: "triangle", rotation: 180, pointRadius: report ? 5 : 7, pointHoverRadius: report ? 5 : 9, pointBackgroundColor: pal.loro, pointBorderColor: pal.testo, pointBorderWidth: 1, order: 1}
+    ]},
+    options: {responsive: true, maintainAspectRatio: false, animation: report ? false : undefined,
+      plugins: {legend: {display: false},
+        tooltip: {enabled: !report, callbacks: {
+          title: it => { const w = mo.finestre[it[0].dataIndex]; return `Dal ${w.da}' al ${w.al}'`; },
+          label: it => {
+            const w = mo.finestre[it.dataIndex];
+            if(it.datasetIndex === 0) return (w.noi + w.loro) >= MOMENTUM_MIN_SEC ? `Palla nostra ${nf(w.noi/(w.noi+w.loro)*100, 0)}% · loro ${nf(w.loro/(w.noi+w.loro)*100, 0)}%` : "Pochi secondi con la palla in gioco";
+            return golIn(it.dataIndex, it.datasetIndex === 1).map(g => `${g.nostro ? "Gol fatto" : "Gol subito"} al ${g.minuto}'${g.marcatore && g.nostro ? " (" + g.marcatore + ")" : ""}: ${g.punteggio}`);
+          }}}},
+      scales: {
+        x: {ticks: {color: pal.tenue, font: {size: report ? 8.5 : 11}, autoSkip: true, maxRotation: 0, autoSkipPadding: 6}, grid: {display: false}, border: {color: pal.griglia}},
+        y: {min: -125, max: 125, afterBuildTicks: ax => { ax.ticks = [-100, -50, 0, 50, 100].map(v => ({value: v})); },
+            ticks: {color: pal.tenue, font: {size: report ? 8.5 : 11},
+              callback: v => v === 100 ? "noi" : (v === -100 ? "loro" : "")},
+            grid: {color: c => c.tick && c.tick.value === 0 ? pal.tenue : pal.griglia, lineWidth: c => c.tick && c.tick.value === 0 ? 1.2 : 1}, border: {display: false}}
+      }},
+    plugins: [linea]
+  };
+}
+
+const COLONNE_PARTITE = ["Match_ID","Data","Avversario","Gol_Fatti","Gol_Subiti"];
+const COLONNE_GIOCATORI = ["Match_ID","Giocatore","Minuti_Giocati","Gol","Assist"];
+
+function preparaDataset(grezzo){
+  const partiteRaw = (grezzo.Partite || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  const giocatoriRaw = (grezzo.Statistiche_Giocatori || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  if(!grezzo.Partite) throw new Error("Nel file non ho trovato il foglio <strong>Partite</strong>. Serve per sapere date e avversari.");
+  if(!grezzo.Statistiche_Giocatori) throw new Error("Nel file non ho trovato il foglio <strong>Statistiche_Giocatori</strong>. Senza le righe dei giocatori non posso calcolare nulla.");
+  if(partiteRaw.length === 0) throw new Error("Il foglio <strong>Partite</strong> non contiene ancora nessuna partita valida. Aggiungi almeno una riga (le righe con «ESEMPIO» nelle note vengono ignorate).");
+  if(giocatoriRaw.length === 0) throw new Error("Il foglio <strong>Statistiche_Giocatori</strong> non contiene ancora righe valide dei giocatori.");
+
+  const mancantiP = COLONNE_PARTITE.filter(c => !(c in partiteRaw[0]));
+  const mancantiG = COLONNE_GIOCATORI.filter(c => !(c in giocatoriRaw[0]));
+  if(mancantiP.length) throw new Error("Nel foglio <strong>Partite</strong> mancano queste colonne: <strong>"+mancantiP.join(", ")+"</strong>.");
+  if(mancantiG.length) throw new Error("Nel foglio <strong>Statistiche_Giocatori</strong> mancano queste colonne: <strong>"+mancantiG.join(", ")+"</strong>.");
+
+  return assemblaDataset(grezzo);
+}
+
+/** Cuore della costruzione del dataset, condiviso dal percorso Excel (preparaDataset, con le sue
+ *  validazioni sui fogli) e dal percorso Seven Lab a più file (costruisciDatasetDaSessioni, che
+ *  non pretende né Partite né Allenamenti: bastano anche solo gli uni o gli altri). */
+function assemblaDataset(grezzo){
+  const partiteRaw = (grezzo.Partite || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  const giocatoriRaw = (grezzo.Statistiche_Giocatori || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  const partite = partiteRaw.map(r => ({
+    Match_ID: String(r.Match_ID ?? "").trim(),
+    Data: toDate(r.Data),
+    Avversario: String(r.Avversario ?? "").trim() || "Avversario non indicato",
+    Competizione: String(r.Competizione ?? "").trim(),
+    Gol_Fatti: N(r.Gol_Fatti), Gol_Subiti: N(r.Gol_Subiti), Durata_Minuti: N(r.Durata_Minuti),
+    Modulo: String(r.Modulo ?? "").trim() || "Non indicato",
+    Forza_Avversario: r.Forza_Avversario ?? null,
+    Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
+    DatiSpaziali: r.DatiSpaziali ?? null,
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null, NomeSquadra: r.NomeSquadra ?? "",
+    ScalaTempi: r.ScalaTempi ?? null
+  })).filter(p => p.Match_ID)
+    .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
+  partite.forEach((p,i) => { p.Ordine = i+1; p.Mese = meseKey(p.Data);
+    p.Etichetta = dataCorta(p.Data)+" "+p.Avversario; p.Risultato = p.Gol_Fatti+"-"+p.Gol_Subiti;
+    p.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:p.DatiSpaziali}, true);
+    p.PuntiGol = estraiPuntiGolGameDaSessione(p, "gol");
+    p.PuntiAssistGol = estraiPuntiGolGameDaSessione(p, "assist");
+    const porta = estraiPuntiPortaDaSessione(p);
+    p.PuntiPorta = porta.punti; p.DiagnosticaPorta = porta.diagnostica; });
+
+  const mappaPartite = new Map(partite.map(p => [p.Match_ID, p]));
+
+  const giocatori = giocatoriRaw.map(r => {
+    const g = {
+      Match_ID: String(r.Match_ID ?? "").trim(),
+      Giocatore: String(r.Giocatore ?? "").trim(),
+      Ruolo: String(r.Ruolo ?? "").trim() || "Non indicato",
+      Minuti_Giocati: N(r.Minuti_Giocati), Gol: N(r.Gol), Assist: N(r.Assist),
+      Tiri_In_Porta: N(r.Tiri_In_Porta), Tiri_Fuori: N(r.Tiri_Fuori),
+      Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
+      Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
+      Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: r.Note ?? "",
+      Palle_Perse: r.Palle_Perse ?? null,
+      Tiri_Subiti_Rilevati: r.Tiri_Subiti_Rilevati ?? null,
+      Cartellini_Gialli: r.Cartellini_Gialli ?? null, Cartellini_Rossi: r.Cartellini_Rossi ?? null,
+      Angoli_Tentati: r.Angoli_Tentati ?? null, Angoli_Gol: r.Angoli_Gol ?? null,
+      Punizioni_Tentate: r.Punizioni_Tentate ?? null, Punizioni_Realizzate: r.Punizioni_Realizzate ?? null,
+      Rigori_Tentati: r.Rigori_Tentati ?? null, Rigori_Realizzati: r.Rigori_Realizzati ?? null
+    };
+    return derivaRiga(g, mappaPartite.get(g.Match_ID));
+  }).filter(g => g.Giocatore);
+  const haTiriInPorta = segnaTiriPorta(giocatori);
+
+  const perGiocatore = new Map();
+  giocatori.filter(g => g.Data).sort((a,b) => a.Data - b.Data).forEach(g => {
+    const n = (perGiocatore.get(g.Giocatore) || 0) + 1;
+    perGiocatore.set(g.Giocatore, n); g.OrdineGiocatore = n;
+  });
+
+  const allenamenti = (grezzo.Allenamenti || []).filter(r => !rigaVuota(r) && !isEsempio(r)).map(r => ({
+    Sessione_ID: String(r.Sessione_ID ?? "").trim(), Data: toDate(r.Data),
+    Tipo_Allenamento: String(r.Tipo_Allenamento ?? "").trim() || "Non indicato",
+    Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
+    DatiSpaziali: r.DatiSpaziali ?? null,
+    StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null, NomeSquadra: r.NomeSquadra ?? "",
+    ScalaTempi: r.ScalaTempi ?? null
+  })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
+  allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
+    a.EventiZona = estraiEventiZonaDaSessione({datiSpaziali:a.DatiSpaziali}, false);
+    a.PuntiGol = estraiPuntiGolGameDaSessione(a, "gol");
+    a.PuntiAssistGol = estraiPuntiGolGameDaSessione(a, "assist");
+    const porta = estraiPuntiPortaDaSessione(a);
+    a.PuntiPorta = porta.punti; a.DiagnosticaPorta = porta.diagnostica; });
+  const mappaSessioni = new Map(allenamenti.map(a => [a.Sessione_ID, a]));
+
+  // Statistiche "da partita" (gol, tiri, passaggi, dribbling, recuperi, parate) registrate per giocatore
+  // durante le partitelle di allenamento: Seven Lab le esporta con lo stesso schema delle partite vere, ma
+  // qui restano un cluster a parte — non entrano mai nella classifica/indice stagionale delle partite vere,
+  // proprio perché un gol segnato contro i compagni in allenamento non è lo stesso di un gol in partita.
+  const statAllenamentoRaw = (grezzo.Statistiche_Allenamento || []).filter(r => !rigaVuota(r) && !isEsempio(r));
+  const statAllenamento = statAllenamentoRaw.map(r => {
+    const g = {
+      Match_ID: String(r.Sessione_ID ?? "").trim(), // stesso nome campo di "giocatori" per riuso di aggregaGiocatori/calcolaTendenze
+      Sessione_ID: String(r.Sessione_ID ?? "").trim(),
+      Giocatore: String(r.Giocatore ?? "").trim(), Ruolo: String(r.Ruolo ?? "").trim() || "Non indicato",
+      Minuti_Giocati: N(r.Minuti_Giocati), Gol: N(r.Gol), Assist: N(r.Assist),
+      Tiri_In_Porta: N(r.Tiri_In_Porta), Tiri_Fuori: N(r.Tiri_Fuori),
+      Passaggi_Corretti: N(r.Passaggi_Corretti), Passaggi_Sbagliati: N(r.Passaggi_Sbagliati),
+      Dribbling_Tentati: N(r.Dribbling_Tentati), Dribbling_Falliti: N(r.Dribbling_Falliti),
+      Recuperi: N(r.Recuperi), Parate: N(r.Parate), Note: "",
+      Palle_Perse: r.Palle_Perse ?? null,
+      Cartellini_Gialli: null, Cartellini_Rossi: null, Angoli_Tentati: null, Angoli_Gol: null,
+      Punizioni_Tentate: null, Punizioni_Realizzate: null, Rigori_Tentati: null, Rigori_Realizzati: null
+    };
+    return derivaRiga(g, mappaSessioni.get(g.Sessione_ID));
+  }).filter(g => g.Giocatore);
+  const haTiriInPortaAllenamento = segnaTiriPorta(statAllenamento);
+
+  const presenze = (grezzo.Presenze_Allenamento || []).filter(r => !rigaVuota(r) && !isEsempio(r)).map(r => {
+    const s = mappaSessioni.get(String(r.Sessione_ID ?? "").trim());
+    const pres = presenteBool(r.Presente);
+    const minuti = N(r.Minuti_Allenamento);
+    const rpeAssente = r.RPE===null || r.RPE===undefined || String(r.RPE).trim()==="";
+    const rpe = rpeAssente ? null : N(r.RPE);
+    return {
+      Sessione_ID: String(r.Sessione_ID ?? "").trim(), Giocatore: String(r.Giocatore ?? "").trim(),
+      PresenteRaw: r.Presente ?? "", Presente: pres, Minuti_Allenamento: minuti, RPE: rpe,
+      Carico: rpe===null ? null : (pres ? minuti*rpe : 0), Data: s ? s.Data : null, Mese: s ? s.Mese : null,
+      DurataSessione: s ? s.Durata_Minuti_Sessione : null, Note: r.Note ?? ""
+    };
+  }).filter(p => p.Giocatore);
+
+  const mesi = Array.from(new Set([...partite.map(p=>p.Mese), ...allenamenti.map(a=>a.Mese)].filter(Boolean))).sort();
+  const nomiGiocatori = Array.from(new Set([...giocatori.map(g=>g.Giocatore), ...presenze.map(p=>p.Giocatore), ...statAllenamento.map(g=>g.Giocatore)])).sort((a,b)=>a.localeCompare(b,"it"));
+
+  return {partite, giocatori, allenamenti, presenze, statAllenamento, mesi, nomiGiocatori,
+    haAllenamenti: allenamenti.length>0 && presenze.length>0,
+    haRPE: presenze.some(p => p.RPE !== null),
+    haStatAllenamento: statAllenamento.length>0,
+    haTiriInPorta, haTiriInPortaAllenamento,
+    haEventiDisciplinari: giocatori.some(g => g.Cartellini_Gialli !== null),
+    haCoordinateZona: partite.some(p=>p.EventiZona.length>0) || allenamenti.some(a=>a.EventiZona.length>0),
+    haDatiGolGame: partite.some(p=>p.PuntiGol.length>0) || allenamenti.some(a=>a.PuntiGol.length>0),
+    // Punto d'ingresso in porta dei gol (08/10/2026): dato NUOVO della sezione «DETTAGLIO GOL GAME», che i
+    // file più vecchi non hanno pur avendo già le coordinate di tiro/assist — va quindi un flag a sé, non
+    // basta haDatiGolGame.
+    haDatiPortaGol: partite.some(p=>p.PuntiPorta.length>0) || allenamenti.some(a=>a.PuntiPorta.length>0),
+    // le palle perse per giocatore ci sono negli export Seven Lab ma non nei dati demo né in un vecchio
+    // Excel: senza questa distinzione l'asse del radar mostrerebbe "0 per tutti" come se fosse un dato vero
+    haPallePerse: giocatori.some(g => g.Palle_Perse !== null && g.Palle_Perse !== undefined),
+    haStatistichePortieriGame: partite.some(p=>p.StatistichePortieriGame) || allenamenti.some(a=>a.StatistichePortieriGame)};
+}
+
+/* NOMI SCRITTI IN MODI DIVERSI (12/10/2026). Richiesta esplicita dell'utente, dopo aver visto nel grafico del
+   carico sia «Arben Sheshi» sia «Arben sheshi»: lo stesso giocatore scritto con maiuscole diverse in due file,
+   che l'app contava come due persone. I nomi che differiscono SOLO per maiuscole/minuscole o per spazi vengono
+   unificati sulla grafia più usata. Niente di più aggressivo (accenti, iniziali, soprannomi): sarebbe tirare a
+   indovinare, e un nome è la chiave di quasi ogni statistica.
+   L'unificazione avviene a ogni costruzione del dataset su COPIE delle sessioni: i file salvati restano come
+   sono, quindi niente è irreversibile, e vale anche per i file già caricati. Le unioni fatte sono elencate in
+   «Qualità dei dati», così si vede cosa è stato unito. */
+const pulisciNome = n => String(n ?? "").trim().replace(/\s+/g, " ");
+const chiaveNome = n => pulisciNome(n).toLocaleLowerCase("it");
+/** Quante parole del nome cominciano con la maiuscola: a parità di uso si preferisce «Arben Sheshi». */
+const maiuscoleIniziali = n => pulisciNome(n).split(" ").filter(w => w && w[0] === w[0].toLocaleUpperCase("it") && w[0] !== w[0].toLocaleLowerCase("it")).length;
+/** Per ogni nome, la grafia da usare. Priorità: in quante sessioni compare nel tabellino giocatori (è la
+ *  grafia "ufficiale" del file), poi le maiuscole iniziali, poi quante volte compare negli eventi. */
+function mappaNomiCanonici(sessioni){
+  const voci = new Map(); // chiave → Map(grafia → {sessioni, eventi})
+  const conta = (nome, campo) => {
+    const g = pulisciNome(nome); if(!g) return;
+    const k = chiaveNome(g);
+    if(!voci.has(k)) voci.set(k, new Map());
+    const m = voci.get(k), v = m.get(g) || {sessioni:0, eventi:0};
+    v[campo]++; m.set(g, v);
+  };
+  (sessioni||[]).forEach(s => {
+    new Set((s.righe||[]).map(r => pulisciNome(r["Giocatore"]))).forEach(n => conta(n, "sessioni"));
+    (s.eventi||[]).forEach(e => conta(e["Giocatore"], "eventi"));
+    (s.datiSpaziali||[]).forEach(d => conta(d["Giocatore"], "eventi"));
+    (s.dettaglioGolGame||[]).forEach(g => { conta(g["Marcatore"], "eventi"); conta(g["Assist"], "eventi"); });
+    (s.statistichePortieriGame||[]).forEach(p => conta(p["Portiere"], "eventi"));
+  });
+  const canonico = new Map(), unioni = [];
+  voci.forEach((grafie, k) => {
+    const lista = [...grafie.entries()].sort((a,b) =>
+      (b[1].sessioni - a[1].sessioni) || (maiuscoleIniziali(b[0]) - maiuscoleIniziali(a[0])) ||
+      (b[1].eventi - a[1].eventi) || a[0].localeCompare(b[0], "it"));
+    canonico.set(k, lista[0][0]);
+    // conta come unione solo se le grafie differiscono davvero nel testo visibile (non solo per spazi in coda)
+    const diverse = [...new Set(lista.map(x => x[0]))];
+    if(diverse.length > 1) unioni.push({nome: lista[0][0], varianti: diverse.slice(1)});
+  });
+  return {canonico, unioni};
+}
+/** Copie delle sessioni con tutti i nomi riportati alla grafia unica. Tocca solo i campi che contengono un
+ *  nome di giocatore; il resto è condiviso con l'originale (non viene modificato). */
+function normalizzaNomiSessioni(sessioni){
+  const {canonico, unioni} = mappaNomiCanonici(sessioni);
+  const nome = n => { const g = pulisciNome(n); return g ? (canonico.get(chiaveNome(g)) || g) : n; };
+  const conNome = (righe, campi) => Array.isArray(righe)
+    ? righe.map(r => { const c = Object.assign({}, r); campi.forEach(f => { if(c[f] !== undefined && String(c[f]).trim() !== "") c[f] = nome(c[f]); }); return c; })
+    : righe;
+  const copie = (sessioni||[]).map(s => Object.assign({}, s, {
+    righe: conNome(s.righe, ["Giocatore"]),
+    eventi: conNome(s.eventi, ["Giocatore"]),
+    datiSpaziali: conNome(s.datiSpaziali, ["Giocatore"]),
+    dettaglioGolGame: conNome(s.dettaglioGolGame, ["Marcatore", "Assist"]),
+    statistichePortieriGame: conNome(s.statistichePortieriGame, ["Portiere"])
+  }));
+  return {sessioni: copie, unioni};
+}
+
+/** Percorso di ingresso "Seven Lab": costruisce il dataset a partire dalle sessioni accumulate
+ *  (un file = una partita o un allenamento), invece che da un unico Excel con più fogli.
+ *  A differenza di preparaDataset() non pretende di avere sia le partite sia gli allenamenti:
+ *  basta una sola sessione di un solo tipo per iniziare a vedere qualcosa. */
+function costruisciDatasetDaSessioni(sessioniSalvate){
+  if(!sessioniSalvate.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
+  // nomi scritti in modi diversi (maiuscole, spazi) riportati a una grafia sola, su copie: vedi normalizzaNomiSessioni
+  const {sessioni, unioni: unioniNomi} = normalizzaNomiSessioni(sessioniSalvate);
+  const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [];
+  sessioni.forEach(s => {
+    // Regola dell'utente (10/10/2026): una sessione senza metodo di rilevazione è diretta — vale anche per
+    // quelle già salvate nel browser da versioni precedenti. E i minuti di una sessione in differita salvata
+    // con la 1.27.0-1.31.0 (tempi corretti, minuti no) si correggono qui, senza toccare l'oggetto salvato.
+    const scala = scalaTempiEffettiva(s.scalaTempi);
+    const fm = fattoreMinutiArretrati(s.scalaTempi);
+    if(s.tipo === "partita"){
+      partiteRaw.push({
+        Match_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
+        Avversario: (s.meta["Avversario"]||"").trim() || "Avversario non indicato",
+        Competizione: "", Gol_Fatti: N(s.meta["Gol fatti"]), Gol_Subiti: N(s.meta["Gol subiti"]),
+        Durata_Minuti: N(s.meta["Durata minuti"]) * fm, Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
+        NomeSquadra: nomeSquadraDaTitolo(s.meta["Titolo"], (s.meta["Avversario"]||"").trim()),
+        Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
+        DatiSpaziali: s.datiSpaziali || null,
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        PossessoAvversario: s.possessoAvversario || null,
+        ScalaTempi: scala
+      });
+      (s.righe||[]).forEach(r => {
+        const tiriTot = N(r["Tiri"]), tiriPorta = N(r["Tiri in porta"]);
+        const dribRiusciti = N(r["Dribbling riusciti"]), dribFalliti = N(r["Dribbling falliti"]);
+        // Cartellini/rigori/punizioni/angoli sono nell'export aggiornato del 25/08/2026 come colonne dirette
+        // per giocatore (non serve più ricavarle dagli eventi): assenti = "non disponibile" (file vecchio
+        // stile partita_1.csv), presenti anche a "0" = dato vero. "Corner con goal"/"Corner senza goal"
+        // (nota: "goal", non "gol", in questa tabella) sono l'unico esito che Seven Lab dà per i corner,
+        // quindi qui non esiste un concetto di "precisione" separato dalla realizzazione.
+        const haDisciplina = r["Cartellini gialli"] !== undefined;
+        // "Tiri subiti rilevati" (03/09/2026, partita_3.csv): conteggio per giocatore dell'evento "Tiro
+        // subito" nella timeline — in pratica valorizzato solo per il portiere in campo. Assente negli export
+        // più vecchi: null (non 0), per non far sembrare un dato vero un semplice "non disponibile".
+        giocatoriRaw.push({
+          Match_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
+          Minuti_Giocati: N(r["Minuti giocati"]) * fm, Gol: N(r["Gol"]), Assist: N(r["Assist"]),
+          Tiri_In_Porta: tiriPorta, Tiri_Fuori: Math.max(0, tiriTot - tiriPorta),
+          Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
+          Dribbling_Tentati: dribRiusciti + dribFalliti, Dribbling_Falliti: dribFalliti,
+          Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"]), Note: "",
+          // "Palle perse" per giocatore (04/09/2026): colonna sempre presente nell'export Seven Lab ma
+          // rimasta finora non mappata (gap del punto 25 del playbook) — serve come asse del radar nuovo.
+          Palle_Perse: r["Palle perse"] !== undefined ? N(r["Palle perse"]) : null,
+          Tiri_Subiti_Rilevati: r["Tiri subiti rilevati"] !== undefined ? N(r["Tiri subiti rilevati"]) : null,
+          Cartellini_Gialli: haDisciplina ? N(r["Cartellini gialli"]) : null,
+          Cartellini_Rossi: haDisciplina ? N(r["Cartellini rossi"]) : null,
+          Angoli_Tentati: haDisciplina ? N(r["Calci angolo"]) : null,
+          Angoli_Gol: haDisciplina ? N(r["Corner con goal"]) : null,
+          Punizioni_Tentate: haDisciplina ? N(r["Punizioni tirate"]) : null,
+          Punizioni_Realizzate: haDisciplina ? N(r["Punizioni segnate"]) : null,
+          Rigori_Tentati: haDisciplina ? N(r["Rigori tirati"]) : null,
+          Rigori_Realizzati: haDisciplina ? N(r["Rigori segnati"]) : null
+        });
+      });
+    } else if(s.tipo === "allenamento"){
+      allenamentiRaw.push({
+        Sessione_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
+        Tipo_Allenamento: (s.meta["Formato"]||"").trim() || "Allenamento",
+        Durata_Minuti_Sessione: N(s.meta["Durata minuti"]) * fm, Note: "", Eventi: s.eventi || null,
+        DatiSpaziali: s.datiSpaziali || null,
+        StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
+        PossessoAvversario: s.possessoAvversario || null,
+        ScalaTempi: scala
+      });
+      // RPE (03/09/2026): da questa consegna Seven Lab può esportare un voto di durezza 1-10 assegnato
+      // dallo staff per l'intera sessione (chiave "RPE" nel blocco metadati, confermato sul primo file di
+      // prova reale con questo campo) — un solo numero per sessione, non uno per giocatore. Applicato a ogni
+      // giocatore presente con lo stesso minutaggio già usato altrove (Carico = minuti × RPE di sessione),
+      // esattamente il metodo session-RPE standard quando il voto è dato dallo staff invece che dal singolo
+      // giocatore. Assente/vuoto → null, non 0, per non attivare per errore il carico con un dato finto (N()
+      // da solo non basta perché restituisce 0 per l'assenza del campo, indistinguibile da un vero "0").
+      const rpeMetaGrezzo = s.meta["RPE"];
+      const rpeSessioneAssente = rpeMetaGrezzo === undefined || rpeMetaGrezzo === null || String(rpeMetaGrezzo).trim() === "";
+      const rpeSessione = rpeSessioneAssente ? null : N(rpeMetaGrezzo);
+      (s.righe||[]).forEach(r => {
+        presenzeRaw.push({
+          Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(),
+          Presente: "Sì", // ogni riga nel file = giocatore convocato/presente a quella sessione
+          Minuti_Allenamento: N(r["Minuti giocati"]) * fm, RPE: rpeSessione, Note: ""
+        });
+        // Seven Lab registra, nelle partitelle di allenamento (7 contro 7 interno), le stesse colonne "da
+        // partita" per ogni giocatore (gol, tiri, passaggi, dribbling, recuperi, parate): per molte squadre
+        // la maggior parte delle statistiche arriva proprio dagli allenamenti, non dalle partite vere. Le
+        // teniamo quindi anche qui, invece di scartarle come accadeva prima — ma sempre come cluster a
+        // parte rispetto a statAllenamentoRaw/giocatoriRaw (vedi assemblaDataset), mai mescolate insieme.
+        // Alcuni export potrebbero avere solo presenza/minuti senza le colonne di gioco (es. un formato
+        // Seven Lab più vecchio o un file compilato a mano): in quel caso non creiamo una riga finta a
+        // zeri, che sembrerebbe un dato vero, ma semplicemente non contribuiamo a statAllenamentoRaw.
+        const haStatGioco = r["Tiri"] !== undefined || r["Passaggi corretti"] !== undefined || r["Gol"] !== undefined;
+        if(haStatGioco){
+          const tiriTotAll = N(r["Tiri"]), tiriPortaAll = N(r["Tiri in porta"]);
+          const dribRiuscitiAll = N(r["Dribbling riusciti"]), dribFallitiAll = N(r["Dribbling falliti"]);
+          statAllenamentoRaw.push({
+            Sessione_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
+            Minuti_Giocati: N(r["Minuti giocati"]) * fm, Gol: N(r["Gol"]), Assist: N(r["Assist"]),
+            Tiri_In_Porta: tiriPortaAll, Tiri_Fuori: Math.max(0, tiriTotAll - tiriPortaAll),
+            Passaggi_Corretti: N(r["Passaggi corretti"]), Passaggi_Sbagliati: N(r["Passaggi sbagliati"]),
+            Dribbling_Tentati: dribRiuscitiAll + dribFallitiAll, Dribbling_Falliti: dribFallitiAll,
+            Recuperi: N(r["Recuperi"]), Parate: N(r["Parate"]),
+            Palle_Perse: r["Palle perse"] !== undefined ? N(r["Palle perse"]) : null
+          });
+        }
+      });
+    }
+  });
+  if(!partiteRaw.length && !allenamentiRaw.length) throw new Error("Nei file caricati non ho trovato né partite né allenamenti validi.");
+  const ds = assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw,
+    Presenze_Allenamento:presenzeRaw, Statistiche_Allenamento:statAllenamentoRaw});
+  ds.unioniNomi = unioniNomi;
+  return ds;
+}
+
+/* TIRI IN PORTA NON SEGNATI A PARTE (12/10/2026). Richiesta dell'utente: «non indico se un tiro va in porta
+   o no, segno solo se ha fatto un tiro e se ha fatto gol». In quei file Seven Lab mette "Tiro in porta" solo sui
+   gol, quindi Tiri_In_Porta = Gol per tutti e la precisione al tiro (tiri in porta / tiri) è lo STESSO numero
+   della realizzazione (gol / tiri): due assi, due righe, due grafici che dicono la stessa cosa. Regola:
+   se in tutto l'insieme (partite, oppure allenamenti) nessuna riga ha più tiri in porta che gol, il tiro in
+   porta non è rilevato → la precisione al tiro vale null e ovunque si mostra la sola realizzazione.
+   Basta UN tiro in porta senza gol per tenerla: succede per esempio nelle partitelle di allenamento quando
+   la parata del portiere è segnata, perché Seven Lab marca come "in porta" il tiro parato. Il flag sta su
+   ogni riga (TiriPortaRilevati) così aggregati, gruppi e riepiloghi di squadra lo ereditano da sé. */
+function segnaTiriPorta(righe){
+  const rilevati = (righe||[]).some(r => N(r.Tiri_In_Porta) > N(r.Gol));
+  (righe||[]).forEach(r => { r.TiriPortaRilevati = rilevati; if(!rilevati) r.Precisione_Tiro_pct = null; });
+  return rilevati;
+}
+/** false solo se le righe dicono esplicitamente che il tiro in porta non è rilevato (dati demo/Excel: true). */
+const tiriPortaRilevati = righe => !(righe||[]).some(r => r && r.TiriPortaRilevati === false);
+
+function derivaRiga(g, partita){
+  g.Tiri_Totali = g.Tiri_In_Porta + g.Tiri_Fuori;
+  g.Passaggi_Totali = g.Passaggi_Corretti + g.Passaggi_Sbagliati;
+  g.Dribbling_Riusciti = g.Dribbling_Tentati - g.Dribbling_Falliti;
+  g.Coinvolgimento_Gol = g.Gol + g.Assist;
+  g.Precisione_Tiro_pct = perc(g.Tiri_In_Porta, g.Tiri_Totali);
+  g.Efficacia_Realizzativa_pct = perc(g.Gol, g.Tiri_Totali);
+  g.Precisione_Passaggi_pct = perc(g.Passaggi_Corretti, g.Passaggi_Totali);
+  g.Successo_Dribbling_pct = perc(g.Dribbling_Riusciti, g.Dribbling_Tentati);
+  g.Errori_Totali = g.Passaggi_Sbagliati + g.Dribbling_Falliti;
+  g.Azioni_Totali = g.Passaggi_Totali + g.Dribbling_Tentati + g.Tiri_Totali;
+  g.Tasso_Errore_pct = perc(g.Errori_Totali, g.Azioni_Totali);
+  // Tasso di errore calcolato SOLO sui passaggi (sbagliati / tentati) — definizione chiesta esplicitamente
+  // dall'utente per il radar (04/09/2026), diversa da Tasso_Errore_pct qui sopra che è più ampio (include
+  // anche i dribbling falliti e mette a denominatore tutte le azioni). Le due convivono di proposito.
+  g.Tasso_Errore_Passaggi_pct = perc(g.Passaggi_Sbagliati, g.Passaggi_Totali);
+  g.Cartellini_Totali = g.Cartellini_Gialli!==null ? N(g.Cartellini_Gialli)+N(g.Cartellini_Rossi) : null;
+  g.Angoli_Realizzazione_pct = g.Angoli_Tentati!==null ? perc(g.Angoli_Gol, g.Angoli_Tentati) : null;
+  g.Realizzazione_Punizioni_pct = g.Punizioni_Tentate!==null ? perc(g.Punizioni_Realizzate, g.Punizioni_Tentate) : null;
+  g.Realizzazione_Rigori_pct = g.Rigori_Tentati!==null ? perc(g.Rigori_Realizzati, g.Rigori_Tentati) : null;
+  const m = g.Minuti_Giocati;
+  ["Gol","Assist","Coinvolgimento_Gol","Recuperi","Tiri_Totali","Dribbling_Tentati","Errori_Totali"].forEach(c => {
+    g[c+"_perPartita"] = m > 0 ? g[c]/m*MINUTI_PARTITA_INTERA : null;
+  });
+  g.Indice_Prestazione = indicePrestazione(g);
+  g.Data = partita ? partita.Data : null;
+  g.Mese = partita ? partita.Mese : null;
+  g.EtichettaPartita = partita ? partita.Etichetta : g.Match_ID;
+  g.OrdinePartita = partita ? partita.Ordine : null;
+  return g;
+}
+
+function aggregaGiocatori(righe){
+  const gruppi = new Map();
+  righe.forEach(r => {
+    if(!gruppi.has(r.Giocatore)) gruppi.set(r.Giocatore, {Giocatore:r.Giocatore, Ruolo:r.Ruolo, righe:[], match:new Set()});
+    const g = gruppi.get(r.Giocatore); g.righe.push(r); g.match.add(r.Match_ID);
+  });
+  const somma = (rs,c) => rs.reduce((a,r)=>a+N(r[c]),0);
+  return Array.from(gruppi.values()).map(g => {
+    const rs = g.righe;
+    const a = {Giocatore:g.Giocatore, Ruolo:g.Ruolo, Partite_Giocate:g.match.size,
+      Minuti_Totali:somma(rs,"Minuti_Giocati"), Gol:somma(rs,"Gol"), Assist:somma(rs,"Assist"),
+      Tiri_In_Porta:somma(rs,"Tiri_In_Porta"), Tiri_Fuori:somma(rs,"Tiri_Fuori"),
+      Passaggi_Corretti:somma(rs,"Passaggi_Corretti"), Passaggi_Sbagliati:somma(rs,"Passaggi_Sbagliati"),
+      Dribbling_Tentati:somma(rs,"Dribbling_Tentati"), Dribbling_Falliti:somma(rs,"Dribbling_Falliti"),
+      Recuperi:somma(rs,"Recuperi"), Parate:somma(rs,"Parate"), Palle_Perse:somma(rs,"Palle_Perse"),
+      Cartellini_Gialli:somma(rs,"Cartellini_Gialli"), Cartellini_Rossi:somma(rs,"Cartellini_Rossi"),
+      Angoli_Tentati:somma(rs,"Angoli_Tentati"), Angoli_Gol:somma(rs,"Angoli_Gol"),
+      Punizioni_Tentate:somma(rs,"Punizioni_Tentate"), Punizioni_Realizzate:somma(rs,"Punizioni_Realizzate"),
+      Rigori_Tentati:somma(rs,"Rigori_Tentati"), Rigori_Realizzati:somma(rs,"Rigori_Realizzati"),
+      Indice_Prestazione_Tot:rs.reduce((s,r)=>s+r.Indice_Prestazione,0),
+      serieIndice: rs.slice().sort((x,y)=>(x.Data?x.Data:0)-(y.Data?y.Data:0)).map(r=>r.Indice_Prestazione)
+    };
+    a.Tiri_Totali = a.Tiri_In_Porta + a.Tiri_Fuori;
+    a.Passaggi_Totali = a.Passaggi_Corretti + a.Passaggi_Sbagliati;
+    a.Dribbling_Riusciti = a.Dribbling_Tentati - a.Dribbling_Falliti;
+    a.Coinvolgimento_Gol = a.Gol + a.Assist;
+    a.Errori_Totali = a.Passaggi_Sbagliati + a.Dribbling_Falliti;
+    a.Azioni_Totali = a.Passaggi_Totali + a.Dribbling_Tentati + a.Tiri_Totali;
+    a.TiriPortaRilevati = tiriPortaRilevati(rs);
+    a.Precisione_Tiro_pct = a.TiriPortaRilevati ? perc(a.Tiri_In_Porta, a.Tiri_Totali) : null;
+    a.Efficacia_Realizzativa_pct = perc(a.Gol, a.Tiri_Totali);
+    a.Precisione_Passaggi_pct = perc(a.Passaggi_Corretti, a.Passaggi_Totali);
+    a.Successo_Dribbling_pct = perc(a.Dribbling_Riusciti, a.Dribbling_Tentati);
+    a.Tasso_Errore_pct = perc(a.Errori_Totali, a.Azioni_Totali);
+    a.Tasso_Errore_Passaggi_pct = perc(a.Passaggi_Sbagliati, a.Passaggi_Totali); // vedi derivaRiga
+    a.Cartellini_Totali = a.Cartellini_Gialli + a.Cartellini_Rossi;
+    a.Angoli_Realizzazione_pct = perc(a.Angoli_Gol, a.Angoli_Tentati);
+    a.Realizzazione_Punizioni_pct = perc(a.Punizioni_Realizzate, a.Punizioni_Tentate);
+    a.Realizzazione_Rigori_pct = perc(a.Rigori_Realizzati, a.Rigori_Tentati);
+    a.Indice_Prestazione_Medio = a.Partite_Giocate>0 ? a.Indice_Prestazione_Tot/a.Partite_Giocate : null;
+    return a;
+  }).sort((x,y)=> y.Indice_Prestazione_Tot - x.Indice_Prestazione_Tot);
+}
+
+/* =====================================================================
+   RADAR PER RUOLO (04/09/2026, richiesta esplicita dell'utente)
+   Un portiere e un attaccante non si leggono con gli stessi assi: il radar della vista Giocatore cambia
+   quindi in base al ruolo. Ogni asse dichiara come si estrae il valore VERO, come si scrive, e se "meno è
+   meglio" (`invertito`, marcato con ↓ nell'etichetta).
+   Perché normalizziamo: gli assi chiesti mescolano conteggi (tiri, passaggi, recuperi) e percentuali, che su
+   un unico radar 0-100 non sarebbero confrontabili (3 recuperi e 3% starebbero allo stesso raggio). Il raggio
+   disegnato è quindi sempre un punteggio 0-100 relativo — 100 = miglior valore della rosa nel periodo su
+   quell'asse — mentre i numeri veri restano nella tabella sotto il radar, che è ciò che si legge davvero.
+   ===================================================================== */
+function ruoloPortiere(ruolo){ return /portier/i.test(String(ruolo||"")); }
+
+/** Assi del radar per un ruolo. `val(riga, statPortiere)` legge il valore vero da una riga aggregata
+ *  (aggregaGiocatori) o dalla riga "pool" del gruppo di confronto; `fmt` lo scrive per la tabella. */
+function assiRadarPerRuolo(ruolo){
+  if(ruoloPortiere(ruolo)) return [
+    // le parate arrivano dallo stesso conteggio dei tiri subiti, così i quattro numeri del portiere
+    // (tiri subiti = parate + gol subiti + eventuali tiri né parati né entrati) sono sempre coerenti
+    {k:"parate",    et:"Parate",         conteggio:true,
+     val:(r,g)=> g ? g.parate : N(r.Parate),                                                       fmt:v=>nf0(v)},
+    {k:"tiriSubiti",et:"Tiri subiti",    conteggio:true, volume:true,
+     val:(r,g)=> g ? g.tiriSubitiTotali : null,                                                    fmt:v=>v===null?"—":nf0(v)},
+    {k:"paratePct", et:"Parate %",       pct:true,
+     val:(r,g)=> g ? perc(N(r.Parate), g.tiriSubitiTotali) : null,                                 fmt:v=>pctTxt(v,0)},
+    {k:"golSubiti", et:"Gol subiti ↓",   conteggio:true, invertito:true,
+     val:(r,g)=> g ? g.golSubiti : null,                                                           fmt:v=>v===null?"—":nf0(v)},
+    {k:"passOk",    et:"Passaggi OK",    conteggio:true, val:r=>N(r.Passaggi_Corretti),            fmt:v=>nf0(v)},
+    {k:"passPct",   et:"Passaggi %",     pct:true, val:r=>r.Precisione_Passaggi_pct,               fmt:v=>pctTxt(v,0)}
+  ];
+  return [
+    {k:"tiri",      et:"Tiri",           conteggio:true, val:r=>N(r.Tiri_Totali),                  fmt:v=>nf0(v)},
+    {k:"tiriPorta", et:"Tiri in porta %",pct:true, val:r=>r.Precisione_Tiro_pct,                   fmt:v=>pctTxt(v,0)},
+    {k:"realizz",   et:"Realizzazione %",pct:true, val:r=>r.Efficacia_Realizzativa_pct,            fmt:v=>pctTxt(v,0)},
+    {k:"passPct",   et:"Passaggi %",     pct:true, val:r=>r.Precisione_Passaggi_pct,               fmt:v=>pctTxt(v,0)},
+    {k:"passOk",    et:"N. passaggi OK", conteggio:true, val:r=>N(r.Passaggi_Corretti),            fmt:v=>nf0(v)},
+    {k:"perse",     et:"Palle perse ↓",  conteggio:true, invertito:true, val:r=>N(r.Palle_Perse),  fmt:v=>nf0(v)},
+    {k:"recuperi",  et:"Recuperi",       conteggio:true, val:r=>N(r.Recuperi),                     fmt:v=>nf0(v)},
+    {k:"dribbling", et:"Dribbling %",    pct:true, val:r=>r.Successo_Dribbling_pct,
+     fmt:(v,r)=> r ? `${pctTxt(v,0)} (${nf0(r.Dribbling_Riusciti)}/${nf0(r.Dribbling_Tentati)})` : pctTxt(v,0)},
+    {k:"errore",    et:"Errore pass. ↓", pct:true, invertito:true, val:r=>r.Tasso_Errore_Passaggi_pct,
+     fmt:v=>pctTxt(v,0)}
+  ];
+}
+
+/** Fonde più righe aggregate (aggregaGiocatori) in un'unica riga "pool" che rappresenta il gruppo di
+ *  confronto: i conteggi diventano la MEDIA per giocatore del gruppo (non la somma, che confrontata col
+ *  singolo sarebbe sempre schiacciante), le percentuali si ricalcolano sui totali sommati (non come media
+ *  di percentuali, che darebbe più peso a chi ha giocato meno). Torna null se il gruppo è vuoto. */
+function poolGiocatori(righeAgg){
+  const righe = righeAgg || [];
+  if(!righe.length) return null;
+  const n = righe.length;
+  const s = c => righe.reduce((t,r)=>t+N(r[c]),0);
+  const somme = {
+    Gol:s("Gol"), Assist:s("Assist"), Tiri_In_Porta:s("Tiri_In_Porta"), Tiri_Fuori:s("Tiri_Fuori"),
+    Passaggi_Corretti:s("Passaggi_Corretti"), Passaggi_Sbagliati:s("Passaggi_Sbagliati"),
+    Dribbling_Tentati:s("Dribbling_Tentati"), Dribbling_Falliti:s("Dribbling_Falliti"),
+    Recuperi:s("Recuperi"), Parate:s("Parate"), Palle_Perse:s("Palle_Perse"), Minuti_Totali:s("Minuti_Totali")
+  };
+  const p = {nGiocatori:n};
+  // conteggi → media per giocatore del gruppo
+  ["Gol","Assist","Recuperi","Parate","Palle_Perse","Passaggi_Corretti","Minuti_Totali"].forEach(c => p[c] = somme[c]/n);
+  p.Tiri_Totali = (somme.Tiri_In_Porta + somme.Tiri_Fuori)/n;
+  p.Dribbling_Riusciti = (somme.Dribbling_Tentati - somme.Dribbling_Falliti)/n;
+  p.Dribbling_Tentati = somme.Dribbling_Tentati/n;
+  // percentuali → ricalcolate sui totali sommati del gruppo
+  p.TiriPortaRilevati = tiriPortaRilevati(righe);
+  p.Precisione_Tiro_pct = p.TiriPortaRilevati ? perc(somme.Tiri_In_Porta, somme.Tiri_In_Porta + somme.Tiri_Fuori) : null;
+  p.Efficacia_Realizzativa_pct = perc(somme.Gol, somme.Tiri_In_Porta + somme.Tiri_Fuori);
+  p.Precisione_Passaggi_pct = perc(somme.Passaggi_Corretti, somme.Passaggi_Corretti + somme.Passaggi_Sbagliati);
+  p.Successo_Dribbling_pct = perc(somme.Dribbling_Tentati - somme.Dribbling_Falliti, somme.Dribbling_Tentati);
+  p.Tasso_Errore_Passaggi_pct = perc(somme.Passaggi_Sbagliati, somme.Passaggi_Corretti + somme.Passaggi_Sbagliati);
+  return p;
+}
+
+/** Statistiche portiere sull'intero periodo, calcolate partita per partita, così parate / tiri subiti /
+ *  gol subiti coprono sempre LO STESSO insieme di gare (bug trovato nell'audit del 04/09/2026: prima le
+ *  parate arrivavano dalla tabella giocatori — tutte le partite — mentre i tiri subiti dalla sola sezione
+ *  «STATISTICHE PORTIERI GAME», presente in un file solo, e i due numeri non tornavano tra loro: 4 parate
+ *  su 4 tiri subiti ma anche 1 gol subito).
+ *  Per ogni partita: se il file ha la sezione dedicata si usa il dato rilevato; altrimenti si stima come
+ *  descritto dall'utente per la modalità live — le parate del portiere più i gol che la squadra ha subito
+ *  in quella gara. Se in una partita hanno giocato due portieri i gol subiti vanno a chi ha giocato più
+ *  minuti (approssimazione dichiarata: i file non dicono quale gol ha incassato quale portiere).
+ *  Torna una mappa nome → {tiriSubitiTotali, parate, golSubiti, stimato}. */
+function statistichePortieriPeriodo(partite, righeGiocatori){
+  const perNome = new Map();
+  const aggiungi = (nome, dati, stimato) => {
+    if(!nome) return;
+    const a = perNome.get(nome) || {tiriSubitiTotali:0, parate:0, golSubiti:0, stimato:false};
+    a.tiriSubitiTotali += N(dati.tiriSubitiTotali); a.parate += N(dati.parate); a.golSubiti += N(dati.golSubiti);
+    a.stimato = a.stimato || stimato;
+    perNome.set(nome, a);
+  };
+  (partite||[]).forEach(p => {
+    const daSezione = statistichePortieriDaSessione(p).portieri;
+    if(daSezione.length){
+      daSezione.forEach(r => aggiungi(r.portiere, {tiriSubitiTotali:r.totaleAffrontati, parate:r.parate, golSubiti:r.golSubiti}, false));
+      return;
+    }
+    const portieriInGara = (righeGiocatori||[])
+      .filter(g => g.Match_ID === p.Match_ID && ruoloPortiere(g.Ruolo))
+      .sort((a,b) => N(b.Minuti_Giocati) - N(a.Minuti_Giocati));
+    portieriInGara.forEach((g, i) => {
+      const gol = i === 0 ? N(p.Gol_Subiti) : 0; // solo al portiere con più minuti, vedi nota sopra
+      const parate = N(g.Parate);
+      if(parate === 0 && gol === 0) return;
+      aggiungi(g.Giocatore, {tiriSubitiTotali: parate + gol, parate, golSubiti: gol}, true);
+    });
+  });
+  return perNome;
+}
+
+/** Calcola i punti del radar: per ogni asse il valore vero del giocatore, quello del gruppo di confronto e
+ *  i due punteggi 0-100 normalizzati sul miglior valore della rosa (`righeRosa`) su quell'asse. Gli assi
+ *  `invertito` (meno è meglio) hanno il punteggio ribaltato, così "area più grande = meglio" resta vero su
+ *  tutto il grafico. Gli assi per cui nessuno della rosa ha un dato vengono scartati. */
+function datiRadarGiocatore(rigaGiocatore, rigaConfronto, righeRosa, ctxPortiere){
+  const assi = assiRadarPerRuolo(rigaGiocatore.Ruolo);
+  const statDi = riga => ctxPortiere ? ctxPortiere(riga) : null;
+  const out = [];
+  assi.forEach(asse => {
+    const vGioc = asse.val(rigaGiocatore, statDi(rigaGiocatore));
+    const vConf = rigaConfronto ? asse.val(rigaConfronto, statDi(rigaConfronto)) : null;
+    const valoriRosa = (righeRosa||[]).map(r => asse.val(r, statDi(r))).filter(v => v !== null && Number.isFinite(v));
+    if(vGioc === null && vConf === null && !valoriRosa.length) return; // nessuno ha questo dato: asse inutile
+    const max = valoriRosa.length ? Math.max(...valoriRosa) : 0;
+    const punteggio = v => {
+      if(v === null || !Number.isFinite(v)) return 0;
+      const quota = max > 0 ? Math.min(1, v/max) : 0;
+      return asse.invertito ? Math.round((1-quota)*100) : Math.round(quota*100);
+    };
+    out.push({
+      chiave: asse.k, etichetta: asse.et, invertito: !!asse.invertito, volume: !!asse.volume,
+      valore: vGioc, valoreConfronto: vConf,
+      testo: vGioc===null ? "—" : asse.fmt(vGioc, rigaGiocatore),
+      testoConfronto: (vConf===null || !rigaConfronto) ? "—" : asse.fmt(vConf, rigaConfronto),
+      punteggio: punteggio(vGioc), punteggioConfronto: punteggio(vConf)
+    });
+  });
+  return out;
+}
+
+/* =====================================================================
+   IMPATTO DEI SUBENTRATI (04/09/2026, richiesta esplicita dell'utente)
+   "Quali sono i giocatori che da subentrati non solo rendono meglio, ma hanno maggiore impatto."
+   Il dato che rende possibile la domanda è la colonna "Cambio entra" della TIMELINE EVENTI, che Seven Lab
+   valorizza a 1 sulla riga dell'ingresso in campo, con il minuto in "Secondo totale": da lì si sa CHI è
+   entrato a partita in corso e QUANDO. Chi ha giocato senza avere un ingresso registrato è considerato
+   titolare. Poiché tutto quello che un subentrato fa in quella gara lo fa dopo essere entrato, le sue
+   statistiche di quella partita sono per intero "da subentrato": non serve spezzare i dati per tempo.
+   ===================================================================== */
+/** Durata di una partita intera di calcio a 7: due tempi da 25 minuti (04/09/2026, segnalato da Elisa —
+ *  prima era normalizzato "per 90'" come nel calcio a 11, un riferimento che qui non esiste e che gonfiava
+ *  ogni valore di quasi il doppio). Se il campionato dovesse cambiare formato basta cambiare questo numero:
+ *  è l'unico posto in cui la durata di riferimento è scritta. Il recupero non si conta: è variabile e non
+ *  è registrato nei file, e includerlo cambierebbe la scala da una partita all'altra. */
+const MINUTI_PARTITA_INTERA = (DURATA_TEMPO_REGOLAMENTARE_SEC/60)*2; // = 50: due tempi regolamentari
+/* =====================================================================
+   TEMPO DI RICONQUISTA DELLA PALLA (07/10/2026, richiesta dell'utente)
+   Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso. È la misura della reattività nella
+   transizione negativa: una squadra che riconquista entro pochi secondi sta riaggredendo, una che ci mette
+   venti secondi si è riordinata e ha lasciato giocare l'avversario.
+
+   COME SI CALCOLA: per ogni "palla persa" della nostra squadra si cerca il primo "recupero" nostro che
+   arriva dopo. L'intervallo fra i due è il tempo di riconquista di quella sequenza. Non servono dati nuovi:
+   entrambi gli eventi sono già nella timeline.
+
+   LE QUATTRO REGOLE CHE EVITANO I NUMERI FINTI:
+   1. Mai a cavallo dell'intervallo. Una palla persa al 24' e un recupero al 26' del secondo tempo non sono
+      la stessa sequenza di gioco: sono separate da quindici minuti di spogliatoio.
+   2. Un gol chiude la sequenza. Se fra la perdita e il recupero la palla finisce in rete (da una parte o
+      dall'altra), quella sequenza non è finita con una riconquista: si gioca da fermo. Contarla darebbe un
+      tempo lunghissimo che non misura niente.
+   3. Oltre la soglia, non è una riconquista. Dopo 60 secondi senza riprendere palla non si sta più parlando
+      di transizione ma di un'altra fase di gioco. Quelle sequenze si contano a parte ("non riconquistate"),
+      non si mediano: includerle gonfierebbe la media proprio con i casi peggiori travestiti da numero.
+   4. La mediana prima della media. La distribuzione è asimmetrica — tante riconquiste rapide e poche
+      lunghissime — e la media si lascia trascinare dalla coda. La mediana descrive la sequenza tipica.
+
+   DIPENDE DALLA PRECISIONE DEI TEMPI, e molto. Dal vivo ogni evento è registrato con qualche secondo di
+   ritardo variabile, e qui i ritardi sono DUE (sulla perdita e sul recupero), dello stesso ordine di
+   grandezza della cosa misurata. Per le sessioni in diretta il dato va letto come indicativo; da video con i
+   tempi corretti diventa accurato. La sezione lo dichiara invece di lasciarlo intuire.
+   ===================================================================== */
+const RICONQUISTA_SOGLIA_SEC = 60;      // oltre: sequenza non riconquistata (regola 3)
+const RICONQUISTA_IMMEDIATA_SEC = 5;    // riaggressione: standard diffuso nell'analisi del calcio
+const RICONQUISTA_RAPIDA_SEC = 10;
+const RICONQUISTA_CAMPIONE_MINIMO = 8;  // sotto: niente mediana, solo i casi grezzi
+
+/** Sequenze perdita → riconquista di UNA partita. Torna null se la timeline non è utilizzabile. */
+function sequenzeRiconquista(partita){
+  const norm = normalizzaEventiSevenLab({eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
+  if(norm.formato === "nessuno" || !norm.eventi.length) return null;
+  const nostra = e => String((e.raw && (e.raw.Team ?? e.raw.Squadra)) || "A").trim().toUpperCase() !== "B";
+  const classifica = e => e.formato === "nuovo"
+    ? classificaEventoRigaNuovoFormato(e.raw)
+    : classificaEventoSevenLab(e.raw.Tipo);
+
+  // Anche un gol SUBITO chiude la sequenza (12/10/2026): la riga «Gol subito» non è nel vocabolario del
+  // possesso e veniva scartata, quindi dopo un gol preso il primo recupero successivo al calcio d'inizio
+  // finiva contato come «riconquista» della palla persa prima del gol. Stesso riconoscimento della sezione
+  // "palle perse che diventano gol" (latoCheSubisce).
+  const eventi = norm.eventi
+    .map(e => ({...e, cl: classifica(e) || (latoCheSubisce(e, "partita") ? {type:"GOAL", outcome:null} : null)}))
+    .filter(e => e.cl && isFinite(e.secondoAssoluto))
+    .sort((a,b) => a.secondoAssoluto - b.secondoAssoluto);
+
+  const sequenze = [];
+  for(let i = 0; i < eventi.length; i++){
+    const e = eventi[i];
+    if(!(e.cl.type === "BALL_LOST" && nostra(e))) continue;
+    let esito = null;
+    for(let j = i+1; j < eventi.length; j++){
+      const f = eventi[j];
+      if(f.periodo !== e.periodo){ esito = {tipo:"fine-tempo"}; break; }            // regola 1
+      if(f.cl.type === "GOAL"){ esito = {tipo:"gol"}; break; }                       // regola 2
+      const dt = f.secondoAssoluto - e.secondoAssoluto;
+      if(dt > RICONQUISTA_SOGLIA_SEC){ esito = {tipo:"oltre-soglia"}; break; }        // regola 3
+      if(f.cl.type === "RECOVERY" && nostra(f)){ esito = {tipo:"riconquista", secondi:dt}; break; }
+    }
+    if(!esito) esito = {tipo:"fine-dati"};
+    sequenze.push({periodo:e.periodo, secondoPerdita:e.secondoAssoluto,
+      giocatorePerdita:(e.raw.Giocatore||"").trim(), esito});
+  }
+  return sequenze;
+}
+
+const mediana = arr => {
+  if(!arr || !arr.length) return null;
+  const a = arr.slice().sort((x,y)=>x-y), m = Math.floor(a.length/2);
+  return a.length % 2 ? a[m] : (a[m-1]+a[m])/2;
+};
+
+/** Riepilogo su un elenco di partite. */
+function analizzaRiconquista(partite){
+  const tutte = [];
+  let senzaTimeline = 0, inDiretta = 0, inDifferitaNonCorretta = 0;
+  (partite||[]).forEach(p => {
+    const sq = sequenzeRiconquista(p);
+    if(!sq){ senzaTimeline++; return; }
+    const sc = p.ScalaTempi;
+    if(!sc || sc.metodo === "diretta" || sc.metodo === null) inDiretta++;
+    else if(sc.metodo === "differita" && !sc.applicata) inDifferitaNonCorretta++;
+    sq.forEach(x => tutte.push({...x, partita:p}));
+  });
+  if(!tutte.length) return null;
+
+  const riconquistate = tutte.filter(x => x.esito.tipo === "riconquista");
+  const tempi = riconquistate.map(x => x.esito.secondi);
+  const perPeriodo = n => {
+    const t = riconquistate.filter(x => x.periodo === n).map(x => x.esito.secondi);
+    return t.length ? {n:t.length, mediana:mediana(t), media:t.reduce((a,b)=>a+b,0)/t.length} : null;
+  };
+  const fascia = (min, max) => tempi.filter(t => t >= min && t < max).length;
+
+  return {
+    sequenze: tutte.length,
+    riconquistate: riconquistate.length,
+    nonRiconquistate: tutte.filter(x => x.esito.tipo === "oltre-soglia").length,
+    chiuseDaGol: tutte.filter(x => x.esito.tipo === "gol").length,
+    chiuseDaFineTempo: tutte.filter(x => x.esito.tipo === "fine-tempo" || x.esito.tipo === "fine-dati").length,
+    mediana: mediana(tempi),
+    media: tempi.length ? tempi.reduce((a,b)=>a+b,0)/tempi.length : null,
+    entroImmediata: tempi.filter(t => t <= RICONQUISTA_IMMEDIATA_SEC).length,
+    entroRapida: tempi.filter(t => t <= RICONQUISTA_RAPIDA_SEC).length,
+    fasce: [
+      {eti:`0-${RICONQUISTA_IMMEDIATA_SEC}s · riaggressione`, n:fascia(0, RICONQUISTA_IMMEDIATA_SEC+0.001)},
+      {eti:`${RICONQUISTA_IMMEDIATA_SEC}-${RICONQUISTA_RAPIDA_SEC}s · rapida`, n:fascia(RICONQUISTA_IMMEDIATA_SEC+0.001, RICONQUISTA_RAPIDA_SEC+0.001)},
+      {eti:`${RICONQUISTA_RAPIDA_SEC}-20s · riordinata`, n:fascia(RICONQUISTA_RAPIDA_SEC+0.001, 20)},
+      {eti:`20-${RICONQUISTA_SOGLIA_SEC}s · lenta`, n:fascia(20, RICONQUISTA_SOGLIA_SEC+0.001)}
+    ],
+    tempo1: perPeriodo(1), tempo2: perPeriodo(2),
+    qualita: {senzaTimeline, inDiretta, inDifferitaNonCorretta, partiteAnalizzate: (partite||[]).length - senzaTimeline}
+  };
+}
+
+/* =====================================================================
+   PALLE PERSE CHE DIVENTANO GOL SUBITI (10/10/2026)
+   Richiesta esplicita dell'utente: «una lettura di quali palle perse portano a un gol avversario, quando la
+   correlazione tra un evento palla persa e un gol è breve, io direi 15 secondi [...] è necessario che sia
+   indicato nelle insight quel giocatore! ci servirà a capire quale giocatore tende a essere meno accurato in
+   situazione di pressing avversario». Sia in partita (Game) sia in allenamento (Live).
+
+   COME SI ATTRIBUISCE UN GOL A UNA PALLA PERSA. Si parte da ogni gol subito e si guarda INDIETRO, non dalla
+   palla persa in avanti: un gol si attribuisce all'ULTIMA palla persa della squadra che lo subisce, se è
+   avvenuta al massimo 15 secondi prima, nello stesso tempo di gioco, e se in mezzo quella squadra non ha
+   mai riavuto la palla. "Riavuto la palla" = un suo recupero, un suo passaggio/dribbling/tiro, oppure una
+   palla persa dell'avversario. Guardare indietro dall'ultima perdita evita l'errore classico di questo
+   tipo di conteggio: perdo palla, la riprendo subito, la perde un compagno, gol — senza la regola, il gol
+   verrebbe dato a entrambi, e il primo non c'entra nulla.
+   Passaggi sbagliati e dribbling falliti NON contano come palla persa: l'utente ha chiesto dell'evento
+   «palla persa», ed è anche la scelta coerente col motore del possesso, dove solo quell'evento passa il
+   pallone all'avversario. Un passaggio sbagliato fra la perdita e il gol, però, spezza l'attribuzione:
+   vuol dire che la squadra aveva di nuovo la palla, e il gol viene da quell'errore, non dalla perdita.
+
+   CHI SUBISCE IL GOL. In partita la timeline ha una colonna "Gol subito" (scritta da Seven Lab sul portiere
+   della squadra che subisce) e l'avversario può avere anche una propria riga "Gol": entrambe valgono, e due
+   segnali dello stesso gol a pochi secondi di distanza vengono fusi in uno. In allenamento le due squadre
+   sono entrambe interne: un gol di una delle due è subito dall'altra, e la palla persa che lo ha generato
+   è di un tuo giocatore in ogni caso — quindi si contano i gol di entrambe le parti.
+   ===================================================================== */
+const PERSA_GOL_FINESTRA_SEC = 15;
+const PERSA_GOL_FUSIONE_SEC = 10; // due segnali dello stesso gol (Gol subito + Gol avversario, rigore + Gol)
+
+/** Una riga della timeline segna un «gol subito»? Tollerante sul nome ("Gol subito", "Goal subito",
+ *  "Gol subito avversario"...), ma non confonde "Tiro subito". */
+function rigaGolSubito(r){
+  return Object.keys(r||{}).some(k => /^(gol|goal)\s*subit/i.test(String(k).trim()) && String(r[k]).trim() === "1");
+}
+/** Lato che SUBISCE il gol scritto in una riga della timeline: "A", "B" oppure null se la riga non è un gol.
+ *  CORRETTO IL 12/10/2026 sul primo file vero di Elisa (partita del 11/10 contro OLC): la versione
+ *  1.33.0 assumeva che «Gol subito» fosse scritto sul NOSTRO portiere (Team A) e ne deduceva che subisce la
+ *  squadra della riga. Nel file vero invece la riga «Gol subito» porta il nostro portiere ma con Team B
+ *  (verificato su partita_1.csv il 12/10: «Lorenzo Baù», B, sette righe per sette gol subiti): il sistema
+ *  concludeva che a subire fosse l'avversario e scartava tutti i gol subiti — la
+ *  sezione diceva «nessun gol subito» su una partita che ne aveva. «Gol subito», in partita, è per
+ *  definizione un gol preso dalla NOSTRA squadra, qualunque sia la squadra scritta sulla riga. In
+ *  allenamento le due squadre sono entrambe interne e il gol di ciascuna è già nella colonna «Gol»: lì
+ *  «Gol subito» non si usa, per non contare due volte lo stesso gol dalla parte sbagliata. */
+function latoCheSubisce(e, tipo){
+  const r = e.raw || {};
+  const team = String(r.Team ?? r.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const altro = team === "A" ? "B" : "A";
+  if(e.formato === "nuovo"){
+    if(rigaGolSubito(r)) return tipo === "partita" ? "A" : null;
+    const cl = classificaEventoRigaNuovoFormato(r);
+    return (cl && cl.type === "GOAL") ? altro : null;
+  }
+  const t = String(r.Tipo||"").trim().toLowerCase();
+  if(/gol subit|goal subit/.test(t)) return tipo === "partita" ? "A" : null;
+  return /^gol$/.test(t) ? altro : null;
+}
+
+/** Abbina ogni palla persa della timeline alla sua posizione in DATI SPAZIALI, quando c'è. Stessa regola già
+ *  usata per assegnare il tempo ai punti di campo (assegnaPeriodoEventiZona): nessun identificativo comune
+ *  fra le due sezioni, quindi l'abbinamento è per giocatore + squadra, nell'ordine in cui compaiono. Torna
+ *  una Map indice-originale-della-riga → {x, y}. */
+function posizioniPallePerse(eventiGrezzi, datiSpaziali){
+  const code = new Map();
+  estraiEventiZonaGrezzi({datiSpaziali}).filter(p => p.tipo === "persa").forEach(p => {
+    const k = String(p.giocatore||"").trim()+"|"+p.team;
+    if(!code.has(k)) code.set(k, []);
+    code.get(k).push(p);
+  });
+  const fuori = new Map();
+  if(!code.size) return fuori;
+  (eventiGrezzi||[]).forEach(e => {
+    const cl = e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo);
+    if(!cl || cl.type !== "BALL_LOST") return;
+    const team = String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+    const coda = code.get(String(e.raw.Giocatore||"").trim()+"|"+team);
+    if(coda && coda.length) fuori.set(e.idxOriginale, coda.shift());
+  });
+  return fuori;
+}
+/** Zona 3×3 da una posizione normalizzata (stesse regole e stesse parole della griglia di campo e di "Dove
+ *  perde palla": terzo dalla X, fascia dalla Y), per esempio «terzo difensivo, sinistra». Dal 12/10/2026 la
+ *  sezione palle perse → gol usa questa invece del solo terzo: l'utente vuole sapere IN QUALE ZONA si perdono
+ *  i palloni che diventano gol, e il terzo da solo non lo dice. */
+function zonaCampoDaPunto(x, y){
+  if(!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  const col = Math.min(2, Math.max(0, Math.floor((x / CAMPO_LUNGHEZZA_M) * 3)));
+  const riga = Math.min(2, Math.max(0, Math.floor((y / CAMPO_LARGHEZZA_M) * 3)));
+  return `terzo ${["difensivo","centrale","offensivo"][col]}, ${["sinistra","centro","destra"][riga]}`;
+}
+/** Terzo di campo da una X normalizzata (0 = propria porta di chi perde palla, 50 = porta avversaria). */
+function terzoDaX(x){
+  if(!Number.isFinite(x)) return null;
+  return x < CAMPO_LUNGHEZZA_M/3 ? "terzo difensivo" : (x < CAMPO_LUNGHEZZA_M*2/3 ? "terzo centrale" : "terzo offensivo");
+}
+
+/** Gol subiti di una sessione, da eventi già classificati e ordinati per tempo (campi `subisce`, `lato`,
+ *  `secondoAssoluto`, `periodo`, `raw`), fusi quando lo stesso gol compare in più righe. Il marcatore viene solo
+ *  da una riga «Gol» della squadra che segna. La riga «Gol subito» porta il NOSTRO portiere — nel file vero
+ *  dell'11/10 «Lorenzo Baù», con squadra B — e mai chi ha segnato: mostrarlo come marcatore sarebbe sbagliato.
+ *  In partita contano solo i gol presi dalla nostra squadra (A), in allenamento quelli di entrambe le squadre.
+ *  Usata dalle palle perse → gol e da «gol subiti e chi è in campo», così le due sezioni contano gli stessi gol. */
+function golDaEventiClassificati(eventi, tipo, lati){
+  // `lati` (facoltativo, 16/10/2026): quali squadre che subiscono tenere. In partita, ["A","B"] dà anche i gol
+  // FATTI dalla nostra squadra (quelli che subisce B), che servono alle formazioni.
+  const latiInteressati = lati || (tipo === "partita" ? ["A"] : ["A","B"]);
+  const gol = [];
+  const marcatoreDi = e => (!rigaGolSubito(e.raw) && e.lato !== e.subisce) ? (String(e.raw.Giocatore||"").trim() || null) : null;
+  (eventi||[]).forEach((e, i) => {
+    if(!e.subisce || !latiInteressati.includes(e.subisce)) return;
+    const doppione = gol.find(g => g.subisce === e.subisce && Math.abs(g.t - e.secondoAssoluto) <= PERSA_GOL_FUSIONE_SEC);
+    if(doppione){ if(!doppione.marcatore) doppione.marcatore = marcatoreDi(e); return; }
+    gol.push({i, t:e.secondoAssoluto, periodo:e.periodo, subisce:e.subisce, marcatore: marcatoreDi(e)});
+  });
+  return gol;
+}
+
+/** Episodi "palla persa → gol subito entro 15 secondi" di UNA sessione. `tipo`: "partita" (contano solo i gol
+ *  subiti dalla nostra squadra, Team A) o "allenamento" (contano i gol di entrambe le squadre interne).
+ *  Ritorna null se la sessione non ha una timeline utilizzabile. */
+function episodiPersaGolSessione(sessione, tipo){
+  const norm = normalizzaEventiSevenLab({eventi: sessione.Eventi, riepilogoTempi: sessione.RiepilogoTempi});
+  if(norm.formato === "nessuno" || !norm.eventi.length) return null;
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = norm.eventi
+    .filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: e.formato === "nuovo" ? classificaEventoRigaNuovoFormato(e.raw) : classificaEventoSevenLab(e.raw.Tipo),
+      subisce: latoCheSubisce(e, tipo), lato: lato(e)}))
+    .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  const latiInteressati = tipo === "partita" ? ["A"] : ["A","B"];
+  const gol = golDaEventiClassificati(eventi, tipo);
+
+  const posizioni = posizioniPallePerse(norm.eventi, sessione.DatiSpaziali);
+  const episodi = [], senzaPersa = [];
+  const nomeEvento = e => {
+    const c = e.cl || {};
+    if(c.type === "RECOVERY") return "recupero";
+    if(c.type === "PASS") return c.outcome === "SUCCESS" ? "passaggio riuscito" : "passaggio sbagliato";
+    if(c.type === "DRIBBLE") return c.outcome === "SUCCESS" ? "dribbling riuscito" : "dribbling fallito";
+    if(c.type === "SHOT") return "tiro";
+    if(c.type === "BALL_LOST") return "palla persa";
+    return "evento";
+  };
+  gol.forEach(g => {
+    // ultima palla persa di chi subisce, entro la finestra e nello stesso tempo
+    let iPersa = -1;
+    for(let j = g.i - 1; j >= 0; j--){
+      const e = eventi[j];
+      if(g.t - e.secondoAssoluto > PERSA_GOL_FINESTRA_SEC || e.periodo !== g.periodo) break;
+      if(e.cl && e.cl.type === "BALL_LOST" && e.lato === g.subisce){ iPersa = j; break; }
+    }
+    if(iPersa < 0){ senzaPersa.push({...g, motivo:"nessuna-persa"}); return; }
+    // In mezzo, chi subisce non deve aver RIPRESO davvero il controllo del pallone: un suo recupero, un suo
+    // passaggio o dribbling RIUSCITO, un suo tiro, oppure una palla persa dell'avversario. Un passaggio
+    // sbagliato o un dribbling fallito subito dopo la perdita (12/10/2026) NON spezza più il legame: è la
+    // stessa azione confusa sotto pressione, e se qualcosa conferma la difficoltà invece di smentirla.
+    const interruzione = eventi.slice(iPersa+1, g.i).find(e => {
+      if(!e.cl) return false;
+      if(e.lato === g.subisce){
+        if(e.cl.type === "RECOVERY" || e.cl.type === "SHOT") return true;
+        if((e.cl.type === "PASS" || e.cl.type === "DRIBBLE") && e.cl.outcome === "SUCCESS") return true;
+        return false;
+      }
+      return e.cl.type === "BALL_LOST";
+    });
+    if(interruzione){
+      const pr = eventi[iPersa];
+      senzaPersa.push({...g, motivo:"spezzato",
+        persa: {giocatore: String(pr.raw.Giocatore||"").trim() || "Non indicato", t: pr.secondoAssoluto},
+        interruzione: {evento: nomeEvento(interruzione), giocatore: String(interruzione.raw.Giocatore||"").trim() || "Non indicato",
+          t: interruzione.secondoAssoluto, squadraCheSubisce: interruzione.lato === g.subisce}});
+      return;
+    }
+    const p = eventi[iPersa];
+    const pos = posizioni.get(p.idxOriginale);
+    episodi.push({giocatore: String(p.raw.Giocatore||"").trim() || "Non indicato", squadra: p.lato,
+      secondoPersa: p.secondoAssoluto, secondoGol: g.t, secondi: g.t - p.secondoAssoluto, periodo: g.periodo,
+      marcatore: g.marcatore, zona: pos ? zonaCampoDaPunto(pos.x, pos.y) : null,
+      x: pos ? pos.x : null, y: pos ? pos.y : null});
+  });
+
+  // palle perse totali per giocatore nella stessa sessione: il denominatore per leggere i numeri sopra
+  const perse = new Map();
+  eventi.forEach(e => {
+    if(!(e.cl && e.cl.type === "BALL_LOST") || !latiInteressati.includes(e.lato)) return;
+    const n = String(e.raw.Giocatore||"").trim() || "Non indicato";
+    perse.set(n, (perse.get(n)||0) + 1);
+  });
+  // Colonne della timeline che parlano di gol, con quante volte valgono "1": se i gol subiti trovati sono
+  // meno di quelli dichiarati nel file, è la prima cosa da guardare per capire come sono scritti.
+  const colonneGol = {};
+  if(norm.formato === "nuovo") norm.eventi.forEach(e => Object.keys(e.raw).forEach(k => {
+    if(/gol|goal|rete/i.test(k) && String(e.raw[k]).trim() === "1") colonneGol[k] = (colonneGol[k]||0) + 1;
+  }));
+  return {episodi, golAnalizzati: gol.length, golSenzaPersa: senzaPersa.length, nonAttribuiti: senzaPersa, pallePerse: perse, colonneGol};
+}
+
+/** Riepilogo su più sessioni dello stesso tipo, con il dettaglio per giocatore. */
+function analizzaPersaGol(sessioni, tipo){
+  const episodi = [], perseTot = new Map(), nonAttribuiti = [], colonneGol = {};
+  let golAnalizzati = 0, golSenzaPersa = 0, senzaTimeline = 0, golDichiarati = 0, sessioniConTimeline = 0;
+  let inDiretta = 0;
+  (sessioni||[]).forEach(s => {
+    const r = episodiPersaGolSessione(s, tipo);
+    if(!r){ senzaTimeline++; return; }
+    sessioniConTimeline++;
+    golAnalizzati += r.golAnalizzati; golSenzaPersa += r.golSenzaPersa;
+    if(tipo === "partita") golDichiarati += N(s.Gol_Subiti);
+    const sc = scalaTempiEffettiva(s.ScalaTempi);
+    if(sc.metodo === "diretta") inDiretta++;
+    r.episodi.forEach(ep => episodi.push({...ep,
+      idSessione: s.Match_ID || s.Sessione_ID, etichetta: s.Etichetta || "", ordine: s.Ordine || 0}));
+    r.nonAttribuiti.forEach(g => nonAttribuiti.push({...g, idSessione: s.Match_ID || s.Sessione_ID, etichetta: s.Etichetta || "", ordine: s.Ordine || 0}));
+    Object.entries(r.colonneGol).forEach(([k,n]) => { colonneGol[k] = (colonneGol[k]||0) + n; });
+    r.pallePerse.forEach((n, g) => perseTot.set(g, (perseTot.get(g)||0) + n));
+  });
+  if(!sessioniConTimeline) return null;
+  episodi.sort((a,b) => (a.ordine - b.ordine) || (a.secondoPersa - b.secondoPersa));
+  const perGiocatore = new Map();
+  episodi.forEach(ep => {
+    const acc = perGiocatore.get(ep.giocatore) || {giocatore: ep.giocatore, episodi:0, secondi:[], zone:{}};
+    acc.episodi++; acc.secondi.push(ep.secondi);
+    if(ep.zona) acc.zone[ep.zona] = (acc.zone[ep.zona]||0) + 1;
+    perGiocatore.set(ep.giocatore, acc);
+  });
+  const giocatori = Array.from(perGiocatore.values()).map(a => {
+    const perse = perseTot.get(a.giocatore) || a.episodi;
+    const zonaTop = Object.entries(a.zone).sort((x,y) => y[1]-x[1])[0];
+    return {giocatore:a.giocatore, episodi:a.episodi, pallePerse:perse, quota: perc(a.episodi, perse),
+      zonaFrequente: zonaTop ? zonaTop[0] : null, zonaFrequenteN: zonaTop ? zonaTop[1] : 0};
+  }).sort((a,b) => (b.episodi - a.episodi) || ((b.quota||0) - (a.quota||0)) || a.giocatore.localeCompare(b.giocatore,"it"));
+  nonAttribuiti.sort((a,b) => (a.ordine - b.ordine) || (a.t - b.t));
+  return {episodi, giocatori, golAnalizzati, golSenzaPersa, golDichiarati, senzaTimeline, sessioniConTimeline, inDiretta,
+    nonAttribuiti, colonneGol, medianaSecondi: mediana(episodi.map(e => e.secondi))};
+}
+
+/** La frase "insight" che nomina i giocatori: usata in dashboard e nei report, così le due non divergono.
+ *  `html`: true per il grassetto sui nomi. */
+function frasePersaGol(a, tipo, html){
+  if(!a || !a.golAnalizzati) return null;
+  const b = s => html ? `<b>${esc(s)}</b>` : s;
+  const chi = tipo === "partita" ? "gol subiti" : "gol nelle partitelle";
+  if(!a.episodi.length)
+    return a.golAnalizzati === 1
+      ? `L'unico ${tipo === "partita" ? "gol subito" : "gol"} non è attribuibile a una ${tipo === "partita" ? "nostra " : ""}palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti.`
+      : `Nessuno dei ${nf0(a.golAnalizzati)} ${chi} è attribuibile a una ${tipo === "partita" ? "nostra " : ""}palla persa nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi precedenti.`;
+  const elenco = a.giocatori.map(g => `${b(g.giocatore)} (${nf0(g.episodi)})`).join(", ");
+  return `${nf0(a.episodi.length)} ${a.episodi.length===1?"gol è arrivato":"gol sono arrivati"} entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi da una palla persa, su ${nf0(a.golAnalizzati)} ${chi}: ${elenco}.`;
+}
+
+/* =====================================================================
+   GOL SUBITI E CHI È IN CAMPO (16/10/2026)
+   Richiesta dell'utente: «una insight che evidenzi la correlazione tra difensore e goal preso in allenamento?
+   Magari esiste una correlazione tra una serie di giocatori e goal presi per quella squadra, cioè magari una
+   serie di difensori o di giocatori portano a un contributo difensivo minore e quindi più goal subiti!
+   Questo uguale anche in partita».
+
+   L'IDEA (è il «con/senza» dell'hockey e del basket). Per ogni giocatore si confrontano due ritmi: i gol che la
+   sua squadra subisce quando LUI È IN CAMPO e quelli che subisce quando non c'è, entrambi rapportati a 50 minuti
+   (una partita intera di calcio a 7). Lo stesso per le coppie di giocatori in campo insieme, che è la «serie di
+   giocatori» della richiesta. Nessun dato nuovo: chi è in campo si ricava dai cambi della timeline.
+
+   CHI È IN CAMPO, MOMENTO PER MOMENTO. Giocano solo i giocatori con minuti nel tabellino. Chi ha come primo cambio
+   un ingresso («Cambio entra» sulla sua riga) parte dalla panchina, gli altri sono titolari; ogni «Cambio entra»
+   lo mette in campo, ogni «Cambio esce» o «Cartellino rosso» lo toglie. In partita sono tutti della nostra squadra.
+   In allenamento serve anche la squadra interna: è quella che compare sulle sue righe prima di un eventuale
+   «Cambio squadra A → B» (che SevenLab Video scrive quando si scambiano due giocatori), dopo è quella d'arrivo.
+   Chi in allenamento non ha nemmeno un evento non si sa in che squadra fosse: resta fuori, e lo si dice.
+   Il tempo viene tagliato in tratti in cui la formazione non cambia; ogni gol subito si dà a chi era in campo
+   per la squadra che lo ha preso, un istante prima del gol (un cambio fatto nello stesso secondo non conta).
+
+   IN ALLENAMENTO TUTTI GIOCANO SEMPRE, quindi «senza di lui» vuol dire soprattutto l'altra squadra: il confronto
+   diventa «quanti gol ha preso la squadra in cui giocava» contro «quanti ne ha presi quella in cui non c'era».
+   Con le squadre rimescolate a ogni allenamento, sulla stagione è proprio la lettura che serve.
+
+   IL CASO. Con pochi gol le differenze grandi vengono anche per caso: 7 gol subiti in una partita, 13 giocatori,
+   qualcuno risulterà «in campo su quasi tutti» senza alcuna colpa. Per questo ogni confronto ha un'etichetta:
+   - si calcola quanto è probabile, per puro caso, trovarsi in campo su così tanti (o così pochi) gol, dati i
+     minuti giocati (test binomiale esatto a due code: con n gol in totale e una quota q di minuti in campo,
+     i gol «suoi» per caso sarebbero Binomiale(n, q));
+   - poiché si guardano molti giocatori insieme, quella probabilità viene corretta per il numero di confronti
+     (Benjamini-Hochberg): su 13 giocatori uno «strano» per caso esce quasi sempre;
+   - «Segnale chiaro» se la probabilità corretta è sotto il 10%, «Da tenere d'occhio» se lo è solo quella grezza,
+     altrimenti «Nei limiti del caso». Il dato diventa solido quando lo stesso nome torna su più partite.
+   E resta una correlazione: dice chi era in campo, non di chi è la colpa (dipende da compagni e avversari).
+   ===================================================================== */
+const IN_CAMPO_MINUTI_MIN = 10;      // minuti minimi in campo E senza di lui perché un giocatore entri nel confronto
+const IN_CAMPO_SOGLIA = 0.10;        // soglia della probabilità (corretta per «chiaro», grezza per «da tenere d'occhio»)
+const IN_CAMPO_MAX_IN_CAMPO = 7;     // calcio a 7: in partita più di 7 in campo vuol dire un cambio mancante nella timeline
+/** Gli ospiti degli allenamenti («OSPITE COGNOME 1»…) contano per la formazione (sono in campo) ma non vengono
+ *  classificati: lo stesso segnaposto non è la stessa persona da un allenamento all'altro. */
+const nomeOspite = n => /^ospite\b/i.test(String(n||"").trim());
+
+/** Probabilità a due code del test binomiale esatto: quanto è raro, per caso, osservare k successi su n con
+ *  probabilità p. Calcolata in scala logaritmica, così regge anche sui gol di un'intera stagione. */
+function binomialeDueCode(k, n, p){
+  if(!(n > 0) || !(p > 0) || !(p < 1)) return 1;
+  const lf = [0]; for(let i = 1; i <= n; i++) lf[i] = lf[i-1] + Math.log(i);
+  const pmf = x => Math.exp(lf[n] - lf[x] - lf[n-x] + x*Math.log(p) + (n-x)*Math.log(1-p));
+  let su = 0, giu = 0;
+  for(let x = 0; x <= n; x++){ const v = pmf(x); if(x >= k) su += v; if(x <= k) giu += v; }
+  return Math.min(1, 2*Math.min(su, giu));
+}
+/** Correzione di Benjamini-Hochberg: per ogni probabilità grezza, quella corretta per il numero di confronti. */
+function correzioneConfronti(pv){
+  const m = pv.length, ord = pv.map((p, i) => ({p, i})).sort((a, b) => a.p - b.p), q = new Array(m);
+  let minimo = 1;
+  for(let r = m - 1; r >= 0; r--){ minimo = Math.min(minimo, ord[r].p * m / (r + 1)); q[ord[r].i] = minimo; }
+  return q;
+}
+function etichettaSegnale(p, q){
+  if(p === null || p === undefined) return null;
+  if(q < IN_CAMPO_SOGLIA) return "chiaro";
+  if(p < IN_CAMPO_SOGLIA) return "occhio";
+  return "caso";
+}
+const TESTO_SEGNALE = {chiaro:"Segnale chiaro", occhio:"Da tenere d'occhio", caso:"Nei limiti del caso"};
+
+/** Righe del tabellino di una sessione (minuti e ruolo di ciascun giocatore). */
+function righeTabellinoSessione(s, tipo){
+  const ds = stato.ds; if(!ds) return [];
+  return tipo === "partita" ? ds.giocatori.filter(g => g.Match_ID === s.Match_ID)
+                            : (ds.statAllenamento || []).filter(g => g.Sessione_ID === s.Sessione_ID);
+}
+
+/** Chi è in campo, per quale squadra, in ogni tratto di UNA sessione, e chi era in campo su ogni gol subito.
+ *  Torna {esclusa} con il motivo se la sessione non si può ricostruire. */
+function formazioniSessione(sessione, tipo){
+  const norm = normalizzaEventiSevenLab({eventi: sessione.Eventi, riepilogoTempi: sessione.RiepilogoTempi});
+  if(norm.formato !== "nuovo" || !norm.eventi.length) return {esclusa: "senza timeline eventi"};
+  const latoRiga = r => String(r.Team ?? r.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const eventi = norm.eventi.filter(e => Number.isFinite(e.secondoAssoluto))
+    .map(e => ({...e, cl: classificaEventoRigaNuovoFormato(e.raw), subisce: latoCheSubisce(e, tipo), lato: latoRiga(e.raw)}))
+    .sort((a,b) => (a.secondoAssoluto - b.secondoAssoluto) || (a.idxOriginale - b.idxOriginale));
+  const gol = golDaEventiClassificati(eventi, tipo);
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const inizio = rigaInizio ? rigaInizio.secondoAssoluto : Math.min(0, ...eventi.map(e => e.secondoAssoluto));
+  let fine = norm.periodi.tempo2FineSec;
+  if(!Number.isFinite(fine)) fine = eventi[eventi.length-1].secondoAssoluto;
+  gol.forEach(g => { if(g.t > fine) fine = g.t; });
+  if(!(fine > inizio)) return {esclusa: "durata non ricavabile"};
+
+  const tabellino = righeTabellinoSessione(sessione, tipo);
+  const ruoli = new Map(tabellino.map(r => [r.Giocatore, r.Ruolo]));
+  const nomeDi = e => String(e.raw.Giocatore||"").trim();
+  // Ruolo SVOLTO nel tempo (16/10/2026): dalla colonna «Ruolo svolto» che il caricamento attacca alle righe
+  // della timeline (sezione «RUOLI EVENTI»). In un istante vale il ruolo dell'ultimo evento del giocatore fino
+  // a quel momento; prima del suo primo evento, quello del primo. Chi non ha ruoli negli eventi (file vecchi,
+  // o sessioni caricate prima della 1.41.0) tiene il ruolo del tabellino.
+  const ruoliSvolti = new Map();
+  eventi.forEach(e => {
+    const r = String(e.raw["Ruolo svolto"] || "").trim(), n = nomeDi(e);
+    if(!r || !n || rigaGolSubito(e.raw)) return;
+    if(!ruoliSvolti.has(n)) ruoliSvolti.set(n, []);
+    ruoliSvolti.get(n).push({t: e.secondoAssoluto, r, slot: String(e.raw.Slot || "").trim().toUpperCase()});
+  });
+  const ruoloAl = (n, t) => {
+    const l = ruoliSvolti.get(n);
+    if(!l || !l.length) return ruoli.get(n) || "";
+    let r = l[0].r; for(const x of l){ if(x.t <= t) r = x.r; else break; }
+    return r;
+  };
+  const ruoliIn = (nomi, t) => Object.fromEntries(nomi.map(n => [n, ruoloAl(n, t)]));
+  // casella del modulo impostato in Seven Lab (P, D1, D2, C1…), stessa regola del ruolo svolto
+  const slotAl = (n, t) => {
+    const l = ruoliSvolti.get(n); if(!l || !l.length) return "";
+    let sl = l[0].slot; for(const x of l){ if(x.t <= t) sl = x.slot; else break; }
+    return sl || "";
+  };
+  const slotIn = (nomi, t) => Object.fromEntries(nomi.map(n => [n, slotAl(n, t)]));
+  let nomi = tabellino.filter(r => N(r.Minuti_Giocati) > 0).map(r => r.Giocatore);
+  const avvisi = [];
+  if(!nomi.length){
+    // Tabellino senza minuti (capita in file vecchi): si considera in campo chi ha almeno un evento nella
+    // timeline — escluso il portiere scritto sulla riga «Gol subito» della squadra avversaria, che è un segnaposto.
+    const conEventi = new Set(eventi.filter(e => nomeDi(e) && !rigaGolSubito(e.raw)).map(nomeDi));
+    nomi = tabellino.length ? tabellino.map(r => r.Giocatore).filter(n => conEventi.has(n)) : [...conEventi];
+    if(!nomi.length) return {esclusa: "nessun giocatore con minuti nel tabellino né con eventi nella timeline"};
+    avvisi.push("il tabellino non ha i minuti giocati: in campo sono considerati i giocatori con almeno un evento");
+  }
+  const cambioSquadra = e => /cambio\s*squadra/i.test(String(e.raw.Dettaglio||""));
+
+  const intervalli = new Map(), squadraIniziale = new Map(), cambiSquadra = new Map(), senzaSquadra = [];
+  const rigaCambio = e => e.raw["Cambio entra"] === "1" || e.raw["Cambio esce"] === "1" || e.raw["Cartellino rosso"] === "1";
+  // un'azione di gioco del giocatore (non un cambio, non un cambio squadra, non la riga «Gol subito» del portiere)
+  const azione = e => !!e.cl && !rigaCambio(e) && !cambioSquadra(e) && !rigaGolSubito(e.raw);
+  let azioniFuori = 0; const chiFuori = new Set();
+  const tempiCambi = [...new Set(eventi.filter(rigaCambio).map(e => e.secondoAssoluto))].sort((a, b) => a - b);
+  nomi.forEach(nome => {
+    const sue = eventi.filter(e => nomeDi(e) === nome);
+    // in campo / fuori. Titolare = il primo cambio non è un ingresso, OPPURE ha già giocato palloni prima di
+    // entrare: in quel caso manca la sua uscita, e il controllo sulla formazione più sotto lo scopre.
+    const cambi = sue.filter(rigaCambio).map(e => ({t: e.secondoAssoluto, entra: e.raw["Cambio entra"] === "1"}));
+    const primoIngresso = cambi.length && cambi[0].entra ? cambi[0].t : null;
+    const giocavaGia = primoIngresso !== null && sue.some(e => azione(e) && e.secondoAssoluto < primoIngresso - 2);
+    // Nei cambi a catena nello stesso secondo (partita del 18/10, 12:27) chi entra può avere PRIMA una riga
+    // «esce» spuria e subito dopo il suo «entra»: senza palloni giocati prima non era titolare.
+    const esceSpurio = cambi.length >= 2 && !cambi[0].entra && cambi[1].entra && cambi[1].t - cambi[0].t <= 2
+      && !sue.some(e => azione(e) && e.secondoAssoluto < cambi[0].t - 2);
+    let dentro = (!(cambi.length && cambi[0].entra) && !esceSpurio) || giocavaGia, da = inizio;
+    const iv = [];
+    cambi.forEach(c => {
+      if(c.entra && !dentro){ dentro = true; da = Math.max(inizio, c.t); }
+      else if(!c.entra && dentro){ dentro = false; if(c.t > da) iv.push([da, Math.min(c.t, fine)]); }
+      else if(c.entra && dentro && c.t > da){
+        // ENTRA MENTRE RISULTA GIÀ IN CAMPO (18/10/2026, partita del 18/10): manca la sua uscita. Succede nei
+        // cambi multipli nello stesso secondo, dove SevenLab ha scritto un nome sbagliato nella prima riga della
+        // catena (al 12:27 «Matteo Duino entra» al posto dell'uscita di Burchielli, che non tocca palla fino al
+        // rientro del 23:01). L'uscita si ricostruisce al primo cambio della partita dopo il suo ultimo pallone;
+        // se coincide con questo ingresso non manca niente (è solo una riga in più) e non cambia nulla.
+        const prima = sue.filter(e => azione(e) && e.secondoAssoluto < c.t - 2).map(e => e.secondoAssoluto);
+        const ultima = prima.length ? Math.max(...prima) : da;
+        const tUscita = tempiCambi.find(t => t >= ultima && t <= c.t) ?? ultima;
+        if(tUscita < c.t - 2){
+          if(tUscita > da) iv.push([da, Math.min(tUscita, fine)]);
+          da = Math.max(inizio, c.t);
+          avvisi.push(`${nome} rientra al ${mmssDaSecondi(c.t - inizio)} senza un'uscita registrata: uscita ricostruita al ${mmssDaSecondi(tUscita - inizio)}, il primo cambio dopo il suo ultimo pallone`);
+        }
+      }
+    });
+    if(dentro && fine > da) iv.push([da, fine]);
+    intervalli.set(nome, iv);
+    // azioni registrate mentre risulta in panchina (tolleranza di 3 secondi attorno ai cambi): manca un cambio
+    const fuori = sue.filter(e => azione(e) && !iv.some(([a,b]) => e.secondoAssoluto >= a - 3 && e.secondoAssoluto <= b + 3));
+    if(fuori.length){ azioniFuori += fuori.length; chiFuori.add(nome); }
+    // squadra (in partita sempre la nostra)
+    if(tipo === "partita"){ squadraIniziale.set(nome, "A"); cambiSquadra.set(nome, []); return; }
+    const cs = sue.filter(cambioSquadra).map(e => {
+      const m = String(e.raw.Dettaglio).match(/→\s*([AB])\b|->\s*([AB])\b/i);
+      return {t: e.secondoAssoluto, squadra: m ? (m[1]||m[2]).toUpperCase() : e.lato};
+    });
+    const primoCambio = cs.length ? cs[0].t : Infinity;
+    const prima = sue.filter(e => !cambioSquadra(e) && !rigaGolSubito(e.raw) && e.secondoAssoluto < primoCambio).map(e => e.lato);
+    if(!prima.length && !cs.length){ senzaSquadra.push(nome); return; }
+    const contaA = prima.filter(x => x === "A").length;
+    const iniziale = prima.length ? (contaA >= prima.length - contaA ? "A" : "B") : (cs[0].squadra === "A" ? "B" : "A");
+    squadraIniziale.set(nome, iniziale); cambiSquadra.set(nome, cs);
+  });
+  const squadraAl = (nome, t) => { let sq = squadraIniziale.get(nome); (cambiSquadra.get(nome)||[]).forEach(c => { if(c.t <= t) sq = c.squadra; }); return sq; };
+  const inCampoAl = (nome, t) => squadraIniziale.has(nome) && (intervalli.get(nome)||[]).some(([a,b]) => t > a && t <= b);
+  const conSquadra = nomi.filter(n => squadraIniziale.has(n));
+
+  // tratti a formazione costante
+  const tagli = new Set([inizio, fine]);
+  intervalli.forEach(iv => iv.forEach(([a,b]) => { tagli.add(a); tagli.add(b); }));
+  cambiSquadra.forEach(cs => cs.forEach(c => { if(c.t > inizio && c.t < fine) tagli.add(c.t); }));
+  const punti = [...tagli].filter(t => t >= inizio && t <= fine).sort((a,b) => a-b);
+  const lati = tipo === "partita" ? ["A"] : ["A","B"];
+  const formazioneAl = t => { const f = {A:[], B:[]}; conSquadra.forEach(n => { if(inCampoAl(n, t)) f[squadraAl(n, t)].push(n); }); return f; };
+  const tratti = [];
+  let maxInCampo = 0;
+  for(let i = 0; i < punti.length - 1; i++){
+    const a = punti[i], b = punti[i+1]; if(!(b > a)) continue;
+    const f = formazioneAl((a+b)/2);
+    if(tipo === "partita") maxInCampo = Math.max(maxInCampo, f.A.length);
+    tratti.push({a, b, f, r: ruoliIn(f.A.concat(f.B), (a+b)/2), sl: slotIn(f.A.concat(f.B), (a+b)/2)});
+  }
+  if(tipo === "partita" && maxInCampo > IN_CAMPO_MAX_IN_CAMPO)
+    return {esclusa: `formazione non ricostruibile: risultano fino a ${maxInCampo} giocatori in campo insieme, probabilmente manca un cambio nella timeline`};
+  if(azioniFuori)
+    return {esclusa: `formazione non ricostruibile: ${[...chiFuori].join(", ")} ${chiFuori.size === 1 ? "ha" : "hanno"} palloni giocati mentre ${chiFuori.size === 1 ? "risulta" : "risultano"} in panchina, quindi manca un cambio nella timeline`};
+  const golInCampo = gol.map(g => { const inCampo = formazioneAl(g.t - 0.5)[g.subisce]; return {t: g.t, subisce: g.subisce, inCampo, ruoli: ruoliIn(inCampo, g.t - 0.5)}; });
+  // tutti i gol, fatti e subiti, con chi era in campo da una parte e dall'altra (per le formazioni)
+  const altro = l => l === "A" ? "B" : "A";
+  const golTutti = golDaEventiClassificati(eventi, tipo, ["A","B"]).map(g => {
+    const f = formazioneAl(g.t - 0.5);
+    return {t: g.t, subisce: g.subisce, segna: altro(g.subisce), inCampoSubisce: f[g.subisce], inCampoSegna: f[altro(g.subisce)]};
+  });
+  return {durataSec: fine - inizio, lati, tratti, gol: golInCampo, golTutti, ruoli, senzaSquadra, avvisi, ruoloSvolto: ruoliSvolti.size > 0};
+}
+
+/** Confronto con/senza su più sessioni dello stesso tipo, per giocatore e per coppia. */
+function analizzaInCampo(sessioni, tipo){
+  const perG = new Map(), perC = new Map(), escluse = [], dettaglio = [];
+  let secTot = 0, golTot = 0, analizzate = 0, golFileTot = 0;
+  // gol scritti nel file (allenamento: somma dei gol del tabellino; partita: «Gol subiti» dei metadati), per
+  // poter dire sempre «analizzati X gol su Y» e quale sessione manca
+  const golNelFile = s => tipo === "partita" ? N(s.Gol_Subiti) : righeTabellinoSessione(s, tipo).reduce((t, r) => t + N(r.Gol), 0);
+  const senzaSquadra = new Set(), ruoli = new Map(), sessioniG = new Map();
+  (sessioni||[]).forEach(s => {
+    const r = formazioniSessione(s, tipo);
+    const golFile = golNelFile(s); golFileTot += golFile;
+    if(r.esclusa){ escluse.push({etichetta: s.Etichetta || "", motivo: r.esclusa, golFile}); dettaglio.push({etichetta: s.Etichetta || "", data: s.Data, esclusa: r.esclusa, golFile, golTimeline: null}); return; }
+    dettaglio.push({etichetta: s.Etichetta || "", data: s.Data, esclusa: null, golFile, golTimeline: r.gol.length, avvisi: r.avvisi || []});
+    analizzate++;
+    secTot += r.durataSec * r.lati.length; golTot += r.gol.length;
+    r.senzaSquadra.forEach(n => senzaSquadra.add(n));
+    r.ruoli.forEach((ru, n) => { if(!ruoli.has(n)) ruoli.set(n, ru); });
+    const g = n => { if(!perG.has(n)) perG.set(n, {sec:0, gol:0}); return perG.get(n); };
+    // Coppie di DIFENSORI (16/10/2026, due correzioni chieste dall'utente: «le coppie che mi interessava vedere per
+    // gol subiti sono tra pariruolo in difesa» e poi «sulla base dello stesso ruolo di partenza, non quello che
+    // assegno quando faccio un cambio»). Una coppia = due giocatori della stessa squadra, entrambi DIFENSORI DI
+    // RUOLO (il ruolo del tabellino, cioè il ruolo naturale), in campo nello stesso momento. Conta anche se uno dei
+    // due in quel momento occupa un'altra casella del modulo; un centrocampista messo in difesa non fa coppia.
+    // Le coppie fra ruoli diversi (un difensore e un centrocampista) non si contano.
+    const difensoreDiRuolo = n => /difens/i.test(r.ruoli.get(n) || "");
+    // una coppia con un ospite resta legata al suo allenamento: lo stesso segnaposto non è la stessa persona
+    const id = s.Match_ID || s.Sessione_ID;
+    const chiaveCoppia = (x, y) => (x.localeCompare(y, "it") < 0 ? x+"\u0001"+y : y+"\u0001"+x) + (nomeOspite(x) || nomeOspite(y) ? "\u0002"+id : "");
+    const c = k => { if(!perC.has(k)) perC.set(k, {sec:0, gol:0, sessioni:new Set(), data: s.Data}); return perC.get(k); };
+    const visti = new Set();
+    r.tratti.forEach(tr => {
+      const d = tr.b - tr.a;
+      r.lati.forEach(l => {
+        const f = tr.f[l];
+        f.forEach(n => { g(n).sec += d; visti.add(n); });
+        const dif = f.filter(difensoreDiRuolo);
+        for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++){ const x = c(chiaveCoppia(dif[i], dif[j])); x.sec += d; x.sessioni.add(id); }
+      });
+    });
+    visti.forEach(n => sessioniG.set(n, (sessioniG.get(n)||0) + 1));
+    r.gol.forEach(gl => {
+      gl.inCampo.forEach(n => g(n).gol++);
+      const dif = gl.inCampo.filter(difensoreDiRuolo);
+      for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++) c(chiaveCoppia(dif[i], dif[j])).gol++;
+    });
+  });
+  if(!analizzate) return {analizzate: 0, escluse, dettaglio, golFile: golFileTot};
+  const ritmo = (gol, sec) => sec > 0 ? gol / (sec/60) * MINUTI_PARTITA_INTERA : null;
+  const confronto = (nome, v, minimo) => {
+    const secSenza = secTot - v.sec, golSenza = golTot - v.gol;
+    const conRitmo = ritmo(v.gol, v.sec), senzaRitmo = secSenza > 0 ? ritmo(golSenza, secSenza) : null;
+    const valido = v.sec >= minimo*60 && secSenza >= IN_CAMPO_MINUTI_MIN*60 && golTot > 0;
+    return {nome, minuti: v.sec/60, gol: v.gol, minutiSenza: secSenza/60, golSenza,
+      ritmoCon: conRitmo, ritmoSenza: senzaRitmo,
+      differenza: (conRitmo !== null && senzaRitmo !== null) ? conRitmo - senzaRitmo : null,
+      p: valido ? binomialeDueCode(v.gol, golTot, v.sec/secTot) : null, valido};
+  };
+  const etichetta = lista => {
+    const validi = lista.filter(x => x.valido), q = correzioneConfronti(validi.map(x => x.p));
+    validi.forEach((x, i) => { x.q = q[i]; x.segnale = etichettaSegnale(x.p, x.q); });
+    lista.forEach(x => { if(!x.valido){ x.q = null; x.segnale = null; } });
+    return lista.sort((a, b) => (b.valido - a.valido) || ((b.differenza ?? -1e9) - (a.differenza ?? -1e9)) || (b.minuti - a.minuti));
+  };
+  const ospiti = [...perG.keys()].filter(nomeOspite);
+  const giocatori = etichetta([...perG.entries()].filter(([n]) => !nomeOspite(n)).map(([n, v]) => Object.assign(confronto(n, v, IN_CAMPO_MINUTI_MIN),
+    {ruolo: ruoli.get(n) || "", portiere: ruoloPortiere(ruoli.get(n)), sessioni: sessioniG.get(n) || 0})));
+  // Coppie di difensori: soglia di 10' insieme (e 10' senza), perché le coppie di difesa sono poche e con le
+  // rotazioni raramente arrivano a 15'. Le coppie con un ospite si mostrano con i loro numeri, una per
+  // allenamento, ma non si classificano (come i giocatori ospiti).
+  const coppieNormali = etichetta([...perC.entries()].filter(([k]) => !k.includes("\u0002")).map(([k, v]) => {
+    const [x, y] = k.split("\u0001");
+    return Object.assign(confronto(x+" e "+y, v, IN_CAMPO_MINUTI_MIN), {x, y, sessioni: v.sessioni.size});
+  })).filter(c => c.minuti >= 1);
+  const coppieConOspite = [...perC.entries()].filter(([k]) => k.includes("\u0002")).map(([k, v]) => {
+    const [x, y] = k.split("\u0002")[0].split("\u0001");
+    return Object.assign(confronto(x+" e "+y, v, IN_CAMPO_MINUTI_MIN), {x, y, sessioni: 1, data: v.data, ospite: true, valido: false, p: null, q: null, segnale: null});
+  }).filter(c => c.minuti >= 1).sort((p, q) => q.minuti - p.minuti);
+  const coppieDifensori = coppieNormali.concat(coppieConOspite);
+  return {tipo, analizzate, escluse, golTotali: golTot, minutiSquadra: secTot/60, ritmoSquadra: ritmo(golTot, secTot),
+    giocatori, coppieDifensori, senzaSquadra: [...senzaSquadra], ospiti, dettaglio, golFile: golFileTot};
+}
+
+/** La frase "insight" con i nomi, uguale in dashboard e nei report. `html`: grassetto sui nomi. */
+function fraseInCampo(a, html){
+  if(!a || !a.analizzate || !a.golTotali) return null;
+  const b = s => html ? `<b>${esc(s)}</b>` : s;
+  const allen = a.tipo === "allenamento";
+  const r50 = v => nf(v, 1);
+  const elenco = nomi => nomi.length === 1 ? b(nomi[0]) : nomi.slice(0, -1).map(b).join(", ") + " e " + b(nomi[nomi.length-1]);
+  // giocatori con numeri identici (in allenamento: sempre nella stessa squadra) si nominano insieme
+  const gruppo = (lista, primo) => lista.filter(g => g.gol === primo.gol && Math.round(g.minuti) === Math.round(primo.minuti)
+    && Math.abs((g.ritmoSenza ?? 0) - (primo.ritmoSenza ?? 0)) < 0.05).slice(0, 5);
+  const descr = (lista) => {
+    const g = lista[0], nomi = lista.map(x => x.nome), piu = nomi.length > 1;
+    const soggetto = allen
+      ? `quando ${piu ? `${elenco(nomi)} erano in campo la loro squadra` : `${elenco(nomi)} era in campo la sua squadra`} ha subito`
+      : `con ${elenco(nomi)} in campo la squadra ha subito`;
+    return `${soggetto} ${nf0(g.gol)} gol in ${nf0(g.minuti)}', cioè ${r50(g.ritmoCon)} a partita, contro ${r50(g.ritmoSenza)} a partita senza ${piu ? "di loro" : "di lui"}`;
+  };
+  const descrCoppia = c => `con i difensori ${b(c.x)} e ${b(c.y)} in campo insieme ${allen ? "la loro squadra ha" : "la squadra ha"} subito ${nf0(c.gol)} gol in ${nf0(c.minuti)}', cioè ${r50(c.ritmoCon)} a partita, contro ${r50(c.ritmoSenza)} senza quella coppia`;
+  const peggiori = a.giocatori.filter(g => g.valido && g.differenza > 0);
+  const forti = peggiori.filter(g => g.segnale === "chiaro"), occhio = peggiori.filter(g => g.segnale === "occhio");
+  const coppieForti = (a.coppieDifensori||[]).filter(c => c.valido && c.differenza > 0 && (c.segnale === "chiaro" || c.segnale === "occhio"))
+    .sort((x, y) => (x.segnale === "chiaro" ? 0 : 1) - (y.segnale === "chiaro" ? 0 : 1) || y.differenza - x.differenza);
+  const frasi = [];
+  if(forti.length) frasi.push(`Segnale chiaro: ${descr(gruppo(forti, forti[0]))}.`);
+  else if(occhio.length) frasi.push(`Da tenere d'occhio: ${descr(gruppo(occhio, occhio[0]))}.`);
+  else if(peggiori.length) frasi.push(`Il dato più alto: ${descr(gruppo(peggiori, peggiori[0]))}. Con ${nf0(a.golTotali)} ${allen ? "gol" : "gol subiti"} in tutto la differenza è ancora nei limiti del caso.`);
+  else frasi.push(`Nessun giocatore con abbastanza minuti ha un ritmo di gol subiti più alto con lui in campo che senza.`);
+  if(coppieForti.length) frasi.push(`Fra le coppie di difensori, ${coppieForti[0].segnale === "chiaro" ? "segnale chiaro" : "da tenere d'occhio"}: ${descrCoppia(coppieForti[0])}.`);
+  return frasi.join(" ");
+}
+
+/* =====================================================================
+   FORMAZIONI: GOL FATTI E SUBITI, E LA FORMAZIONE MIGLIORE (16/10/2026)
+   Richiesta dell'utente: «le formazioni che hanno subito più goal e quali sono, per apporto nel tempo giocato,
+   le formazioni che hanno creato maggiori goal, sia nelle partite sia negli allenamenti» e, in fondo alle due
+   dashboard, «la migliore formazione possibile sulla base dei dati per meno goal presi e più fatti [...] uno dei
+   cardini della scelta sia che la formazione, per minuti in campo giocati assieme, abbia tenuto un risultato di
+   vantaggio sull'avversario».
+
+   FORMAZIONE = l'insieme dei giocatori in campo nello stesso momento per la stessa squadra (in partita i nostri 7,
+   in allenamento la squadra interna). Si ricava dagli stessi tratti a formazione costante di formazioniSessione,
+   quindi vale tutto quello che c'è scritto lì su cambi, cartellini rossi, «Cambio squadra» e sessioni escluse.
+   Una formazione che torna in campo più volte, anche in partite diverse, somma i suoi minuti e i suoi gol.
+
+   IL CRITERIO (proposto da me, l'utente ha chiesto un suggerimento): il SALDO RETI, cioè gol fatti meno gol subiti
+   mentre quella formazione era in campo. È esattamente il «risultato di vantaggio tenuto nei minuti giocati
+   insieme» della richiesta, e mette insieme i due dati invece di farne prevalere uno: guardare solo i gol subiti
+   premierebbe una formazione che non segna mai, solo i gol fatti una che ne prende altrettanti. A parità di saldo
+   vince chi ne ha subiti meno (la solidità), poi chi ha giocato più minuti insieme. Gli altri due criteri restano
+   selezionabili in dashboard.
+
+   LA PRUDENZA SUI POCHI MINUTI. Con le rotazioni del calcio a 7 una formazione resta in campo pochi minuti, e
+   2 minuti con un gol fatto darebbero un saldo «a partita» enorme. Per scegliere, ogni formazione parte come se
+   avesse già giocato FORMAZIONE_MINUTI_PRUDENZA minuti al ritmo medio della squadra: chi ha giocato tanto insieme
+   resta quasi com'è, chi ha giocato pochissimo viene riportato verso la media. Per essere la formazione migliore
+   servono comunque almeno FORMAZIONE_MINUTI_MIN minuti insieme. I numeri mostrati sono sempre quelli veri.
+   ===================================================================== */
+const FORMAZIONE_MINUTI_PRUDENZA = 10;
+const FORMAZIONE_MINUTI_MIN = 5;
+const CRITERI_FORMAZIONE = {
+  saldo:  {etichetta:"Saldo reti: gol fatti meno gol subiti (consigliato)", breve:"saldo reti"},
+  subiti: {etichetta:"Meno gol subiti", breve:"meno gol subiti"},
+  fatti:  {etichetta:"Più gol fatti", breve:"più gol fatti"}
+};
+const ORDINE_RUOLI = r => /portier/i.test(r) ? 0 : /difens/i.test(r) ? 1 : /centrocamp/i.test(r) ? 2 : /attacc/i.test(r) ? 3 : 2;
+const cognome = n => { const p = String(n||"").trim().split(/\s+/); return nomeOspite(n) ? "Ospite" : (p.length > 1 ? p.slice(1).join(" ") : p[0]); };
+
+function analizzaFormazioni(sessioni, tipo){
+  const perF = new Map(), escluse = [], ruoli = new Map();
+  let secTot = 0, gfTot = 0, gaTot = 0, analizzate = 0;
+  const chiave = lista => lista.slice().sort((a, b) => a.localeCompare(b, "it")).join("\u0001");
+  const f = k => { if(!perF.has(k)) perF.set(k, {chiave:k, giocatori:k.split("\u0001"), sec:0, gf:0, ga:0, sessioni:new Set(), ruoliSec:new Map(), slotSec:new Map()}); return perF.get(k); };
+  (sessioni||[]).forEach(s => {
+    const r = formazioniSessione(s, tipo);
+    if(r.esclusa){ escluse.push({etichetta: s.Etichetta || "", data: s.Data, motivo: r.esclusa}); return; }
+    analizzate++;
+    r.ruoli.forEach((ru, n) => { if(!ruoli.has(n)) ruoli.set(n, ru); });
+    const id = s.Match_ID || s.Sessione_ID;
+    r.tratti.forEach(tr => r.lati.forEach(l => {
+      if(!tr.f[l].length) return;
+      const x = f(chiave(tr.f[l])), d = tr.b - tr.a; x.sec += d; x.sessioni.add(id);
+      // secondi per ruolo SVOLTO di ciascun giocatore dentro questa formazione (16/10/2026)
+      tr.f[l].forEach(n => { const ru = (tr.r && tr.r[n]) || ""; if(!ru) return; if(!x.ruoliSec.has(n)) x.ruoliSec.set(n, new Map()); const m = x.ruoliSec.get(n); m.set(ru, (m.get(ru)||0) + d); });
+      // e per casella del modulo (16/10/2026, per disegnare la formazione nel modulo impostato in Seven Lab)
+      tr.f[l].forEach(n => { const sl = (tr.sl && tr.sl[n]) || ""; if(!/^[PDCA]\d*$/.test(sl)) return; if(!x.slotSec.has(n)) x.slotSec.set(n, new Map()); const m = x.slotSec.get(n); m.set(sl, (m.get(sl)||0) + d); });
+    }));
+    secTot += r.durataSec * r.lati.length;
+    r.golTutti.forEach(g => {
+      if(r.lati.includes(g.subisce) && g.inCampoSubisce.length){ f(chiave(g.inCampoSubisce)).ga++; gaTot++; }
+      if(r.lati.includes(g.segna) && g.inCampoSegna.length){ f(chiave(g.inCampoSegna)).gf++; gfTot++; }
+    });
+  });
+  if(!analizzate || !(secTot > 0)) return {tipo, analizzate, escluse, formazioni: []};
+  const minTot = secTot/60, rGF = gfTot/minTot, rGA = gaTot/minTot, T0 = FORMAZIONE_MINUTI_PRUDENZA, P = MINUTI_PARTITA_INTERA;
+  const formazioni = [...perF.values()].filter(x => x.sec > 0).map(x => {
+    const min = x.sec/60;
+    const gfAdj = (x.gf + rGF*T0)/(min + T0)*P, gaAdj = (x.ga + rGA*T0)/(min + T0)*P;
+    // il ruolo con cui ciascuno ha giocato più a lungo in questa formazione; se non c'è, quello del tabellino
+    const ruoloIn = n => { const m = x.ruoliSec.get(n); if(!m || !m.size) return ruoli.get(n) || ""; return [...m.entries()].sort((p, q) => q[1] - p[1])[0][0]; };
+    // la casella del modulo tenuta più a lungo in questa formazione: decide linea (P/D/C/A) e ordine nella linea
+    const slotIn = n => { const m = x.slotSec.get(n); if(!m || !m.size) return ""; return [...m.entries()].sort((p, q) => q[1] - p[1])[0][0]; };
+    const ruoloMostrato = n => { const k = slotIn(n).charAt(0); return RUOLO_DA_SLOT[k] || ruoloIn(n); };
+    const numeroSlot = n => { const m = /(\d+)$/.exec(slotIn(n)); return m ? +m[1] : 0; };
+    const giocatori = x.giocatori.slice().sort((a, b) => (ORDINE_RUOLI(ruoloMostrato(a)) - ORDINE_RUOLI(ruoloMostrato(b))) || (numeroSlot(a) - numeroSlot(b)) || cognome(a).localeCompare(cognome(b), "it"));
+    const ruoliF = giocatori.map(ruoloMostrato);
+    return {chiave: x.chiave, giocatori, ruoli: ruoliF, slots: giocatori.map(slotIn), modulo: moduloDaRuoli(ruoliF),
+      moduloDaSlot: giocatori.every(n => slotIn(n)), minuti: min, gf: x.gf, ga: x.ga, saldo: x.gf - x.ga,
+      ritmoGF: x.gf/min*P, ritmoGA: x.ga/min*P, gfAdj, gaAdj, saldoAdj: gfAdj - gaAdj, sessioni: x.sessioni.size,
+      ospiti: x.giocatori.filter(nomeOspite).length, idoneo: min >= FORMAZIONE_MINUTI_MIN};
+  });
+  return {tipo, analizzate, escluse, formazioni, minutiTot: minTot, gfTot, gaTot, mediaGF: rGF*P, mediaGA: rGA*P};
+}
+/** Formazioni ordinate secondo un criterio (le non idonee, sotto i minuti minimi, in fondo). */
+function ordinaFormazioni(lista, criterio){
+  const chiave = {saldo: x => x.saldoAdj, subiti: x => -x.gaAdj, fatti: x => x.gfAdj}[criterio] || (x => x.saldoAdj);
+  const spareggio = {saldo: (a, b) => (a.gaAdj - b.gaAdj), subiti: (a, b) => (b.gfAdj - a.gfAdj), fatti: (a, b) => (a.gaAdj - b.gaAdj)}[criterio] || (() => 0);
+  return (lista||[]).slice().sort((a, b) => (b.idoneo - a.idoneo) || (chiave(b) - chiave(a)) || spareggio(a, b) || (b.minuti - a.minuti));
+}
+/** Elenco compatto dei giocatori di una formazione: cognomi in ordine di ruolo (portiere, difesa, centrocampo, attacco). */
+/** Il modulo di una formazione nella notazione del calcio a 7, senza il portiere: «2-3-1», «3-2-1»… */
+const RUOLO_DA_SLOT = {P:"Portiere", D:"Difensore", C:"Centrocampista", A:"Attaccante"};
+function moduloDaRuoli(ruoli){
+  const conta = [1, 2, 3].map(k => (ruoli||[]).filter(r => ORDINE_RUOLI(r || "") === k).length).filter(v => v > 0);
+  return conta.length >= 2 ? conta.join("-") : "";
+}
+const nomiFormazione = (x, html) => x.giocatori.map(n => html ? esc(cognome(n)) : cognome(n)).join(", ");
+const saldoTxt = v => v > 0 ? "+"+nf0(v) : (v < 0 ? "−"+nf0(Math.abs(v)) : "0");
+
+/** Minuti minimi perché una media "per partita intera" venga calcolata e mostrata. Tenuta alla stessa
+ *  proporzione di prima (erano 10 minuti su 90, cioè un ottavo scarso di partita). */
+const MINUTI_MINIMI_NORMALIZZAZIONE = 6;
+
+/** Mappa nome → secondo di ingresso, per una partita. Vuota se il file non ha la timeline o la colonna. */
+function ingressiDaTimeline(partita){
+  const mappa = new Map();
+  const eventi = (partita && Array.isArray(partita.Eventi)) ? partita.Eventi : [];
+  eventi.forEach(e => {
+    if(e["Cambio entra"] !== "1") return;
+    const nome = String(e["Giocatore"]||"").trim();
+    if(!nome) return;
+    const sec = N(e["Secondo totale"]);
+    // se un giocatore entra più volte (uscito e rientrato) conta il primo ingresso
+    if(!mappa.has(nome)) mappa.set(nome, sec);
+  });
+  return mappa;
+}
+
+/** Per ogni giocatore: quanto ha giocato e reso da subentrato, quanto da titolare, e quante volte è stato
+ *  in distinta senza entrare. `impatto` è il criterio di ordinamento: prima il contributo ASSOLUTO ai gol
+ *  da subentrato (gol + assist), poi l'indice accumulato, poi i minuti — di proposito NON una media rapportata alla partita intera
+ *  minuti, che su spezzoni di pochi minuti si gonfia a dismisura e metterebbe in cima chi ha giocato meno.
+ *  Le medie rapportate alla partita intera restano nella tabella come dato di lettura, con l'avvertenza sul campione. */
+function analizzaSubentrati(partite, righeGiocatori){
+  const perPartita = new Map();
+  (partite||[]).forEach(p => perPartita.set(p.Match_ID, ingressiDaTimeline(p)));
+  const conIngressi = Array.from(perPartita.values()).filter(m => m.size > 0).length;
+  const perGiocatore = new Map();
+  const vuoto = () => ({partite:0, minuti:0, gol:0, assist:0, indice:0});
+  (righeGiocatori||[]).forEach(g => {
+    const ingressi = perPartita.get(g.Match_ID);
+    if(!ingressi) return;
+    if(!perGiocatore.has(g.Giocatore))
+      perGiocatore.set(g.Giocatore, {Giocatore:g.Giocatore, Ruolo:g.Ruolo, convocazioni:0, panchinaSenzaEntrare:0,
+        subentrato:vuoto(), titolare:vuoto(), minutiIngresso:[]});
+    const a = perGiocatore.get(g.Giocatore);
+    a.convocazioni++;
+    const minuti = N(g.Minuti_Giocati);
+    const secIngresso = ingressi.get(g.Giocatore);
+    if(minuti <= 0){ a.panchinaSenzaEntrare++; return; }
+    const dove = secIngresso !== undefined ? a.subentrato : a.titolare;
+    dove.partite++; dove.minuti += minuti; dove.gol += N(g.Gol); dove.assist += N(g.Assist);
+    dove.indice += N(g.Indice_Prestazione);
+    if(secIngresso !== undefined) a.minutiIngresso.push(secIngresso/60);
+  });
+  // Una media "per partita intera" ricavata da due o tre minuti giocati non è un dato: è quel numero
+  // moltiplicato per venti. Sotto questa soglia non la calcoliamo proprio, invece di stampare cose come
+  // "360,4 per partita" (visto davvero sui dati di prova). Le colonne assolute — ingressi, minuti,
+  // gol+assist, indice — restano sempre visibili: sono quelle che reggono anche con pochi minuti.
+  const suPartitaIntera = (valore, minuti) => minuti >= MINUTI_MINIMI_NORMALIZZAZIONE ? (valore/minuti)*MINUTI_PARTITA_INTERA : null;
+  const elenco = Array.from(perGiocatore.values())
+    .filter(a => a.subentrato.partite > 0)
+    .map(a => {
+      const s = a.subentrato, t = a.titolare;
+      const contributo = s.gol + s.assist;
+      return Object.assign(a, {
+        contributoSubentrato: contributo,
+        minutoMedioIngresso: a.minutiIngresso.length ? a.minutiIngresso.reduce((x,y)=>x+y,0)/a.minutiIngresso.length : null,
+        indicePartitaSubentrato: suPartitaIntera(s.indice, s.minuti),
+        indicePartitaTitolare: t.partite ? suPartitaIntera(t.indice, t.minuti) : null,
+        contributoPartitaSubentrato: suPartitaIntera(contributo, s.minuti),
+        impatto: contributo*1000 + s.indice
+      });
+    })
+    .sort((x,y) => y.impatto - x.impatto || y.subentrato.minuti - x.subentrato.minuti);
+  return {elenco, partiteConIngressi: conIngressi, partiteTotali: (partite||[]).length};
+}
+
+function riepilogoSquadra(righe, partite){
+  const s = c => righe.reduce((a,r)=>a+N(r[c]),0);
+  const tiriTot = s("Tiri_In_Porta")+s("Tiri_Fuori");
+  const passTot = s("Passaggi_Corretti")+s("Passaggi_Sbagliati");
+  const dribTent = s("Dribbling_Tentati");
+  const dribRius = dribTent - s("Dribbling_Falliti");
+  const azioni = passTot + dribTent + tiriTot;
+  return {
+    partite: partite.length,
+    gol_fatti: partite.reduce((a,p)=>a+p.Gol_Fatti,0),
+    gol_subiti: partite.reduce((a,p)=>a+p.Gol_Subiti,0),
+    gol_giocatori: s("Gol"), assist: s("Assist"),
+    tiri_in_porta: s("Tiri_In_Porta"), tiri_totali: tiriTot,
+    // vedi segnaTiriPorta: senza tiri in porta segnati a parte la precisione al tiro non esiste
+    tiri_porta_rilevati: tiriPortaRilevati(righe),
+    precisione_tiro: tiriPortaRilevati(righe) ? perc(s("Tiri_In_Porta"), tiriTot) : null,
+    efficacia_realizzativa: perc(s("Gol"), tiriTot),
+    precisione_passaggi: perc(s("Passaggi_Corretti"), passTot),
+    successo_dribbling: perc(dribRius, dribTent),
+    tasso_errore: perc(s("Passaggi_Sbagliati")+s("Dribbling_Falliti"), azioni),
+    recuperi: s("Recuperi"), parate: s("Parate")
+  };
+}
+
+function regressione(xs, ys){
+  const px=[], py=[];
+  for(let i=0;i<xs.length;i++){
+    const x=xs[i], y=ys[i];
+    if(x===null||y===null||!isFinite(x)||!isFinite(y)) continue;
+    px.push(x); py.push(y);
+  }
+  const n = px.length;
+  if(n < 3) return null;
+  if(px.every(v => v===px[0])) return null;
+  const mx = px.reduce((a,b)=>a+b,0)/n, my = py.reduce((a,b)=>a+b,0)/n;
+  let sxy=0, sxx=0, syy=0;
+  for(let i=0;i<n;i++){ const dx=px[i]-mx, dy=py[i]-my; sxy+=dx*dy; sxx+=dx*dx; syy+=dy*dy; }
+  if(sxx === 0) return null;
+  const slope = sxy/sxx, intercept = my - slope*mx;
+  const r = (sxx>0 && syy>0) ? sxy/Math.sqrt(sxx*syy) : 0;
+  const xmin = Math.min(...px), xmax = Math.max(...px);
+  const vi = slope*xmin+intercept, vf = slope*xmax+intercept;
+  return {n, slope, intercept, r, xmin, xmax, valore_iniziale:vi, valore_finale:vf, delta_totale:vf-vi};
+}
+
+/* `limiti` [min, max] delimita i valori che la metrica può davvero assumere. Serve perché la retta di
+   interpolazione, prolungata fino alla prima e all'ultima partita, può uscire dal mondo reale: nell'audit
+   del 04/09/2026 un report annunciava un tasso di errore sceso "a -7%", che non esiste. I due estremi
+   vengono quindi riportati dentro i limiti e la variazione ricalcolata su quelli, così la frase resta
+   coerente con i numeri che mostra. max null = nessun limite superiore. */
+const CONFIG_TREND = {
+  Tasso_Errore_pct:   {label:"Tasso di errore", unit:"%", soglia:6, dec:0, meglioAlto:false, limiti:[0,100],
+    desc:"Palloni persi (passaggi sbagliati + dribbling falliti) sul totale delle azioni. Scendere è positivo."},
+  Precisione_Tiro_pct:{label:"Precisione al tiro", unit:"%", soglia:8, dec:0, meglioAlto:true, limiti:[0,100],
+    desc:"Tiri in porta sul totale dei tiri. Salire è positivo."},
+  Minuti_Giocati:     {label:"Minuti giocati", unit:"'", soglia:10, dec:0, meglioAlto:null, limiti:[0,null],
+    desc:"Minutaggio a partita. Non è né buono né cattivo in sé: dice come sta cambiando il ruolo del giocatore nella rosa."}
+};
+/** Riporta dentro i limiti dichiarati i due estremi di una retta di tendenza e ricalcola la variazione. */
+function limitaTendenza(fit, limiti){
+  if(!limiti) return fit;
+  const [min, max] = limiti;
+  const dentro = v => {
+    let x = v;
+    if(min !== null && min !== undefined) x = Math.max(min, x);
+    if(max !== null && max !== undefined) x = Math.min(max, x);
+    return x;
+  };
+  const vi = dentro(fit.valore_iniziale), vf = dentro(fit.valore_finale);
+  return Object.assign({}, fit, {valore_iniziale:vi, valore_finale:vf, delta_totale:vf-vi});
+}
+
+function calcolaTendenze(righe){
+  const perG = new Map();
+  righe.filter(r=>r.Data).sort((a,b)=>a.Data-b.Data).forEach(r => {
+    if(!perG.has(r.Giocatore)) perG.set(r.Giocatore, []);
+    perG.get(r.Giocatore).push(r);
+  });
+  const out = [];
+  perG.forEach((rs, nome) => {
+    rs.forEach((r,i) => r.__ord = i+1);
+    Object.keys(CONFIG_TREND).forEach(metrica => {
+      const cfg = CONFIG_TREND[metrica];
+      const punti = rs.filter(r => r[metrica] !== null && r[metrica] !== undefined && isFinite(r[metrica]));
+      if(punti.length < 3) return;
+      const fitGrezzo = regressione(punti.map(r=>r.__ord), punti.map(r=>r[metrica]));
+      if(!fitGrezzo) return;
+      const fit = limitaTendenza(fitGrezzo, cfg.limiti);
+      const rilevante = Math.abs(fit.delta_totale) >= cfg.soglia && Math.abs(fit.r) >= 0.35;
+      const direzione = Math.abs(fit.delta_totale) < cfg.soglia*0.3 ? "stabile" : (fit.slope>0 ? "in aumento" : "in calo");
+      let giudizio = "neutro";
+      if(cfg.meglioAlto === true) giudizio = fit.delta_totale>0 ? "positivo":"negativo";
+      if(cfg.meglioAlto === false) giudizio = fit.delta_totale<0 ? "positivo":"negativo";
+      if(direzione === "stabile") giudizio = "neutro";
+      out.push({Giocatore:nome, Ruolo:rs[0].Ruolo, Metrica:metrica, cfg, ...fit, rilevante, direzione, giudizio,
+        punti: punti.map(r=>({x:r.__ord, y:r[metrica], etichetta:r.EtichettaPartita}))});
+    });
+  });
+  return out;
+}
+
+function fraseTendenza(t){
+  const g = t.Giocatore, n = t.n, d = Math.abs(t.delta_totale);
+  const vi = nf(t.valore_iniziale, t.cfg.dec)+t.cfg.unit, vf = nf(t.valore_finale, t.cfg.dec)+t.cfg.unit;
+  if(t.Metrica === "Tasso_Errore_pct"){
+    return t.delta_totale > 0
+      ? `Il tasso di errore di ${g} è aumentato di ${nf0(d)} punti percentuali nelle ultime ${n} partite (da circa ${vi} a ${vf}): può valere la pena lavorare sulla gestione del pallone in allenamento.`
+      : `Il tasso di errore di ${g} è diminuito di ${nf0(d)} punti percentuali nelle ultime ${n} partite (da circa ${vi} a ${vf}): segnale di maggiore sicurezza nella gestione del pallone.`;
+  }
+  if(t.Metrica === "Precisione_Tiro_pct"){
+    return t.delta_totale > 0
+      ? `La precisione al tiro di ${g} è migliorata di ${nf0(d)} punti percentuali nelle ultime ${n} partite (da circa ${vi} a ${vf}).`
+      : `La precisione al tiro di ${g} è peggiorata di ${nf0(d)} punti percentuali nelle ultime ${n} partite (da circa ${vi} a ${vf}): da monitorare nei prossimi allenamenti.`;
+  }
+  if(t.Metrica === "Minuti_Giocati"){
+    return t.delta_totale > 0
+      ? `I minuti giocati da ${g} sono in crescita nel corso della stagione (da circa ${vi} a ${vf} a partita): sta guadagnando spazio in squadra.`
+      : `I minuti giocati da ${g} sono in calo nel corso della stagione (da circa ${vi} a ${vf} a partita): da capire con lo staff tecnico se per scelta o per altri motivi.`;
+  }
+  return `${g}: ${t.cfg.label.toLowerCase()} ${t.direzione}.`;
+}
+
+function aggregaAllenamenti(sessioni, presenze){
+  const idSess = new Set(sessioni.map(s=>s.Sessione_ID));
+  const pres = presenze.filter(p => idSess.has(p.Sessione_ID));
+  const totSess = idSess.size;
+  const gruppi = new Map();
+  pres.forEach(p => {
+    if(!gruppi.has(p.Giocatore)) gruppi.set(p.Giocatore, {Giocatore:p.Giocatore, presenti:0, minuti:0, carico:0, rpe:[], n:0});
+    const g = gruppi.get(p.Giocatore);
+    g.n++; if(p.Presente){ g.presenti++; g.minuti += p.Minuti_Allenamento; if(p.RPE!==null) g.rpe.push(p.RPE); }
+    g.carico += (p.Carico||0);
+  });
+  return {totSess, righe: Array.from(gruppi.values()).map(g => ({
+    Giocatore:g.Giocatore, Sessioni_Presenti:g.presenti, Sessioni_Totali:totSess,
+    Tasso_Presenza_pct: perc(g.presenti, totSess), Minuti_Tot:g.minuti, Carico_Tot:g.carico,
+    RPE_Medio: g.rpe.length ? g.rpe.reduce((a,b)=>a+b,0)/g.rpe.length : null
+  })).sort((a,b)=> (b.Tasso_Presenza_pct??-1) - (a.Tasso_Presenza_pct??-1))};
+}
+
+function caricoMensile(sessioni, presenze){
+  const perMese = new Map();
+  presenze.forEach(p => {
+    if(!p.Mese) return;
+    if(!perMese.has(p.Mese)) perMese.set(p.Mese, {Mese:p.Mese, carico:0, n:0, sess:new Set()});
+    const m = perMese.get(p.Mese); m.carico += p.Carico; m.n++; m.sess.add(p.Sessione_ID);
+  });
+  return Array.from(perMese.values()).sort((a,b)=>a.Mese.localeCompare(b.Mese))
+    .map(m => ({Mese:m.Mese, Carico_Tot:m.carico, Carico_Medio: m.n>0 ? m.carico/m.n : null, Sessioni:m.sess.size}));
+}
+
+function caricoGiocatoreMese(presenze){
+  const map = new Map();
+  presenze.forEach(p => {
+    if(!p.Mese) return;
+    const k = p.Giocatore+"|"+p.Mese;
+    map.set(k, (map.get(k)||0) + p.Carico);
+  });
+  return map;
+}
+
+/** Tutti i mesi (chiave "YYYY-MM") in cui esiste almeno una sessione di allenamento, in ordine
+ *  cronologico — usati per popolare i selettori "Da mese/A mese" della Dashboard Allenamento. */
+function mesiConAllenamento(){
+  return Array.from(new Set((stato.ds.allenamenti||[]).map(a=>a.Mese).filter(Boolean))).sort();
+}
+
+/** Equivalente di datiFiltrati() ma per un intervallo di mesi arbitrario (da/a incluso, entrambi null =
+ *  tutta la stagione) invece del singolo mese/tutto del filtro periodo generale in alto: usato dalla
+ *  sezione "Carico di allenamento e stanchezza stimata" (05) e dai report PDF allenamenti, che devono
+ *  poter coprire un arco di più mesi indipendente dal filtro periodo che governa il resto della dashboard. */
+function datiAllenamentoIntervallo(da, a){
+  const ds = stato.ds;
+  const allenamenti = ds.allenamenti.filter(x => meseNelPeriodo(x.Mese, da, a));
+  const idSess = new Set(allenamenti.map(x=>x.Sessione_ID));
+  return {
+    allenamenti,
+    presenze: ds.presenze.filter(p => idSess.has(p.Sessione_ID)),
+    statAllenamento: ds.statAllenamento.filter(g => idSess.has(g.Sessione_ID))
+  };
+}
+
+/** Sotto questa soglia di allenamenti-con-statistiche-di-gioco nel periodo scelto, l'indice sotto non
+ *  classifica più nessuno come Alto/Basso (mostra "n/d" per tutti) — vedi il commento sopra
+ *  stimaCaricoStanchezza per il motivo. Valori scelti da me, non richiesti esplicitamente dall'utente:
+ *  ragionevoli per un'amatoriale che si allena 1-2 volte a settimana, ma tarabili se servisse diversamente. */
+const CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA = 4;
+const CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE = 2;
+/** Stima un indice di carico/stanchezza SENZA un vero dato RPE (che oggi non è disponibile, vedi
+ *  ds.haRPE): combina quanto spesso un giocatore è presente agli allenamenti con quanti minuti gioca
+ *  davvero nelle partitelle (l'unico dato di volume/intensità reale che i file contengono oggi). È un
+ *  PROXY dichiarato, non un vero carico sRPE — due giocatori con lo stesso minutaggio risultano con lo
+ *  stesso indice anche se uno si allena più intensamente. Peso maggiore (70%) al volume di minuti
+ *  giocati, che è il segnale più diretto di carico fisico reale; peso minore (30%) alla sola frequenza
+ *  di presenza, che conta come esposizione ma non misura l'intensità.
+ *  Bug segnalato dall'utente il 03/09/2026: con un solo allenamento nel periodo scelto, quasi tutta la
+ *  rosa risultava "Alto" — non perché fossero davvero più carichi, ma solo perché confrontare un
+ *  giocatore contro la MEDIA DELLA SQADRA in quello stesso, unico allenamento è statisticamente fragile:
+ *  bastano un paio di giocatori entrati poco o rimasti in panchina per abbassare la media e far
+ *  risultare "sopra media" chiunque abbia giocato una seduta normale. L'utente si aspetta un "Alto" solo
+ *  dopo MOLTI allenamenti con carico alto, non da un singolo dato. Corretto imponendo due soglie minime,
+ *  sotto le quali il livello resta "n/d" invece di un'etichetta fuorviante: (1) la squadra nel suo
+ *  insieme deve avere almeno CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA allenamenti con statistiche di
+ *  gioco nel periodo, altrimenti la media di confronto stessa non è affidabile; (2) il singolo giocatore
+ *  deve averne giocate almeno CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE, altrimenti il suo indice
+ *  riflette una sola seduta isolata, non una tendenza. */
+function stimaCaricoStanchezza(righeAllenamento, statAllenamentoPeriodo){
+  const minutiPerGiocatore = new Map();
+  const sessioniPerGiocatore = new Map();
+  statAllenamentoPeriodo.forEach(r => {
+    minutiPerGiocatore.set(r.Giocatore, (minutiPerGiocatore.get(r.Giocatore)||0) + N(r.Minuti_Giocati));
+    if(!sessioniPerGiocatore.has(r.Giocatore)) sessioniPerGiocatore.set(r.Giocatore, new Set());
+    sessioniPerGiocatore.get(r.Giocatore).add(r.Sessione_ID);
+  });
+  const sessioniConStatNelPeriodo = new Set(statAllenamentoPeriodo.map(r=>r.Sessione_ID)).size;
+  const righe = righeAllenamento.map(r => ({
+    Giocatore: r.Giocatore, Sessioni_Presenti: r.Sessioni_Presenti, Sessioni_Totali: r.Sessioni_Totali,
+    Tasso_Presenza_pct: r.Tasso_Presenza_pct, Minuti_Partitelle: minutiPerGiocatore.get(r.Giocatore) || 0,
+    Sessioni_Con_Stat: sessioniPerGiocatore.get(r.Giocatore) ? sessioniPerGiocatore.get(r.Giocatore).size : 0
+  }));
+  const maxMinuti = Math.max(1, ...righe.map(r=>r.Minuti_Partitelle));
+  righe.forEach(r => {
+    const normMinuti = (r.Minuti_Partitelle / maxMinuti) * 100;
+    r.Indice_Stanchezza = Math.round(normMinuti*0.7 + (r.Tasso_Presenza_pct??0)*0.3);
+  });
+  const mediaIndice = righe.length ? righe.reduce((a,r)=>a+r.Indice_Stanchezza,0)/righe.length : 0;
+  const campioneSquadraSufficiente = sessioniConStatNelPeriodo >= CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA;
+  righe.forEach(r => {
+    const campioneGiocatoreSufficiente = r.Sessioni_Con_Stat >= CARICO_STANCHEZZA_SESSIONI_MINIME_GIOCATORE;
+    r.Livello_Stanchezza = (mediaIndice<=0 || !campioneSquadraSufficiente || !campioneGiocatoreSufficiente)
+      ? "n/d" : (r.Indice_Stanchezza >= mediaIndice*1.2 ? "Alto" : r.Indice_Stanchezza <= mediaIndice*0.8 ? "Basso" : "Medio");
+  });
+  return {righe: righe.sort((a,b)=>b.Indice_Stanchezza - a.Indice_Stanchezza), sessioniConStatNelPeriodo, campioneSquadraSufficiente};
+}
+
+/** Indice prestazione medio di un giocatore in un dato mese, sulle sole partite di quel mese. */
+function indiceMedioGiocatoreMese(giocatori, mese){
+  const righe = giocatori.filter(g => g.Mese === mese);
+  const agg = aggregaGiocatori(righe);
+  const map = new Map();
+  agg.forEach(a => map.set(a.Giocatore, a.Indice_Prestazione_Medio));
+  return map;
+}
+
+/** Segnali incrociati carico di allenamento ↔ rendimento in partita, mese su mese. */
+function incrociCaricoRendimento(ds){
+  const mesiConPartite = Array.from(new Set(ds.partite.map(p=>p.Mese).filter(Boolean))).sort();
+  const caricoGM = caricoGiocatoreMese(ds.presenze);
+  const out = [];
+  for(let i=1;i<mesiConPartite.length;i++){
+    const mPrec = mesiConPartite[i-1], mCorr = mesiConPartite[i];
+    const idxPrec = indiceMedioGiocatoreMese(ds.giocatori, mPrec);
+    const idxCorr = indiceMedioGiocatoreMese(ds.giocatori, mCorr);
+    idxCorr.forEach((valCorr, nome) => {
+      const valPrec = idxPrec.get(nome);
+      if(valPrec === undefined || valPrec === null || valCorr === null) return;
+      const deltaIndice = valCorr - valPrec;
+      const caricoPrec = caricoGM.get(nome+"|"+mPrec) || 0;
+      const caricoCorr = caricoGM.get(nome+"|"+mCorr) || 0;
+      if(caricoPrec <= 0) return;
+      const rapportoCarico = caricoCorr / caricoPrec;
+      let tipo = null;
+      if(rapportoCarico >= 1.4 && deltaIndice <= -1.5) tipo = "affaticamento";
+      else if(rapportoCarico >= 0.75 && rapportoCarico <= 1.3 && deltaIndice >= 1.5) tipo = "positivo";
+      else if(rapportoCarico <= 0.6 && deltaIndice <= -1.5) tipo = "carico_basso";
+      if(tipo) out.push({Giocatore:nome, mesePrec:mPrec, meseCorr:mCorr, deltaIndice, rapportoCarico, caricoPrec, caricoCorr, tipo});
+    });
+  }
+  return out.sort((a,b)=> Math.abs(b.deltaIndice) - Math.abs(a.deltaIndice));
+}
+
+/** Classifica i giocatori per coinvolgimento nel gioco (azioni con palla rapportate a una partita intera di
+ *  calcio a 7, MINUTI_PARTITA_INTERA), su tutta la stagione. Era normalizzato "ogni 90'" come nel calcio a
+ *  11: riferimento sbagliato per questo sport, corretto il 04/09/2026 su segnalazione di Elisa.
+ *  Proxy costruita solo con azioni tentate dal giocatore stesso (passaggi, tiri, dribbling): non misura
+ *  quanto un giocatore viene cercato dai compagni, perché i passaggi ricevuti non sono tra i dati raccolti. */
+function classificaCoinvolgimento(righe){
+  return aggregaGiocatori(righe)
+    .map(a => ({
+      Giocatore:a.Giocatore, Ruolo:a.Ruolo, Partite_Giocate:a.Partite_Giocate,
+      Minuti_Totali:a.Minuti_Totali, Azioni_Totali:a.Azioni_Totali,
+      Coinvolgimento_Partita: a.Minuti_Totali > 0 ? (a.Azioni_Totali/a.Minuti_Totali)*MINUTI_PARTITA_INTERA : null
+    }))
+    .filter(a => a.Coinvolgimento_Partita !== null)
+    .sort((a,b) => b.Coinvolgimento_Partita - a.Coinvolgimento_Partita);
+}
+
+/** Rendimento di squadra aggregato per modulo tattico (colonna facoltativa Modulo nel foglio Partite).
+ *  Non tiene conto della forza dell'avversario: vedi avvertenza in Metodologia. */
+function rendimentoPerFormazione(ds){
+  const gruppi = new Map();
+  ds.partite.forEach(p => {
+    const mod = p.Modulo || "Non indicato";
+    if(!gruppi.has(mod)) gruppi.set(mod, []);
+    gruppi.get(mod).push(p);
+  });
+  return Array.from(gruppi.entries()).map(([modulo, partite]) => {
+    const ids = new Set(partite.map(p=>p.Match_ID));
+    const righe = ds.giocatori.filter(g => ids.has(g.Match_ID));
+    const s = riepilogoSquadra(righe, partite);
+    const n = partite.length;
+    const diffRetiTot = partite.reduce((a,p)=>a+(p.Gol_Fatti-p.Gol_Subiti),0);
+    return {
+      Modulo: modulo, Partite: n,
+      Gol_Fatti_Media: n ? s.gol_fatti/n : null,
+      Gol_Subiti_Media: n ? s.gol_subiti/n : null,
+      Differenza_Reti_Media: n ? diffRetiTot/n : null,
+      Precisione_Passaggi_pct: s.precisione_passaggi,
+      Tasso_Errore_pct: s.tasso_errore,
+      sufficiente: n >= 2 && modulo !== "Non indicato"
+    };
+  }).sort((a,b) => (b.Differenza_Reti_Media ?? -999) - (a.Differenza_Reti_Media ?? -999));
+}
+
+/* ---------------------- Validazione ---------------------- */
+function validaDati(ds){
+  const av = [];
+  const add = (tipo, testo) => av.push({tipo, testo});
+  const idPartite = new Set(ds.partite.map(p=>p.Match_ID));
+  const idUsati = new Set(ds.giocatori.map(g=>g.Match_ID));
+  ds.giocatori.forEach(g => { if(!idPartite.has(g.Match_ID))
+    add("errore", `La riga di <strong>${esc(g.Giocatore)}</strong> ha Match_ID «${esc(g.Match_ID)}», che non esiste nel foglio Partite: quella partita non entra nei calcoli di data e periodo.`); });
+  ds.partite.forEach(p => { if(!idUsati.has(p.Match_ID))
+    add("attenzione", `La partita <strong>${esc(p.Match_ID)}</strong> (${dataLabel(p.Data)} vs ${esc(p.Avversario)}) non ha nessuna riga giocatore in Statistiche_Giocatori.`); });
+  ds.giocatori.forEach(g => {
+    const dove = `${esc(g.Giocatore)} — ${esc(g.Match_ID)}`;
+    if(g.Dribbling_Falliti > g.Dribbling_Tentati)
+      add("errore", `${dove}: i dribbling falliti (${nf0(g.Dribbling_Falliti)}) sono più di quelli tentati (${nf0(g.Dribbling_Tentati)}).`);
+    if(g.Gol > g.Tiri_In_Porta)
+      add("errore", `${dove}: ${nf0(g.Gol)} gol con soli ${nf0(g.Tiri_In_Porta)} tiri in porta. Ogni gol nasce da un tiro in porta, quindi uno dei due valori è da correggere.`);
+    if(g.Minuti_Giocati < 0 || g.Minuti_Giocati > 90)
+      add("attenzione", `${dove}: minuti giocati fuori dall'intervallo previsto 0–90 (${nf0(g.Minuti_Giocati)}).`);
+    ["Gol","Assist","Tiri_In_Porta","Tiri_Fuori","Passaggi_Corretti","Passaggi_Sbagliati","Dribbling_Tentati","Dribbling_Falliti","Recuperi","Parate"].forEach(c => {
+      if(N(g[c]) < 0) add("errore", `${dove}: valore negativo nella colonna ${c} (${nf0(N(g[c]))}).`);
+    });
+    if(g.Parate > 0 && !/portier/i.test(g.Ruolo))
+      add("attenzione", `${dove}: ${nf0(g.Parate)} parate registrate per un giocatore con ruolo «${esc(g.Ruolo)}». Le parate contano molto nell'indice prestazione: controlla che il ruolo sia corretto.`);
+  });
+  const dupG = new Map();
+  ds.giocatori.forEach(g => { const k = g.Match_ID+"|"+g.Giocatore; dupG.set(k, (dupG.get(k)||0)+1); });
+  dupG.forEach((n,k) => { if(n>1) add("errore", `Riga duplicata in Statistiche_Giocatori: ${esc(k.replace("|"," — "))} appare ${n} volte, quindi i suoi numeri vengono contati più volte.`); });
+  const dupP = new Map();
+  ds.presenze.forEach(p => { const k = p.Sessione_ID+"|"+p.Giocatore; dupP.set(k, (dupP.get(k)||0)+1); });
+  dupP.forEach((n,k) => { if(n>1) add("errore", `Riga duplicata in Presenze_Allenamento: ${esc(k.replace("|"," — "))} appare ${n} volte.`); });
+  const idSess = new Set(ds.allenamenti.map(a=>a.Sessione_ID));
+  ds.presenze.forEach(p => {
+    const dove = `${esc(p.Giocatore)} — ${esc(p.Sessione_ID)}`;
+    if(!idSess.has(p.Sessione_ID))
+      add("errore", `${dove}: la sessione non esiste nel foglio Allenamenti, quindi la presenza non viene attribuita a nessun mese.`);
+    if(p.Presente && p.RPE!==null && (p.RPE < 1 || p.RPE > 10))
+      add("attenzione", `${dove}: RPE fuori dalla scala 1–10 (${nf(p.RPE,0)}). Il carico di allenamento risulta distorto.`);
+    if(!p.Presente && p.Minuti_Allenamento > 0)
+      add("attenzione", `${dove}: segnato assente ma con ${nf0(p.Minuti_Allenamento)} minuti di allenamento. Il carico è stato messo a 0.`);
+    if(p.DurataSessione !== null && p.Minuti_Allenamento > p.DurataSessione && p.DurataSessione > 0)
+      add("attenzione", `${dove}: ${nf0(p.Minuti_Allenamento)} minuti di allenamento su una sessione di ${nf0(p.DurataSessione)} minuti.`);
+  });
+  // nomi unificati (12/10/2026): non è un errore, ma va detto cosa è stato unito
+  (ds.unioniNomi || []).forEach(u => add("attenzione",
+    `Nome scritto in modi diversi nei file: ${u.varianti.map(v => "«"+esc(v)+"»").join(", ")} ${u.varianti.length === 1 ? "è stato unito" : "sono stati uniti"} a <strong>«${esc(u.nome)}»</strong>, la grafia più usata. Se fossero persone diverse, scrivi i nomi in modo che si distinguano anche senza maiuscole.`));
+  return av;
+}
+
+/* =====================================================================
+   STATO E RENDER
+   ===================================================================== */
+const stato = {ds:null, periodo:"tutto", giocatore:null, ordina:{col:"Indice_Prestazione_Tot", dir:-1},
+  ordinaAllenamento:{col:"Indice_Prestazione_Tot", dir:-1}, chiaveIA:"", grafici:{}, confrontoA:null, confrontoB:null,
+  // Periodo proprio della sezione "Carico di allenamento e stanchezza stimata" (05): indipendente dal
+  // filtro periodo generale in alto, null/null = tutta la stagione. Vedi datiAllenamentoIntervallo.
+  allenamentoDashDa:null, allenamentoDashA:null,
+  // Sessione singola scelta nella sezione "Zone di recupero e palla persa (allenamento)": "" = tutte.
+  // Serve perché il confronto Squadra A/B ha senso solo su una sessione sola (19/09/2026).
+  zoneSessione:"",
+  possessoPartita:"", // partita scelta nella sezione «Possesso palla e momentum» (18/10/2026)
+  persaGolPartita:"", persaGolAllenamento:"", // selettore partita/allenamento della sezione "palle perse → gol"
+  inCampoPartita:"", inCampoAllenamento:"", // selettore della sezione "gol subiti e chi è in campo"
+  formazionePartita:"", criterioFormazionePartita:"saldo", criterioFormazioneAllenamento:"saldo", // "la formazione migliore"
+  // Sezioni "Dove perde palla": giocatore scelto in allenamento, e ambito (stagione o singola partita)
+  // nella scheda Giocatori (19/09/2026).
+  persaGiocatoreAll:"", persaAmbitoPartita:"",
+  // Confronto tra due giocatori sui dati di ALLENAMENTO (19/09/2026), gemello di confrontoA/confrontoB
+  confrontoAllA:null, confrontoAllB:null};
+
+function colore(nome){ return getComputedStyle(document.documentElement).getPropertyValue("--"+nome).trim(); }
+function distruggiGrafici(){ Object.values(stato.grafici).forEach(c => { try{ c.destroy(); }catch(e){} }); stato.grafici = {}; }
+
+function creaGrafico(id, config, root=document){
+  const el = root.getElementById ? root.getElementById(id) : root.querySelector("#"+id);
+  if(!el) return null;
+  if(stato.grafici[id]){ try{ stato.grafici[id].destroy(); }catch(e){} }
+  const chart = new Chart(el, config);
+  stato.grafici[id] = chart;
+  return chart;
+}
+
+/** Opzioni comuni a tutti i grafici Chart.js. Nota sul merge (04/09/2026): Object.assign è superficiale,
+ *  quindi chi passa un proprio ramo `plugins` perderebbe legenda e stile del tooltip di base — quel solo
+ *  ramo viene quindi fuso a mano, un livello per plugin. `scales` resta invece a sostituzione piena: i
+ *  grafici radar dichiarano una scala `r` che non deve convivere con le `x`/`y` di base. */
+function baseOpzioni(extra={}){
+  const testo = colore("muted"), griglia = colore("grid");
+  const base = {
+    responsive:true, maintainAspectRatio:false,
+    animation: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? false : {duration:600},
+    interaction:{mode:"nearest", intersect:false},
+    plugins:{
+      legend:{display:true, position:"bottom", labels:{color:testo, boxWidth:12, boxHeight:12, font:{size:11}, usePointStyle:true, padding:12}},
+      tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8, displayColors:true}
+    },
+    scales:{
+      x:{ticks:{color:testo, font:{size:11}, maxRotation:0, autoSkipPadding:12}, grid:{color:griglia, drawTicks:false}, border:{color:griglia}},
+      y:{ticks:{color:testo, font:{size:11}}, grid:{color:griglia, drawTicks:false}, border:{color:griglia}}
+    }
+  };
+  const opz = Object.assign({}, base, extra);
+  if(extra.plugins){
+    opz.plugins = Object.assign({}, base.plugins);
+    Object.keys(extra.plugins).forEach(k => {
+      opz.plugins[k] = Object.assign({}, base.plugins[k] || {}, extra.plugins[k]);
+    });
+  }
+  return opz;
+}
+
+function datiFiltrati(){
+  const ds = stato.ds;
+  if(stato.periodo === "tutto")
+    return {partite:ds.partite, giocatori:ds.giocatori, allenamenti:ds.allenamenti, presenze:ds.presenze,
+      statAllenamento: ds.statAllenamento, mese:null};
+  const m = stato.periodo;
+  const partite = ds.partite.filter(p => p.Mese === m);
+  const ids = new Set(partite.map(p=>p.Match_ID));
+  return {partite, giocatori: ds.giocatori.filter(g => ids.has(g.Match_ID)),
+    allenamenti: ds.allenamenti.filter(a => a.Mese === m),
+    presenze: ds.presenze.filter(p => p.Mese === m),
+    statAllenamento: ds.statAllenamento.filter(g => g.Mese === m), mese:m};
+}
+function mesePrecedenteConDati(mese){
+  const ds = stato.ds;
+  const mesiPartite = Array.from(new Set(ds.partite.map(p=>p.Mese).filter(Boolean))).sort();
+  if(mese){ const i = mesiPartite.indexOf(mese); return i > 0 ? mesiPartite[i-1] : null; }
+  return mesiPartite.length >= 2 ? mesiPartite[mesiPartite.length-2] : null;
+}
+function meseCorrenteRiferimento(mese){
+  const ds = stato.ds;
+  const mesiPartite = Array.from(new Set(ds.partite.map(p=>p.Mese).filter(Boolean))).sort();
+  return mese || (mesiPartite.length ? mesiPartite[mesiPartite.length-1] : null);
+}
+/** Equivalenti dei tre helper sopra ma basati sui mesi delle sessioni di allenamento invece che delle
+ *  partite: usati per il confronto mese su mese delle statistiche da allenamento (KPI, andamento). */
+function datiMeseAllenamento(m){
+  const ds = stato.ds;
+  return {allenamenti: ds.allenamenti.filter(a=>a.Mese===m), statAllenamento: ds.statAllenamento.filter(g=>g.Mese===m)};
+}
+function mesePrecedenteConDatiAllenamento(mese){
+  const ds = stato.ds;
+  const mesiAll = Array.from(new Set(ds.allenamenti.map(a=>a.Mese).filter(Boolean))).sort();
+  if(mese){ const i = mesiAll.indexOf(mese); return i > 0 ? mesiAll[i-1] : null; }
+  return mesiAll.length >= 2 ? mesiAll[mesiAll.length-2] : null;
+}
+function meseCorrenteRiferimentoAllenamento(mese){
+  const ds = stato.ds;
+  const mesiAll = Array.from(new Set(ds.allenamenti.map(a=>a.Mese).filter(Boolean))).sort();
+  return mese || (mesiAll.length ? mesiAll[mesiAll.length-1] : null);
+}
+function datiMese(m){
+  const ds = stato.ds;
+  const partite = ds.partite.filter(p=>p.Mese===m);
+  const ids = new Set(partite.map(p=>p.Match_ID));
+  return {partite, giocatori: ds.giocatori.filter(g=>ids.has(g.Match_ID)),
+    allenamenti: ds.allenamenti.filter(a=>a.Mese===m), presenze: ds.presenze.filter(p=>p.Mese===m)};
+}
+
+/* --------- 3. KPI --------- */
+function renderKPI(f){
+  const s = riepilogoSquadra(f.giocatori, f.partite);
+  const mCorr = meseCorrenteRiferimento(f.mese), mPrec = mesePrecedenteConDati(f.mese);
+  let sPrec = null, sCorr = null;
+  if(mPrec){
+    const dPrec = datiMese(mPrec), dCorr = datiMese(mCorr);
+    sPrec = riepilogoSquadra(dPrec.giocatori, dPrec.partite);
+    sCorr = riepilogoSquadra(dCorr.giocatori, dCorr.partite);
+  }
+  const perGara = v => f.partite.length>0 ? v/f.partite.length : null;
+  const kpi = [
+    {eti:"Gol fatti", val:nf0(s.gol_fatti), nota: f.partite.length? nf(perGara(s.gol_fatti),1)+" a partita":"", raw:s.gol_fatti,
+      prevRaw: sPrec?sPrec.gol_fatti:null, currRaw: sCorr?sCorr.gol_fatti:null, meglio:"alto", dec:0, unit:""},
+    {eti:"Gol subiti", val:nf0(s.gol_subiti), nota: f.partite.length? nf(perGara(s.gol_subiti),1)+" a partita":"", raw:s.gol_subiti,
+      prevRaw: sPrec?sPrec.gol_subiti:null, currRaw: sCorr?sCorr.gol_subiti:null, meglio:"basso", dec:0, unit:""},
+    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.gol_giocatori)+" gol e "+nf0(s.assist)+" assist dai giocatori",
+      prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
+    s.tiri_porta_rilevati
+      ? {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
+          prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"}
+      : {eti:"Realizzazione", val:pctTxt(s.efficacia_realizzativa), nota:nf0(s.gol_giocatori)+" gol su "+nf0(s.tiri_totali)+" tiri",
+          prevRaw: sPrec?sPrec.efficacia_realizzativa:null, currRaw: sCorr?sCorr.efficacia_realizzativa:null, meglio:"alto", dec:1, unit:" pt"},
+    {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:"Tasso di errore squadra "+pctTxt(s.tasso_errore),
+      prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
+  ];
+
+  $("#kpi-desc").textContent = mPrec
+    ? (f.mese
+        ? `Valori di ${meseLabel(mCorr)}. Le frecce confrontano ${meseBreve(mCorr)} con ${meseLabel(mPrec)}, l'ultimo mese precedente con dati.`
+        : `Totali di tutta la stagione caricata. Le frecce confrontano ${meseLabel(mCorr)} con ${meseLabel(mPrec)}, cioè gli ultimi due mesi con dati.`)
+    : "Sintesi del periodo selezionato. Il confronto mese su mese comparirà quando avrai caricato partite in almeno due mesi diversi.";
+
+  $("#griglia-kpi").innerHTML = kpi.map(k => {
+    let delta = "";
+    if(k.prevRaw !== null && k.prevRaw !== undefined && k.currRaw !== null && k.currRaw !== undefined && isFinite(k.prevRaw) && isFinite(k.currRaw)){
+      const d = k.currRaw - k.prevRaw;
+      const buono = k.meglio === "basso" ? d < 0 : d > 0;
+      const cls = Math.abs(d) < (k.dec===0?0.5:0.05) ? "neutro" : (buono ? "su":"giu");
+      const freccia = d > 0 ? "▲" : (d < 0 ? "▼" : "▬");
+      const etichetta = cls==="neutro" ? "stabile" : (buono ? "in miglioramento" : "in peggioramento");
+      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)} · ${etichetta}</span></div>`;
+    } else {
+      delta = `<div class="kpi-delta neutro"><span>Confronto mese su mese non disponibile</span></div>`;
+    }
+    return `<div class="kpi"><div class="kpi-eti">${esc(k.eti)}</div><div class="kpi-valore">${k.val}</div>${delta}${k.nota?`<div class="kpi-nota">${esc(k.nota)}</div>`:""}</div>`;
+  }).join("");
+}
+
+/* --------- 4. Andamento --------- */
+function renderAndamento(f){
+  const cont = $("#contenuto-andamento");
+  if(f.partite.length === 0){
+    cont.className = ""; cont.innerHTML = `<div class="vuoto"><strong>Nessuna partita nel periodo selezionato.</strong> Cambia periodo dal filtro in alto oppure aggiungi partite al file Excel.</div>`;
+    return;
+  }
+  const perMatch = f.partite.map(p => {
+    const righe = f.giocatori.filter(g => g.Match_ID === p.Match_ID);
+    const s = riepilogoSquadra(righe, [p]);
+    return {p, s};
+  });
+  const etichette = perMatch.map(x => x.p.Etichetta);
+  const serie = [
+    {id:"gr-gol", titolo:"Gol fatti e subiti per partita", sub:"Linee continue: gol; la tratteggiata è la media dei gol fatti nel periodo.",
+     dataset:[{label:"Gol fatti", data:perMatch.map(x=>x.p.Gol_Fatti), color:colore("c1")},
+              {label:"Gol subiti", data:perMatch.map(x=>x.p.Gol_Subiti), color:colore("c2")}],
+     media: perMatch.reduce((a,x)=>a+x.p.Gol_Fatti,0)/perMatch.length, mediaLabel:"Media gol fatti", suffisso:""},
+    {id:"gr-passaggi", titolo:"Precisione passaggi di squadra", sub:"Passaggi corretti sul totale, partita per partita.",
+     dataset:[{label:"Precisione passaggi", data:perMatch.map(x=>x.s.precisione_passaggi), color:colore("c1")}],
+     media: media(perMatch.map(x=>x.s.precisione_passaggi)), mediaLabel:"Media periodo", suffisso:"%"},
+    tiriPortaRilevati(f.giocatori)
+      ? {id:"gr-tiro", titolo:"Precisione al tiro di squadra", sub:"Tiri in porta sul totale dei tiri, partita per partita.",
+         dataset:[{label:"Precisione al tiro", data:perMatch.map(x=>x.s.precisione_tiro), color:colore("c3")}],
+         media: media(perMatch.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"}
+      : {id:"gr-tiro", titolo:"Realizzazione di squadra", sub:"Gol sul totale dei tiri, partita per partita.",
+         dataset:[{label:"Realizzazione", data:perMatch.map(x=>x.s.efficacia_realizzativa), color:colore("c3")}],
+         media: media(perMatch.map(x=>x.s.efficacia_realizzativa)), mediaLabel:"Media periodo", suffisso:"%"},
+    {id:"gr-errore", titolo:"Tasso di errore di squadra", sub:"Palloni persi sul totale delle azioni: più è basso, meglio è.",
+     dataset:[{label:"Tasso di errore", data:perMatch.map(x=>x.s.tasso_errore), color:colore("c5")}],
+     media: media(perMatch.map(x=>x.s.tasso_errore)), mediaLabel:"Media periodo", suffisso:"%"}
+  ];
+  cont.className = "griglia g-2";
+  cont.innerHTML = serie.map(s => `<div class="card"><div class="grafico-titolo">${esc(s.titolo)}</div><div class="grafico-sub">${esc(s.sub)}</div><div class="grafico-wrap"><canvas id="${s.id}"></canvas></div></div>`).join("");
+  serie.forEach(s => {
+    const ds = s.dataset.map(d => ({
+      label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color,
+      pointRadius:4, pointHoverRadius:6, borderWidth:2.5, tension:0.25, spanGaps:true
+    }));
+    if(s.media !== null && isFinite(s.media)){
+      ds.push({label:s.mediaLabel+" ("+nf(s.media, s.suffisso?1:1)+s.suffisso+")",
+        data:etichette.map(()=>s.media), borderColor:colore("faint"), borderDash:[6,5], borderWidth:1.8, pointRadius:0, fill:false});
+    }
+    creaGrafico(s.id, {type:"line", data:{labels:etichette, datasets:ds},
+      options:baseOpzioni({scales:{
+        x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, minRotation:0, autoSkip:true, maxTicksLimit:8}, grid:{display:false}, border:{color:colore("grid")}},
+        y:{beginAtZero:true, suggestedMax: s.suffisso==="%"?100:undefined, ticks:{color:colore("muted"), font:{size:11}, callback:v=>nf0(v)+s.suffisso}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }})});
+  });
+}
+function media(arr){ const v = arr.filter(x=>x!==null && isFinite(x)); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; }
+
+/* --------- 5. Classifica --------- */
+/* Colonne della classifica giocatori.
+   19/09/2026, richiesta di Elisa: ogni percentuale deve poter essere "interrogata" nei numeri che la
+   generano. Il motivo è concreto e riguarda la lettura, non la curiosità: un 60% di dribbling riusciti
+   sembra un dato mediocre, ma se arriva da 12 tentativi su 20 racconta un giocatore che prova molto,
+   mentre lo stesso 60% da 3 su 5 non racconta niente. Senza i numeri sotto, la percentuale da sola può
+   far sembrare peggiore proprio chi osa di più. Le colonne marcate `assoluta:true` sono quelle aggiunte
+   per questo, e si possono nascondere con l'interruttore sopra la tabella (la scelta viene ricordata). */
+const COLONNE_TAB = [
+  {k:"Giocatore", eti:"Giocatore", tipo:"testo"},
+  {k:"Partite_Giocate", eti:"Partite", tipo:"num", dec:0},
+  {k:"Minuti_Totali", eti:"Minuti", tipo:"num", dec:0},
+  {k:"Gol", eti:"Gol", tipo:"num", dec:0},
+  {k:"Assist", eti:"Assist", tipo:"num", dec:0},
+  {k:"Passaggi_Corretti", eti:"Passaggi riusciti", tipo:"num", dec:0, assoluta:true},
+  {k:"Passaggi_Totali", eti:"Passaggi tentati", tipo:"num", dec:0, assoluta:true},
+  {k:"Precisione_Passaggi_pct", eti:"Prec. passaggi", tipo:"pct"},
+  {k:"Dribbling_Riusciti", eti:"Dribbling riusciti", tipo:"num", dec:0, assoluta:true},
+  {k:"Dribbling_Tentati", eti:"Dribbling tentati", tipo:"num", dec:0, assoluta:true},
+  {k:"Successo_Dribbling_pct", eti:"Succ. dribbling", tipo:"pct"},
+  {k:"Errori_Totali", eti:"Errori", tipo:"num", dec:0, assoluta:true},
+  {k:"Azioni_Totali", eti:"Azioni totali", tipo:"num", dec:0, assoluta:true},
+  {k:"Tasso_Errore_pct", eti:"Tasso errore", tipo:"pct"},
+  {k:"Indice_Prestazione_Tot", eti:"Indice prest.", tipo:"num", dec:1},
+  {k:"sparkline", eti:"Andamento indice", tipo:"spark"}
+];
+/** Stesse colonne di COLONNE_TAB per la classifica giocatori da statistiche di allenamento: unica
+ *  differenza, "Partite" diventa "Sessioni" perché qui si conta il numero di sessioni con dati, non di
+ *  partite vere (il campo JS sottostante resta Partite_Giocate, riusato da aggregaGiocatori). */
+const COLONNE_TAB_ALLENAMENTO = COLONNE_TAB.map(c => c.k === "Partite_Giocate" ? {...c, eti:"Sessioni"} : {...c});
+
+/** Valore di una cella "assoluta" per la riga aggregata. Tenuto in un posto solo così l'ordinamento e la
+ *  cella mostrano sempre lo stesso numero. */
+function valoreColonna(a, k){ return a[k]; }
+
+/** Interruttore "numeri dietro le percentuali". Ricordato nel browser: è una preferenza di lettura, non
+ *  un dato, e riaprire l'app con la tabella diversa da come l'hai lasciata è fastidioso. */
+const CHIAVE_ASSOLUTI = "calcio7-mostra-assoluti";
+function mostraAssoluti(){
+  try{ const v = window[MEMORIA_CHIAVE].getItem(CHIAVE_ASSOLUTI); return v === null ? true : v === "1"; }
+  catch(e){ return true; }
+}
+function impostaMostraAssoluti(v){
+  try{ window[MEMORIA_CHIAVE].setItem(CHIAVE_ASSOLUTI, v ? "1" : "0"); }catch(e){}
+}
+function interruttoreAssoluti(idTabella){
+  return `<div class="riga-interruttore">
+    <label class="interruttore"><input type="checkbox" id="sw-assoluti-${idTabella}"${mostraAssoluti()?" checked":""}>
+    <span>Mostra i numeri dietro le percentuali</span></label>
+    <span class="nota-piccola">Es. il successo nel dribbling accanto ai dribbling riusciti e tentati: una percentuale bassa su molti tentativi è un'altra cosa rispetto alla stessa percentuale su pochi.</span>
+  </div>`;
+}
+function collegaInterruttoreAssoluti(cont, idTabella, ridisegna){
+  const sw = cont.querySelector("#sw-assoluti-"+idTabella);
+  if(sw) sw.addEventListener("change", e => { impostaMostraAssoluti(e.target.checked); ridisegna(); });
+}
+function renderClassifica(f){
+  const cont = $("#contenuto-classifica");
+  const agg = aggregaGiocatori(f.giocatori);
+  if(agg.length === 0){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna riga giocatore nel periodo selezionato.</strong> Prova a scegliere «Tutta la stagione» dal filtro Periodo.</div>`;
+    return;
+  }
+  const {col, dir} = stato.ordina;
+  agg.sort((a,b) => {
+    if(col === "Giocatore") return dir * String(a.Giocatore).localeCompare(String(b.Giocatore), "it");
+    const va = a[col], vb = b[col];
+    const na = (va===null||va===undefined||!isFinite(va)) ? -Infinity : va;
+    const nb = (vb===null||vb===undefined||!isFinite(vb)) ? -Infinity : vb;
+    return dir === -1 ? nb - na : na - nb;
+  });
+  const colonne = COLONNE_TAB.filter(c => !c.assoluta || mostraAssoluti());
+  const cella = (a, c) => {
+    if(c.k === "Giocatore") return `<td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>`;
+    if(c.k === "sparkline") return `<td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)}"></canvas></td>`;
+    if(c.k === "Minuti_Totali") return `<td>${nf0(a.Minuti_Totali)}'</td>`;
+    if(c.k === "Indice_Prestazione_Tot") return `<td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a partita</span></td>`;
+    if(c.tipo === "pct") return `<td>${pctTxt(valoreColonna(a,c.k))}</td>`;
+    return `<td>${nf(valoreColonna(a,c.k), c.dec||0)}</td>`;
+  };
+  const righe = agg.map(a => `<tr>${colonne.map(c => cella(a,c)).join("")}</tr>`).join("");
+  cont.innerHTML = interruttoreAssoluti("partite") + `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Classifica dei giocatori nel periodo selezionato</caption>
+    <thead><tr>${colonne.map(c => {
+      const sort = c.k === col ? (dir===-1?"descending":"ascending") : "none";
+      return `<th scope="col" data-col="${c.k}" ${c.tipo==="spark"?"":`aria-sort="${sort}" tabindex="0" role="columnheader"`}>${esc(c.eti)}</th>`;
+    }).join("")}</tr></thead><tbody>${righe}</tbody></table></div>
+    <p class="kpi-nota" style="margin-top:8px">L'indice prestazione è una somma pesata non ufficiale: utile per confrontare i giocatori della stessa squadra, non per confronti assoluti. Vedi la sezione Metodologia.</p>`;
+  collegaInterruttoreAssoluti(cont, "partite", () => renderClassifica(datiFiltrati()));
+  $$("th[data-col]", cont).forEach(th => {
+    if(th.dataset.col === "sparkline") return;
+    const attiva = () => {
+      const c = th.dataset.col;
+      if(stato.ordina.col === c) stato.ordina.dir *= -1;
+      else stato.ordina = {col:c, dir: c==="Giocatore" ? 1 : -1};
+      renderClassifica(datiFiltrati());
+    };
+    th.addEventListener("click", attiva);
+    th.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); attiva(); } });
+  });
+  $$("canvas.spark", cont).forEach(disegnaSpark);
+}
+/** La sparkline si adatta alla larghezza della cella invece di restare fissa a 88px: nella tabella
+ *  classifica quella colonna riceve lo spazio che avanza, e una linea di tendenza più larga si legge molto
+ *  meglio (04/09/2026). La funzione è scritta per poter essere richiamata più volte sullo stesso canvas
+ *  (succede dopo il ridimensionamento delle colonne): ricalcola sempre le dimensioni da zero. */
+function disegnaSpark(cv){
+  const serie = cv.dataset.serie.split(",").map(Number).filter(v=>isFinite(v));
+  const ctx = cv.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const cella = cv.parentElement;
+  const disponibile = cella ? cella.clientWidth - 20 : 0;
+  const w = Math.max(70, Math.min(360, Math.round(disponibile > 0 ? disponibile : 88)));
+  const h = 26;
+  cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+  cv.style.width = w+"px"; cv.style.height = h+"px";
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.scale(dpr, dpr); ctx.clearRect(0,0,w,h);
+  if(serie.length === 0) return;
+  if(serie.length === 1){
+    ctx.fillStyle = colore("c1"); ctx.beginPath(); ctx.arc(w/2, h/2, 3, 0, Math.PI*2); ctx.fill(); return;
+  }
+  const min = Math.min(...serie), max = Math.max(...serie), span = (max-min)||1;
+  const px = i => 3 + i*(w-6)/(serie.length-1);
+  const py = v => h-4 - ((v-min)/span)*(h-8);
+  ctx.strokeStyle = colore("c1"); ctx.lineWidth = 1.8; ctx.lineJoin = "round"; ctx.beginPath();
+  serie.forEach((v,i) => i===0 ? ctx.moveTo(px(i),py(v)) : ctx.lineTo(px(i),py(v)));
+  ctx.stroke();
+  ctx.fillStyle = colore("c1"); ctx.beginPath();
+  ctx.arc(px(serie.length-1), py(serie[serie.length-1]), 2.6, 0, Math.PI*2); ctx.fill();
+}
+
+/* --------- 6. Tendenze --------- */
+function renderTendenze(f){
+  const cont = $("#contenuto-tendenze");
+  const nPartitePerG = new Map();
+  f.giocatori.forEach(g => nPartitePerG.set(g.Giocatore, (nPartitePerG.get(g.Giocatore)||0)+1));
+  const maxPartite = Math.max(0, ...Array.from(nPartitePerG.values()));
+  if(maxPartite < 3){
+    cont.innerHTML = `<div class="vuoto"><strong>Servono almeno 3 partite giocate dallo stesso giocatore per tracciare una retta di interpolazione.</strong><br>
+      Nel periodo selezionato il giocatore con più presenze ne ha ${nf0(maxPartite)}. Questa sezione si arricchisce da sola man mano che carichi nuove partite: con 3 punti la retta è già leggibile, con 6-8 diventa affidabile.</div>`;
+    return;
+  }
+  const tutte = calcolaTendenze(f.giocatori);
+  stato.tendenze = tutte;
+  const blocchi = Object.keys(CONFIG_TREND).filter(m => m !== "Precisione_Tiro_pct" || tiriPortaRilevati(f.giocatori)).map(metrica => {
+    const cfg = CONFIG_TREND[metrica];
+    const rilev = tutte.filter(t => t.Metrica === metrica && t.rilevante)
+      .sort((a,b) => Math.abs(b.delta_totale) - Math.abs(a.delta_totale)).slice(0,3);
+    const tot = tutte.filter(t => t.Metrica === metrica).length;
+    let corpo;
+    if(tot === 0){
+      corpo = `<div class="vuoto"><strong>Dati insufficienti per questa metrica.</strong><br>Nessun giocatore ha almeno 3 partite con questo valore registrato${metrica==="Precisione_Tiro_pct"?" (serve almeno un tiro per partita)":metrica==="Tasso_Errore_pct"?" (servono passaggi, dribbling o tiri registrati)":""}. Compila la colonna corrispondente nel foglio Statistiche_Giocatori e la retta comparirà da sola.</div>`;
+    } else if(rilev.length === 0){
+      corpo = `<div class="vuoto">Nessuna tendenza marcata su questa metrica: per i ${nf0(tot)} giocatori con almeno 3 partite valide i valori restano abbastanza stabili partita dopo partita (variazione sotto ${nf0(cfg.soglia)}${cfg.unit} oppure andamento troppo irregolare per essere considerato una tendenza).</div>`;
+    } else {
+      corpo = `<div class="griglia g-2">` + rilev.map((t,i) => {
+        const id = "gr-trend-"+metrica+"-"+i;
+        const pill = t.giudizio==="positivo" ? `<span class="pill pos">Segnale positivo</span>`
+          : t.giudizio==="negativo" ? `<span class="pill neg">Da attenzionare</span>` : `<span class="pill neu">Da leggere nel contesto</span>`;
+        return `<div class="trend-card">
+          <div class="trend-testa"><div><div class="trend-nome">${esc(t.Giocatore)}</div><div class="trend-stat">${esc(t.Ruolo)} · ${cfg.label} ${t.direzione}</div></div>${pill}</div>
+          <div class="grafico-wrap"><canvas id="${id}"></canvas></div>
+          <div class="trend-frase">${esc(fraseTendenza(t))}</div>
+          <div class="trend-stat">Variazione stimata dalla retta: ${t.delta_totale>0?"+":""}${nf(t.delta_totale,cfg.dec)}${cfg.unit} su ${nf0(t.n)} partite · correlazione r = ${nf(t.r,2)} · soglia di rilevanza ${nf0(cfg.soglia)}${cfg.unit}</div>
+        </div>`;
+      }).join("") + `</div>`;
+    }
+    return {metrica, cfg, rilev, html:`<div class="trend-blocco">
+      <h3>${esc(cfg.label)}</h3><div class="meta">${esc(cfg.desc)}</div>${corpo}</div>`};
+  });
+  cont.innerHTML = blocchi.map(b => b.html).join("");
+  blocchi.forEach(b => b.rilev.forEach((t,i) => disegnaTrend("gr-trend-"+b.metrica+"-"+i, t)));
+  const nRil = tutte.filter(t=>t.rilevante).length;
+  cont.insertAdjacentHTML("beforeend", `<p class="kpi-nota">Analizzati ${nf0(new Set(tutte.map(t=>t.Giocatore)).size)} giocatori con almeno 3 partite: ${nf0(nRil)} tendenze superano la soglia di rilevanza. Le rette sono indicazioni statistiche, da confrontare con quello che hai visto in campo.</p>`);
+}
+
+function disegnaTrend(id, t){
+  const cfg = t.cfg;
+  const punti = t.punti.map(p => ({x:p.x, y:p.y, etichetta:p.etichetta}));
+  const retta = [{x:t.xmin, y:t.valore_iniziale}, {x:t.xmax, y:t.valore_finale}];
+  const colPunti = t.giudizio==="negativo" ? colore("c2") : colore("c1");
+  const ys = punti.map(p=>p.y).concat([t.valore_iniziale, t.valore_finale]);
+  const minY = Math.min(...ys), maxY = Math.max(...ys), pad = Math.max(2, (maxY-minY)*0.25);
+  creaGrafico(id, {
+    type:"scatter",
+    data:{datasets:[
+      {label:"Partite giocate", data:punti, backgroundColor:colPunti, borderColor:colPunti,
+       pointRadius:5.5, pointHoverRadius:8, showLine:false, order:2},
+      {label:"Retta di interpolazione", data:retta, borderColor:colore("text"), borderDash:[7,5], borderWidth:2.2,
+       pointRadius:0, showLine:true, fill:false, order:1}
+    ]},
+    options:baseOpzioni({
+      plugins:{
+        legend:{display:true, position:"bottom", labels:{color:colore("muted"), boxWidth:14, boxHeight:2, font:{size:11}, usePointStyle:false, padding:10}},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{
+            title:(items)=> items[0].datasetIndex===0 ? (punti[items[0].dataIndex]?.etichetta || "Partita "+items[0].parsed.x) : "Retta di interpolazione",
+            label:(it)=> cfg.label+": "+nf(it.parsed.y, cfg.dec===0?1:cfg.dec)+cfg.unit
+          }}
+      },
+      scales:{
+        x:{type:"linear", min:t.xmin-0.4, max:t.xmax+0.4,
+          title:{display:true, text:"Partita del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
+          ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
+          grid:{color:colore("grid")}, border:{color:colore("grid")}},
+        y:{min:Math.max(0, minY-pad), max:maxY+pad,
+          title:{display:true, text:cfg.label+" ("+ (cfg.unit==="'"?"minuti":"%") +")", color:colore("faint"), font:{size:10.5}},
+          ticks:{color:colore("muted"), font:{size:11}, maxTicksLimit:6, callback:v=>nf0(v)+cfg.unit}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }
+    })
+  });
+}
+
+/* ===========================================================================
+   6c. STATISTICHE DA ALLENAMENTO (partitelle): stessa profondità di analisi
+   delle partite vere (KPI, andamento, classifica, tendenze), calcolata su
+   ds.statAllenamento — un cluster di dati sempre tenuto separato da
+   ds.giocatori/ds.partite. Riusa le funzioni generiche di aggregazione
+   (aggregaGiocatori, riepilogoSquadra, calcolaTendenze) già verificate sui
+   dati di partita, ma con copie dedicate delle funzioni di rendering/testo
+   per usare un linguaggio corretto ("sessione"/"allenamento" invece di
+   "partita") e per non condividere lo stato di ordinamento della classifica
+   con quello della classifica partite (stato.ordinaAllenamento a parte).
+   =========================================================================== */
+function renderKPIAllenamentoStat(f){
+  const cont = $("#griglia-kpi-stat-allenamento");
+  const desc = $("#kpi-stat-allenamento-desc");
+  if(!stato.ds.haStatAllenamento){
+    desc.textContent = "Non disponibile: i file allenamento caricati non includono le statistiche per giocatore (gol, tiri, passaggi, ecc.), solo presenze e minuti.";
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Se le tue partitelle di allenamento vengono registrate da Seven Lab con le statistiche per giocatore, ricaricale: verranno lette automaticamente.</div>`;
+    return;
+  }
+  if(f.statAllenamento.length === 0){
+    desc.textContent = "Sintesi del periodo selezionato.";
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento nel periodo selezionato.</strong> Cambia periodo dal filtro in alto.</div>`;
+    return;
+  }
+  const s = riepilogoSquadra(f.statAllenamento, []);
+  const nSessioni = new Set(f.statAllenamento.map(g=>g.Sessione_ID)).size;
+  const presenzaSess = (() => {
+    const perSessione = new Map();
+    f.statAllenamento.forEach(r => {
+      if(!perSessione.has(r.Sessione_ID)) perSessione.set(r.Sessione_ID, new Set());
+      if(N(r.Minuti_Giocati) > 0) perSessione.get(r.Sessione_ID).add(r.Giocatore);
+    });
+    const conteggi = Array.from(perSessione.values()).map(x => x.size).filter(x => x > 0);
+    if(!conteggi.length) return {media:null, min:null, max:null};
+    return {media: conteggi.reduce((a,b)=>a+b,0)/conteggi.length, min: Math.min(...conteggi), max: Math.max(...conteggi)};
+  })();
+  const mCorr = meseCorrenteRiferimentoAllenamento(f.mese), mPrec = mesePrecedenteConDatiAllenamento(f.mese);
+  let sPrec = null, sCorr = null;
+  if(mPrec){
+    const dPrec = datiMeseAllenamento(mPrec), dCorr = datiMeseAllenamento(mCorr);
+    sPrec = riepilogoSquadra(dPrec.statAllenamento, []);
+    sCorr = riepilogoSquadra(dCorr.statAllenamento, []);
+  }
+  const kpi = [
+    {eti:"Sessioni con statistiche", val:nf0(nSessioni), nota:"Partitelle di allenamento con dati per giocatore", raw:nSessioni, prevRaw:null, currRaw:null},
+    // 19/09/2026: senza questo numero i totali di squadra sono illeggibili. Una sessione in otto e una in
+    // quattordici producono quantità molto diverse di passaggi, tiri e gol, e sommandole si ottiene un
+    // totale che dipende da quanta gente si è presentata almeno quanto da come si è giocato. Mostrando la
+    // media e l'intervalllo min-max, la disparità si vede invece di restare nascosta dentro i totali.
+    {eti:"Giocatori per sessione", val:presenzaSess.media!==null?nf(presenzaSess.media,1):"—",
+      nota: presenzaSess.min===presenzaSess.max ? "Sempre lo stesso numero di presenti" : `Da ${nf0(presenzaSess.min)} a ${nf0(presenzaSess.max)} presenti: i totali qui sotto risentono di questa differenza`,
+      raw:presenzaSess.media, prevRaw:null, currRaw:null},
+    {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist", raw:s.gol_giocatori,
+      prevRaw: sPrec?sPrec.gol_giocatori:null, currRaw: sCorr?sCorr.gol_giocatori:null, meglio:"alto", dec:0, unit:""},
+    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota: s.tiri_porta_rilevati ? nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali) : nf0(s.tiri_totali)+" tiri totali",
+      prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
+    s.tiri_porta_rilevati
+      ? {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
+          prevRaw: sPrec?sPrec.precisione_tiro:null, currRaw: sCorr?sCorr.precisione_tiro:null, meglio:"alto", dec:1, unit:" pt"}
+      : {eti:"Realizzazione", val:pctTxt(s.efficacia_realizzativa), nota:"Tasso di errore "+pctTxt(s.tasso_errore),
+          prevRaw: sPrec?sPrec.efficacia_realizzativa:null, currRaw: sCorr?sCorr.efficacia_realizzativa:null, meglio:"alto", dec:1, unit:" pt"},
+    {eti:"Successo dribbling", val:pctTxt(s.successo_dribbling), nota:nf0(s.recuperi)+" recuperi, "+nf0(s.parate)+" parate",
+      prevRaw: sPrec?sPrec.successo_dribbling:null, currRaw: sCorr?sCorr.successo_dribbling:null, meglio:"alto", dec:1, unit:" pt"}
+  ];
+  desc.textContent = mPrec
+    ? (f.mese
+        ? `Valori di ${meseLabel(mCorr)}. Le frecce confrontano ${meseBreve(mCorr)} con ${meseLabel(mPrec)}, l'ultimo mese precedente con dati.`
+        : `Totali di tutta la stagione caricata. Le frecce confrontano ${meseLabel(mCorr)} con ${meseLabel(mPrec)}, cioè gli ultimi due mesi con dati.`)
+    : "Sintesi del periodo selezionato. Il confronto mese su mese comparirà quando avrai caricato allenamenti con statistiche in almeno due mesi diversi.";
+  cont.innerHTML = kpi.map(k => {
+    let delta = "";
+    if(k.prevRaw !== null && k.prevRaw !== undefined && k.currRaw !== null && k.currRaw !== undefined && isFinite(k.prevRaw) && isFinite(k.currRaw)){
+      const d = k.currRaw - k.prevRaw;
+      const buono = k.meglio === "basso" ? d < 0 : d > 0;
+      const cls = Math.abs(d) < (k.dec===0?0.5:0.05) ? "neutro" : (buono ? "su":"giu");
+      const freccia = d > 0 ? "▲" : (d < 0 ? "▼" : "▬");
+      const etichetta = cls==="neutro" ? "stabile" : (buono ? "in miglioramento" : "in peggioramento");
+      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)} · ${etichetta}</span></div>`;
+    } else if(k.eti !== "Sessioni con statistiche") {
+      delta = `<div class="kpi-delta neutro"><span>Confronto mese su mese non disponibile</span></div>`;
+    }
+    return `<div class="kpi"><div class="kpi-eti">${esc(k.eti)}</div><div class="kpi-valore">${k.val}</div>${delta}${k.nota?`<div class="kpi-nota">${esc(k.nota)}</div>`:""}</div>`;
+  }).join("");
+}
+
+function renderAndamentoAllenamentoStat(f){
+  const cont = $("#contenuto-andamento-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.className = ""; cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore (gol, tiri, passaggi, ecc.), non solo presenze.</div>`;
+    return;
+  }
+  const sessioniConDati = Array.from(new Set(f.statAllenamento.map(g=>g.Sessione_ID)));
+  if(sessioniConDati.length === 0){
+    cont.className = ""; cont.innerHTML = `<div class="vuoto"><strong>Nessuna sessione con statistiche nel periodo selezionato.</strong> Cambia periodo dal filtro in alto.</div>`;
+    return;
+  }
+  const sessioni = f.allenamenti.filter(a => sessioniConDati.includes(a.Sessione_ID)).sort((a,b)=>a.Ordine-b.Ordine);
+  const perSessione = sessioni.map(sess => {
+    const righe = f.statAllenamento.filter(g => g.Sessione_ID === sess.Sessione_ID);
+    const s = riepilogoSquadra(righe, []);
+    return {sess, s};
+  });
+  const etichette = perSessione.map(x => x.sess.Etichetta);
+  const serie = [
+    {id:"gr-all-gol", titolo:"Gol segnati in allenamento", sub:"Totale gol dei giocatori per sessione; la tratteggiata è la media del periodo.",
+     dataset:[{label:"Gol", data:perSessione.map(x=>x.s.gol_giocatori), color:colore("c1")}],
+     media: media(perSessione.map(x=>x.s.gol_giocatori)), mediaLabel:"Media periodo", suffisso:""},
+    {id:"gr-all-passaggi", titolo:"Precisione passaggi in allenamento", sub:"Passaggi corretti sul totale, sessione per sessione.",
+     dataset:[{label:"Precisione passaggi", data:perSessione.map(x=>x.s.precisione_passaggi), color:colore("c1")}],
+     media: media(perSessione.map(x=>x.s.precisione_passaggi)), mediaLabel:"Media periodo", suffisso:"%"},
+    tiriPortaRilevati(f.statAllenamento)
+      ? {id:"gr-all-tiro", titolo:"Precisione al tiro in allenamento", sub:"Tiri in porta sul totale dei tiri, sessione per sessione.",
+         dataset:[{label:"Precisione al tiro", data:perSessione.map(x=>x.s.precisione_tiro), color:colore("c3")}],
+         media: media(perSessione.map(x=>x.s.precisione_tiro)), mediaLabel:"Media periodo", suffisso:"%"}
+      : {id:"gr-all-tiro", titolo:"Realizzazione in allenamento", sub:"Gol sul totale dei tiri, sessione per sessione.",
+         dataset:[{label:"Realizzazione", data:perSessione.map(x=>x.s.efficacia_realizzativa), color:colore("c3")}],
+         media: media(perSessione.map(x=>x.s.efficacia_realizzativa)), mediaLabel:"Media periodo", suffisso:"%"},
+    {id:"gr-all-errore", titolo:"Tasso di errore in allenamento", sub:"Palloni persi sul totale delle azioni: più è basso, meglio è.",
+     dataset:[{label:"Tasso di errore", data:perSessione.map(x=>x.s.tasso_errore), color:colore("c5")}],
+     media: media(perSessione.map(x=>x.s.tasso_errore)), mediaLabel:"Media periodo", suffisso:"%"}
+  ];
+  cont.className = "griglia g-2";
+  cont.innerHTML = serie.map(s => `<div class="card"><div class="grafico-titolo">${esc(s.titolo)}</div><div class="grafico-sub">${esc(s.sub)}</div><div class="grafico-wrap"><canvas id="${s.id}"></canvas></div></div>`).join("");
+  serie.forEach(s => {
+    const ds = s.dataset.map(d => ({
+      label:d.label, data:d.data, borderColor:d.color, backgroundColor:d.color,
+      pointRadius:4, pointHoverRadius:6, borderWidth:2.5, tension:0.25, spanGaps:true
+    }));
+    if(s.media !== null && isFinite(s.media)){
+      ds.push({label:s.mediaLabel+" ("+nf(s.media,1)+s.suffisso+")",
+        data:etichette.map(()=>s.media), borderColor:colore("faint"), borderDash:[6,5], borderWidth:1.8, pointRadius:0, fill:false});
+    }
+    creaGrafico(s.id, {type:"line", data:{labels:etichette, datasets:ds},
+      options:baseOpzioni({scales:{
+        x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, minRotation:0, autoSkip:true, maxTicksLimit:8}, grid:{display:false}, border:{color:colore("grid")}},
+        y:{beginAtZero:true, suggestedMax: s.suffisso==="%"?100:undefined, ticks:{color:colore("muted"), font:{size:11}, callback:v=>nf0(v)+s.suffisso}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }})});
+  });
+}
+
+function renderClassificaAllenamentoStat(f){
+  const cont = $("#contenuto-classifica-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore.</div>`;
+    return;
+  }
+  const agg = aggregaGiocatori(f.statAllenamento);
+  if(agg.length === 0){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna riga giocatore nel periodo selezionato.</strong> Prova a scegliere «Tutta la stagione» dal filtro Periodo.</div>`;
+    return;
+  }
+  const {col, dir} = stato.ordinaAllenamento;
+  agg.sort((a,b) => {
+    if(col === "Giocatore") return dir * String(a.Giocatore).localeCompare(String(b.Giocatore), "it");
+    const va = a[col], vb = b[col];
+    const na = (va===null||va===undefined||!isFinite(va)) ? -Infinity : va;
+    const nb = (vb===null||vb===undefined||!isFinite(vb)) ? -Infinity : vb;
+    return dir === -1 ? nb - na : na - nb;
+  });
+  // 19/09/2026, richiesta di Elisa: agli allenamenti non c'è sempre la rosa al completo, e una sessione
+  // in otto non è confrontabile con una in quattordici. Due conseguenze, entrambe gestite qui:
+  //  (1) i totali (gol, minuti, indice) premiano chi c'è sempre a prescindere da come gioca — accanto a
+  //      ogni totale compare quindi il valore medio per sessione EFFETTIVAMENTE FREQUENTATA da quel
+  //      giocatore, che è il solo denominatore corretto per confrontarlo con un compagno;
+  //  (2) chi ha frequentato poche sessioni ha medie instabili: la sua riga viene attenuata e la colonna
+  //      delle presenze dice subito su quante sessioni possibili è stato presente.
+  const sessioniPeriodo = new Set(f.statAllenamento.map(r => r.Sessione_ID)).size;
+  const sogliaPresenze = Math.max(2, Math.ceil(sessioniPeriodo * 0.3));
+  const perSess = (v, n) => (n > 0 ? v / n : null);
+  const colonne = COLONNE_TAB_ALLENAMENTO.filter(c => !c.assoluta || mostraAssoluti());
+  const cella = (a, c) => {
+    const n = a.Partite_Giocate;
+    if(c.k === "Giocatore") return `<td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>`;
+    if(c.k === "sparkline") return `<td><canvas class="spark" width="88" height="26" data-serie="${a.serieIndice.join(",")}" aria-label="Andamento dell'indice prestazione di ${esc(a.Giocatore)} in allenamento"></canvas></td>`;
+    if(c.k === "Partite_Giocate") return `<td>${nf0(n)}<span class="ruolo">su ${nf0(sessioniPeriodo)} · ${pctTxt(perc(n, sessioniPeriodo),0)}</span></td>`;
+    if(c.k === "Minuti_Totali") return `<td>${nf0(a.Minuti_Totali)}'<span class="ruolo">${nf(perSess(a.Minuti_Totali,n),1)}' a sessione</span></td>`;
+    if(c.k === "Gol") return `<td>${nf0(a.Gol)}<span class="ruolo">${nf(perSess(a.Gol,n),2)} a sessione</span></td>`;
+    if(c.k === "Assist") return `<td>${nf0(a.Assist)}<span class="ruolo">${nf(perSess(a.Assist,n),2)} a sessione</span></td>`;
+    if(c.k === "Indice_Prestazione_Tot") return `<td><strong>${nf(a.Indice_Prestazione_Tot,1)}</strong><span class="ruolo">${nf(a.Indice_Prestazione_Medio,1)} a sessione</span></td>`;
+    if(c.tipo === "pct") return `<td>${pctTxt(valoreColonna(a,c.k))}</td>`;
+    return `<td>${nf(valoreColonna(a,c.k), c.dec||0)}</td>`;
+  };
+  const righe = agg.map(a => {
+    const poche = a.Partite_Giocate < sogliaPresenze;
+    return `<tr${poche ? ' class="riga-attenuata"' : ''}>${colonne.map(c => cella(a,c)).join("")}</tr>`;
+  }).join("");
+  const attenuate = agg.filter(a => a.Partite_Giocate < sogliaPresenze).length;
+  cont.innerHTML = interruttoreAssoluti("allenamento") + `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Classifica dei giocatori nelle statistiche di allenamento del periodo selezionato</caption>
+    <thead><tr>${colonne.map(c => {
+      const sort = c.k === col ? (dir===-1?"descending":"ascending") : "none";
+      return `<th scope="col" data-col="${c.k}" ${c.tipo==="spark"?"":`aria-sort="${sort}" tabindex="0" role="columnheader"`}>${esc(c.eti)}</th>`;
+    }).join("")}</tr></thead><tbody>${righe}</tbody></table></div>
+    <p class="kpi-nota" style="margin-top:8px">Statistiche accumulate nelle partitelle di allenamento, tenute separate dalle statistiche di partita vera. Stesso indice prestazione (somma pesata non ufficiale) usato per le partite, qui applicato ai dati di allenamento.</p>
+    <p class="nota-piccola">Agli allenamenti non c'è sempre la rosa al completo, quindi i <strong>totali</strong> (gol, minuti, indice) premiano anche solo il fatto di esserci stato di più. Sotto ogni totale c'è perciò il valore <strong>a sessione frequentata</strong>, calcolato sulle sole sessioni in cui quel giocatore era presente: è il numero da usare per confrontare due compagni con presenze diverse. Le presenze nel periodo sono ${nf0(sessioniPeriodo)}.${attenuate ? ` ${attenuate===1?"Una riga è attenuata":`${nf0(attenuate)} righe sono attenuate`} perché sotto le ${nf0(sogliaPresenze)} presenze: con così poche sessioni le medie oscillano troppo per essere lette come una tendenza.` : ""}</p>`;
+  collegaInterruttoreAssoluti(cont, "allenamento", () => renderClassificaAllenamentoStat(datiFiltrati()));
+  $$("th[data-col]", cont).forEach(th => {
+    if(th.dataset.col === "sparkline") return;
+    const attiva = () => {
+      const c = th.dataset.col;
+      if(stato.ordinaAllenamento.col === c) stato.ordinaAllenamento.dir *= -1;
+      else stato.ordinaAllenamento = {col:c, dir: c==="Giocatore" ? 1 : -1};
+      renderClassificaAllenamentoStat(datiFiltrati());
+    };
+    th.addEventListener("click", attiva);
+    th.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); attiva(); } });
+  });
+  $$("canvas.spark", cont).forEach(disegnaSpark);
+}
+
+function renderTendenzeAllenamentoStat(f){
+  const cont = $("#contenuto-tendenze-stat-allenamento");
+  if(!stato.ds.haStatAllenamento){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore.</div>`;
+    return;
+  }
+  const nSessPerG = new Map();
+  f.statAllenamento.forEach(g => nSessPerG.set(g.Giocatore, (nSessPerG.get(g.Giocatore)||0)+1));
+  const maxSess = Math.max(0, ...Array.from(nSessPerG.values()));
+  if(maxSess < 3){
+    cont.innerHTML = `<div class="vuoto"><strong>Servono almeno 3 sessioni di allenamento con statistiche dello stesso giocatore per tracciare una retta di interpolazione.</strong><br>
+      Nel periodo selezionato il giocatore con più sessioni con dati ne ha ${nf0(maxSess)}. Questa sezione si arricchisce da sola man mano che carichi nuovi allenamenti con statistiche.</div>`;
+    return;
+  }
+  const tutte = calcolaTendenze(f.statAllenamento);
+  const blocchi = Object.keys(CONFIG_TREND).filter(m => m !== "Precisione_Tiro_pct" || tiriPortaRilevati(f.statAllenamento)).map(metrica => {
+    const cfg = CONFIG_TREND[metrica];
+    const rilev = tutte.filter(t => t.Metrica === metrica && t.rilevante)
+      .sort((a,b) => Math.abs(b.delta_totale) - Math.abs(a.delta_totale)).slice(0,3);
+    const tot = tutte.filter(t => t.Metrica === metrica).length;
+    let corpo;
+    if(tot === 0){
+      corpo = `<div class="vuoto"><strong>Dati insufficienti per questa metrica.</strong><br>Nessun giocatore ha almeno 3 sessioni con questo valore registrato.</div>`;
+    } else if(rilev.length === 0){
+      corpo = `<div class="vuoto">Nessuna tendenza marcata su questa metrica: per i ${nf0(tot)} giocatori con almeno 3 sessioni valide i valori restano abbastanza stabili sessione dopo sessione (variazione sotto ${nf0(cfg.soglia)}${cfg.unit} oppure andamento troppo irregolare per essere considerato una tendenza).</div>`;
+    } else {
+      corpo = `<div class="griglia g-2">` + rilev.map((t,i) => {
+        const id = "gr-all-trend-"+metrica+"-"+i;
+        const pill = t.giudizio==="positivo" ? `<span class="pill pos">Segnale positivo</span>`
+          : t.giudizio==="negativo" ? `<span class="pill neg">Da attenzionare</span>` : `<span class="pill neu">Da leggere nel contesto</span>`;
+        return `<div class="trend-card">
+          <div class="trend-testa"><div><div class="trend-nome">${esc(t.Giocatore)}</div><div class="trend-stat">${esc(t.Ruolo)} · ${cfg.label} ${t.direzione}</div></div>${pill}</div>
+          <div class="grafico-wrap"><canvas id="${id}"></canvas></div>
+          <div class="trend-frase">${esc(fraseTendenzaAllenamento(t))}</div>
+          <div class="trend-stat">Variazione stimata dalla retta: ${t.delta_totale>0?"+":""}${nf(t.delta_totale,cfg.dec)}${cfg.unit} su ${nf0(t.n)} sessioni · correlazione r = ${nf(t.r,2)} · soglia di rilevanza ${nf0(cfg.soglia)}${cfg.unit}</div>
+        </div>`;
+      }).join("") + `</div>`;
+    }
+    return {metrica, cfg, rilev, html:`<div class="trend-blocco">
+      <h3>${esc(cfg.label)}</h3><div class="meta">${esc(cfg.desc)}</div>${corpo}</div>`};
+  });
+  cont.innerHTML = blocchi.map(b => b.html).join("");
+  blocchi.forEach(b => b.rilev.forEach((t,i) => disegnaTrendAllenamento("gr-all-trend-"+b.metrica+"-"+i, t)));
+  const nRil = tutte.filter(t=>t.rilevante).length;
+  cont.insertAdjacentHTML("beforeend", `<p class="kpi-nota">Analizzati ${nf0(new Set(tutte.map(t=>t.Giocatore)).size)} giocatori con almeno 3 sessioni: ${nf0(nRil)} tendenze superano la soglia di rilevanza. Statistiche di allenamento, tenute separate da quelle di partita vera.</p>`);
+}
+
+function fraseTendenzaAllenamento(t){
+  const g = t.Giocatore, n = t.n, d = Math.abs(t.delta_totale);
+  const vi = nf(t.valore_iniziale, t.cfg.dec)+t.cfg.unit, vf = nf(t.valore_finale, t.cfg.dec)+t.cfg.unit;
+  if(t.Metrica === "Tasso_Errore_pct"){
+    return t.delta_totale > 0
+      ? `Il tasso di errore di ${g} in allenamento è aumentato di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`
+      : `Il tasso di errore di ${g} in allenamento è diminuito di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}): segnale di maggiore sicurezza nella gestione del pallone.`;
+  }
+  if(t.Metrica === "Precisione_Tiro_pct"){
+    return t.delta_totale > 0
+      ? `La precisione al tiro di ${g} in allenamento è migliorata di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`
+      : `La precisione al tiro di ${g} in allenamento è peggiorata di ${nf0(d)} punti percentuali nelle ultime ${n} sessioni (da circa ${vi} a ${vf}).`;
+  }
+  if(t.Metrica === "Minuti_Giocati"){
+    return t.delta_totale > 0
+      ? `I minuti giocati da ${g} nelle partitelle di allenamento sono in crescita (da circa ${vi} a ${vf} a sessione).`
+      : `I minuti giocati da ${g} nelle partitelle di allenamento sono in calo (da circa ${vi} a ${vf} a sessione).`;
+  }
+  return `${g}: ${t.cfg.label.toLowerCase()} ${t.direzione}.`;
+}
+
+function disegnaTrendAllenamento(id, t){
+  const cfg = t.cfg;
+  const punti = t.punti.map(p => ({x:p.x, y:p.y, etichetta:p.etichetta}));
+  const retta = [{x:t.xmin, y:t.valore_iniziale}, {x:t.xmax, y:t.valore_finale}];
+  const colPunti = t.giudizio==="negativo" ? colore("c2") : colore("c1");
+  const ys = punti.map(p=>p.y).concat([t.valore_iniziale, t.valore_finale]);
+  const minY = Math.min(...ys), maxY = Math.max(...ys), pad = Math.max(2, (maxY-minY)*0.25);
+  creaGrafico(id, {
+    type:"scatter",
+    data:{datasets:[
+      {label:"Sessioni di allenamento", data:punti, backgroundColor:colPunti, borderColor:colPunti,
+       pointRadius:5.5, pointHoverRadius:8, showLine:false, order:2},
+      {label:"Retta di interpolazione", data:retta, borderColor:colore("text"), borderDash:[7,5], borderWidth:2.2,
+       pointRadius:0, showLine:true, fill:false, order:1}
+    ]},
+    options:baseOpzioni({
+      plugins:{
+        legend:{display:true, position:"bottom", labels:{color:colore("muted"), boxWidth:14, boxHeight:2, font:{size:11}, usePointStyle:false, padding:10}},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{
+            title:(items)=> items[0].datasetIndex===0 ? (punti[items[0].dataIndex]?.etichetta || "Sessione "+items[0].parsed.x) : "Retta di interpolazione",
+            label:(it)=> cfg.label+": "+nf(it.parsed.y, cfg.dec===0?1:cfg.dec)+cfg.unit
+          }}
+      },
+      scales:{
+        x:{type:"linear", min:t.xmin-0.4, max:t.xmax+0.4,
+          title:{display:true, text:"Sessione del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
+          ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
+          grid:{color:colore("grid")}, border:{color:colore("grid")}},
+        y:{min:Math.max(0, minY-pad), max:maxY+pad,
+          title:{display:true, text:cfg.label+" ("+ (cfg.unit==="'"?"minuti":"%") +")", color:colore("faint"), font:{size:10.5}},
+          ticks:{color:colore("muted"), font:{size:11}, maxTicksLimit:6, callback:v=>nf0(v)+cfg.unit}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+      }
+    })
+  });
+}
+
+/* --------- 6b. Andamento individuale, coinvolgimento, formazioni (sempre tutta la stagione) --------- */
+function renderAndamentoIndividuale(){
+  const ds = stato.ds;
+  renderAndamentoGiocatore(ds);
+  renderCoinvolgimento(ds);
+  renderFormazioni(ds);
+  renderConvocazioni(ds);
+}
+
+function renderAndamentoGiocatore(ds){
+  const cont = $("#contenuto-andamento-individuale");
+  const nome = stato.giocatore;
+  if(!nome){ cont.innerHTML = `<div class="vuoto">Carica dei dati per vedere questa sezione.</div>`; return; }
+  const righeGioc = ds.giocatori.filter(g => g.Giocatore === nome).filter(g=>g.Data).sort((a,b)=>a.Data-b.Data);
+  const mesiTrain = Array.from(new Set(ds.allenamenti.map(a=>a.Mese).filter(Boolean))).sort();
+  const caricoGM = caricoGiocatoreMese(ds.presenze);
+  const serieCarico = mesiTrain.map((m,i) => ({x:i+1, mese:m, y: caricoGM.get(nome+"|"+m) ?? null})).filter(p=>p.y!==null);
+
+  cont.innerHTML = `<div class="griglia g-2">
+    <div class="trend-card">
+      <div class="trend-testa"><div><div class="trend-nome">${esc(nome)}</div><div class="trend-stat">Indice prestazione in partita — tutta la stagione (${righeGioc.length} partite)</div></div></div>
+      ${righeGioc.length ? `<div class="grafico-wrap"><canvas id="gr-andind-partita"></canvas></div>` : `<div class="vuoto" style="margin:0">Nessuna partita registrata per questo giocatore.</div>`}
+    </div>
+    <div class="trend-card">
+      <div class="trend-testa"><div><div class="trend-nome">${esc(nome)}</div><div class="trend-stat">Carico di allenamento (sRPE) — tutta la stagione</div></div></div>
+      ${serieCarico.length ? `<div class="grafico-wrap"><canvas id="gr-andind-carico"></canvas></div>` : `<div class="vuoto" style="margin:0">Nessun dato di allenamento per questo giocatore.</div>`}
+    </div>
+  </div>`;
+
+  if(righeGioc.length){
+    const punti = righeGioc.map((r,i) => ({x:i+1, y:r.Indice_Prestazione, etichetta:r.EtichettaPartita}));
+    creaGrafico("gr-andind-partita", {
+      type:"line",
+      data:{datasets:[{label:"Indice prestazione", data:punti, borderColor:colore("c1"), backgroundColor:colore("c1"), pointRadius:4.5, pointHoverRadius:7, tension:0.25}]},
+      options: baseOpzioni({
+        plugins:{legend:{display:false}, tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{title:(items)=> punti[items[0].dataIndex]?.etichetta || "Partita "+items[0].parsed.x, label:(it)=>"Indice: "+nf(it.parsed.y,1)}}},
+        scales:{x:{type:"linear", min:0.6, max:punti.length+0.4, ticks:{stepSize:1, precision:0, color:colore("muted"), font:{size:11}}, title:{display:true, text:"Partita in ordine cronologico", color:colore("faint"), font:{size:10.5}}, grid:{color:colore("grid")}},
+          y:{ticks:{color:colore("muted"), font:{size:11}}, title:{display:true, text:"Indice prestazione", color:colore("faint"), font:{size:10.5}}, grid:{color:colore("grid")}}}
+      })
+    });
+  }
+  if(serieCarico.length){
+    creaGrafico("gr-andind-carico", {
+      type:"line",
+      data:{datasets:[{label:"Carico sRPE", data:serieCarico, borderColor:colore("c3"), backgroundColor:colore("c3"), pointRadius:4.5, pointHoverRadius:7, tension:0.25}]},
+      options: baseOpzioni({
+        plugins:{legend:{display:false}, tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{title:(items)=> meseLabel(serieCarico[items[0].dataIndex]?.mese), label:(it)=>"Carico: "+nf0(it.parsed.y)+" u.a."}}},
+        scales:{x:{type:"linear", min:0.6, max:serieCarico.length+0.4, ticks:{stepSize:1, precision:0, callback:(v)=> meseBreve(serieCarico[v-1]?.mese) || "", color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}},
+          y:{ticks:{color:colore("muted"), font:{size:11}}, title:{display:true, text:"Carico sRPE mensile", color:colore("faint"), font:{size:10.5}}, grid:{color:colore("grid")}}}
+      })
+    });
+  }
+}
+
+function renderCoinvolgimento(ds){
+  const cont = $("#contenuto-coinvolgimento");
+  const classifica = classificaCoinvolgimento(ds.giocatori).slice(0,10);
+  if(!classifica.length){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per calcolare il coinvolgimento nel gioco.</div>`; return; }
+  const max = Math.max(...classifica.map(c=>c.Coinvolgimento_Partita));
+  const pochiMinuti = classifica.filter(c => c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE).length;
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Giocatori più coinvolti nel gioco, tutta la stagione</caption>
+    <thead><tr><th scope="col">Giocatore</th><th scope="col">Partite</th><th scope="col">Minuti giocati</th><th scope="col">Azioni tot.</th><th scope="col">Azioni per partita intera</th></tr></thead>
+    <tbody>${classifica.map(c => `<tr${c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE ? ' class="riga-attenuata"' : ''}>
+      <td>${esc(c.Giocatore)}<span class="ruolo">${esc(c.Ruolo)}</span></td>
+      <td>${nf0(c.Partite_Giocate)}</td>
+      <td>${nf(c.Minuti_Totali,1)}'</td>
+      <td>${nf0(c.Azioni_Totali)}</td>
+      <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(c.Coinvolgimento_Partita/max*100):0}%; background:var(--c1)"></div><span>${nf(c.Coinvolgimento_Partita,1)}</span></div></td>
+    </tr>`).join("")}</tbody>
+  </table></div>
+  <p class="nota-piccola">"Azioni per partita intera" rapporta passaggi, tiri e dribbling tentati a una gara completa di calcio a 7 (${nf0(MINUTI_PARTITA_INTERA)} minuti, due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}): serve a mettere sullo stesso piano chi gioca tutta la partita e chi entra a mezz'ora. La colonna "Azioni tot." resta il dato grezzo di stagione, che dipende anche da quante partite ha giocato — <strong>per questo un giocatore con meno azioni totali può stare più in alto</strong>: ne ha fatte meno ma in molto meno tempo.${pochiMinuti ? ` ${pochiMinuti===1?"Una riga è attenuata":`${nf0(pochiMinuti)} righe sono attenuate`} perché sotto i ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)} minuti giocati in tutta la stagione: su un campione così piccolo il rapporto si gonfia e non è da prendere sul serio.` : ""}</p>`;
+}
+
+function renderFormazioni(ds){
+  const cont = $("#contenuto-formazioni");
+  const righe = rendimentoPerFormazione(ds);
+  const conDati = righe.filter(r => r.Modulo !== "Non indicato");
+  if(!conDati.length){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna partita ha ancora un modulo indicato.</strong><br>Aggiungi la colonna <strong>Modulo</strong> al foglio Partite (es. «2-3-1») e questa sezione si popolerà da sola.</div>`;
+    return;
+  }
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Rendimento di squadra per modulo tattico</caption>
+    <thead><tr><th scope="col">Modulo</th><th scope="col">Partite</th><th scope="col">Gol fatti (media)</th><th scope="col">Gol subiti (media)</th><th scope="col">Diff. reti (media)</th><th scope="col">Prec. passaggi</th><th scope="col">Tasso errore</th></tr></thead>
+    <tbody>${righe.map(r => `<tr${r.sufficiente?"":' style="opacity:.55"'}>
+      <td>${esc(r.Modulo)}${r.sufficiente?"":` <span class="ruolo">poche partite</span>`}</td>
+      <td>${nf0(r.Partite)}</td>
+      <td>${nf(r.Gol_Fatti_Media,1)}</td>
+      <td>${nf(r.Gol_Subiti_Media,1)}</td>
+      <td><strong>${r.Differenza_Reti_Media>0?"+":""}${nf(r.Differenza_Reti_Media,1)}</strong></td>
+      <td>${pctTxt(r.Precisione_Passaggi_pct,0)}</td>
+      <td>${pctTxt(r.Tasso_Errore_pct,0)}</td>
+    </tr>`).join("")}</tbody>
+  </table></div>
+  <p class="kpi-nota" style="margin-top:8px">Righe sotto le 2 partite o senza modulo indicato sono mostrate in trasparenza: troppo poco dato per essere lette come un segnale. Ricorda l'avvertenza sulla forza dell'avversario in Metodologia.</p>`;
+}
+
+/** Classifica stagionale (tutta la stagione, non risente del filtro periodo) che incrocia le convocazioni
+ *  (partite in cui il giocatore ha una scheda statistiche, unico dato di "presenza alla convocazione"
+ *  disponibile da Seven Lab) con i minuti totali giocati, per stabilire chi ha giocato di più nell'anno. */
+function renderConvocazioni(ds){
+  const cont = $("#contenuto-convocazioni");
+  const righe = aggregaGiocatori(ds.giocatori)
+    .map(a => ({Giocatore:a.Giocatore, Ruolo:a.Ruolo, Convocazioni:a.Partite_Giocate, Minuti_Totali:a.Minuti_Totali,
+      Media_Minuti: a.Partite_Giocate>0 ? a.Minuti_Totali/a.Partite_Giocate : null}))
+    .sort((a,b) => b.Minuti_Totali - a.Minuti_Totali);
+  if(!righe.length){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per calcolare convocazioni e minutaggio.</div>`; return; }
+  const max = Math.max(...righe.map(r=>r.Minuti_Totali));
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+    <caption class="solo-sr">Convocazioni e minuti totali giocati, tutta la stagione, ordinati per minuti totali</caption>
+    <thead><tr><th scope="col">Giocatore</th><th scope="col">Convocazioni</th><th scope="col">Media minuti/convocazione</th><th scope="col">Minuti totali</th></tr></thead>
+    <tbody>${righe.map(r => `<tr>
+      <td>${esc(r.Giocatore)}<span class="ruolo">${esc(r.Ruolo)}</span></td>
+      <td>${nf0(r.Convocazioni)}</td>
+      <td>${r.Media_Minuti!==null?nf0(r.Media_Minuti)+"'":"—"}</td>
+      <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(r.Minuti_Totali/max*100):0}%; background:var(--c1)"></div><span>${nf0(r.Minuti_Totali)}'</span></div></td>
+    </tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+/* --------- 7. Vista giocatore --------- */
+function renderGiocatore(f){
+  const cont = $("#contenuto-giocatore");
+  const nome = stato.giocatore;
+  const righe = f.giocatori.filter(g => g.Giocatore === nome).sort((a,b)=>(a.Data?a.Data:0)-(b.Data?b.Data:0));
+  $("#badge-giocatore").textContent = nome || "—";
+  if(!nome || righe.length === 0){
+    cont.innerHTML = `<div class="vuoto"><strong>${nome?esc(nome)+" non ha partite":"Nessun giocatore selezionato"}</strong> nel periodo scelto. Cambia periodo o giocatore dai filtri in alto.</div>`;
+    return;
+  }
+  const aggTutti = aggregaGiocatori(f.giocatori);
+  const mio = aggTutti.find(a => a.Giocatore === nome);
+  const squadra = riepilogoSquadra(f.giocatori, f.partite);
+  const righeStessoRuolo = f.giocatori.filter(g => g.Ruolo === mio.Ruolo && g.Giocatore !== nome);
+  const haPariRuolo = righeStessoRuolo.length > 0;
+  const confronto = haPariRuolo ? riepilogoSquadra(righeStessoRuolo, []) : squadra;
+  const etichettaConfronto = haPariRuolo ? `Media pari ruolo (${mio.Ruolo})` : "Media squadra";
+  const numPariRuolo = new Set(righeStessoRuolo.map(g=>g.Giocatore)).size;
+  // Radar per ruolo (04/09/2026): assi diversi per portiere e giocatore di movimento — vedi il blocco
+  // "RADAR PER RUOLO" nel motore di calcolo per la definizione degli assi e della normalizzazione.
+  const portieriGameAgg = aggregaPortieriGame(f.partite);
+  const statPortieriPeriodo = statistichePortieriPeriodo(f.partite, f.giocatori);
+  const statPortiereDi = riga => {
+    if(riga && riga._statPortiere !== undefined) return riga._statPortiere;
+    return statPortieriPeriodo.get(riga.Giocatore) || null;
+  };
+  const pariRuoloAgg = aggregaGiocatori(righeStessoRuolo);
+  const rigaConfronto = haPariRuolo ? poolGiocatori(pariRuoloAgg) : poolGiocatori(aggTutti.filter(a=>a.Giocatore!==nome));
+  if(rigaConfronto){
+    const statPeer = (haPariRuolo ? pariRuoloAgg : aggTutti.filter(a=>a.Giocatore!==nome))
+      .map(r => statPortieriPeriodo.get(r.Giocatore)).filter(Boolean);
+    rigaConfronto._statPortiere = statPeer.length ? {
+      tiriSubitiTotali: statPeer.reduce((t,x)=>t+x.tiriSubitiTotali,0)/statPeer.length,
+      parate: statPeer.reduce((t,x)=>t+x.parate,0)/statPeer.length,
+      golSubiti: statPeer.reduce((t,x)=>t+x.golSubiti,0)/statPeer.length,
+      stimato: statPeer.some(x=>x.stimato)
+    } : null;
+    rigaConfronto.Ruolo = mio.Ruolo;
+  }
+  const datiRadar = datiRadarGiocatore(mio, rigaConfronto, aggTutti, statPortiereDi)
+    .filter(d => d.chiave !== "perse" || stato.ds.haPallePerse); // vedi haPallePerse in assemblaDataset
+  const statMioPortiere = statPortiereDi(mio);
+  const haAssiInvertiti = datiRadar.some(d => d.invertito);
+  const haAssiVolume = datiRadar.some(d => d.volume);
+  // "Tiri subiti" (03/09/2026, rivista il 03/09/2026 su richiesta esplicita dell'utente): quando i file
+  // caricati includono "STATISTICHE PORTIERI GAME" per questo portiere, mostriamo il dato reale di Seven Lab
+  // invece della vecchia stima (parate + gol subiti, l'unica possibile prima di avere questo dato) — vedi
+  // statistichePortieriDaSessione/aggregaPortieriGame per la definizione. L'utente ha chiesto esplicitamente
+  // "tiri subiti totali" come cifra principale, con parate e gol subiti come dettaglio: usiamo quindi il
+  // "Totale tiri affrontati" di Seven Lab (tiri subiti + parate + gol subiti) come valore del KPI, non più la
+  // formula tiro-subito-più-parata usata in un primo tentativo (che escludeva i gol e non corrispondeva a
+  // cosa l'utente intendeva davvero per "totali").
+  const mioPortiereGame = portieriGameAgg.find(p => p.portiere === nome); // aggregato già calcolato sopra
+  const parateTxt = /portier/i.test(mio.Ruolo)
+    ? (mioPortiereGame
+      ? `<div class="kpi"><div class="kpi-eti">Tiri subiti totali</div><div class="kpi-valore">${nf0(mioPortiereGame.totaleAffrontati)}</div><div class="kpi-nota">${nf0(mioPortiereGame.parate)} parati (${pctTxt(perc(mioPortiereGame.parate, mioPortiereGame.totaleAffrontati),0)}) · ${nf0(mioPortiereGame.golSubiti)} gol subiti</div></div>`
+      : `<div class="kpi"><div class="kpi-eti">Parate</div><div class="kpi-valore">${nf0(mio.Parate)}</div><div class="kpi-nota">Stima di parate riuscite: ${pctTxt(perc(mio.Parate, mio.Parate + squadra.gol_subiti),0)} dei tiri subiti stimati (parate + gol subiti) — stima indicativa, non ancora il dato reale di Seven Lab</div></div>`)
+    : "";
+  cont.innerHTML = `
+    <div class="griglia g-kpi" style="margin-bottom:16px">
+      <div class="kpi"><div class="kpi-eti">Partite · minuti</div><div class="kpi-valore">${nf0(mio.Partite_Giocate)} · ${nf0(mio.Minuti_Totali)}'</div><div class="kpi-nota">${esc(mio.Ruolo)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Gol · assist</div><div class="kpi-valore">${nf0(mio.Gol)} · ${nf0(mio.Assist)}</div><div class="kpi-nota">${mio.Minuti_Totali>0?nf(mio.Coinvolgimento_Gol/mio.Minuti_Totali*MINUTI_PARTITA_INTERA,2)+" partecipazioni ai gol per partita intera":"—"}</div></div>
+      <div class="kpi"><div class="kpi-eti">Indice prestazione</div><div class="kpi-valore">${nf(mio.Indice_Prestazione_Tot,1)}</div><div class="kpi-nota">${nf(mio.Indice_Prestazione_Medio,1)} a partita · ${nf0(aggTutti.findIndex(a=>a.Giocatore===nome)+1)}° in squadra</div></div>
+      <div class="kpi"><div class="kpi-eti">Tasso di errore</div><div class="kpi-valore">${pctTxt(mio.Tasso_Errore_pct)}</div><div class="kpi-nota">Media squadra ${pctTxt(squadra.tasso_errore)}</div></div>
+      ${parateTxt}
+    </div>
+    <div class="griglia g-2">
+      <div class="card card-radar"><div class="grafico-titolo">Profilo ${ruoloPortiere(mio.Ruolo)?"da portiere":"da giocatore di movimento"} di ${esc(nome)} vs ${haPariRuolo?`pari ruolo (${esc(mio.Ruolo)})`:"resto della rosa"}</div>
+        <div class="grafico-sub">Assi scelti in base al ruolo. Il raggio è un punteggio relativo: <strong>100 = miglior valore della rosa</strong> nel periodo su quell'asse, così conteggi e percentuali stanno sullo stesso grafico. I numeri veri sono nella tabella qui sotto.${haPariRuolo?` Confronto con ${nf0(numPariRuolo)} altro/i giocatore/i nello stesso ruolo.`:" Nessun altro giocatore nello stesso ruolo nel periodo: confronto con la media del resto della rosa (valore indicativo, non un benchmark di ruolo)."}</div>
+        <div class="radar-affianco">
+        <div class="grafico-wrap alto"><canvas id="gr-radar"></canvas></div>
+        <div class="tabella-radar">
+          <table>
+            <caption class="solo-sr">Valori reali degli assi del radar: giocatore e gruppo di confronto</caption>
+            <thead><tr><th scope="col">Indicatore</th><th scope="col">${esc(nome)}</th><th scope="col">${esc(haPariRuolo?"Media pari ruolo":"Media rosa")}</th></tr></thead>
+            <tbody>${datiRadar.map(d => `<tr>
+              <td>${esc(d.etichetta)}</td>
+              <td class="num forte">${esc(d.testo)}</td>
+              <td class="num">${esc(d.testoConfronto)}</td>
+            </tr>`).join("")}</tbody>
+          </table>
+        </div>
+        </div>
+        <p class="nota-piccola">${[
+          haAssiInvertiti ? "Gli assi con <strong>↓</strong> sono quelli in cui meno è meglio: sul grafico il punteggio è già ribaltato (area più grande = meno palle perse/errori), mentre in tabella resta il numero vero." : "",
+          haAssiVolume ? "«Tiri subiti» è un dato di volume (quanto lavoro ha avuto il portiere), non un merito: va letto insieme a «Parate %»." : "",
+          (statMioPortiere && statMioPortiere.stimato) ? "Per le partite i cui file non hanno la sezione «STATISTICHE PORTIERI GAME», tiri e gol subiti sono <strong>stimati</strong> come le sue parate più i gol incassati dalla squadra in quella gara; dove la sezione c'è si usa il dato rilevato." : ""
+        ].filter(Boolean).join(" ")}</p></div>
+      <div class="card"><div class="grafico-titolo">Andamento partita per partita</div>
+        <div class="grafico-sub">${tiriPortaRilevati(righe) ? "Precisione al tiro" : "Realizzazione (gol sui tiri)"}, precisione passaggi e tasso di errore nelle sue partite.</div>
+        <div class="grafico-wrap alto"><canvas id="gr-gioc-linee"></canvas></div></div>
+      <div class="card"><div class="grafico-titolo">Minuti giocati</div>
+        <div class="grafico-sub">Minutaggio partita per partita, con la media del periodo.</div>
+        <div class="grafico-wrap"><canvas id="gr-gioc-minuti"></canvas></div></div>
+      <div class="card"><div class="grafico-titolo">Contributo offensivo e recuperi</div>
+        <div class="grafico-sub">Gol, assist e palloni recuperati partita per partita.</div>
+        <div class="grafico-wrap"><canvas id="gr-gioc-contributo"></canvas></div></div>
+    </div>`;
+
+  creaGrafico("gr-radar", {
+    type:"radar",
+    data:{labels:datiRadar.map(d=>d.etichetta), datasets:[
+      {label:nome, data:datiRadar.map(d=>d.punteggio), borderColor:colore("c1"),
+       backgroundColor:colore("c1")+"33", pointBackgroundColor:colore("c1"), borderWidth:2.4},
+      {label:etichettaConfronto, data:datiRadar.map(d=>d.punteggioConfronto), borderColor:colore("c2"),
+       backgroundColor:"transparent", pointBackgroundColor:colore("c2"), borderWidth:2, borderDash:[6,4]}
+    ]},
+    // Nel tooltip mostriamo il valore VERO (non il punteggio normalizzato), altrimenti il grafico direbbe
+    // solo "quanto sei vicino al migliore" senza mai dire quanto hai fatto davvero.
+    options:baseOpzioni({
+      plugins:{tooltip:{callbacks:{label:(ctx)=>{
+        const d = datiRadar[ctx.dataIndex];
+        if(!d) return "";
+        const vero = ctx.datasetIndex === 0 ? d.testo : d.testoConfronto;
+        return `${ctx.dataset.label}: ${vero} (punteggio ${nf0(ctx.parsed.r)}/100)`;
+      }}}},
+      scales:{r:{
+        min:0, max:100, ticks:{stepSize:25, color:colore("faint"), font:{size:10}, backdropColor:"transparent", callback:v=>v},
+        grid:{color:colore("grid")}, angleLines:{color:colore("grid")},
+        pointLabels:{color:colore("muted"), font:{size:10.5}, padding:6}
+      }}
+    })
+  });
+  const et = righe.map(r=>r.EtichettaPartita);
+  creaGrafico("gr-gioc-linee", {
+    type:"line",
+    data:{labels:et, datasets:[
+      tiriPortaRilevati(righe)
+        ? {label:"Precisione al tiro", data:righe.map(r=>r.Precisione_Tiro_pct), borderColor:colore("c1"), backgroundColor:colore("c1"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true}
+        : {label:"Realizzazione", data:righe.map(r=>r.Efficacia_Realizzativa_pct), borderColor:colore("c1"), backgroundColor:colore("c1"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true},
+      {label:"Precisione passaggi", data:righe.map(r=>r.Precisione_Passaggi_pct), borderColor:colore("c3"), backgroundColor:colore("c3"), tension:.25, borderWidth:2.4, pointRadius:4, spanGaps:true},
+      {label:"Tasso di errore", data:righe.map(r=>r.Tasso_Errore_pct), borderColor:colore("c2"), backgroundColor:colore("c2"), tension:.25, borderWidth:2.4, pointRadius:4, borderDash:[5,4], spanGaps:true}
+    ]},
+    options:baseOpzioni({scales:{
+      x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, autoSkip:true, maxTicksLimit:6}, grid:{display:false}, border:{color:colore("grid")}},
+      y:{min:0, max:100, ticks:{color:colore("muted"), font:{size:11}, callback:v=>v+"%"}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+    }})
+  });
+  const mediaMin = media(righe.map(r=>r.Minuti_Giocati));
+  creaGrafico("gr-gioc-minuti", {
+    type:"bar",
+    data:{labels:et, datasets:[
+      {label:"Minuti giocati", data:righe.map(r=>r.Minuti_Giocati), backgroundColor:colore("c1"), borderRadius:4, maxBarThickness:40},
+      {type:"line", label:"Media periodo ("+nf0(mediaMin)+"')", data:et.map(()=>mediaMin), borderColor:colore("faint"), borderDash:[6,5], borderWidth:1.8, pointRadius:0}
+    ]},
+    options:baseOpzioni({scales:{
+      x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, autoSkip:true, maxTicksLimit:6}, grid:{display:false}, border:{color:colore("grid")}},
+      y:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}, callback:v=>v+"'"}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+    }})
+  });
+  creaGrafico("gr-gioc-contributo", {
+    type:"bar",
+    data:{labels:et, datasets:[
+      {label:"Gol", data:righe.map(r=>r.Gol), backgroundColor:colore("c1"), stack:"a", borderRadius:3, maxBarThickness:40},
+      {label:"Assist", data:righe.map(r=>r.Assist), backgroundColor:colore("c4"), stack:"a", borderRadius:3, maxBarThickness:40},
+      {label:"Recuperi", data:righe.map(r=>r.Recuperi), backgroundColor:colore("c6"), stack:"b", borderRadius:3, maxBarThickness:40}
+    ]},
+    options:baseOpzioni({scales:{
+      x:{ticks:{color:colore("muted"), font:{size:10.5}, maxRotation:38, autoSkip:true, maxTicksLimit:6}, grid:{display:false}, border:{color:colore("grid")}},
+      y:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}, precision:0}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+    }})
+  });
+}
+
+/* --------- 7b. Confronto tra due giocatori --------- */
+const RIGHE_CONFRONTO = [
+  {label:"Ruolo", get:a=>a.Ruolo, tipo:"testo"},
+  {label:"Partite giocate", get:a=>a.Partite_Giocate, tipo:"num", meglio:"alto"},
+  {label:"Minuti totali", get:a=>a.Minuti_Totali, tipo:"num", meglio:"alto"},
+  {label:"Gol", get:a=>a.Gol, tipo:"num", meglio:"alto"},
+  {label:"Assist", get:a=>a.Assist, tipo:"num", meglio:"alto"},
+  {label:"Tiri (in porta / totali)", get:a=>`${nf0(a.Tiri_In_Porta)} / ${nf0(a.Tiri_Totali)}`, tipo:"testo"},
+  {label:"Precisione al tiro", get:a=>a.Precisione_Tiro_pct, tipo:"pct", meglio:"alto"},
+  {label:"Passaggi (corretti / totali)", get:a=>`${nf0(a.Passaggi_Corretti)} / ${nf0(a.Passaggi_Totali)}`, tipo:"testo"},
+  {label:"Precisione passaggi", get:a=>a.Precisione_Passaggi_pct, tipo:"pct", meglio:"alto"},
+  {label:"Dribbling (riusciti / tentati)", get:a=>`${nf0(a.Dribbling_Riusciti)} / ${nf0(a.Dribbling_Tentati)}`, tipo:"testo"},
+  {label:"Successo dribbling", get:a=>a.Successo_Dribbling_pct, tipo:"pct", meglio:"alto"},
+  {label:"Recuperi", get:a=>a.Recuperi, tipo:"num", meglio:"alto"},
+  {label:"Parate", get:a=>a.Parate, tipo:"num", meglio:"alto"},
+  {label:"Tasso di errore", get:a=>a.Tasso_Errore_pct, tipo:"pct", meglio:"basso"},
+  {label:"Indice prestazione (tot. / medio)", get:a=>`${nf(a.Indice_Prestazione_Tot,1)} / ${nf(a.Indice_Prestazione_Medio,1)}`, tipo:"testo"}
+];
+const RIGHE_CONFRONTO_DISCIPLINA = [
+  {label:"Cartellini (gialli / rossi)", get:a=>`${nf0(a.Cartellini_Gialli)} / ${nf0(a.Cartellini_Rossi)}`, tipo:"testo"},
+  {label:"Angoli (tentati / gol)", get:a=>`${nf0(a.Angoli_Tentati)} / ${nf0(a.Angoli_Gol)}`, tipo:"testo"},
+  {label:"Realizzazione angoli", get:a=>a.Angoli_Realizzazione_pct, tipo:"pct", meglio:"alto"},
+  {label:"Punizioni (tentate / realizzate)", get:a=>`${nf0(a.Punizioni_Tentate)} / ${nf0(a.Punizioni_Realizzate)}`, tipo:"testo"},
+  {label:"Realizzazione punizioni", get:a=>a.Realizzazione_Punizioni_pct, tipo:"pct", meglio:"alto"},
+  {label:"Rigori (tentati / realizzati)", get:a=>`${nf0(a.Rigori_Tentati)} / ${nf0(a.Rigori_Realizzati)}`, tipo:"testo"},
+  {label:"Realizzazione rigori", get:a=>a.Realizzazione_Rigori_pct, tipo:"pct", meglio:"alto"}
+];
+
+/** Le stesse righe di confronto, con l'etichetta dell'unità adattata: in allenamento non si contano
+ *  "partite giocate" ma "sessioni frequentate", e chiamarle partite confonderebbe (19/09/2026). */
+function righeConfrontoPer(unitaPl, a, b){
+  // I calci piazzati e i cartellini quasi mai vengono registrati in una partitella: includere sette righe
+  // tutte a zero renderebbe la tabella più lunga senza aggiungere nulla. Si mostrano solo se almeno uno dei
+  // due giocatori ha qualcosa da mostrare lì.
+  const conta = g => g ? (N(g.Cartellini_Totali)+N(g.Angoli_Tentati)+N(g.Punizioni_Tentate)+N(g.Rigori_Tentati)) : 0;
+  const haDisciplina = (stato.ds && stato.ds.haEventiDisciplinari) && (unitaPl === "Partite" || conta(a)+conta(b) > 0);
+  let base = haDisciplina ? RIGHE_CONFRONTO.concat(RIGHE_CONFRONTO_DISCIPLINA) : RIGHE_CONFRONTO;
+  // tiro in porta non rilevato (segnaTiriPorta): «in porta» e precisione al tiro diventano tiri e realizzazione
+  if(!tiriPortaRilevati([a, b])) base = base.map(r =>
+      r.label === "Tiri (in porta / totali)" ? {label:"Tiri", get:g=>g.Tiri_Totali, tipo:"num", meglio:"alto"}
+    : r.label === "Precisione al tiro" ? {label:"Realizzazione", get:g=>g.Efficacia_Realizzativa_pct, tipo:"pct", meglio:"alto"} : r);
+  if(unitaPl === "Partite") return base;
+  return base.map(r => r.label === "Partite giocate" ? {...r, label:"Sessioni frequentate"}
+                     : (r.label === "Indice prestazione (tot. / medio)" ? {...r, label:"Indice prestazione (tot. / a sessione)"} : r));
+}
+
+function formattaValoreConfronto(riga, v){
+  if(v===null || v===undefined) return "—";
+  if(riga.tipo === "pct") return pctTxt(v);
+  if(riga.tipo === "num") return nf0(v);
+  if(riga.tipo === "dec") return nf(v,1);
+  return esc(String(v));
+}
+function classeMiglior(riga, va, vb, perA, classe="conf-migliore"){
+  if(!riga.meglio || va===null || vb===null || va===undefined || vb===undefined || va===vb) return "";
+  const aVince = riga.meglio === "alto" ? va > vb : va < vb;
+  const bVince = riga.meglio === "alto" ? vb > va : vb < va;
+  if(perA && aVince) return ` class="${classe}"`;
+  if(!perA && bVince) return ` class="${classe}"`;
+  return "";
+}
+
+/* Configurazione dei due confronti tra giocatori: quello sulle partite (esistente) e quello sugli
+   allenamenti (19/09/2026). Elisa: «capiterà che ci siano giocatori che non giocheranno nemmeno nella
+   stagione» — per quei giocatori l'unica traccia di rendimento sono le partitelle di allenamento, e senza
+   un confronto su quei dati restano invisibili nel momento in cui si decide chi convocare. È la stessa
+   funzione che disegna entrambi: due confronti che divergono nel tempo sarebbero due modi diversi di
+   leggere lo stesso giocatore. */
+const CONFRONTO_PARTITE = {
+  idCont:"contenuto-confronto", idSelA:"cf-sel-a", idSelB:"cf-sel-b", idRadar:"gr-confronto-radar",
+  statoA:"confrontoA", statoB:"confrontoB", righeDa: f => f.giocatori,
+  unitaPl:"Partite", unita:"partita", contesto:"partite giocate"
+};
+const CONFRONTO_ALLENAMENTO = {
+  idCont:"contenuto-confronto-allenamento", idSelA:"cfa-sel-a", idSelB:"cfa-sel-b", idRadar:"gr-confronto-allenamento-radar",
+  statoA:"confrontoAllA", statoB:"confrontoAllB", righeDa: f => f.statAllenamento,
+  unitaPl:"Sessioni", unita:"sessione", contesto:"partitelle di allenamento"
+};
+function renderConfronto(f){ renderConfrontoGenerico(f, CONFRONTO_PARTITE); }
+function renderConfrontoAllenamento(f){
+  if(!stato.ds.haStatAllenamento){
+    const c = $("#"+CONFRONTO_ALLENAMENTO.idCont);
+    if(c) c.innerHTML = `<div class="vuoto"><strong>Nessuna statistica da allenamento disponibile.</strong> Servono file allenamento con le colonne di gioco per giocatore (gol, tiri, passaggi…), non solo presenze e minuti.</div>`;
+    const sa = $("#"+CONFRONTO_ALLENAMENTO.idSelA), sb = $("#"+CONFRONTO_ALLENAMENTO.idSelB);
+    if(sa) sa.innerHTML = ""; if(sb) sb.innerHTML = "";
+    return;
+  }
+  renderConfrontoGenerico(f, CONFRONTO_ALLENAMENTO);
+}
+function renderConfrontoGenerico(f, cfg){
+  const cont = $("#"+cfg.idCont);
+  if(!cont) return;
+  const sorgente = cfg.righeDa(f) || [];
+  const nomi = Array.from(new Set(sorgente.map(g=>g.Giocatore))).sort((a,b)=>a.localeCompare(b, "it"));
+  const selA = $("#"+cfg.idSelA), selB = $("#"+cfg.idSelB);
+  if(nomi.length < 2){
+    selA.innerHTML = ""; selB.innerHTML = "";
+    cont.innerHTML = `<div class="vuoto"><strong>Servono almeno due giocatori con dati</strong> nel periodo scelto per fare un confronto. Cambia periodo dai filtri in alto.</div>`;
+    return;
+  }
+  if(!stato[cfg.statoA] || !nomi.includes(stato[cfg.statoA])) stato[cfg.statoA] = nomi[0];
+  if(!stato[cfg.statoB] || !nomi.includes(stato[cfg.statoB]) || stato[cfg.statoB] === stato[cfg.statoA]){
+    stato[cfg.statoB] = nomi.find(n => n !== stato[cfg.statoA]) || nomi[0];
+  }
+  const opzioni = nomi.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  selA.innerHTML = opzioni; selA.value = stato[cfg.statoA];
+  selB.innerHTML = opzioni; selB.value = stato[cfg.statoB];
+
+  const agg = aggregaGiocatori(sorgente);
+  const a = agg.find(x => x.Giocatore === stato[cfg.statoA]);
+  const b = agg.find(x => x.Giocatore === stato[cfg.statoB]);
+  if(!a || !b){ cont.innerHTML = `<div class="vuoto">Dati insufficienti per uno dei due giocatori nel periodo scelto.</div>`; return; }
+
+  const metriche = [
+    ["Precisione passaggi", a.Precisione_Passaggi_pct, b.Precisione_Passaggi_pct],
+    ["Precisione al tiro", a.Precisione_Tiro_pct, b.Precisione_Tiro_pct],
+    ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
+    ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
+    ["Affidabilità (100 − tasso errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
+  ].filter(([nome]) => nome !== "Precisione al tiro" || tiriPortaRilevati([a, b]));
+  const stessoRuolo = a.Ruolo === b.Ruolo;
+
+  const righe = righeConfrontoPer(cfg.unitaPl, a, b);
+
+  cont.innerHTML = `
+    <div class="griglia g-2">
+      <div class="card"><div class="grafico-titolo">${esc(a.Giocatore)} vs ${esc(b.Giocatore)}</div>
+        <div class="grafico-sub">${stessoRuolo ? "Stesso ruolo: " : "Ruoli diversi: "}confronto diretto sulle percentuali del periodo, sulle ${esc(cfg.contesto)}. Più l'area è esterna, meglio è.</div>
+        <div class="grafico-wrap alto"><canvas id="${cfg.idRadar}"></canvas></div></div>
+      <div class="card" style="padding:0; overflow:hidden">
+        <div class="conf-testata">
+          <div><span class="nome">${esc(a.Giocatore)}</span> <span class="ruolo-badge">${esc(a.Ruolo)}</span></div>
+          <div><span class="nome">${esc(b.Giocatore)}</span> <span class="ruolo-badge">${esc(b.Ruolo)}</span></div>
+        </div>
+        <div class="tabella-scroll" style="max-height:520px">
+        <table>
+          <thead><tr><th>Indicatore</th><th>${esc(a.Giocatore)}</th><th>${esc(b.Giocatore)}</th></tr></thead>
+          <tbody>
+            ${righe.map(r => {
+              const va = r.get(a), vb = r.get(b);
+              return `<tr><td>${esc(r.label)}</td>
+                <td${classeMiglior(r, va, vb, true)}>${formattaValoreConfronto(r, va)}</td>
+                <td${classeMiglior(r, va, vb, false)}>${formattaValoreConfronto(r, vb)}</td></tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+    <p class="kpi-nota" style="margin-top:8px">La cella evidenziata indica il valore migliore tra i due per quell'indicatore, calcolato sulle ${esc(cfg.contesto)}. Utile per capire, a parità o meno di ruolo, chi per statistiche è più adatto a coprire una determinata posizione.${cfg.unitaPl==="Sessioni" ? " Attenzione ai minutaggi molto diversi: due giocatori con un numero di presenze lontano non sono pienamente confrontabili sui totali, e la riga «Sessioni frequentate» serve proprio a ricordarlo." : ""}</p>`;
+
+  creaGrafico(cfg.idRadar, {
+    type:"radar",
+    data:{labels:metriche.map(m=>m[0]), datasets:[
+      {label:a.Giocatore, data:metriche.map(m=>m[1]===null?0:m[1]), borderColor:colore("c1"),
+       backgroundColor:colore("c1")+"33", pointBackgroundColor:colore("c1"), borderWidth:2.4},
+      {label:b.Giocatore, data:metriche.map(m=>m[2]===null?0:m[2]), borderColor:colore("c2"),
+       backgroundColor:colore("c2")+"33", pointBackgroundColor:colore("c2"), borderWidth:2.4}
+    ]},
+    options:baseOpzioni({scales:{r:{
+      min:0, max:100, ticks:{stepSize:25, color:colore("faint"), font:{size:10}, backdropColor:"transparent", callback:v=>v+"%"},
+      grid:{color:colore("grid")}, angleLines:{color:colore("grid")},
+      pointLabels:{color:colore("muted"), font:{size:10.5}}
+    }}})
+  });
+}
+
+/* --------- 8. Allenamenti --------- */
+function renderAllenamenti(){
+  const cont = $("#contenuto-allenamenti");
+  if(!stato.ds.haAllenamenti){
+    cont.innerHTML = `<div class="vuoto"><strong>Non hai ancora caricato nessun file allenamento.</strong><br>
+      Carica almeno un file <code>allenamento_*.csv</code> esportato da Seven Lab per vedere carico di lavoro e presenze (queste ultime solo nel Report PDF). Il resto della dashboard funziona comunque.</div>`;
+    return;
+  }
+  // Sezione con un periodo proprio (selettori "Da/A" qui sopra), indipendente dal filtro periodo generale
+  // in alto: così si può guardare un arco di mesi diverso da quello del resto della dashboard.
+  const f = datiAllenamentoIntervallo(stato.allenamentoDashDa, stato.allenamentoDashA);
+  if(f.allenamenti.length === 0 || f.presenze.length === 0){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna sessione di allenamento nel periodo scelto.</strong> Cambia il periodo con i selettori Da/A qui sopra.</div>`;
+    return;
+  }
+  const haRPE = stato.ds.haRPE;
+  const {totSess, righe} = aggregaAllenamenti(f.allenamenti, f.presenze);
+  const mensile = haRPE ? caricoMensile(stato.ds.allenamenti, stato.ds.presenze) : [];
+  const cgm = haRPE ? caricoGiocatoreMese(stato.ds.presenze) : new Map();
+  const mesiOrd = Array.from(new Set(stato.ds.presenze.map(p=>p.Mese).filter(Boolean))).sort();
+  const picchi = [];
+  if(haRPE) righe.forEach(r => {
+    for(let i=1;i<mesiOrd.length;i++){
+      const prec = cgm.get(r.Giocatore+"|"+mesiOrd[i-1]) || 0;
+      const curr = cgm.get(r.Giocatore+"|"+mesiOrd[i]) || 0;
+      if(prec > 0 && curr/prec >= 1.5)
+        picchi.push({g:r.Giocatore, da:mesiOrd[i-1], a:mesiOrd[i], rapporto:curr/prec, prec, curr});
+    }
+  });
+  // Carico di stanchezza stimato senza RPE reale (presenza + minuti nelle partitelle): vedi
+  // stimaCaricoStanchezza per i dettagli del calcolo, le due soglie minime introdotte il 03/09/2026 e i
+  // limiti dichiarati.
+  const stimaStanchezza = stimaCaricoStanchezza(righe, f.statAllenamento);
+  const stanchezza = stimaStanchezza.righe;
+  const classeLivello = l => l==="Alto" ? "neg" : l==="Basso" ? "pos" : "neu";
+
+  const avvisi = [];
+  stanchezza.filter(r => r.Livello_Stanchezza === "Alto").forEach(r => avvisi.push({tipo:"attenzione",
+    testo:`<strong>${esc(r.Giocatore)}</strong> ha un carico di stanchezza stimato alto in questo periodo: frequenza di presenza e minuti nelle partitelle sopra la media della squadra.`}));
+  picchi.forEach(p => avvisi.push({tipo:"attenzione",
+    testo:`Carico di <strong>${esc(p.g)}</strong>: da ${nf0(p.prec)} a ${nf0(p.curr)} unità sRPE tra ${meseBreve(p.da)} e ${meseBreve(p.a)}, cioè ${nf(p.rapporto,1)} volte tanto.`}));
+  if(!stimaStanchezza.campioneSquadraSufficiente) avvisi.push({tipo:"ok",
+    testo:`Il confronto Alto/Medio/Basso richiede almeno ${CARICO_STANCHEZZA_SESSIONI_MINIME_SQUADRA} allenamenti con statistiche di gioco nel periodo scelto (ce ne sono ${nf0(stimaStanchezza.sessioniConStatNelPeriodo)}): con poche sedute, un solo giocatore uscito prima o rimasto in panchina basta a sballare la media della squadra, quindi qui sotto tutti restano "n/d". Allarga il periodo o attendi altri allenamenti.`});
+  if(avvisi.length === 0) avvisi.push({tipo:"ok", testo: haRPE
+    ? "Nessun carico di stanchezza stimato alto e nessun salto di carico sRPE pari o superiore a 1,5 volte tra un mese e l'altro."
+    : "Nessun carico di stanchezza stimato alto in questo periodo."});
+
+  cont.innerHTML = `
+    <div class="griglia g-kpi" style="margin-bottom:16px">
+      <div class="kpi"><div class="kpi-eti">Allenamenti nel periodo</div><div class="kpi-valore">${nf0(totSess)}</div><div class="kpi-nota">${esc(Array.from(new Set(f.allenamenti.map(a=>a.Tipo_Allenamento))).join(", "))}</div></div>
+      ${haRPE ? `<div class="kpi"><div class="kpi-eti">Carico totale squadra</div><div class="kpi-valore">${nf0(righe.reduce((a,r)=>a+r.Carico_Tot,0))}</div><div class="kpi-nota">Unità sRPE (minuti × RPE)</div></div>` : ""}
+      <div class="kpi"><div class="kpi-eti">Giocatori a carico stimato alto</div><div class="kpi-valore">${nf0(stanchezza.filter(r=>r.Livello_Stanchezza==="Alto").length)}</div><div class="kpi-nota">su ${nf0(stanchezza.length)} giocatori nel periodo</div></div>
+    </div>
+    <div class="griglia g-2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="grafico-titolo">Carico di stanchezza stimato</div>
+        <div class="grafico-sub">${stato.ds.haStatAllenamento ? "Incrocia frequenza di presenza e minuti giocati nelle partitelle: non è un vero dato RPE, vedi la nota sotto la tabella." : "Basato solo sulla presenza: non hai ancora caricato statistiche di gioco nelle partitelle, quindi il minutaggio qui sotto resta a 0 per tutti."}</div>
+        <div class="tabella-scroll"><table>
+          <thead><tr><th scope="col">Giocatore</th><th scope="col">Presenze</th><th scope="col">Minuti in partitelle</th><th scope="col">Carico stimato</th></tr></thead>
+          <tbody>${stanchezza.map(r => `<tr>
+            <td>${esc(r.Giocatore)}</td>
+            <td>${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}</td>
+            <td>${nf0(r.Minuti_Partitelle)}'</td>
+            <td><span class="pill ${classeLivello(r.Livello_Stanchezza)}">${esc(r.Livello_Stanchezza)}</span></td>
+          </tr>`).join("")}</tbody>
+        </table></div>
+        <p class="nota-piccola" style="margin-top:10px">${haRPE
+          ? "Proxy da presenza e minutaggio, utile come confronto rapido senza bisogno del voto RPE — ma ora che hai un RPE reale nei file caricati, guarda soprattutto il «Carico di allenamento per giocatore» qui a fianco (minuti × RPE): è più preciso, perché tiene conto di quanto è stato duro davvero l'allenamento e non solo di quanto hai giocato."
+          : "Proxy senza un vero RPE (sforzo percepito 1-10 a fine seduta), che i file caricati non includono: due giocatori con lo stesso minutaggio risultano con lo stesso carico anche se uno si allena più intensamente. Per una stima più precisa: (1) verifica se Seven Lab permette di registrare una valutazione di sforzo per sessione che non hai ancora attivato o esportato; (2) fatti dare da giocatori o staff un numero da 1 a 10 a fine allenamento, anche solo su carta, da aggiungere poi ai dati; (3) la colonna «Voto»/«Punti» già esportata da Seven Lab per ogni giocatore potrebbe aiutare, ma valuta la prestazione, non la fatica percepita, quindi il legame con il carico reale non è garantito."}</p>
+      </div>
+      ${haRPE ? `<div class="card"><div class="grafico-titolo">Carico di allenamento per giocatore</div>
+        <div class="grafico-sub">Unità sRPE accumulate nel periodo (minuti × RPE, carico 0 se assente).</div>
+        <div class="grafico-wrap alto" style="height:${Math.max(320, righe.length * 24 + 60)}px"><canvas id="gr-carico"></canvas></div></div>
+      <div class="card"><div class="grafico-titolo">Carico medio di squadra mese per mese</div>
+        <div class="grafico-sub">Media delle unità sRPE per presenza registrata. Serve a vedere se il carico cresce troppo in fretta.</div>
+        <div class="grafico-wrap"><canvas id="gr-carico-mese"></canvas></div></div>` : `<div class="card"><div class="grafico-titolo">Carico di allenamento (sRPE)</div>
+        <div class="vuoto" style="margin:0">Non disponibile: i file caricati non includono l'RPE percepito (fatica 1-10). Il carico stimato qui a fianco resta comunque calcolato.</div></div>`}
+    </div>
+    <div class="card">
+      <div class="grafico-titolo">Segnali da valutare con lo staff</div>
+      <div class="grafico-sub">Carico di stanchezza stimato alto${haRPE ? " e aumenti di carico sRPE pari o superiori a 1,5 volte da un mese all'altro." : "."}</div>
+      <div class="griglia-avvisi">${avvisi.map(a=>`<div class="avviso ${a.tipo}"><span class="ic" aria-hidden="true">${a.tipo==="ok"?"✓":"!"}</span><span>${a.testo}</span></div>`).join("")}</div>
+      ${picchi.length ? `<p class="nota-piccola">Un salto rapido del carico (concetto di rapporto carico acuto/cronico) è un segnale da valutare con lo staff, non una diagnosi: se possibile distribuisci il carico più gradualmente nelle settimane successive.</p>` : ""}
+    </div>`;
+
+  if(haRPE){
+  const ordCarico = righe.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot);
+  creaGrafico("gr-carico", {
+    type:"bar",
+    data:{labels:ordCarico.map(r=>r.Giocatore), datasets:[
+      {label:"Carico sRPE", data:ordCarico.map(r=>r.Carico_Tot), backgroundColor:colore("c3"), borderRadius:4, maxBarThickness:26}
+    ]},
+    options:baseOpzioni({indexAxis:"y", plugins:{legend:{display:false},
+      tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+        callbacks:{label:it=>"Carico: "+nf0(it.parsed.x)+" unità sRPE"}}},
+      scales:{
+        x:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}, border:{color:colore("grid")}},
+        // autoSkip:false (12/10/2026): con più di una quindicina di giocatori Chart.js saltava un nome su due
+        // per farli stare nei 320px fissi del riquadro — si vedevano più barre che nomi. Ora il riquadro cresce
+        // con il numero di giocatori (24px a barra) e ogni barra ha il suo nome.
+        y:{ticks:{color:colore("muted"), font:{size:11}, autoSkip:false}, grid:{display:false}, border:{color:colore("grid")}}
+      }})
+  });
+  }
+  if(haRPE && mensile.length >= 1){
+    creaGrafico("gr-carico-mese", {
+      type:"line",
+      data:{labels:mensile.map(m=>meseLabel(m.Mese)), datasets:[
+        {label:"Carico medio per presenza", data:mensile.map(m=>m.Carico_Medio), borderColor:colore("c1"),
+         backgroundColor:colore("c1"), tension:.25, borderWidth:2.6, pointRadius:5}
+      ]},
+      options:baseOpzioni({plugins:{legend:{display:false},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{label:it=>nf0(it.parsed.y)+" unità sRPE in media"}}},
+        scales:{
+          x:{ticks:{color:colore("muted"), font:{size:11}}, grid:{display:false}, border:{color:colore("grid")}},
+          y:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
+        }})
+    });
+  }
+}
+
+/* --------- 8b. Segnali incrociati --------- */
+function renderIncroci(){
+  const cont = $("#contenuto-incroci");
+  if(!stato.ds.haAllenamenti){
+    cont.innerHTML = `<div class="vuoto"><strong>Servono sia le partite sia gli allenamenti</strong> per calcolare questo incrocio: carica anche i file allenamento.</div>`;
+    return;
+  }
+  if(!stato.ds.haRPE){
+    cont.innerHTML = `<div class="vuoto"><strong>Questa sezione richiede il carico di allenamento (sRPE)</strong>, quindi il dato RPE percepito (fatica 1-10). I file caricati finora non lo includono: il carico di stanchezza stimato resta disponibile nella sezione «Carico di allenamento e stanchezza stimata», ma qui non c'è ancora nulla da incrociare.</div>`;
+    return;
+  }
+  const incroci = incrociCaricoRendimento(stato.ds);
+  if(incroci.length === 0){
+    cont.innerHTML = `<div class="vuoto">Nessun segnale incrociato rilevante per ora: servono almeno due mesi consecutivi con partite e allenamenti registrati per lo stesso giocatore. Continuerà ad aggiornarsi da solo.</div>`;
+    return;
+  }
+  const etichette = {affaticamento:{cls:"neg", testo:"Possibile affaticamento"}, positivo:{cls:"pos", testo:"Il lavoro sta pagando"}, carico_basso:{cls:"neu", testo:"Carico in forte calo"}};
+  cont.innerHTML = `<div class="griglia g-2">` + incroci.slice(0,8).map(x => {
+    const et = etichette[x.tipo];
+    let frase;
+    if(x.tipo === "affaticamento") frase = `Il carico di allenamento è salito di ${nf(x.rapportoCarico,1)}× da ${meseBreve(x.mesePrec)} a ${meseBreve(x.meseCorr)}, mentre l'indice prestazione medio in partita è sceso di ${nf0(Math.abs(x.deltaIndice))} punti: vale la pena verificare con lo staff se c'è affaticamento.`;
+    else if(x.tipo === "positivo") frase = `Il carico di allenamento è rimasto stabile (${nf(x.rapportoCarico,1)}×) tra ${meseBreve(x.mesePrec)} e ${meseBreve(x.meseCorr)}, mentre l'indice prestazione medio è salito di ${nf0(x.deltaIndice)} punti: il lavoro sta pagando.`;
+    else frase = `Il carico di allenamento è sceso a ${nf(x.rapportoCarico,1)}× tra ${meseBreve(x.mesePrec)} e ${meseBreve(x.meseCorr)} e l'indice prestazione medio è calato di ${nf0(Math.abs(x.deltaIndice))} punti: da capire se il calo di lavoro dipende da un infortunio o un'assenza.`;
+    return `<div class="trend-card">
+      <div class="trend-testa"><div><div class="trend-nome">${esc(x.Giocatore)}</div><div class="trend-stat">${meseLabel(x.mesePrec)} → ${meseLabel(x.meseCorr)}</div></div><span class="pill ${et.cls}">${et.testo}</span></div>
+      <div class="trend-frase">${esc(frase)}</div>
+    </div>`;
+  }).join("") + `</div>
+  <p class="kpi-nota" style="margin-top:14px">Sono correlazioni tra due cluster di dati che raccogli separatamente, non nessi causa-effetto: il modo giusto di usarle è come punto di partenza per una conversazione con lo staff, non come conclusione.</p>`;
+}
+
+/* --------- 8d/7e. Zone di recupero e palla persa (dashboard) --------- */
+/** Sezione condivisa da Dashboard Partita e Dashboard Allenamento: 2 grafici a zone (griglia 3×3, %) più
+ *  2 heatmap vere (recupero/palla persa), calcolati dalle coordinate X/Y degli eventi (vedi il motore più
+ *  sopra, "ZONE DI RECUPERO E PALLA PERSA"). `idContenitore` distingue i due usi (id diversi per i canvas,
+ *  altrimenti le due dashboard, entrambe sempre nel DOM, andrebbero in conflitto sugli stessi id). Gating
+ *  esplicito, non un grafico vuoto: finché nessun file caricato include le coordinate, la sezione lo dice
+ *  chiaramente invece di mostrare percentuali a zero che sembrerebbero un dato vero. */
+/** Palle perse con posizione di UN solo giocatore (19/09/2026, richiesta di Elisa). I punti di zona
+ *  portano già il nome del giocatore da estraiEventiZonaDaSessione, quindi non serve nessun dato nuovo:
+ *  è un filtro su quello che c'è. `soloSquadraA` non serve qui — il filtro sul nome è più stretto. */
+function persePerGiocatore(sessioni, nome){
+  const out = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    if(p.tipo === "persa" && p.giocatore === nome) out.push(p);
+  }));
+  return out;
+}
+function recuperiPerGiocatore(sessioni, nome){
+  const out = [];
+  (sessioni||[]).forEach(s => (s.EventiZona||[]).forEach(p => {
+    if(p.tipo === "recupero" && p.giocatore === nome) out.push(p);
+  }));
+  return out;
+}
+
+const ETICHETTE_ZONA_LUNGHEZZA = ["difensivo", "centrale", "offensivo"];
+const ETICHETTE_ZONA_FASCIA = ["sinistra", "centro", "destra"];
+
+/** Elenco delle zone in cui un giocatore ha perso palla, in numeri ASSOLUTI e ordinato per frequenza.
+ *  Su campioni piccoli — ed è la norma per un singolo giocatore — "2 palle perse nel terzo difensivo a
+ *  destra" è un'informazione onesta, mentre "66,7%" è la stessa cosa travestita da misura. */
+function elencoZonePerse(punti){
+  const z = calcolaZoneCampo(punti);
+  return z.celle.map((c, i) => ({
+    riga: Math.floor(i/3), col: i%3, conteggio: c.conteggio, pct: c.pct,
+    etichetta: `terzo ${ETICHETTE_ZONA_LUNGHEZZA[i%3]}, ${ETICHETTE_ZONA_FASCIA[Math.floor(i/3)]}`
+  })).filter(c => c.conteggio > 0).sort((a,b) => b.conteggio - a.conteggio);
+}
+
+/* Avvisi sull'attendibilità dei grafici di zona (19/09/2026, dopo l'analisi dei file grezzi).
+   Due limiti misurati sui dati veri, che il grafico da solo non comunica:
+   (1) CAMPIONE. Una griglia a 9 zone ha bisogno dell'ordine del centinaio di eventi perché ogni casella
+       abbia un numero stabile. Nei file esaminati il massimo era 31 eventi in una sessione: lì una casella
+       ne contiene tre o quattro, e un evento in più sposta la zona di tre punti percentuali. La soglia
+       precedente (5) era troppo bassa per dirlo davvero.
+   (2) BORDI. Su 73 eventi reali nessuno è mai caduto nel 20% esterno della larghezza: i tocchi si fermano
+       fra 6,3 e 23,7 metri su un campo largo 30. Le due fasce laterali hanno quindi poco più di un terzo
+       della superficie raggiungibile rispetto a quella centrale, e la concentrazione al centro che si vede
+       nel grafico è in larga parte un effetto di questo, non un tratto della squadra. La distorsione è però
+       costante, quindi il CONFRONTO fra una sessione e l'altra resta valido: è il valore assoluto per
+       fascia a non essere interpretabile. */
+const ZONE_CAMPIONE_SCARSO = 10;   // sotto: le percentuali non vanno lette
+const ZONE_CAMPIONE_LIMITATO = 40; // sotto: leggibili solo come indicazione
+
+function avvisoCampioneZone(n, cosa){
+  if(n <= 0) return "";
+  if(n < ZONE_CAMPIONE_SCARSO)
+    return `<strong>Campione troppo piccolo per leggere le percentuali:</strong> ${nf0(n)} ${n===1?"evento":"eventi"} con posizione ${esc(cosa)}. Con così pochi punti ogni zona vale un evento o due, e le percentuali qui sopra cambierebbero completamente con un solo evento in più. Usale solo come indicazione di dove si è giocato, non come misura.`;
+  if(n < ZONE_CAMPIONE_LIMITATO)
+    return `<strong>Campione limitato:</strong> ${nf0(n)} eventi con posizione ${esc(cosa)}. Per una griglia a nove zone servirebbe l'ordine del centinaio di eventi perché ogni casella sia stabile; qui un evento in più o in meno sposta una zona di qualche punto percentuale.`;
+  return "";
+}
+
+/** Avvertenza fissa sulla lettura laterale, misurata sui file reali: vedi il commento qui sopra. */
+/** Avvertenza sul quinto esterno della larghezza del campo — da SEMPRE presente a CONDIZIONATA ai dati
+ *  (12/10/2026). Nei file registrati dal vivo fino a settembre nessun evento cadeva mai nei 6 metri vicini alle
+ *  linee laterali (vedi claude/attendibilita-dati-posizionali.md): le fasce laterali risultavano artificialmente
+ *  vuote e il centro artificialmente pieno. Nei primi file registrati da video (partita e allenamento dell'11 e
+ *  del 10/10) la larghezza è coperta quasi tutta — da 0,2 a 28,9 metri in partita, 25 eventi su 81 nei due
+ *  quinti esterni — quindi l'avvertenza compare solo se i punti mostrati la giustificano davvero: abbastanza
+ *  eventi e (quasi) nessuno vicino alle linee laterali. */
+const BORDO_LATERALE_M = CAMPO_LARGHEZZA_M / 5;
+function notaBordiCampo(punti){
+  const validi = (punti||[]).filter(p => Number.isFinite(p.y));
+  if(validi.length < 20) return null;
+  const esterni = validi.filter(p => p.y < BORDO_LATERALE_M || p.y > CAMPO_LARGHEZZA_M - BORDO_LATERALE_M).length;
+  if(esterni / validi.length >= 0.03) return null;
+  return `Sulle <strong>fasce laterali</strong> questo dato va letto con cautela: su ${nf0(validi.length)} eventi con posizione, ${esterni === 0 ? "nessuno cade" : `solo ${nf0(esterni)} ${esterni===1?"cade":"cadono"}`} nei 6 metri vicini alle linee laterali. Nel calcio non succede: di solito è il segno che, al momento di toccare il campo, i bordi non vengono usati — come capitava nei file registrati dal vivo. Le zone laterali risultano così più vuote del vero e il centro più pieno; il confronto fra sessioni registrate allo stesso modo resta valido.`;
+}
+
+function renderZoneCampo(idContenitore, sessioni, sessioniPartitaPerTempo, mostraPerSquadra){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haCoordinateZona){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate X/Y degli eventi di recupero e palla persa nei file caricati — un dato che Seven Lab non esporta ancora oggi. Quando i tuoi export le includeranno, questa sezione si popola da sola, sia in partita sia in allenamento.</div>`;
+    return;
+  }
+  const {recupero, persa} = raccogliEventiZona(sessioni);
+  if(!recupero.length && !persa.length){
+    cont.innerHTML = `<div class="vuoto">Nessun evento con posizione registrata nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const baricentroRecupero = calcolaBaricentroMetri(recupero), baricentroPersa = calcolaBaricentroMetri(persa);
+  const idp = "zc-"+idContenitore;
+  cont.innerHTML = `
+    <div class="griglia g-2 g-campi">
+      <div class="card">
+        <div class="grafico-titolo">Zone di recupero (%)</div>
+        <div class="grafico-sub">${nf0(recupero.length)} recuperi con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).${baricentroRecupero!==null ? ` Baricentro di recupero stimato: <strong>${nf(baricentroRecupero,1)} m</strong> dalla propria porta (campo lungo 50 m).` : ""}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Zone di palla persa (%)</div>
+        <div class="grafico-sub">${nf0(persa.length)} palle perse con posizione nel periodo scelto.${baricentroPersa!==null ? ` Baricentro di perdita palla stimato: <strong>${nf(baricentroPersa,1)} m</strong> dalla propria porta.` : ""}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap recuperi</div>
+        <div class="grafico-sub">Densità reale dei recuperi sul campo: colore più caldo dove se ne concentrano di più.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-recupero" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap palle perse</div>
+        <div class="grafico-sub">Densità reale delle palle perse sul campo.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-persa" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    ${(() => {
+      const n = Math.max(recupero.length, persa.length);
+      const av = avvisoCampioneZone(n, "nel periodo scelto");
+      const bordi = notaBordiCampo(recupero.concat(persa));
+      return (av ? `<p class="nota-piccola">${av}</p>` : "") + (bordi ? `<p class="nota-piccola">${bordi}</p>` : "");
+    })()}
+    ${(baricentroRecupero!==null || baricentroPersa!==null) ? `<p class="nota-piccola">Il baricentro stimato è calcolato solo dagli eventi di recupero/palla persa con posizione, non da tutte le azioni della partita: non rappresenta il posizionamento generale della squadra sul campo, solo dove tende a recuperare/perdere palla.</p>` : ""}`;
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
+  disegnaCampoZone($("#"+idp+"-zona-recupero"), recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+  disegnaCampoZone($("#"+idp+"-zona-persa"), persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat-recupero"), recupero, optsBase);
+  disegnaCampoHeatmap($("#"+idp+"-heat-persa"), persa, optsBase);
+  if(sessioniPartitaPerTempo){
+    const bt = calcolaBaricentroPerTempo(sessioniPartitaPerTempo);
+    if(bt){
+      const cardTempo = document.createElement("div");
+      cardTempo.className = "card"; cardTempo.style.marginTop = "12px";
+      const t1 = bt.baricentro1!==null ? `${nf(bt.baricentro1,1)} m (${nf0(bt.n1)} recuperi)` : "non disponibile";
+      const t2 = bt.baricentro2!==null ? `${nf(bt.baricentro2,1)} m (${nf0(bt.n2)} recuperi)` : "non disponibile";
+      let confronto = "";
+      if(bt.baricentro1!==null && bt.baricentro2!==null){
+        const delta = bt.baricentro2 - bt.baricentro1;
+        confronto = Math.abs(delta) < 1
+          ? "Sostanzialmente stabile tra i due tempi."
+          : `${delta>0?"Più alto":"Più basso"} nel 2° tempo di ${nf(Math.abs(delta),1)} m rispetto al 1°${delta<0?" — un possibile segnale di calo di intensità/stanchezza da verificare con lo staff":""}.`;
+      }
+      cardTempo.innerHTML = `<div class="grafico-titolo">Baricentro di recupero per tempo</div>
+        <div class="grafico-sub">1° tempo: <strong>${t1}</strong> dalla propria porta · 2° tempo: <strong>${t2}</strong> dalla propria porta. ${confronto}</div>
+        <p class="nota-piccola" style="margin-top:8px">Abbinamento tra posizione ed evento fatto per giocatore/squadra/tipo evento in ordine di successione (non c'è un identificativo comune tra le due sezioni del file Seven Lab): in rari casi limite può risultare impreciso.</p>`;
+      cont.appendChild(cardTempo);
+    }
+  }
+  // Confronto tra le due squadre interne, solo in allenamento (richiesta esplicita dell'utente 03/09/2026):
+  // il grafico "totalità" qui sopra (A+B insieme) resta il dato più importante — vedi il commento su
+  // raccogliEventiZonaPerSquadra — questi quattro grafici più piccoli aggiungono la vista per singola
+  // squadra, utile per confrontare la tendenza di una partitella con l'altra.
+  // 19/09/2026, su segnalazione di Elisa: le squadre A e B vengono rifatte a ogni allenamento, quindi
+  // "Squadra A" di martedì e "Squadra A" di giovedì non sono lo stesso gruppo di persone. Sommare più
+  // sessioni in un unico grafico per squadra produce un dato che sembra parlare di una squadra e invece
+  // non parla di nessuno. Da qui in poi il confronto A/B compare SOLO quando in gioco c'è una sessione
+  // sola: lì le due squadre sono davvero due gruppi reali e confrontarle ha senso.
+  const unaSolaSessione = (sessioni||[]).length === 1;
+  if(mostraPerSquadra && !unaSolaSessione && (sessioni||[]).length > 1){
+    const avviso = document.createElement("p");
+    avviso.className = "nota-piccola";
+    avviso.style.marginTop = "12px";
+    avviso.innerHTML = `Il confronto <strong>Squadra A contro Squadra B</strong> non viene mostrato su più sessioni insieme: le squadre vengono rifatte a ogni allenamento, quindi "Squadra A" di una sessione non è lo stesso gruppo di un'altra e sommarle darebbe un dato senza significato. Scegli una singola sessione qui sopra per vederlo.`;
+    cont.appendChild(avviso);
+  }
+  if(mostraPerSquadra && unaSolaSessione){
+    const perSquadra = raccogliEventiZonaPerSquadra(sessioni);
+    const haEntrambe = (perSquadra.A.recupero.length || perSquadra.A.persa.length) &&
+                        (perSquadra.B.recupero.length || perSquadra.B.persa.length);
+    if(haEntrambe){
+      const blocco = document.createElement("div");
+      blocco.style.marginTop = "16px";
+      blocco.innerHTML = `<div class="grafico-titolo" style="margin-bottom:10px">Recuperi e palle perse per squadra</div>
+        <div class="griglia g-2 g-campi">
+          <div class="card"><div class="grafico-titolo">Recuperi — Squadra A</div>
+            <div class="grafico-sub">${nf0(perSquadra.A.recupero.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero-a" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Recuperi — Squadra B</div>
+            <div class="grafico-sub">${nf0(perSquadra.B.recupero.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-recupero-b" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Palle perse — Squadra A</div>
+            <div class="grafico-sub">${nf0(perSquadra.A.persa.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa-a" width="480" height="288"></canvas></div></div>
+          <div class="card"><div class="grafico-titolo">Palle perse — Squadra B</div>
+            <div class="grafico-sub">${nf0(perSquadra.B.persa.length)} con posizione.</div>
+            <div class="grafico-wrap-campo"><canvas id="${idp}-zona-persa-b" width="480" height="288"></canvas></div></div>
+        </div>
+        <p class="nota-piccola" style="margin-top:8px">Stesso orientamento del grafico "totalità" qui sopra (propria porta a sinistra, porta avversaria a destra per ciascuna squadra) — utile per confrontare la tendenza di una squadra con l'altra, ma il dato più affidabile per capire dove la squadra recupera/perde palla in generale resta quello con entrambe le squadre insieme.</p>`;
+      cont.appendChild(blocco);
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-recupero-a"), perSquadra.A.recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-recupero-b"), perSquadra.B.recupero, Object.assign({}, optsBase, {colore:colore("success")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-persa-a"), perSquadra.A.persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+      disegnaCampoZone(blocco.querySelector("#"+idp+"-zona-persa-b"), perSquadra.B.persa, Object.assign({}, optsBase, {colore:colore("danger")}));
+    }
+  }
+}
+
+/** Sezione "Dove si segna di più" / "Da dove arrivano gli assist" — richiesta esplicita dell'utente
+ *  (03/09/2026): usa le coordinate della sezione "DETTAGLIO GOL GAME" (vedi estraiPuntiGolGameDaSessione),
+ *  con lo stesso stile a doppia vista (griglia a zone % + heatmap) di renderZoneCampo qui sopra, per
+ *  coerenza visiva. Solo partite: i gol fatti sono sempre "nostri", un equivalente per l'allenamento (dove
+ *  A/B sono due squadre interne) non ha lo stesso significato ed è già coperto dalla classifica marcatori.
+ *  Gating esplicito come per le zone di recupero: finché nessun file caricato include questa sezione, lo
+ *  dice chiaramente invece di un grafico vuoto. */
+function renderGolGameCampo(idContenitore, sessioni){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haDatiGolGame){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate di tiro e assist dei gol nei file caricati (sezione «DETTAGLIO GOL GAME») — un dato che Seven Lab non esporta ancora in tutti gli export. Quando i tuoi file la includeranno, questa sezione si popola da sola.</div>`;
+    return;
+  }
+  const gol = [], assist = [];
+  (sessioni||[]).forEach(s => { (s.PuntiGol||[]).forEach(p=>gol.push(p)); (s.PuntiAssistGol||[]).forEach(p=>assist.push(p)); });
+  if(!gol.length){
+    cont.innerHTML = `<div class="vuoto">Nessun gol con posizione registrata nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const idp = "gg-"+idContenitore;
+  cont.innerHTML = `
+    <div class="griglia g-2 g-campi">
+      <div class="card">
+        <div class="grafico-titolo">Zone di tiro dei gol (%)</div>
+        <div class="grafico-sub">${nf0(gol.length)} gol con posizione nel periodo scelto, su una griglia 3×3 del campo (dalla propria porta all'attacco).</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-gol" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Zone di partenza degli assist (%)</div>
+        <div class="grafico-sub">${assist.length ? nf0(assist.length)+" assist con posizione nel periodo scelto." : "Nessun gol assistito con posizione nel periodo scelto (i gol senza assist restano esclusi qui)."}</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona-assist" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap tiri vincenti</div>
+        <div class="grafico-sub">Densità reale dei punti da cui si è segnato: colore più caldo dove si concentrano di più i gol.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-gol" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap origine assist</div>
+        <div class="grafico-sub">Densità reale da dove arrivano più spesso gli assist vincenti.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat-assist" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    ${(() => { const av = avvisoCampioneZone(gol.length, "nel periodo scelto"); return av ? `<p class="nota-piccola">${av}</p>` : ""; })()}
+    <p class="nota-piccola" style="margin-top:8px">Assi dedotti dai valori delle coordinate nel file (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): se un file futuro mostrasse dati incoerenti con "porta avversaria a destra", segnalacelo così verifichiamo.</p>`;
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
+  disegnaCampoZone($("#"+idp+"-zona-gol"), gol, Object.assign({}, optsBase, {colore:colore("c1")}));
+  disegnaCampoZone($("#"+idp+"-zona-assist"), assist, Object.assign({}, optsBase, {colore:colore("c4")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat-gol"), gol, optsBase);
+  disegnaCampoHeatmap($("#"+idp+"-heat-assist"), assist, optsBase);
+}
+
+/** Avvisi comuni a schermo e nei report sul punto d'ingresso in porta: quelli dedotti dal file
+ *  (colonne/unità/verso dell'asse, vedi estraiPuntiPortaDaSessione) più quello sulla dimensione del
+ *  campione, che qui è per forza piccolo — un gol = un punto, non un evento fra centinaia. */
+function avvisiPorta(punti, diag){
+  const righe = [];
+  if(punti.length < PORTA_GOL_INDICATIVI)
+    righe.push(`<strong>Pochi gol per parlare di tendenza:</strong> ${nf0(punti.length)} ${punti.length===1?"gol":"gol"} con il punto d'ingresso registrato. Il disegno dice dove sono finiti questi gol, non dove la squadra segna di solito: per quello servono alcune decine di gol, che si accumulano partita dopo partita.`);
+  if(diag && diag.avvisi) diag.avvisi.forEach(a => righe.push(a));
+  if(diag) righe.push(`Colonne lette dal file: «${esc(diag.colonnaX)}» in larghezza e «${esc(diag.colonnaY)}» in altezza, interpretate come ${esc(ETICHETTA_SCALA_PORTA[diag.scalaX]||diag.scalaX)} e ${esc(ETICHETTA_SCALA_PORTA[diag.scalaY]||diag.scalaY)}${diag.colonnaEtichetta ? `, con «${esc(diag.colonnaEtichetta)}» come riscontro testuale di Seven Lab` : ""}. Se il disegno non corrisponde a come sono andati i gol, è qui che si corregge: segnalacelo col file.`);
+  return righe;
+}
+
+/** Sezione "Dove entra la palla in porta" (dashboard partita) — richiesta esplicita dell'utente
+ *  (08/10/2026): una porta da calcio disegnata e un pallone su ogni punto d'ingresso dei gol fatti, senza
+ *  quote né misure a schermo. Accanto al disegno, i nove settori di porta con i valori ASSOLUTI accanto alle
+ *  percentuali e l'elenco gol per gol, così il grafico si può sempre interrogare risalendo ai numeri.
+ *  Il periodo scelto in alto decide se si guarda una partita sola o un insieme di gare: la distinzione
+ *  partita singola / periodo è nei contenuti (l'elenco mostra la colonna della partita solo se ce n'è più
+ *  di una, e la numerazione dei palloni compare solo quando i gol sono abbastanza pochi da restare leggibili). */
+function renderPortaGol(idContenitore, sessioni){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haDatiPortaGol){
+    const ignote = colonneGolGameSconosciute(sessioni);
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono, nella sezione «DETTAGLIO GOL GAME» dell'export Seven Lab, le coordinate del punto in cui la palla entra in porta sui gol fatti — un dato nuovo, che i file caricati finora non contengono. Appena i tuoi export lo includeranno, questa sezione si popola da sola: il sistema riconosce le colonne da sé, senza bisogno di aggiornare l'app.${
+      ignote.length ? `<br><br>Nei file caricati questa sezione contiene anche queste colonne, che l'app non sta usando: ${ignote.map(c=>"«"+esc(c)+"»").join(", ")}. Se una di queste è il punto d'ingresso in porta, segnalacelo: basta insegnare all'app questo nome.` : ""}</div>`;
+    return;
+  }
+  const punti = raccogliPuntiPorta(sessioni);
+  if(!punti.length){
+    cont.innerHTML = `<div class="vuoto">Nessun gol con il punto d'ingresso registrato nel periodo scelto: cambia periodo o carica altri file.</div>`;
+    return;
+  }
+  const diag = diagnosticaPorta(sessioni);
+  const {celle, totale} = calcolaSettoriPorta(punti);
+  const piuPartite = new Set(punti.map(p=>p.idPartita)).size > 1;
+  const maxCella = Math.max(1, ...celle.map(c=>c.n));
+  // Riempimento proporzionale ai gol, calcolato qui con hexRgba come per i campetti su canvas, invece che in
+  // CSS: così la scala di colore è la stessa dei grafici e non dipende da funzioni CSS più recenti.
+  const sfondoCella = n => hexRgba(colore("c1"), n ? 0.12 + (n/maxCella)*0.58 : 0);
+  const bassi = celle.slice(6,9).reduce((a,c)=>a+c.n,0);
+  const alti = celle.slice(0,3).reduce((a,c)=>a+c.n,0);
+  const laterali = celle.filter(c => c.col !== 1).reduce((a,c)=>a+c.n,0);
+  const idp = "pg-"+idContenitore;
+  const marcatori = settoriPerMarcatore(punti);
+  // La matrice dei nove settori ricalca la forma della porta qui sopra (ogni nono è a sua volta 3:1, come
+  // lo specchio intero) con le etichette fuori dalle caselle invece che dentro: dentro resta solo il dato.
+  const matrice = `
+    <div class="porta-matrice">
+      <div class="pm-assi-y">${PORTA_RIGHE.map(r=>`<span>${esc(r)}</span>`).join("")}</div>
+      <div class="pm-griglia">${celle.map(c => `
+        <div class="pm-cella${c.n ? "" : " pm-vuota"}" style="background:${sfondoCella(c.n)}">
+          <span class="pm-pct">${totale ? nf0(c.pct)+"%" : "—"}</span>
+          <span class="pm-n">${nf0(c.n)} ${c.n===1?"gol":"gol"}</span>
+        </div>`).join("")}</div>
+      <div class="pm-assi-x">${PORTA_COLONNE.map(c=>`<span>${esc(c.charAt(0).toUpperCase()+c.slice(1))}</span>`).join("")}</div>
+    </div>`;
+  cont.innerHTML = `
+    <div class="card porta-card">
+      <div class="grafico-titolo">Dove è entrata la palla</div>
+      <div class="grafico-sub">${nf0(punti.length)} gol con il punto d'ingresso registrato${piuPartite ? " nel periodo scelto" : " in questa partita"}. <span class="porta-suggerimento">Tocca un pallone per vedere chi ha segnato e a che minuto.</span></div>
+      <div class="grafico-wrap-porta"><canvas id="${idp}-porta" width="1440" height="540"></canvas></div>
+      <ul class="porta-elenco-accessibile">${punti.map(p => `<li>${esc(zonaPorta(p.x01,p.y01).etichetta)} — ${esc(p.marcatore||"marcatore non indicato")}${p.secondo ? ", minuto "+esc(mmssDaSecondi(p.secondo)) : ""}${piuPartite && p.partita ? ", "+esc(p.partita) : ""}</li>`).join("")}</ul>
+    </div>
+    <div class="card porta-card">
+      <div class="grafico-titolo">Peso dei nove settori</div>
+      <div class="grafico-sub">Quanto pesa ciascun nono di porta sul totale dei gol, sulla stessa forma e con lo stesso orientamento del grafico qui sopra.</div>
+      ${matrice}
+      <div class="porta-sintesi">
+        <div><span class="pz-l">In basso</span><span class="pz-v">${nf0(bassi)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">A mezza altezza</span><span class="pz-v">${nf0(totale-bassi-alti)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">In alto</span><span class="pz-v">${nf0(alti)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">Verso i pali</span><span class="pz-v">${nf0(laterali)}<small>/${nf0(totale)}</small></span></div>
+        <div><span class="pz-l">Nel terzo centrale</span><span class="pz-v">${nf0(totale-laterali)}<small>/${nf0(totale)}</small></span></div>
+      </div>
+      <p class="nota-piccola">Sotto la percentuale c'è sempre il conteggio vero: su ${nf0(totale)} gol un singolo episodio in più sposta una casella di ${nf0(100/Math.max(1,totale))} punti, quindi le percentuali vanno lette insieme ai numeri.</p>
+    </div>
+    ${piuPartite && marcatori.length ? `<div class="card porta-card">
+      <div class="grafico-titolo">Il settore preferito di ogni marcatore</div>
+      <div class="grafico-sub">Dove ciascuno fa entrare la palla più spesso, nel periodo scelto. Una lettura che ha senso solo con più partite: su una gara sola coincide col singolo gol.</div>
+      <div class="tabella-scroll"><table>
+        <thead><tr><th scope="col">Marcatore</th><th scope="col">Gol con posizione</th><th scope="col">Settore più frequente</th><th scope="col">Gol in quel settore</th><th scope="col">Nel terzo basso</th></tr></thead>
+        <tbody>${marcatori.map(m => `<tr>
+          <td>${esc(m.marcatore)}</td><td>${nf0(m.gol)}</td><td>${esc(m.settore)}</td>
+          <td>${nf0(m.nSettore)}</td><td>${nf0(m.altezzaBassa)} su ${nf0(m.gol)}</td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${avvisiPorta(punti, diag).map(a => `<p class="nota-piccola">${a}</p>`).join("")}`;
+  const cv = $("#"+idp+"-porta");
+  const opzioni = {
+    sfondo: colore("surface-alt"), erba: hexRgba(colore("success"), 0.12),
+    telaio: colore("surface"), telaioBordo: hexRgba(colore("text"), 0.70),
+    lineaPorta: hexRgba(colore("muted"), 0.70), lineaSettori: hexRgba(colore("muted"), 0.40),
+    rete: {veloAlto: hexRgba(colore("muted"), 0.04), veloBasso: hexRgba(colore("muted"), 0.11),
+           filo: hexRgba(colore("muted"), 0.26)},
+    testo: colore("muted"), testoTenue: hexRgba(colore("muted"), 0.85),
+    palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    alone: hexRgba(colore("c1"), 0.18), aloneBordo: colore("c1"),
+    badgeFondo: colore("c1"), badgeTesto: "#FFFFFF", numera: false
+  };
+  disegnaPortaCalcio(cv, punti, opzioni);
+  collegaPortaInterattiva(cv, punti, opzioni, piuPartite);
+}
+
+/** Dà a ogni colonna delle tabelle a schermo la larghezza che le serve davvero, invece di quella dettata
+ *  dall'intestazione (audit del 04/09/2026: colonne larghe 144-152px per contenere valori come "83,3%",
+ *  solo perché l'intestazione "Prec. passaggi" stava su una riga sola). Le intestazioni ora possono andare
+ *  a capo tra una parola e l'altra, quindi a una colonna basta la sua parola più lunga; lo spazio che
+ *  avanza va alla colonna dei nomi e a quelle che contengono una barra o una sparkline, che dallo spazio
+ *  in più ci guadagnano davvero. Se invece il contenuto non ci sta, la tabella resta scorrevole come prima. */
+function adattaLarghezzeColonneSchermo(){
+  $$(".tabella-scroll table").forEach(tbl => {
+    const intestazioni = Array.from(tbl.querySelectorAll("thead th"));
+    if(!intestazioni.length) return;
+    const righe = Array.from(tbl.querySelectorAll("tbody tr")).slice(0, 40); // campione: basta per la larghezza
+    const larghe = [];   // colonne con barre/sparkline: hanno bisogno di respiro
+    const necessarie = intestazioni.map((th, i) => {
+      const cs = getComputedStyle(th);
+      const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      // per l'intestazione basta la parola più lunga: il resto va a capo
+      let n = unescConteggio(th.textContent).split(/\s+/).reduce((m,w)=>Math.max(m, larghezzaTestoPx(w, th)), 0) + pad;
+      let conBarra = false;
+      righe.forEach(tr => {
+        const td = tr.children[i];
+        if(!td) return;
+        if(td.querySelector(".barra-wrap, svg, canvas")) conBarra = true;
+        const csTd = getComputedStyle(td);
+        const padTd = parseFloat(csTd.paddingLeft) + parseFloat(csTd.paddingRight);
+        const testo = Array.from(td.childNodes).filter(x=>x.nodeType===3).map(x=>x.textContent).join(" ").trim() || td.textContent;
+        n = Math.max(n, larghezzaTestoPx(unescConteggio(testo).slice(0,40), td) + padTd);
+      });
+      if(conBarra) larghe.push(i);
+      return Math.max(n + 4, conBarra ? 130 : 44);
+    });
+    const totale = necessarie.reduce((a,b)=>a+b, 0);
+    const contenitore = tbl.parentElement ? tbl.parentElement.clientWidth : 0;
+    if(!contenitore) return;
+    const finali = necessarie.slice();
+    if(totale < contenitore){
+      // lo spazio che avanza: metà alla prima colonna (i nomi), il resto alle colonne con barra, e se non
+      // ce ne sono si distribuisce in proporzione come prima
+      let avanzo = contenitore - totale - 2;
+      // le colonne con barra/sparkline crescono, ma fino a un tetto: oltre, una colonna larghissima con
+      // dentro una linea sottile sembra solo spazio sprecato
+      const TETTO_COLONNA_GRAFICA = 300;
+      larghe.forEach(i => {
+        const extra = Math.min(Math.floor(avanzo/larghe.length), Math.max(0, TETTO_COLONNA_GRAFICA - finali[i]));
+        finali[i] += extra; avanzo -= extra;
+      });
+      // poi la colonna dei nomi, anch'essa fino a un tetto (un nome e un ruolo non hanno bisogno di mezzo
+      // schermo); quel che resta si spalma in parti uguali su tutte, così la tabella riempie la riga senza
+      // che nessuna colonna diventi sproporzionata rispetto a quello che contiene
+      const TETTO_COLONNA_NOMI = 340;
+      const extraNomi = Math.min(avanzo, Math.max(0, TETTO_COLONNA_NOMI - finali[0]));
+      finali[0] += extraNomi; avanzo -= extraNomi;
+      if(avanzo > 0){ const quota = Math.floor(avanzo/finali.length); finali.forEach((v,i)=>{ finali[i] = v + quota; }); }
+    }
+    const larghezzaTabella = finali.reduce((a,b)=>a+b, 0);
+    tbl.style.width = (totale < contenitore ? "100%" : larghezzaTabella + "px");
+    tbl.style.minWidth = "0";
+    intestazioni.forEach((th,i) => { th.style.width = Math.round(finali[i]) + "px"; });
+  });
+  // le sparkline si ridisegnano sulla nuova larghezza della loro colonna
+  $$("canvas.spark").forEach(disegnaSpark);
+}
+
+/** Misura quanto è alta davvero la barra che resta fissa in cima (filtri + schede + indice sezioni) e la
+ *  scrive nella variabile CSS --altezza-fissa. La usano due regole in index.html: lo scroll-margin delle
+ *  sezioni (senza, cliccando una voce dell'indice la sezione finiva NASCOSTA dietro la barra) e l'altezza
+ *  massima delle tabelle scorrevoli (senza, su schermi bassi la tabella non ci stava mai tutta sotto la
+ *  barra). Quando la barra non è fissa — su telefono torna a scorrere via con la pagina — vale 0.
+ *  Chiamata all'avvio, al ridimensionamento e ogni volta che la barra cambia contenuto/visibilità. */
+function aggiornaAltezzaBarraFissa(){
+  const barra = $(".topbar-pinned");
+  if(!barra) return;
+  const fissa = getComputedStyle(barra).position === "sticky";
+  const h = fissa ? Math.round(barra.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty("--altezza-fissa", h + "px");
+}
+
+/** Sezione "Impatto dei subentrati" della Dashboard Partita (04/09/2026). Mostra chi, entrando a gara in
+ *  corso, incide di più. Gating esplicito: se nei file non c'è nemmeno un ingresso registrato lo dice,
+ *  invece di mostrare una tabella vuota che sembrerebbe "nessuno rende bene". */
+function renderSubentrati(f){
+  const cont = $("#contenuto-subentrati");
+  if(!cont) return;
+  const {elenco, partiteConIngressi, partiteTotali} = analizzaSubentrati(f.partite, f.giocatori);
+  if(!partiteConIngressi){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Nei file caricati non c'è nessun cambio registrato: serve la colonna «Cambio entra» nella timeline eventi, che Seven Lab valorizza quando un giocatore entra a partita in corso. Finché le partite si giocano senza sostituzioni registrate, questa sezione resta vuota.</div>`;
+    return;
+  }
+  if(!elenco.length){
+    cont.innerHTML = `<div class="vuoto">Nel periodo scelto nessun giocatore è entrato a partita in corso (${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} con cambi registrati).</div>`;
+    return;
+  }
+  const CAMPIONE_MINIMO_MIN = 5; // sotto questa soglia le medie per partita non sono da prendere sul serio
+  const righe = elenco.map(a => {
+    const s = a.subentrato;
+    const ridotto = s.minuti < CAMPIONE_MINIMO_MIN;
+    const confronto = (a.indicePartitaTitolare !== null && a.indicePartitaSubentrato !== null)
+      ? a.indicePartitaSubentrato - a.indicePartitaTitolare : null;
+    return `<tr${ridotto ? ' class="riga-attenuata"' : ''}>
+      <td>${esc(a.Giocatore)}<span class="ruolo">${esc(a.Ruolo)}</span></td>
+      <td>${nf0(s.partite)}</td>
+      <td>${nf(s.minuti,1)}'</td>
+      <td>${a.minutoMedioIngresso!==null ? nf(a.minutoMedioIngresso,1)+"'" : "—"}</td>
+      <td>${nf0(a.contributoSubentrato)}</td>
+      <td>${nf(s.indice,1)}</td>
+      <td>${a.indicePartitaSubentrato!==null ? nf(a.indicePartitaSubentrato,1) : "—"}</td>
+      <td>${a.indicePartitaTitolare!==null ? nf(a.indicePartitaTitolare,1) : "—"}</td>
+      <td>${confronto===null ? "—" : `<span class="rp-flag ${confronto>0?"up":(confronto<0?"down":"flat")}">${confronto>0?"▲ +":"▼ "}${nf(Math.abs(confronto),1)}</span>`}</td>
+      <td>${nf0(a.panchinaSenzaEntrare)}</td>
+    </tr>`;
+  }).join("");
+  const conCampioneRidotto = elenco.filter(a => a.subentrato.minuti < CAMPIONE_MINIMO_MIN).length;
+  cont.innerHTML = `<div class="tabella-scroll"><table>
+      <caption class="solo-sr">Rendimento e impatto dei giocatori entrati a partita in corso</caption>
+      <thead><tr>
+        <th scope="col">Giocatore</th><th scope="col">Ingressi</th><th scope="col">Minuti da subentrato</th>
+        <th scope="col">Minuto medio d'ingresso</th><th scope="col">Gol + assist</th><th scope="col">Indice accumulato</th>
+        <th scope="col">Indice per partita intera da subentrato</th><th scope="col">Indice per partita intera da titolare</th>
+        <th scope="col">Differenza</th><th scope="col">In distinta senza entrare</th>
+      </tr></thead><tbody>${righe}</tbody></table></div>
+    <p class="nota-piccola">Ordinati per impatto: prima il contributo ai gol da subentrato (gol + assist), poi l'indice accumulato. Volutamente <strong>non</strong> per media rapportata alla partita intera: su spezzoni di pochi minuti quella media si gonfia e metterebbe in cima proprio chi ha giocato meno.</p>
+    <p class="nota-piccola">Le due colonne "per partita intera" rapportano il rendimento a una gara completa di calcio a 7, cioè ${nf0(MINUTI_PARTITA_INTERA)} minuti (due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}; il recupero non è conteggiato perché non è registrato e cambia da partita a partita). Servono a confrontare il giocatore con sé stesso — quanto rende entrando rispetto a quando parte titolare — non a confrontare giocatori con minutaggi molto diversi. Restano vuote ("—") quando i minuti giocati in quella veste sono meno di ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)}: una media rapportata a ${nf0(MINUTI_PARTITA_INTERA)} minuti ricavata da due o tre minuti in campo non è un dato, è quel numero moltiplicato per venti.${conCampioneRidotto ? ` ${conCampioneRidotto===1?"Una riga è attenuata":`${nf0(conCampioneRidotto)} righe sono attenuate`} perché sotto i ${nf0(CAMPIONE_MINIMO_MIN)} minuti complessivi da subentrato.` : ""}</p>
+    <p class="nota-piccola">Chi è entrato a partita in corso si riconosce dall'evento «Cambio entra» nella timeline; chi ha giocato senza averne uno è considerato titolare. ${nf0(partiteConIngressi)} ${partiteConIngressi===1?"partita":"partite"} su ${nf0(partiteTotali)} nel periodo ${partiteConIngressi===1?"ha":"hanno"} almeno un cambio registrato.</p>`;
+}
+
+/** Sezione "Dove perde palla" per un singolo giocatore (19/09/2026, richiesta di Elisa). Usata identica
+ *  in due posti: nella Dashboard Allenamento (totale del periodo, sulle sole partitelle) e nella Dashboard
+ *  Giocatori (dove si può scegliere tutta la stagione oppure una singola partita).
+ *  Nota di onestà sui numeri, da non togliere: per un singolo giocatore il campione è molto più piccolo di
+ *  quello già piccolo della squadra. Nei file reali visti finora il giocatore con più palle perse
+ *  georeferenziate ne aveva 7 in tutta la stagione, la mediana era 2, e in una singola partita si arriva a
+ *  1-2. Per questo l'elenco in numeri assoluti sta SOTTO i grafici ma prima di ogni percentuale: è quello
+ *  che si può davvero leggere oggi. I grafici restano perché con una stagione intera di dati diventeranno
+ *  la vista giusta. */
+function renderPersaGiocatore(idContenitore, sessioni, nome, contesto){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  if(!stato.ds.haCoordinateZona){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Servono le coordinate X/Y degli eventi di palla persa nei file caricati (sezione «DATI SPAZIALI» dell'export Seven Lab). Quando i tuoi file la includeranno, questa sezione si popola da sola.</div>`;
+    return;
+  }
+  if(!nome){
+    cont.innerHTML = `<div class="vuoto">Scegli un giocatore per vedere dove perde palla.</div>`;
+    return;
+  }
+  const perse = persePerGiocatore(sessioni, nome);
+  const recuperi = recuperiPerGiocatore(sessioni, nome);
+  if(!perse.length){
+    cont.innerHTML = `<div class="vuoto"><strong>Nessuna palla persa con posizione per ${esc(nome)}</strong> ${esc(contesto)}.${recuperi.length ? ` Ha invece ${nf0(recuperi.length)} ${recuperi.length===1?"recupero":"recuperi"} con posizione nello stesso arco.` : ""} Cambia periodo o scegli un altro giocatore.</div>`;
+    return;
+  }
+  const zone = elencoZonePerse(perse);
+  const top = zone[0];
+  const idp = "pg-"+idContenitore;
+  const rampa = rampaHeatmap(colore("c6"), colore("c2"), colore("danger"));
+  const optsBase = {sfondo:colore("surface-alt"), lineaCampo:colore("muted"), testo:colore("text"), testoChiaro:"#FFFFFF", rampa,
+    punto: hexRgba(colore("text"), 0.78), puntoBordo: hexRgba(colore("surface-alt"), 0.9)};
+  const avviso = avvisoCampioneZone(perse.length, `per ${nome} ${contesto}`);
+  cont.innerHTML = `
+    <div class="griglia g-2 g-campi">
+      <div class="card">
+        <div class="grafico-titolo">Zone di palla persa — ${esc(nome)} (%)</div>
+        <div class="grafico-sub">${nf0(perse.length)} ${perse.length===1?"palla persa":"palle perse"} con posizione ${esc(contesto)}, su una griglia 3×3 del campo (dalla propria porta all'attacco).</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-zona" width="640" height="384"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Heatmap palle perse — ${esc(nome)}</div>
+        <div class="grafico-sub">Densità reale dei punti in cui ha perso il pallone: colore più caldo dove si concentrano di più.</div>
+        <div class="grafico-wrap-campo"><canvas id="${idp}-heat" width="640" height="384"></canvas></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="grafico-titolo">Dove ha perso palla, in numeri</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Palle perse di ${esc(nome)} per zona di campo</caption>
+        <thead><tr><th scope="col">Zona</th><th scope="col">Palle perse</th><th scope="col">Quota</th></tr></thead>
+        <tbody>${zone.map(z => `<tr><td>${esc(z.etichetta)}</td><td>${nf0(z.conteggio)}</td><td>${pctTxt(z.pct,0)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">La zona in cui perde più palloni è <strong>${esc(top.etichetta)}</strong>, con ${nf0(top.conteggio)} ${top.conteggio===1?"pallone":"palloni"} su ${nf0(perse.length)}.${recuperi.length ? ` Per contesto: nello stesso arco ha ${nf0(recuperi.length)} ${recuperi.length===1?"recupero":"recuperi"} con posizione.` : ""} I numeri assoluti sono la lettura da usare finché il campione resta piccolo: la colonna della quota, su pochi palloni, cambia moltissimo per un evento in più o in meno.</p>
+    </div>
+    ${avviso ? `<p class="nota-piccola">${avviso}</p>` : ""}
+    ${(() => { const bordi = notaBordiCampo(perse); return bordi ? `<p class="nota-piccola">${bordi}</p>` : ""; })()}`;
+  disegnaCampoZone($("#"+idp+"-zona"), perse, Object.assign({}, optsBase, {colore:colore("danger")}));
+  disegnaCampoHeatmap($("#"+idp+"-heat"), perse, optsBase);
+}
+
+/** Sezione zone di allenamento con selettore di sessione (19/09/2026). Il selettore serve a una cosa
+ *  precisa: il confronto tra Squadra A e Squadra B viene mostrato solo su una sessione singola, perché le
+ *  due squadre vengono rifatte a ogni allenamento (vedi renderZoneCampo). Senza un modo per isolare una
+ *  sessione quel confronto sarebbe di fatto irraggiungibile. */
+function renderZoneAllenamento(f){
+  const sel = $("#zn-sel-sessione");
+  if(sel){
+    const sessioni = (f.allenamenti||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+    const precedente = stato.zoneSessione;
+    sel.innerHTML = `<option value="">Tutte le sessioni del periodo (${nf0(sessioni.length)})</option>`
+      + sessioni.map(a => `<option value="${esc(a.Sessione_ID)}">${esc(dataLabel(a.Data))}${a.Tipo_Allenamento?" · "+esc(a.Tipo_Allenamento):""}</option>`).join("");
+    if(precedente && sessioni.some(a => a.Sessione_ID === precedente)) sel.value = precedente;
+    else { sel.value = ""; stato.zoneSessione = ""; }
+  }
+  const scelte = stato.zoneSessione
+    ? (f.allenamenti||[]).filter(a => a.Sessione_ID === stato.zoneSessione)
+    : (f.allenamenti||[]);
+  renderZoneCampo("contenuto-zone-allenamento", scelte, null, true);
+}
+
+/** Dashboard Allenamento: dove perde palla un giocatore, sul totale delle partitelle del periodo. */
+function renderPersaGiocatoreAllenamento(f){
+  const sel = $("#pg-sel-giocatore");
+  const sessioni = f.allenamenti || [];
+  if(sel){
+    const nomi = Array.from(new Set(sessioni.flatMap(s => (s.EventiZona||[]).filter(p=>p.tipo==="persa").map(p=>p.giocatore)).filter(Boolean)))
+      .sort((a,b)=>a.localeCompare(b,"it"));
+    const prec = stato.persaGiocatoreAll;
+    sel.innerHTML = nomi.length
+      ? nomi.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("")
+      : `<option value="">Nessun giocatore con palle perse georeferenziate</option>`;
+    if(prec && nomi.includes(prec)) sel.value = prec;
+    else stato.persaGiocatoreAll = nomi[0] || "";
+    sel.value = stato.persaGiocatoreAll;
+  }
+  const periodo = stato.periodo === "tutto" ? "in tutta la stagione (allenamenti)" : `negli allenamenti di ${meseLabel(stato.periodo)}`;
+  renderPersaGiocatore("contenuto-persa-giocatore-allenamento", sessioni, stato.persaGiocatoreAll, periodo);
+}
+
+/** Dashboard Giocatori: stesso grafico per il giocatore già scelto in alto, con la possibilità di
+ *  restringere a una singola partita invece di tutta la stagione. */
+function renderPersaGiocatorePartita(f){
+  const sel = $("#pgp-sel-ambito");
+  const partite = f.partite || [];
+  if(sel){
+    const prec = stato.persaAmbitoPartita;
+    sel.innerHTML = `<option value="">Tutta la stagione (partite)</option>`
+      + partite.slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0))
+          .map(p => `<option value="${esc(p.Match_ID)}">${esc(dataLabel(p.Data))} · ${esc(p.Avversario)}</option>`).join("");
+    if(prec && partite.some(p => p.Match_ID === prec)) sel.value = prec;
+    else { sel.value = ""; stato.persaAmbitoPartita = ""; }
+  }
+  const scelte = stato.persaAmbitoPartita ? partite.filter(p => p.Match_ID === stato.persaAmbitoPartita) : partite;
+  const contesto = stato.persaAmbitoPartita
+    ? (() => { const p = partite.find(x => x.Match_ID === stato.persaAmbitoPartita); return p ? `nella partita del ${dataLabel(p.Data)} contro ${p.Avversario}` : "nella partita scelta"; })()
+    : (stato.periodo === "tutto" ? "in tutte le partite della stagione" : `nelle partite di ${meseLabel(stato.periodo)}`);
+  renderPersaGiocatore("contenuto-persa-giocatore-partita", scelte, stato.giocatore, contesto);
+}
+
+/** Sezione "Tempo di riconquista della palla" (Dashboard Partita, 07/10/2026). */
+/* --------- Possesso palla e momentum, partita singola (18/10/2026) --------- */
+const paletteMomentumSchermo = () => ({noi: colore("c1"), loro: colore("c2"), testo: colore("text"), tenue: colore("muted"), griglia: colore("grid")});
+function renderPossessoPartita(f){
+  const cont = $("#contenuto-possesso-partita");
+  if(!cont) return;
+  const sel = $("#pos-sel-partita");
+  const ordinate = (f.partite || []).slice().sort((a, b) => (b.Ordine || 0) - (a.Ordine || 0));
+  if(!ordinate.length){ if(sel) sel.innerHTML = ""; cont.innerHTML = `<div class="vuoto">Nessuna partita nel periodo scelto.</div>`; return; }
+  if(!(stato.possessoPartita && ordinate.some(p => p.Match_ID === stato.possessoPartita)))
+    stato.possessoPartita = (ordinate.find(haInterruttorePossesso) || ordinate[0]).Match_ID;
+  if(sel){
+    sel.innerHTML = ordinate.map(p => `<option value="${esc(p.Match_ID)}">${esc(dataLabel(p.Data))} · vs ${esc(p.Avversario)}${haInterruttorePossesso(p) ? " · possesso misurato" : ""}</option>`).join("");
+    sel.value = stato.possessoPartita;
+  }
+  const p = ordinate.find(x => x.Match_ID === stato.possessoPartita) || ordinate[0];
+  const pm = possessoMisuratoPartita(p);
+  if(!pm){
+    const a = analizzaEventiPartitaSevenLab({id: p.Match_ID, eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+    const x = a.eventiSquadra.length ? analyzePossession(a.eventiSquadra) : null;
+    if(!x || x.confidencePct === null){
+      cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Questa partita non ha l'interruttore del possesso né una timeline eventi utilizzabile.</div>`;
+      return;
+    }
+    const kpi = calcolaPossessionKpis(x.sequences, a.eventiSquadra);
+    cont.innerHTML = `
+      <div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span>Questa partita non ha l'interruttore del possesso (sezione «POSSESSO AVVERSARIO», negli export di SevenLab dal 18/10/2026): il possesso è <strong>stimato</strong> dai soli eventi della nostra squadra, e il momentum non si può costruire. La stima tende a dare a noi più possesso di quello vero, perché non vede quando gli avversari tengono palla a lungo.</span></div>
+      <div class="griglia g-kpi" style="margin-top:14px">
+        <div class="kpi"><div class="kpi-eti">Possesso stimato</div><div class="kpi-valore">${pctTxt(x.ourPossessionWeightedPct, 0)}</div><div class="kpi-nota">dai nostri eventi; la palla contesa conta a metà</div></div>
+        <div class="kpi"><div class="kpi-eti">Copertura del dato</div><div class="kpi-valore">${pctTxt(x.confidencePct, 0)}</div><div class="kpi-nota">${esc(getConfidenceLabelPossesso(x.confidencePct))} · ${mmss(x.unknownSec)} non classificabili</div></div>
+        <div class="kpi"><div class="kpi-eti">Possessi nostri rilevati</div><div class="kpi-valore">${nf0(kpi.possessi)}</div><div class="kpi-nota">${kpi.durataMediaSec ? `in media ${nf0(kpi.durataMediaSec)}"` : ""}</div></div>
+      </div>`;
+    return;
+  }
+  const mo = momentumPartita(p, pm);
+  const frasi = frasiMomentum(pm, mo, true);
+  const tot = pm.giocoSec || 1, w = v => (v / tot * 100).toFixed(1);
+  const pal = paletteMomentumSchermo();
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${frasi.join(" ")}</span></div>
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">Possesso nostro</div><div class="kpi-valore">${pctTxt(pm.pctNoi, 0)}</div><div class="kpi-nota">${mmss(pm.noiSec)} con la palla</div></div>
+      <div class="kpi"><div class="kpi-eti">Possesso avversari</div><div class="kpi-valore">${pctTxt(pm.pctLoro, 0)}</div><div class="kpi-nota">${mmss(pm.loroSec)} con l'interruttore acceso</div></div>
+      <div class="kpi"><div class="kpi-eti">Palla ferma o non classificabile</div><div class="kpi-valore">${mmss(pm.fermaSec)}</div><div class="kpi-nota">${nf0(pm.fermaSec / tot * 100)}% del tempo di gioco: rimesse, falli, gol, cambi</div></div>
+      <div class="kpi"><div class="kpi-eti">Possessi degli avversari</div><div class="kpi-valore">${nf0(pm.possessiLoro)}</div><div class="kpi-nota">in media ${nf0(pm.durataMediaLoro)}", il più lungo ${mmss(pm.piuLungoLoro)}</div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Come si divide il tempo di gioco</div>
+      <div class="pos-barra" role="img" aria-label="Palla nostra ${mmss(pm.noiSec)}, palla loro ${mmss(pm.loroSec)}, ferma o non classificabile ${mmss(pm.fermaSec)}">
+        <span style="width:${w(pm.noiSec)}%; background:var(--c1)"></span><span style="width:${w(pm.loroSec)}%; background:var(--c2)"></span><span style="width:${w(pm.fermaSec)}%; background:var(--grid)"></span>
+      </div>
+      <div class="pos-legenda"><span><i style="background:var(--c1)"></i>Palla nostra ${mmss(pm.noiSec)}</span><span><i style="background:var(--c2)"></i>Palla loro ${mmss(pm.loroSec)}</span><span><i style="background:var(--grid)"></i>Ferma o non classificabile ${mmss(pm.fermaSec)}</span></div>
+    </div>
+    ${mo ? `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Momentum della partita</div>
+      <div class="grafico-sub">Ogni barra sono ${nf0(MOMENTUM_FINESTRA_SEC / 60)} minuti: verso l'alto quando la palla è stata soprattutto nostra, verso il basso quando è stata soprattutto loro; più è lunga, più il possesso è stato netto. I triangoli segnano i gol: in alto i nostri, in basso quelli subiti. Tocca una barra per i numeri.</div>
+      <div class="grafico-wrap" style="height:300px"><canvas id="gr-momentum"></canvas></div>
+      <div class="pos-legenda"><span><i style="background:var(--c1)"></i>Palla soprattutto nostra</span><span><i style="background:var(--c2)"></i>Palla soprattutto loro</span><span><b style="color:var(--c1)">▲</b> Gol fatto</span><span><b style="color:var(--c2)">▼</b> Gol subito</span></div>
+    </div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Come si conta: la palla è degli avversari quando l'interruttore del possesso di SevenLab è acceso (dato misurato); è nostra quando è spento e negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi c'è stato un nostro evento con la palla, o la palla ci è appena tornata. Il resto è palla ferma o non classificabile e non entra nella percentuale, come nelle statistiche ufficiali che contano solo la palla in gioco. Il momentum vale solo per la singola partita: sommato su più gare non vorrebbe dire niente.</p>`;
+  if(mo) creaGrafico("gr-momentum", configMomentum(mo, pal, false));
+}
+
+function renderRiconquista(f){
+  const cont = $("#contenuto-riconquista");
+  if(!cont) return;
+  const a = analizzaRiconquista(f.partite);
+  if(!a){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i tempi (sezione «TIMELINE EVENTI» dell'export Seven Lab) e almeno una palla persa seguita da un recupero. Nei file caricati per il periodo scelto non c'è.</div>`;
+    return;
+  }
+  const q = a.qualita;
+  const pctRic = perc(a.riconquistate, a.sequenze);
+  const pctImm = perc(a.entroImmediata, a.riconquistate);
+  const pctRap = perc(a.entroRapida, a.riconquistate);
+  const maxFascia = Math.max(1, ...a.fasce.map(x => x.n));
+  const campioneScarso = a.riconquistate < RICONQUISTA_CAMPIONE_MINIMO;
+
+  const confrontoTempi = (a.tempo1 && a.tempo2)
+    ? (() => {
+        const d = a.tempo2.mediana - a.tempo1.mediana;
+        if(Math.abs(d) < 1) return `Fra primo e secondo tempo non cambia praticamente nulla (${nf(a.tempo1.mediana,1)}s contro ${nf(a.tempo2.mediana,1)}s).`;
+        return d > 0
+          ? `Nel secondo tempo la squadra ci mette <strong>${nf(d,1)}s in più</strong> a riprendersi la palla (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s): è il segnale che di solito accompagna il calo di intensità.`
+          : `Nel secondo tempo la squadra riconquista <strong>${nf(Math.abs(d),1)}s più in fretta</strong> (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s).`;
+      })()
+    : "Il confronto fra i due tempi comparirà quando ci saranno sequenze in entrambi.";
+
+  const avvisiQualita = [];
+  if(q.inDiretta) avvisiQualita.push(`${nf0(q.inDiretta)} ${q.inDiretta===1?"partita è stata registrata":"partite sono state registrate"} <strong>in diretta</strong>: lì ogni evento porta il ritardo di reazione di chi taggava, e qui i ritardi sono due (sulla perdita e sul recupero), dello stesso ordine di grandezza di quello che si sta misurando. Leggi questi numeri come indicativi, non come misure.`);
+  if(q.inDifferitaNonCorretta) avvisiQualita.push(`${nf0(q.inDifferitaNonCorretta)} ${q.inDifferitaNonCorretta===1?"partita è stata registrata":"partite sono state registrate"} <strong>in differita senza velocità di riproduzione dichiarata</strong>: i loro tempi sono quelli del cronometro di lavoro, non della partita. Questi secondi sono gonfiati e non vanno letti finché il file non riporta la velocità.`);
+  if(q.senzaTimeline) avvisiQualita.push(`${nf0(q.senzaTimeline)} ${q.senzaTimeline===1?"partita è esclusa":"partite sono escluse"} perché senza timeline eventi utilizzabile.`);
+
+  cont.innerHTML = `
+    <div class="griglia g-kpi">
+      <div class="kpi"><div class="kpi-eti">Tempo tipico di riconquista</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : nf(a.mediana,1)+"s"}</div>
+        <div class="kpi-nota">${campioneScarso ? `Solo ${nf0(a.riconquistate)} sequenze: troppo poche per una mediana` : `Mediana su ${nf0(a.riconquistate)} riconquiste · media ${nf(a.media,1)}s`}</div></div>
+      <div class="kpi"><div class="kpi-eti">Riaggressione entro ${nf0(RICONQUISTA_IMMEDIATA_SEC)}s</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : pctTxt(pctImm,0)}</div>
+        <div class="kpi-nota">${nf0(a.entroImmediata)} riconquiste su ${nf0(a.riconquistate)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Entro ${nf0(RICONQUISTA_RAPIDA_SEC)}s</div>
+        <div class="kpi-valore">${campioneScarso ? "—" : pctTxt(pctRap,0)}</div>
+        <div class="kpi-nota">${nf0(a.entroRapida)} riconquiste su ${nf0(a.riconquistate)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Palle perse riconquistate</div>
+        <div class="kpi-valore">${pctTxt(pctRic,0)}</div>
+        <div class="kpi-nota">${nf0(a.riconquistate)} su ${nf0(a.sequenze)} palle perse analizzate</div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Quanto ci mette, sequenza per sequenza</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Distribuzione dei tempi di riconquista per fascia</caption>
+        <thead><tr><th scope="col">Fascia</th><th scope="col">Sequenze</th><th scope="col">Quota</th><th scope="col">Distribuzione</th></tr></thead>
+        <tbody>${a.fasce.map(x => `<tr>
+          <td>${esc(x.eti)}</td><td>${nf0(x.n)}</td><td>${pctTxt(perc(x.n, a.riconquistate),0)}</td>
+          <td><div class="barra-wrap"><div class="barra" style="width:${(x.n/maxFascia*100).toFixed(1)}%; background:var(--c1)"></div><span>${nf0(x.n)}</span></div></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">${confrontoTempi}</p>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Le sequenze che non finiscono con una riconquista</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Esito delle palle perse non riconquistate</caption>
+        <thead><tr><th scope="col">Esito</th><th scope="col">Sequenze</th><th scope="col">Come viene trattato</th></tr></thead>
+        <tbody>
+          <tr><td>Nessun recupero entro ${nf0(RICONQUISTA_SOGLIA_SEC)}s</td><td>${nf0(a.nonRiconquistate)}</td><td>Contate a parte, escluse dalla mediana</td></tr>
+          <tr><td>Chiuse da un gol</td><td>${nf0(a.chiuseDaGol)}</td><td>La palla riparte da fermo: non è una riconquista</td></tr>
+          <tr><td>Chiuse dalla fine del tempo</td><td>${nf0(a.chiuseDaFineTempo)}</td><td>Mai misurate a cavallo dell'intervallo</td></tr>
+        </tbody>
+      </table></div>
+      <p class="nota-piccola" style="margin-top:8px">Queste sequenze non vengono mediate con le altre di proposito: includerle con un tempo convenzionale gonfierebbe la media proprio con i casi peggiori, travestendoli da misura. Il tempo tipico qui sopra è la <strong>mediana</strong> e non la media perché la distribuzione è asimmetrica — tante riconquiste rapide e poche lunghissime — e la media si farebbe trascinare dalla coda.</p>
+    </div>
+
+    ${avvisiQualita.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${avvisiQualita.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Si parte da ogni palla persa della squadra e si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Nessun dato nuovo da raccogliere — entrambi gli eventi sono già nella timeline di Seven Lab.</p>`;
+}
+
+/** Perché un gol non è stato attribuito a nessuna palla persa, in una frase (12/10/2026). Senza questa
+ *  spiegazione un gol non attribuito sembrava un errore del sistema: ora si vede quale palla persa c'era e
+ *  quale evento ha spezzato il legame, e la regola si può giudicare caso per caso. */
+function motivoNonAttribuito(g, tipo){
+  if(g.motivo === "nessuna-persa")
+    return `Nessuna palla persa ${tipo === "partita" ? "della nostra squadra" : "della squadra "+esc(g.subisce)} nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima.`;
+  const it = g.interruzione, pr = g.persa;
+  return `Ultima palla persa: <b>${esc(pr.giocatore)}</b> al ${esc(mmssDaSecondi(pr.t))}, ${nf(g.t - pr.t,0)}s prima del gol. Non attribuita perché al ${esc(mmssDaSecondi(it.t))} `
+    + (it.squadraCheSubisce
+        ? `${esc(it.giocatore)} ha fatto un ${esc(it.evento)}: la squadra aveva ripreso il pallone.`
+        : `${esc(it.giocatore)} (avversario) ha perso palla: la squadra aveva ripreso il pallone.`);
+}
+/** Le colonne della timeline che parlano di gol, in chiaro: serve quando i gol trovati non tornano. */
+function elencoColonneGol(a){
+  const voci = Object.entries(a.colonneGol || {});
+  return voci.length ? voci.map(([k,n]) => `«${esc(k)}» (${nf0(n)})`).join(", ") : "nessuna";
+}
+
+/** Sezione "Palle perse che diventano gol" — Dashboard Partita e Dashboard Allenamento (10/10/2026).
+ *  Il selettore della sezione sceglie fra tutte le sessioni del periodo in alto e una sessione sola: la
+ *  solita distinzione partita singola / periodo. In cima la frase che nomina i giocatori (la stessa che va
+ *  nei report, da frasePersaGol); sotto i numeri ASSOLUTI per giocatore accanto alla quota sulle sue palle
+ *  perse, e l'elenco degli episodi. */
+function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo, tipo){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  const sel = $("#"+idSelettore);
+  const ordinate = (sessioniPeriodo||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+  const idDi = s => s.Match_ID || s.Sessione_ID;
+  if(sel){
+    const etiTutte = tipo === "partita" ? `Tutte le partite del periodo (${nf0(ordinate.length)})` : `Tutti gli allenamenti del periodo (${nf0(ordinate.length)})`;
+    sel.innerHTML = `<option value="">${etiTutte}</option>` + ordinate.map(s => `<option value="${esc(idDi(s))}">${esc(dataLabel(s.Data))} · ${esc(tipo === "partita" ? "vs "+s.Avversario : (s.Tipo_Allenamento||"allenamento"))}</option>`).join("");
+    if(stato[chiaveStato] && ordinate.some(s => idDi(s) === stato[chiaveStato])) sel.value = stato[chiaveStato];
+    else { sel.value = ""; stato[chiaveStato] = ""; }
+  }
+  const scelte = stato[chiaveStato] ? ordinate.filter(s => idDi(s) === stato[chiaveStato]) : (sessioniPeriodo||[]);
+  const singola = scelte.length === 1;
+  const a = analizzaPersaGol(scelte, tipo);
+  if(!a){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i tempi (sezione «TIMELINE EVENTI» dell'export Seven Lab). Nei file scelti non c'è.</div>`;
+    return;
+  }
+  if(!a.golAnalizzati){
+    cont.innerHTML = (tipo === "partita" && a.golDichiarati > 0)
+      ? `<div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span>Il file dichiara <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline non ne riconosco nessuno: sono scritti in un modo che il sistema non legge ancora. Colonne della timeline che parlano di gol: ${elencoColonneGol(a)}. Mandaci il file: basta insegnare all'app quella colonna.</span></div>`
+      : `<div class="vuoto">${tipo === "partita" ? "Nessun gol subito nella timeline" : "Nessun gol nelle partitelle"} ${singola ? (tipo === "partita" ? "di questa partita" : "di questo allenamento") : "del periodo scelto"}: non c'è niente da attribuire.</div>`;
+    return;
+  }
+  const pctAttr = perc(a.episodi.length, a.golAnalizzati);
+  const maxEp = Math.max(1, ...a.giocatori.map(g => g.episodi));
+  const conZona = a.episodi.some(e => e.zona);
+  const conMarcatore = a.episodi.some(e => e.marcatore);
+  const piuSessioni = new Set(a.episodi.map(e => e.idSessione)).size > 1 || !singola;
+  const note = [];
+  if(tipo === "partita" && a.golDichiarati > a.golAnalizzati)
+    note.push(`Nei metadati ${a.golDichiarati===1?"risulta":"risultano"} <strong>${nf0(a.golDichiarati)} gol subiti</strong>, ma nella timeline ne trovo ${nf0(a.golAnalizzati)}: ${nf0(a.golDichiarati - a.golAnalizzati)} ${a.golDichiarati - a.golAnalizzati === 1 ? "gol non è stato registrato" : "gol non sono stati registrati"} come evento con un tempo, e restano fuori da questa lettura. Colonne della timeline che parlano di gol: ${elencoColonneGol(a)}.`);
+  if(a.senzaTimeline) note.push(`${nf0(a.senzaTimeline)} ${a.senzaTimeline===1?"sessione è esclusa":"sessioni sono escluse"} perché senza timeline eventi.`);
+  if(a.inDiretta) note.push(`${nf0(a.inDiretta)} ${a.inDiretta===1?"sessione è stata registrata":"sessioni sono state registrate"} in diretta: un secondo o due di ritardo nel tocco contano poco su una finestra di ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi, ma dal vivo qualche palla persa sfugge — e un gol preceduto da una perdita non registrata finisce fra quelli «senza palla persa».`);
+
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${frasePersaGol(a, tipo, true)}</span></div>
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">${tipo === "partita" ? "Gol subiti analizzati" : "Gol analizzati"}</div>
+        <div class="kpi-valore">${nf0(a.golAnalizzati)}</div>
+        <div class="kpi-nota">${singola ? (tipo === "partita" ? "in questa partita" : "in questo allenamento") : `in ${nf0(a.sessioniConTimeline)} ${tipo === "partita" ? (a.sessioniConTimeline===1?"partita":"partite") : (a.sessioniConTimeline===1?"allenamento":"allenamenti")}`}</div></div>
+      <div class="kpi"><div class="kpi-eti">Nati da una palla persa</div>
+        <div class="kpi-valore">${nf0(a.episodi.length)}</div>
+        <div class="kpi-nota">${pctTxt(pctAttr,0)} dei gol · entro ${nf0(PERSA_GOL_FINESTRA_SEC)}s</div></div>
+      <div class="kpi"><div class="kpi-eti">Giocatori coinvolti</div>
+        <div class="kpi-valore">${nf0(a.giocatori.length)}</div>
+        <div class="kpi-nota">${a.giocatori.length ? "hanno perso la palla da cui è nato un gol" : "—"}</div></div>
+      <div class="kpi"><div class="kpi-eti">Dalla perdita al gol</div>
+        <div class="kpi-valore">${a.medianaSecondi !== null ? nf(a.medianaSecondi,0)+"s" : "—"}</div>
+        <div class="kpi-nota">${a.episodi.length ? "tempo tipico (mediana)" : "nessun episodio"}</div></div>
+    </div>
+    ${a.giocatori.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Chi ha perso la palla</div>
+      <div class="grafico-sub">Il conteggio vero viene prima della quota: chi tocca molti palloni ne perde di più, e una quota alta su due sole palle perse non dice ancora niente.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Palle perse che hanno portato a un gol, per giocatore</caption>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col">Palle perse diventate gol</th><th scope="col">Palle perse in tutto</th><th scope="col">Quota</th>${conZona ? `<th scope="col">Dove le perde, più spesso</th>` : ""}<th scope="col">Peso</th></tr></thead>
+        <tbody>${a.giocatori.map(g => `<tr>
+          <td>${esc(g.giocatore)}</td><td>${nf0(g.episodi)}</td><td>${nf0(g.pallePerse)}</td><td>${pctTxt(g.quota,0)}</td>
+          ${conZona ? `<td>${g.zonaFrequente ? esc(g.zonaFrequente)+(g.episodi > 1 ? ` (${nf0(g.zonaFrequenteN)} su ${nf0(g.episodi)})` : "") : "—"}</td>` : ""}
+          <td><div class="barra-wrap"><div class="barra" style="width:${(g.episodi/maxEp*100).toFixed(1)}%; background:var(--danger)"></div><span>${nf0(g.episodi)}</span></div></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Gli episodi, uno per uno</div>
+      <div class="grafico-sub">Minuto della palla persa, chi l'ha persa e quanti secondi dopo è arrivato il gol.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Episodi palla persa seguita da gol</caption>
+        <thead><tr>${piuSessioni ? `<th scope="col">${tipo === "partita" ? "Partita" : "Allenamento"}</th>` : ""}<th scope="col">Minuto</th><th scope="col">Ha perso palla</th>${tipo === "allenamento" ? `<th scope="col">Squadra</th>` : ""}<th scope="col">Gol dopo</th>${conZona ? `<th scope="col">Zona della perdita</th>` : ""}${conMarcatore ? `<th scope="col">Ha segnato</th>` : ""}</tr></thead>
+        <tbody>${a.episodi.map(e => `<tr>
+          ${piuSessioni ? `<td>${esc(e.etichetta)}</td>` : ""}
+          <td>${esc(mmssDaSecondi(e.secondoPersa))}</td><td>${esc(e.giocatore)}</td>
+          ${tipo === "allenamento" ? `<td>${esc(e.squadra)}</td>` : ""}
+          <td>${nf(e.secondi,0)}s</td>
+          ${conZona ? `<td>${e.zona ? esc(e.zona) : "—"}</td>` : ""}
+          ${conMarcatore ? `<td>${esc(e.marcatore || "—")}</td>` : ""}
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${/* La scheda "Gol non attribuiti, e perché" (v1.33.1) è stata tolta il 12/10/2026 su richiesta
+         dell'utente: sui file veri diceva quasi solo «nessuna palla persa nei 15 secondi prima», cioè niente.
+         Il motore continua a calcolare i motivi (nonAttribuiti), se un giorno servissero altrove. */ ""}
+    ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">Un gol viene attribuito all'<strong>ultima</strong> palla persa della squadra che lo subisce, se è avvenuta al massimo ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima e se nel frattempo quella squadra non ha ripreso davvero il pallone: un suo recupero, un suo passaggio o dribbling riuscito, un suo tiro, o una palla persa dell'avversario spezzano il legame. Un passaggio sbagliato o un dribbling fallito subito dopo la perdita no: fanno parte della stessa azione sotto pressione.</p>
+    <p class="nota-piccola">Come leggerlo: una palla persa a ridosso di un gol dice che è stata persa nel momento sbagliato, non dimostra da sola che il giocatore fosse sotto pressing — quello il dato non lo registra. Diventa un indizio solido quando lo stesso nome torna su più partite${conZona ? ", e ancora di più se le perdite sono nel terzo difensivo, dove di solito si gioca sotto pressione" : ""}.</p>`;
+}
+
+/* --------- Gol subiti e chi è in campo (partita e allenamento, 16/10/2026) --------- */
+/** Pillola del segnale: il colore dice anche il verso (più gol subiti con lui = rosso, meno = verde). */
+function pillSegnale(x){
+  if(!x || !x.segnale) return "—";
+  const cls = x.segnale === "caso" ? "neu" : (x.segnale === "occhio" ? "att" : ((x.differenza ?? 0) > 0 ? "neg" : "pos"));
+  return `<span class="pill ${cls}">${esc(TESTO_SEGNALE[x.segnale])}</span>`;
+}
+/** Minuti di una coppia: con un decimale quando l'arrotondamento la porterebbe alla soglia senza esserci
+ *  (9,8' scritto «10'» in una riga attenuata «sotto i 10'» confonde). */
+const minutiCoppiaTxt = m => (m < IN_CAMPO_MINUTI_MIN && Math.round(m) >= IN_CAMPO_MINUTI_MIN) ? nf(m, 1) : nf0(m);
+const fmtDiff = v => v === null || v === undefined ? "—" : (v > 0 ? "+" : (v < 0 ? "−" : "")) + nf(Math.abs(v), 1);
+
+/** Una formazione come riga: i cognomi in ordine di ruolo, con un pallino colorato per ruolo, e accanto il
+ *  conteggio vero. `valore`/`max` danno la lunghezza della barra; `colore` è una variabile CSS. */
+function rigaFormazioneHtml(x, testoNumeri, valore, max, colore){
+  const chip = (n, r) => `<span class="fz-chip"><i class="fz-ruolo fz-r${ORDINE_RUOLI(r)}" aria-hidden="true"></i>${esc(cognome(n))}</span>`;
+  return `<div class="fz-riga">
+    <div class="fz-nomi">${x.giocatori.map((n, i) => chip(n, x.ruoli[i])).join("")}</div>
+    <div class="fz-numeri"><div class="barra-wrap"><div class="barra" style="width:${max > 0 ? Math.max(3, valore/max*100).toFixed(1) : 3}%; background:var(--${colore})"></div></div><span>${testoNumeri}</span></div>
+  </div>`;
+}
+const LEGENDA_RUOLI = `<div class="fz-legenda"><span><i class="fz-ruolo fz-r0"></i>Portiere</span><span><i class="fz-ruolo fz-r1"></i>Difensore</span><span><i class="fz-ruolo fz-r2"></i>Centrocampista</span><span><i class="fz-ruolo fz-r3"></i>Attaccante</span></div>`;
+
+function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo, tipo){
+  const cont = $("#"+idContenitore);
+  if(!cont) return;
+  const sel = $("#"+idSelettore);
+  const allen = tipo === "allenamento";
+  const ordinate = (sessioniPeriodo||[]).slice().sort((a,b)=>(b.Ordine||0)-(a.Ordine||0));
+  const idDi = s => s.Match_ID || s.Sessione_ID;
+  if(sel){
+    const etiTutte = !allen ? `Tutte le partite del periodo (${nf0(ordinate.length)})` : `Tutti gli allenamenti del periodo (${nf0(ordinate.length)})`;
+    sel.innerHTML = `<option value="">${etiTutte}</option>` + ordinate.map(s => `<option value="${esc(idDi(s))}">${esc(dataLabel(s.Data))} · ${esc(!allen ? "vs "+s.Avversario : (s.Tipo_Allenamento||"allenamento"))}</option>`).join("");
+    if(stato[chiaveStato] && ordinate.some(s => idDi(s) === stato[chiaveStato])) sel.value = stato[chiaveStato];
+    else { sel.value = ""; stato[chiaveStato] = ""; }
+  }
+  const scelte = stato[chiaveStato] ? ordinate.filter(s => idDi(s) === stato[chiaveStato]) : (sessioniPeriodo||[]);
+  const singola = scelte.length === 1;
+  const a = analizzaInCampo(scelte, tipo);
+  const unita = n => !allen ? (n===1 ? "partita" : "partite") : (n===1 ? "allenamento" : "allenamenti");
+  const verbo = allen ? "segnati" : "subiti";
+  // Quali sessioni sono state contate e quali no, e perché: è la risposta a «nel file i gol sono 15, qui 10»
+  const righeCopertura = () => {
+    const out = [];
+    (a.dettaglio||[]).filter(d => d.esclusa).forEach(d => out.push(`<strong>${esc(dataLabel(d.data) || d.etichetta)}</strong>: esclus${allen ? "o" : "a"}, ${nf0(d.golFile)} gol non contati — ${esc(d.esclusa)}.`));
+    (a.dettaglio||[]).filter(d => !d.esclusa && d.avvisi && d.avvisi.length).forEach(d => out.push(`<strong>${esc(dataLabel(d.data) || d.etichetta)}</strong>: ${esc(d.avvisi.join("; "))}.`));
+    (a.dettaglio||[]).filter(d => !d.esclusa && d.golTimeline !== d.golFile).forEach(d => out.push(`<strong>${esc(dataLabel(d.data) || d.etichetta)}</strong>: nel file ${nf0(d.golFile)} gol ${verbo}, nella timeline ${nf0(d.golTimeline)} — si contano solo i gol con il loro minuto nella timeline.`));
+    return out;
+  };
+  if(!a.analizzate){
+    const cop = righeCopertura();
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline degli eventi con i cambi («Cambio entra» / «Cambio esce») per sapere chi era in campo.${cop.length ? "<br><br>"+cop.join("<br>") : ""}</div>`;
+    return;
+  }
+  if(!a.golTotali){
+    cont.innerHTML = `<div class="vuoto">${!allen ? "Nessun gol subito" : "Nessun gol nelle partitelle"} ${singola ? (!allen ? "in questa partita" : "in questo allenamento") : "nel periodo scelto"}: non c'è niente da mettere in relazione con chi era in campo.</div>`;
+    return;
+  }
+  const validi = a.giocatori.filter(g => g.valido);
+  const coppieDif = a.coppieDifensori || [];
+  const nChiari = validi.filter(g => g.segnale === "chiaro").length + coppieDif.filter(c => c.segnale === "chiaro").length;
+  const nOcchio = validi.filter(g => g.segnale === "occhio").length + coppieDif.filter(c => c.segnale === "occhio").length;
+  const idGrafico = "gr-incampo-" + tipo;
+  const senzaEti = allen ? "Senza di lui (l'altra squadra)" : "Senza di lui";
+  const copertura = righeCopertura();
+  const note = [];
+  if(a.senzaSquadra.length) note.push(`${a.senzaSquadra.map(esc).join(", ")}: ${a.senzaSquadra.length===1?"nessun evento registrato, quindi non si sa in quale squadra giocasse":"nessun evento registrato, quindi non si sa in quale squadra giocassero"}. ${a.senzaSquadra.length===1?"È escluso":"Sono esclusi"} dalla formazione.`);
+  if(allen && singola) note.push(`Con un solo allenamento il confronto coincide con la squadra in cui ciascuno ha giocato: chi era nella stessa squadra per tutta la partitella ha gli stessi numeri. Diventa una lettura sui singoli quando le squadre cambiano da un allenamento all'altro.`);
+
+  // Coppie di difensori (16/10/2026; dal 16/10/2026 per ruolo svolto, e solo loro: «le coppie che mi interessava
+  // vedere per gol subiti sono tra pariruolo in difesa»). Stesse due barre del grafico dei giocatori.
+  const difValide = coppieDif.filter(c => c.valido).sort((x, y) => y.differenza - x.differenza);
+  const difTutte = coppieDif.slice().sort((x, y) => (y.valido - x.valido) || (!!x.ospite - !!y.ospite) || (x.valido ? y.differenza - x.differenza : y.minuti - x.minuti));
+  const idGrDif = "gr-incampo-dif-" + tipo;
+  const elencoDate = l => l.slice(0, 4).map(d => esc(dataLabel(d) || d)).join(", ") + (l.length > 4 ? ` e altr${allen ? "i" : "e"} ${nf0(l.length - 4)}` : "");
+  const noteDif = [];
+  const conOspite = coppieDif.some(c => c.ospite);
+  const nomeCoppia = c => `${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` <span class="ruolo-mini">${esc(dataLabel(c.data) || "")}</span>` : ""}`;
+  const bloccoDifensori = `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Le coppie di difensori</div>
+      <div class="grafico-sub">Due difensori di ruolo in campo nello stesso momento${allen ? ", nella stessa squadra" : ""}. Conta il ruolo di partenza (quello del tabellino), non la posizione data con un cambio: due difensori fanno coppia anche se uno dei due è entrato a centrocampo, e un centrocampista messo in difesa non fa coppia. Nel grafico le coppie con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme. <strong>Barra rossa</strong>: gol subiti a partita con la coppia in campo; <strong>barra grigia</strong>: senza quella coppia. In cima la coppia con cui si prende di più.</div>
+      ${difValide.length ? `<div class="grafico-wrap" style="height:${Math.max(200, difValide.length * 44 + 80)}px"><canvas id="${idGrDif}"></canvas></div>` : ""}
+      ${difTutte.length ? `${difValide.length ? "" : `<div class="vuoto" style="margin-bottom:10px">${difTutte.every(c => c.ospite)
+          ? `In difesa ha sempre giocato almeno un ospite: sotto i numeri delle coppie, senza confronto.`
+          : `Nessuna coppia di difensori ha giocato almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme (e ${nf0(IN_CAMPO_MINUTI_MIN)}' separata): sotto i numeri veri, senza confronto.`}</div>`}
+      <div class="tabella-scroll" style="margin-top:12px"><table>
+        <caption class="solo-sr">Gol subiti con ciascuna coppia di difensori in campo e senza</caption>
+        <thead><tr><th scope="col">Coppia di difesa</th><th scope="col">Minuti insieme</th><th scope="col">Gol subiti insieme</th><th scope="col">A partita, insieme</th><th scope="col">A partita, senza la coppia</th><th scope="col">Differenza</th><th scope="col">Segnale</th></tr></thead>
+        <tbody>${difTutte.map(c => `<tr${c.valido ? "" : ' class="riga-attenuata"'}><td class="cella-testo">${nomeCoppia(c)}</td>
+          <td>${minutiCoppiaTxt(c.minuti)}'</td><td>${nf0(c.gol)}</td><td>${nf(c.ritmoCon,1)}</td>
+          <td>${c.valido ? nf(c.ritmoSenza,1) : "—"}</td><td>${c.valido ? fmtDiff(c.differenza) : "—"}</td><td>${pillSegnale(c)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="nota-piccola">${[difTutte.some(c => !c.valido && !c.ospite) ? `Le righe attenuate hanno meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme (o meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' senza): troppo pochi per un confronto.` : "",
+        conOspite ? `Le coppie con un ospite hanno solo i loro numeri, ${a.analizzate > 1 ? "una per allenamento, " : ""}senza confronto: lo stesso segnaposto non è la stessa persona da un allenamento all'altro.` : ""].filter(Boolean).join(" ")}</p>`
+        : `<div class="vuoto">Nessuna coppia di difensori${allen ? " nella stessa squadra" : ""}: in nessun momento c'erano in campo insieme due difensori di ruolo (ruolo del tabellino).</div>`}
+      ${noteDif.length ? `<div class="avviso attenzione" style="margin-top:12px"><span class="ic" aria-hidden="true">!</span><span>${noteDif.join("<br><br>")}</span></div>` : ""}
+    </div>`;
+  // Formazioni con più gol subiti e con più gol fatti (16/10/2026)
+  const fz = analizzaFormazioni(scelte, tipo);
+  const idonee = (fz.formazioni||[]).filter(x => x.idoneo);
+  const piuSubiti = idonee.filter(x => x.ga > 0).sort((x, y) => (y.gaAdj - x.gaAdj) || (y.minuti - x.minuti)).slice(0, 5);
+  const piuFatti = idonee.filter(x => x.gf > 0).sort((x, y) => (y.gfAdj - x.gfAdj) || (y.minuti - x.minuti)).slice(0, 5);
+  const maxGA = Math.max(0, ...piuSubiti.map(x => x.ritmoGA)), maxGF = Math.max(0, ...piuFatti.map(x => x.ritmoGF));
+  const nomeFz = allen ? "squadra" : "formazione";
+  const bloccoFormazioni = `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Le ${allen ? "squadre" : "formazioni"} in campo: chi ha subito di più e chi ha segnato di più</div>
+      <div class="grafico-sub">${allen ? "Squadra" : "Formazione"} = i giocatori in campo nello stesso momento${allen ? " nella stessa squadra interna" : ""}. Contano solo quelle rimaste in campo insieme almeno ${nf0(FORMAZIONE_MINUTI_MIN)}'. La barra è il ritmo a partita, il numero accanto il conteggio vero: con pochi minuti insieme il ritmo si gonfia, per questo l'ordine tiene conto anche dei minuti.</div>
+      ${LEGENDA_RUOLI}
+      <div class="griglia g-2" style="margin-top:10px">
+        <div><div class="fz-titoletto">Hanno subito più gol</div>${piuSubiti.length ? piuSubiti.map(x => rigaFormazioneHtml(x, `${nf0(x.ga)} gol subiti in ${nf0(x.minuti)}' · ${nf(x.ritmoGA,1)} a partita`, x.ritmoGA, maxGA, "c2")).join("") : `<div class="vuoto">Nessuna ${nomeFz} con almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme ha subito gol.</div>`}</div>
+        <div><div class="fz-titoletto">Hanno segnato più gol</div>${piuFatti.length ? piuFatti.map(x => rigaFormazioneHtml(x, `${nf0(x.gf)} gol fatti in ${nf0(x.minuti)}' · ${nf(x.ritmoGF,1)} a partita`, x.ritmoGF, maxGF, "c1")).join("") : `<div class="vuoto">Nessuna ${nomeFz} con almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme ha segnato.</div>`}</div>
+      </div>
+      <p class="nota-piccola">${nf0(idonee.length)} ${allen ? "squadre" : "formazioni"} su ${nf0((fz.formazioni||[]).length)} hanno giocato almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme. La ${nomeFz} migliore in assoluto, secondo il saldo reti, è in fondo alla pagina.</p>
+    </div>`;
+
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseInCampo(a, true)}</span></div>
+    ${copertura.length ? `<div class="avviso attenzione" style="margin-top:12px"><span class="ic" aria-hidden="true">!</span><span>${a.golFile !== a.golTotali ? `Qui sono contati <strong>${nf0(a.golTotali)} gol su ${nf0(a.golFile)}</strong> ${verbo} nei file. Perché mancano gli altri:` : "Da sapere:"}<br>${copertura.join("<br>")}</span></div>` : ""}
+    <div class="griglia g-kpi" style="margin-top:14px">
+      <div class="kpi"><div class="kpi-eti">${!allen ? "Gol subiti analizzati" : "Gol analizzati"}</div>
+        <div class="kpi-valore">${nf0(a.golTotali)}${a.golFile !== a.golTotali ? ` <span class="kpi-unita">su ${nf0(a.golFile)}</span>` : ""}</div>
+        <div class="kpi-nota">${singola ? (!allen ? "in questa partita" : "in questo allenamento") : `in ${nf0(a.analizzate)} ${unita(a.analizzate)} su ${nf0(scelte.length)}`}</div></div>
+      <div class="kpi"><div class="kpi-eti">${!allen ? "Gol subiti a partita" : "Gol subiti a partita, per squadra"}</div>
+        <div class="kpi-valore">${nf(a.ritmoSquadra,1)}</div>
+        <div class="kpi-nota">la media: ogni giocatore si confronta con questa (partita = 50')</div></div>
+      <div class="kpi"><div class="kpi-eti">Giocatori confrontati</div>
+        <div class="kpi-valore">${nf0(validi.length)}</div>
+        <div class="kpi-nota">con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' in campo e ${nf0(IN_CAMPO_MINUTI_MIN)}' senza</div></div>
+      <div class="kpi"><div class="kpi-eti">Segnali</div>
+        <div class="kpi-valore">${nf0(nChiari)} <span class="kpi-unita">chiari</span></div>
+        <div class="kpi-nota">${nf0(nOcchio)} da tenere d'occhio, fra giocatori e coppie di difensori</div></div>
+    </div>
+    ${validi.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Quanti gol prende la squadra a partita, con lui in campo e senza di lui</div>
+      <div class="grafico-sub">Ogni giocatore ha due barre. <strong>Quella rossa</strong>: i gol che la ${allen ? "sua " : ""}squadra prende a partita quando lui gioca. <strong>Quella grigia</strong>: quanti ne prende ${allen ? "quando lui non c'è (in allenamento: l'altra squadra)" : "quando lui non gioca"}. Se la rossa è più lunga, con lui in campo si prendono più gol. In cima chi ha la differenza più grande.</div>
+      <div class="grafico-wrap alto" style="height:${Math.max(280, validi.length * 40 + 80)}px"><canvas id="${idGrafico}"></canvas></div>
+    </div>` : ""}
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Giocatore per giocatore</div>
+      <div class="grafico-sub">Gli stessi numeri del grafico, con il conteggio vero dei gol. Le righe attenuate hanno troppo pochi minuti in campo o senza di lui per un confronto${!allen ? " (il portiere, se gioca sempre, non ha un «senza di lui»)" : ""}.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Gol subiti con ciascun giocatore in campo e senza</caption>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col" class="cella-testo">Ruolo</th><th scope="col">Minuti in campo</th><th scope="col">Gol subiti con lui</th><th scope="col">A partita, con lui</th><th scope="col">A partita, senza di lui</th><th scope="col">Differenza</th><th scope="col">Segnale</th></tr></thead>
+        <tbody>${a.giocatori.map(g => `<tr${g.valido ? "" : ' class="riga-attenuata"'}>
+          <td class="cella-testo">${esc(g.nome)}</td><td class="cella-testo">${esc(g.ruolo || "—")}</td>
+          <td>${nf0(g.minuti)}'</td><td>${nf0(g.gol)}</td><td>${nf(g.ritmoCon,1)}</td>
+          <td>${g.valido ? nf(g.ritmoSenza,1) : "—"}</td><td>${g.valido ? fmtDiff(g.differenza) : "—"}</td><td>${pillSegnale(g)}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </div>
+    ${bloccoDifensori}
+    ${bloccoFormazioni}
+    ${note.length ? `<div class="avviso attenzione" style="margin-top:16px"><span class="ic" aria-hidden="true">!</span><span>${note.join("<br><br>")}</span></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px">«A partita» vuol dire rapportato a 50 minuti, una partita intera di calcio a 7: così chi ha giocato 20 minuti e chi ne ha giocati 40 si confrontano alla pari. Chi è in campo si ricava dai cambi della timeline («Cambio entra», «Cambio esce», cartellino rosso)${allen ? " e, in allenamento, dalla squadra scritta sulle righe di ciascun giocatore e dai «Cambio squadra»" : ""}. Ogni gol subito va a chi era in campo per la squadra che lo ha preso, un istante prima del gol. ${allen ? "In allenamento giocano tutti per tutta la partitella, quindi «senza di lui» vuol dire soprattutto la squadra avversaria: il confronto è fra la squadra in cui giocava e quella in cui non c'era." : "«Senza di lui» comprende anche le partite che non ha giocato."}</p>
+    <p class="nota-piccola">Come leggere il segnale: con pochi gol una differenza grande può venire anche per caso, e qui si confrontano tanti giocatori e tante coppie di difensori insieme. <strong>Segnale chiaro</strong>: anche tenendo conto di quanti confronti si fanno, difficilmente è il caso. <strong>Da tenere d'occhio</strong>: la differenza è marcata, ma potrebbe ancora essere il caso; se si ripete nelle prossime ${allen ? "sessioni" : "partite"} diventa un indizio. <strong>Nei limiti del caso</strong>: per ora non dice niente. In ogni caso è una correlazione: dice chi era in campo quando la squadra ha preso gol, non di chi è la colpa, che dipende anche da compagni e avversari.${a.ospiti && a.ospiti.length ? " Gli ospiti contano per la formazione ma non vengono classificati: lo stesso nome segnaposto non è la stessa persona da un allenamento all'altro." : ""}</p>`;
+
+  if(validi.length){
+    const ord = validi.slice().sort((x, y) => y.differenza - x.differenza);
+    const rosso = colore("c2"), grigio = colore("muted");
+    creaGrafico(idGrafico, {
+      type:"bar",
+      data:{labels:ord.map(g => g.nome), datasets:[
+        {label:"Con lui in campo", data:ord.map(g => +g.ritmoCon.toFixed(2)), backgroundColor:rosso, borderRadius:4, maxBarThickness:16, categoryPercentage:0.78, barPercentage:0.92},
+        {label:senzaEti, data:ord.map(g => +g.ritmoSenza.toFixed(2)), backgroundColor:hexRgba(grigio, 0.55), borderRadius:4, maxBarThickness:16, categoryPercentage:0.78, barPercentage:0.92}]},
+      options:baseOpzioni({indexAxis:"y", plugins:{
+        legend:{display:true, position:"top", align:"start", labels:{color:colore("text"), boxWidth:14, boxHeight:14, font:{size:12, weight:"600"}}},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{title: it => ord[it[0].dataIndex].nome,
+            label: it => { const g = ord[it.dataIndex];
+              return it.datasetIndex === 0 ? `Con lui in campo: ${nf0(g.gol)} gol in ${nf0(g.minuti)}' = ${nf(g.ritmoCon,1)} a partita`
+                                           : `Senza di lui: ${nf0(g.golSenza)} gol in ${nf0(g.minutiSenza)}' = ${nf(g.ritmoSenza,1)} a partita`; },
+            afterBody: it => TESTO_SEGNALE[ord[it[0].dataIndex].segnale] ? ["", TESTO_SEGNALE[ord[it[0].dataIndex].segnale]] : []}}},
+        scales:{
+          x:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}, border:{color:colore("grid")},
+            title:{display:true, text:"gol subiti a partita (50')", color:colore("muted"), font:{size:11}}},
+          y:{ticks:{color:colore("text"), font:{size:12}, autoSkip:false}, grid:{display:false}, border:{color:colore("grid")}}
+        }})
+    });
+  }
+  if(difValide.length){
+    const rosso = colore("c2"), grigio = colore("muted");
+    creaGrafico(idGrDif, {
+      type:"bar",
+      data:{labels:difValide.map(c => cognome(c.x)+" e "+cognome(c.y)), datasets:[
+        {label:"Con la coppia in campo", data:difValide.map(c => +c.ritmoCon.toFixed(2)), backgroundColor:rosso, borderRadius:4, maxBarThickness:16, categoryPercentage:0.78, barPercentage:0.92},
+        {label:"Senza la coppia", data:difValide.map(c => +c.ritmoSenza.toFixed(2)), backgroundColor:hexRgba(grigio, 0.55), borderRadius:4, maxBarThickness:16, categoryPercentage:0.78, barPercentage:0.92}]},
+      options:baseOpzioni({indexAxis:"y", plugins:{
+        legend:{display:true, position:"top", align:"start", labels:{color:colore("text"), boxWidth:14, boxHeight:14, font:{size:12, weight:"600"}}},
+        tooltip:{backgroundColor:colore("text"), titleColor:colore("bg"), bodyColor:colore("bg"), padding:10, cornerRadius:8,
+          callbacks:{label: it => { const c = difValide[it.dataIndex];
+            return it.datasetIndex === 0 ? `Insieme: ${nf0(c.gol)} gol in ${nf0(c.minuti)}' = ${nf(c.ritmoCon,1)} a partita` : `Senza la coppia: ${nf0(c.golSenza)} gol in ${nf0(c.minutiSenza)}' = ${nf(c.ritmoSenza,1)} a partita`; }}}},
+        scales:{
+          x:{beginAtZero:true, ticks:{color:colore("muted"), font:{size:11}}, grid:{color:colore("grid")}, border:{color:colore("grid")},
+            title:{display:true, text:"gol subiti a partita (50')", color:colore("muted"), font:{size:11}}},
+          y:{ticks:{color:colore("text"), font:{size:12}, autoSkip:false}, grid:{display:false}, border:{color:colore("grid")}}
+        }})
+    });
+  }
+}
+
+/* --------- La formazione migliore (partita e allenamento, 16/10/2026) --------- */
+/** Campo visto dall'alto con i giocatori di una formazione disposti per ruolo (portiere in basso, attacco in
+ *  alto). HTML e CSS, non canvas: si adatta da solo al telefono e html2canvas lo porta nei report così com'è.
+ *  `pal`: colori espliciti (in dashboard quelli del tema, nei report quelli fissi della carta). */
+function campoFormazioneHtml(x, pal){
+  // Campo verticale 2:3, la nostra porta in basso (come nelle grafiche delle formazioni). Ogni giocatore sta nella
+  // sua linea del modulo (dalla casella P/D/C/A di Seven Lab, o dal ruolo) a una profondità fissa, e nella linea
+  // da sinistra a destra secondo il numero della casella (D1, D2…). Tutto in percentuale e posizionato in assoluto:
+  // si adatta al telefono e html2canvas lo porta nei report così com'è.
+  const PROFONDITA = [88, 70, 47, 24]; // portiere, difesa, centrocampo, attacco (% dall'alto)
+  const larghezze = n => n === 1 ? [50] : n === 2 ? [30, 70] : n === 3 ? [18, 50, 82] : Array.from({length:n}, (_, i) => 12 + i * 76 / (n - 1));
+  const linee = [[], [], [], []];
+  x.giocatori.forEach((n, i) => linee[ORDINE_RUOLI(x.ruoli[i] || "")].push(n)); // già ordinati per casella
+  const iniziali = n => nomeOspite(n) ? "OS" : String(n).trim().split(/\s+/).map(w => w[0] || "").join("").slice(0, 2).toUpperCase();
+  const gioc = (n, k, left, larg) => `<div class="fz-g" style="left:${left.toFixed(1)}%; top:${PROFONDITA[k]}%; width:${larg}%">
+      <span class="fz-maglia" style="background:${k === 0 ? pal.portiere : pal.maglia}; color:${k === 0 ? pal.portiereTesto : pal.magliaTesto}">${esc(iniziali(n))}</span>
+      <span class="fz-nome" style="color:${pal.nome}; background:${pal.nomeSfondo}">${esc(cognome(n))}</span></div>`;
+  const segno = st => `<div class="fz-segno" style="border-color:${pal.linee}; ${st}"></div>`;
+  const punto = (l, t) => `<div class="fz-punto" style="left:${l}%; top:${t}%; background:${pal.linee}"></div>`;
+  const strisce = Array.from({length:8}, (_, i) => `<div class="fz-striscia" style="top:${i*12.5}%; height:12.5%; background:${i % 2 ? pal.striscia : pal.prato}"></div>`).join("");
+  return `<div class="fz-campo" role="img" aria-label="Formazione${x.modulo ? " " + esc(x.modulo) : ""}: ${esc(x.giocatori.map(cognome).join(", "))}" style="background:${pal.prato}">
+    ${strisce}
+    ${segno("left:5%; right:5%; top:3%; bottom:3%")}
+    ${segno("left:5%; right:5%; top:50%; height:0; border-width:2px 0 0 0")}
+    ${segno("left:38%; width:24%; top:50%; aspect-ratio:1; border-radius:50%; transform:translateY(-50%)")}
+    ${segno("left:22%; right:22%; top:3%; height:15%; border-top:none")}
+    ${segno("left:36%; right:36%; top:3%; height:5.5%; border-top:none")}
+    ${segno("left:22%; right:22%; bottom:3%; height:15%; border-bottom:none")}
+    ${segno("left:36%; right:36%; bottom:3%; height:5.5%; border-bottom:none")}
+    ${segno("left:41%; right:41%; top:0.6%; height:2.6%; border-bottom:none")}
+    ${segno("left:41%; right:41%; bottom:0.6%; height:2.6%; border-top:none")}
+    ${punto(50, 50)}${punto(50, 13)}${punto(50, 87)}
+    ${x.modulo ? `<div class="fz-modulo" style="background:${pal.moduloSfondo}; color:${pal.moduloTesto}">${esc(x.modulo)}</div>` : ""}
+    ${linee.map((l, k) => { const pos = larghezze(l.length), larg = [0, 56, 38, 31][l.length] || 24; return l.map((n, i) => gioc(n, k, pos[i], larg)).join(""); }).join("")}
+  </div>`;
+}
+/** Il campo è sempre verde, con le linee bianche, come nelle grafiche delle formazioni: stessi colori in
+ *  dashboard (tema chiaro e scuro) e nei report. Maglie chiare per tutti, gialla per il portiere. */
+const PALETTE_CAMPO = {prato:"#2F6B3B", striscia:"#367444", linee:"rgba(255,255,255,0.62)", portiere:"#F2B33D", portiereTesto:"#2B2108",
+  maglia:"#F7F5EE", magliaTesto:"#1D3B2A", nome:"#FFFFFF", nomeSfondo:"rgba(8,28,16,0.62)", moduloSfondo:"rgba(8,28,16,0.62)", moduloTesto:"#FFFFFF"};
+const paletteCampoSchermo = () => PALETTE_CAMPO;
+const PALETTE_CAMPO_REPORT = PALETTE_CAMPO;
+/** Una riga sotto il campo: il modulo e da dove viene la disposizione. */
+function notaModuloHtml(m){
+  if(!m.modulo) return "";
+  return m.moduloDaSlot
+    ? `Modulo <b>${esc(m.modulo)}</b>: ognuno è nella casella del modulo impostato in Seven Lab in cui ha giocato più a lungo con questa formazione.`
+    : `Modulo <b>${esc(m.modulo)}</b>, ricavato dai ruoli: per qualcuno il file non ha le caselle del modulo di Seven Lab (sezione «RUOLI EVENTI» degli export recenti). Ricaricando il file la disposizione segue il modulo impostato.`;
+}
+
+/** La frase che presenta la formazione migliore: uguale in dashboard e nei report. */
+function fraseFormazioneMigliore(m, fz, criterio, tipo, html){
+  if(!m) return null;
+  const allen = tipo === "allenamento";
+  const unita = n => allen ? (n === 1 ? "allenamento" : "allenamenti") : (n === 1 ? "partita" : "partite");
+  const b = s => html ? `<b>${s}</b>` : s;
+  const chi = m.giocatori.map(n => html ? esc(cognome(n)) : cognome(n)).join(", ");
+  let f = `Secondo il criterio «${CRITERI_FORMAZIONE[criterio].breve}» la formazione migliore${m.modulo ? `, schierata con il ${m.modulo},` : ""} è ${b(chi)}: in campo insieme ${nf0(m.minuti)}' in ${nf0(m.sessioni)} ${unita(m.sessioni)}, con ${nf0(m.gf)} gol fatti e ${nf0(m.ga)} subiti (saldo ${saldoTxt(m.saldo)}).`;
+  if(m.saldo > 0) f += ` Nei minuti giocati insieme ha tenuto il vantaggio sull'avversario.`;
+  else if(m.saldo === 0) f += ` Nei minuti giocati insieme ha tenuto il pari: nessuna formazione con abbastanza minuti ha chiuso in vantaggio.`;
+  else f += ` Nessuna formazione con abbastanza minuti ha chiuso in vantaggio: questa è quella che ha perso meno terreno.`;
+  return f;
+}
+
+function renderFormazioneMigliore(tipo){
+  const allen = tipo === "allenamento";
+  const cont = $(allen ? "#contenuto-formazione-allenamento" : "#contenuto-formazione-partita");
+  if(!cont || !stato.ds) return;
+  const f = datiFiltrati();
+  const sessioni = allen ? f.allenamenti : f.partite;
+  const chiaveCrit = allen ? "criterioFormazioneAllenamento" : "criterioFormazionePartita";
+  const selCrit = $(allen ? "#fm-sel-criterio-allenamento" : "#fm-sel-criterio-partita");
+  if(selCrit){
+    if(!selCrit.options.length) selCrit.innerHTML = Object.entries(CRITERI_FORMAZIONE).map(([k, c]) => `<option value="${k}">${esc(c.etichetta)}</option>`).join("");
+    if(!CRITERI_FORMAZIONE[stato[chiaveCrit]]) stato[chiaveCrit] = "saldo";
+    selCrit.value = stato[chiaveCrit];
+  }
+  const criterio = stato[chiaveCrit] || "saldo";
+  let scelte = sessioni, singola = false;
+  if(!allen){
+    const sel = $("#fm-sel-partita");
+    const ordinate = sessioni.slice().sort((a, b) => (b.Ordine||0) - (a.Ordine||0));
+    if(sel){
+      sel.innerHTML = `<option value="">Tutte le partite del periodo (${nf0(ordinate.length)})</option>` + ordinate.map(p => `<option value="${esc(p.Match_ID)}">${esc(dataLabel(p.Data))} · vs ${esc(p.Avversario)}</option>`).join("");
+      if(stato.formazionePartita && ordinate.some(p => p.Match_ID === stato.formazionePartita)) sel.value = stato.formazionePartita;
+      else { sel.value = ""; stato.formazionePartita = ""; }
+    }
+    if(stato.formazionePartita){ scelte = ordinate.filter(p => p.Match_ID === stato.formazionePartita); singola = true; }
+  }
+  const fz = analizzaFormazioni(scelte, tipo);
+  if(!fz.analizzate){
+    cont.innerHTML = `<div class="vuoto"><strong>Non disponibile.</strong> Serve la timeline con i cambi per sapere chi era in campo insieme${fz.escluse.length ? `: ${fz.escluse.map(e => `${esc(dataLabel(e.data) || e.etichetta)} esclus${allen ? "o" : "a"} (${esc(e.motivo)})`).join("; ")}` : ""}.</div>`;
+    return;
+  }
+  const ordinate = ordinaFormazioni(fz.formazioni, criterio);
+  const m = ordinate.find(x => x.idoneo);
+  if(!m){
+    cont.innerHTML = `<div class="vuoto">Nessuna formazione è rimasta in campo insieme almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' ${singola ? "in questa partita" : "nel periodo"}: con cambi così frequenti non c'è una formazione con abbastanza minuti per essere giudicata.</div>`;
+    return;
+  }
+  const altre = ordinate.filter(x => x.idoneo && x !== m).slice(0, 5);
+  const unita = n => allen ? (n === 1 ? "allenamento" : "allenamenti") : (n === 1 ? "partita" : "partite");
+  const ritmo = v => nf(v, 1);
+  const escluse = fz.escluse.length ? `<div class="avviso attenzione" style="margin-top:12px"><span class="ic" aria-hidden="true">!</span><span>${fz.escluse.map(e => `<strong>${esc(dataLabel(e.data) || e.etichetta)}</strong>: esclus${allen ? "o" : "a"} — ${esc(e.motivo)}.`).join("<br>")}</span></div>` : "";
+  cont.innerHTML = `
+    <div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseFormazioneMigliore(m, fz, criterio, tipo, true)}</span></div>
+    ${escluse}
+    <div class="griglia g-2" style="margin-top:16px">
+      <div class="card">
+        <div class="grafico-titolo">La formazione migliore</div>
+        <div class="grafico-sub">${singola ? "In questa partita" : (allen ? "Su tutti gli allenamenti del periodo" : "Su tutte le partite del periodo")}, secondo il criterio «${esc(CRITERI_FORMAZIONE[criterio].breve)}».</div>
+        <div class="fz-campo-wrap">${campoFormazioneHtml(m, paletteCampoSchermo())}</div>
+        ${notaModuloHtml(m) ? `<p class="nota-piccola fz-nota-modulo">${notaModuloHtml(m)}</p>` : ""}
+      </div>
+      <div class="card">
+        <div class="grafico-titolo">Perché questa</div>
+        <div class="griglia g-kpi" style="margin-top:10px">
+          <div class="kpi"><div class="kpi-eti">Minuti insieme</div><div class="kpi-valore">${nf0(m.minuti)}'</div><div class="kpi-nota">in ${nf0(m.sessioni)} ${unita(m.sessioni)}</div></div>
+          <div class="kpi"><div class="kpi-eti">Saldo reti</div><div class="kpi-valore">${saldoTxt(m.saldo)}</div><div class="kpi-nota">${nf0(m.gf)} fatti, ${nf0(m.ga)} subiti</div></div>
+        </div>
+        <div class="tabella-scroll" style="margin-top:14px"><table>
+          <caption class="solo-sr">Gol a partita della formazione migliore e della media</caption>
+          <thead><tr><th scope="col">A partita (50')</th><th scope="col">Questa formazione</th><th scope="col">Media ${allen ? "delle squadre" : "della squadra"}</th></tr></thead>
+          <tbody>
+            <tr><td class="cella-testo">Gol fatti</td><td>${ritmo(m.ritmoGF)}</td><td>${ritmo(fz.mediaGF)}</td></tr>
+            <tr><td class="cella-testo">Gol subiti</td><td>${ritmo(m.ritmoGA)}</td><td>${ritmo(fz.mediaGA)}</td></tr>
+            <tr><td class="cella-testo">Saldo</td><td>${fmtDiff(m.ritmoGF - m.ritmoGA)}</td><td>${fmtDiff(fz.mediaGF - fz.mediaGA)}</td></tr>
+          </tbody></table></div>
+        <p class="nota-piccola">${m.minuti < 2*FORMAZIONE_MINUTI_PRUDENZA ? `Con ${nf0(m.minuti)}' insieme i valori «a partita» sono gonfiati: conta di più il conteggio vero (${nf0(m.gf)} fatti, ${nf0(m.ga)} subiti). ` : ""}${m.ospiti ? `Nella formazione c'è un ospite: lo stesso nome segnaposto non è la stessa persona da un allenamento all'altro.` : ""}</p>
+      </div>
+    </div>
+    ${altre.length ? `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Le altre candidate</div>
+      <div class="grafico-sub">Le formazioni che seguono, nello stesso ordine del criterio scelto, fra quelle con almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Altre formazioni candidate</caption>
+        <thead><tr><th scope="col">Formazione</th><th scope="col">Minuti insieme</th><th scope="col">Gol fatti</th><th scope="col">Gol subiti</th><th scope="col">Saldo</th></tr></thead>
+        <tbody>${altre.map(x => `<tr><td class="cella-testo">${nomiFormazione(x, true)}</td><td>${nf0(x.minuti)}'</td><td>${nf0(x.gf)}</td><td>${nf0(x.ga)}</td><td>${saldoTxt(x.saldo)}</td></tr>`).join("")}</tbody>
+      </table></div></div>` : ""}
+    <p class="nota-piccola" style="margin-top:12px"><strong>Il criterio consigliato è il saldo reti</strong> (gol fatti meno gol subiti nei minuti giocati insieme): è il «vantaggio tenuto sull'avversario» e mette insieme i due dati, invece di farne prevalere uno. Guardare solo i gol subiti premierebbe una formazione che non segna mai, solo i gol fatti una che ne prende altrettanti. A parità di saldo vince chi ne ha subiti meno, poi chi ha giocato più minuti insieme. Gli altri due criteri si scelgono dal menu.</p>
+    <p class="nota-piccola">Formazione = i ${allen ? "giocatori della stessa squadra interna" : "7 giocatori"} in campo nello stesso momento; se torna in campo più volte, anche in ${allen ? "allenamenti" : "partite"} diversi, somma minuti e gol. Servono almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme. Per non far vincere due minuti fortunati, nella scelta ogni formazione parte come se avesse già giocato ${nf0(FORMAZIONE_MINUTI_PRUDENZA)}' alla media della squadra: chi ha giocato tanto insieme resta quasi com'è, chi ha giocato poco viene riportato verso la media. I numeri mostrati sono quelli veri. È la formazione che <em>ha funzionato</em> finora, non una previsione.</p>`;
+}
+
+/* --------- 9. Qualità dati --------- */
+function renderQualita(){
+  const cont = $("#contenuto-qualita");
+  const av = validaDati(stato.ds);
+  if(av.length === 0){
+    cont.innerHTML = `<div class="avviso ok"><span class="ic" aria-hidden="true">✓</span><span><strong>Nessun problema rilevato.</strong> Tutti i controlli automatici sono passati: identificativi coerenti, nessun duplicato, valori nei range previsti.</span></div>`;
+    return;
+  }
+  const errori = av.filter(a=>a.tipo==="errore"), attenzioni = av.filter(a=>a.tipo==="attenzione");
+  cont.innerHTML = `
+    <p class="kpi-nota" style="margin-top:0">${nf0(errori.length)} da correggere · ${nf0(attenzioni.length)} da verificare</p>
+    ${errori.map(a=>`<div class="avviso errore"><span class="ic" aria-hidden="true">✕</span><span><strong>Da correggere:</strong> ${a.testo}</span></div>`).join("")}
+    ${attenzioni.map(a=>`<div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span><strong>Da verificare:</strong> ${a.testo}</span></div>`).join("")}`;
+}
+
+/* =====================================================================
+   RENDER GENERALE
+   ===================================================================== */
+function render(){
+  if(!stato.ds) return;
+  const f = datiFiltrati();
+  const nomiPeriodo = stato.periodo === "tutto" ? "Tutta la stagione" : meseLabel(stato.periodo);
+  $("#riepilogo-filtri").textContent = `${nomiPeriodo} · ${nf0(f.partite.length)} partite · ${nf0(new Set(f.giocatori.map(g=>g.Giocatore)).size)} giocatori`;
+  renderKPI(f);
+  renderAndamento(f);
+  renderClassifica(f);
+  renderTendenze(f);
+  renderKPIAllenamentoStat(f);
+  renderAndamentoAllenamentoStat(f);
+  renderClassificaAllenamentoStat(f);
+  renderTendenzeAllenamentoStat(f);
+  renderAndamentoIndividuale();
+  renderGiocatore(f);
+  renderConfronto(f);
+  renderPersaGiocatorePartita(f);
+  renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
+  renderGolGameCampo("contenuto-golgame-partita", f.partite);
+  renderPortaGol("contenuto-porta-partita", f.partite);
+  renderSubentrati(f);
+  renderPossessoPartita(f);
+  renderRiconquista(f);
+  renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita");
+  renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita");
+  renderFormazioneMigliore("partita");
+  renderAllenamenti();
+  renderIncroci();
+  renderZoneAllenamento(f);
+  renderPersaGiocatoreAllenamento(f);
+  renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento");
+  renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", f.allenamenti, "allenamento");
+  renderFormazioneMigliore("allenamento");
+  renderConfrontoAllenamento(f);
+  renderQualita();
+  aggiornaSelettoriReport();
+  adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
+}
+
+function attivaDashboard(ds, etichettaOrigine){
+  stato.ds = ds;
+  stato.periodo = "tutto";
+  const agg = aggregaGiocatori(ds.giocatori);
+  stato.giocatore = agg.length ? agg[0].Giocatore : (ds.nomiGiocatori[0] || null);
+  const selP = $("#sel-periodo");
+  selP.innerHTML = `<option value="tutto">Tutta la stagione</option>` +
+    ds.mesi.map(m => `<option value="${m}">${meseLabel(m)}</option>`).join("");
+  selP.value = "tutto";
+  const selG = $("#sel-giocatore");
+  selG.innerHTML = ds.nomiGiocatori.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  if(stato.giocatore) selG.value = stato.giocatore;
+  $("#sez-caricamento").classList.add("nascosto");
+  $("#dashboard").classList.remove("nascosto");
+  $("#barra-filtri").classList.remove("nascosto");
+  $("#tab-switcher").classList.remove("nascosto");
+  $("#nav-sezioni").classList.remove("nascosto");
+  $("#btn-nuovo").classList.remove("nascosto");
+  const b = $("#badge-dataset");
+  b.classList.remove("nascosto");
+  b.textContent = etichettaOrigine;
+  render();
+  aggiornaAltezzaBarraFissa(); // la barra fissa ora mostra filtri/schede/indice: è cambiata di altezza
+  window.scrollTo({top:0, behavior:"auto"});
+}
+
+function mostraErrore(html){
+  const box = $("#errore-caricamento");
+  box.className = "";
+  box.innerHTML = `<div class="avviso errore"><span class="ic" aria-hidden="true">✕</span><span><strong>Non riesco a leggere il file.</strong> ${html}<br><span style="color:var(--muted)">Controlla il file e riprova, oppure premi «Prova con dati di esempio» per vedere come funziona la dashboard.</span></span></div>`;
+}
+
+/* =====================================================================
+   CARICAMENTO FILE
+   ===================================================================== */
+function leggiWorkbook(wb){
+  const grezzo = {};
+  ["Partite","Statistiche_Giocatori","Allenamenti","Presenze_Allenamento"].forEach(nome => {
+    const chiave = wb.SheetNames.find(s => s.trim().toLowerCase() === nome.toLowerCase());
+    if(chiave) grezzo[nome] = XLSX.utils.sheet_to_json(wb.Sheets[chiave], {defval:null, raw:true});
+  });
+  return grezzo;
+}
+function gestisciFile(file){
+  $("#errore-caricamento").classList.add("nascosto");
+  if(!/\.(xlsx|xls)$/i.test(file.name)){
+    mostraErrore("Il file <strong>"+esc(file.name)+"</strong> non è un foglio Excel (.xlsx o .xls).");
+    $("#errore-caricamento").classList.remove("nascosto"); return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try{
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:"array", cellDates:true});
+      const ds = preparaDataset(leggiWorkbook(wb));
+      distruggiGrafici();
+      attivaDashboard(ds, file.name);
+    }catch(err){
+      mostraErrore(err && err.message ? err.message : "Errore inatteso nella lettura del file.");
+      $("#errore-caricamento").classList.remove("nascosto");
+    }
+  };
+  reader.onerror = () => { mostraErrore("Il browser non è riuscito a leggere il file dal disco."); $("#errore-caricamento").classList.remove("nascosto"); };
+  reader.readAsArrayBuffer(file);
+}
+
+/** Legge un singolo file .csv di Seven Lab come testo e lo restituisce via Promise (per poterne
+ *  attendere in sequenza tanti quanti ne seleziona/trascina l'utente in un colpo solo). */
+function leggiTestoFile(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error("Il browser non è riuscito a leggere «"+file.name+"» dal disco."));
+    reader.readAsText(file, "UTF-8");
+  });
+}
+
+/** Punto di ingresso quando l'utente sceglie o trascina uno o più file: se anche uno solo è .csv
+ *  trattiamo l'intero gruppo come export Seven Lab (si accumulano con quelli già caricati); se sono
+ *  tutti .xlsx/.xls usiamo il vecchio percorso a un unico file con più fogli. */
+async function gestisciFileSelezionati(fileList){
+  const file = Array.from(fileList || []);
+  if(!file.length) return;
+  $("#errore-caricamento").classList.add("nascosto");
+  const csv = file.filter(f => /\.csv$/i.test(f.name));
+  if(csv.length){
+    const nonCsv = file.filter(f => !/\.csv$/i.test(f.name));
+    const errori = [];
+    for(const f of nonCsv) errori.push(`«${esc(f.name)}» non è un .csv: ignorato in questo caricamento multiplo.`);
+    for(const f of csv){
+      try{
+        const testo = await leggiTestoFile(f);
+        aggiungiSessioneDaTesto(f.name, testo);
+      }catch(err){
+        errori.push(`«${esc(f.name)}»: ${err && err.message ? err.message : "errore di lettura."}`);
+      }
+    }
+    if(errori.length){ mostraErrore(errori.join("<br>")); $("#errore-caricamento").classList.remove("nascosto"); }
+    ricaricaDaSessioni();
+    return;
+  }
+  // nessun .csv nel gruppo: percorso legacy, un solo file Excel con più fogli
+  gestisciFile(file[0]);
+}
+
+/** Ricostruisce (o svuota) la dashboard a partire da tutte le sessioni Seven Lab accumulate finora,
+ *  e aggiorna sempre il pannello "File caricati" (visibile anche prima di aprire la dashboard). */
+function ricaricaDaSessioni(){
+  renderPannelloFile();
+  const sessioni = leggiSessioniSalvate();
+  if(!sessioni.length){
+    distruggiGrafici();
+    stato.ds = null;
+    $("#dashboard").classList.add("nascosto");
+    $("#sez-caricamento").classList.remove("nascosto");
+    $("#barra-filtri").classList.add("nascosto");
+    $("#tab-switcher").classList.add("nascosto");
+    $("#nav-sezioni").classList.add("nascosto");
+    $("#btn-nuovo").classList.add("nascosto");
+    $("#badge-dataset").classList.add("nascosto");
+    return;
+  }
+  try{
+    const ds = costruisciDatasetDaSessioni(sessioni);
+    distruggiGrafici();
+    const nPartite = sessioni.filter(s=>s.tipo==="partita").length;
+    const nAllen = sessioni.filter(s=>s.tipo==="allenamento").length;
+    attivaDashboard(ds, `${nPartite} partite · ${nAllen} allenamenti (${sessioni.length} file)`);
+  }catch(err){
+    mostraErrore(err && err.message ? err.message : "Errore inatteso nella lettura dei file.");
+    $("#errore-caricamento").classList.remove("nascosto");
+  }
+}
+
+/** Disegna la lista dei file Seven Lab già caricati (con pulsante Elimina), sempre visibile sopra
+ *  la zona di trascinamento, sia in fase di caricamento sia a dashboard aperta. */
+function renderPannelloFile(){
+  const box = $("#pannello-file");
+  if(!box) return;
+  const sessioni = leggiSessioniSalvate().slice().sort((a,b) => (a.caricatoIl||"").localeCompare(b.caricatoIl||""));
+  if(!sessioni.length){ box.classList.add("nascosto"); box.innerHTML = ""; return; }
+  box.classList.remove("nascosto");
+  box.innerHTML = `<h3 style="font-size:15px">File caricati (${sessioni.length})</h3>
+    <div class="lista-file">${sessioni.map(s => {
+      const dataSess = parseDataSevenLab(s.meta["Data"]);
+      const desc = s.tipo === "partita" ? ("vs "+esc((s.meta["Avversario"]||"").trim()||"—")) : (esc((s.meta["Formato"]||"").trim())||"allenamento");
+      // Metodo di rilevazione accanto a ogni file (10/10/2026): è il modo più rapido per vedere, appena
+      // caricato un file da video, se il sistema l'ha riconosciuto e se ha corretto i tempi — e per i file
+      // dello storico, che il metodo non lo scrivono, che sono stati presi come diretta.
+      const sc = scalaTempiEffettiva(s.scalaTempi);
+      const vel = sc.velocita ? String(sc.velocita).replace(".", ",")+"×" : "";
+      const badgeMetodo = sc.metodo === "differita"
+        ? (sc.orologio === "video"
+            ? `<span class="badge-metodo differita" title="${esc("Tempi già di partita, lasciati come sono: " + (sc.motiviOrologio||[]).join("; "))}">Differita${vel ? " · "+vel : ""} · tempi del video</span>`
+            : `<span class="badge-metodo differita" title="${sc.applicata ? "Registrata con il cronometro: tempi e minuti riportati al tempo reale" : "Tempi lasciati come sono"}">Differita${vel ? " · "+vel : ""}${sc.applicata ? " · tempi corretti" : (sc.velocita === 1 ? "" : " · tempi non corretti")}</span>`)
+        : `<span class="badge-metodo diretta${sc.predefinito ? " predefinito" : ""}" title="${sc.predefinito ? "Il file non indica il metodo di rilevazione: considerata diretta" : "Registrata dal vivo"}">Diretta${sc.predefinito ? " (non indicato)" : ""}</span>`;
+      const avvisi = (sc.avvisi && sc.avvisi.length) ? sc.avvisi : (sc.avviso ? [sc.avviso] : []);
+      return `<div class="riga-file">
+        <span class="badge-tipo ${s.tipo}">${s.tipo === "partita" ? "Partita" : "Allenamento"}</span>
+        ${badgeMetodo}
+        <span class="riga-file-nome">${esc(s.nomeFile)}</span>
+        <span class="riga-file-dett">${dataLabel(dataSess)} · ${desc}</span>
+        <button type="button" class="btn piccolo pericolo" data-elimina-sessione="${esc(s.id)}">Elimina</button>
+        ${avvisi.map(t => `<div class="riga-file-avviso">${esc(t)}</div>`).join("")}
+      </div>`;
+    }).join("")}</div>`;
+}
+
+/* =====================================================================
+   REPORT ESPORTABILI IN PDF
+   ===================================================================== */
+function aggiornaSelettoriReport(){
+  if(!stato.ds) return;
+  const selP = $("#rp-sel-partita");
+  selP.innerHTML = stato.ds.partite.slice().reverse().map(p =>
+    `<option value="${esc(p.Match_ID)}">${dataLabel(p.Data)} · vs ${esc(p.Avversario)} (${p.Risultato})</option>`).join("");
+  popolaSelettoriPeriodoAllenamento();
+}
+
+/** Riempie i due selettori "Da mese/A mese" della sezione 05 (a schermo) e i due del report PDF
+ *  allenamenti: stessa lista di mesi (solo quelli con almeno una sessione di allenamento), opzione vuota
+ *  = "inizio/fine stagione". Chiamata da aggiornaSelettoriReport() ogni volta che il dataset cambia, e
+ *  anche direttamente quando serve solo ripopolare senza toccare il selettore Partita. */
+function popolaSelettoriPeriodoAllenamento(){
+  if(!stato.ds) return;
+  const mesi = mesiConAllenamento();
+  const opzioniMesi = mesi.map(m => `<option value="${m}">${meseLabel(m)}</option>`).join("");
+  [["#sel-all-da","Inizio stagione", () => stato.allenamentoDashDa],
+   ["#sel-all-a","Fine stagione", () => stato.allenamentoDashA],
+   ["#rp-sel-all-da","Inizio stagione", () => ""],
+   ["#rp-sel-all-a","Fine stagione", () => ""]
+  ].forEach(([sel, etichettaVuota, valoreCorrente]) => {
+    const el = $(sel);
+    if(!el) return;
+    const valore = valoreCorrente() || "";
+    el.innerHTML = `<option value="">${etichettaVuota}</option>` + opzioniMesi;
+    el.value = mesi.includes(valore) ? valore : "";
+  });
+}
+
+/** Trova l'elemento di stato per idEl; se index.html non è aggiornato (versione disallineata rispetto
+ *  ad app.js, con id diversi) ripiega sul vecchio id condiviso "#rp-stato" invece di fallire in silenzio:
+ *  meglio un messaggio nel posto "sbagliato" che nessun messaggio affatto. */
+function elementoStatoReport(idEl){
+  return $(idEl) || $("#rp-stato") || null;
+}
+
+function statoReport(msg, attivo, idEl="#rp-stato-partita"){
+  const el = elementoStatoReport(idEl);
+  if(!el){ console.error("Elemento di stato report non trovato:", idEl); return; }
+  el.textContent = msg;
+  el.classList.toggle("attivo", !!attivo);
+}
+
+/** Come statoReport, ma con in più un link cliccabile che apre/scarica il PDF appena generato — resta
+ *  visibile finché non si genera un altro report, come rete di sicurezza se il download automatico non
+ *  fosse partito (succede su alcuni browser mobili). */
+function statoReportConLink(msg, url, nomeFile, idEl="#rp-stato-partita"){
+  const el = elementoStatoReport(idEl);
+  if(!el){ console.error("Elemento di stato report non trovato:", idEl); return; }
+  el.classList.remove("attivo");
+  el.innerHTML = "";
+  el.appendChild(document.createTextNode(msg + " "));
+  const a = document.createElement("a");
+  a.href = url; a.download = nomeFile; a.target = "_blank"; a.rel = "noopener";
+  a.textContent = "Se il download non è partito, tocca qui per aprirlo.";
+  el.appendChild(a);
+}
+
+function nomeFileData(prefisso, d){
+  const s = d instanceof Date && !isNaN(d) ? d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0") : "";
+  return `${prefisso}_${s}.pdf`;
+}
+
+/** Costruisce una pagina di report in stile "CV" (colonna laterale scura + fascia colorata in cima)
+ *  dentro #report-stage (fuori schermo, A4 a 96dpi ≈ 794×1123px) e la restituisce.
+ *  Con `conSidebar:false` costruisce una pagina a piena larghezza, senza colonna laterale: usata per le
+ *  pagine di appendice con le statistiche dettagliate di tutti i giocatori, dove servono più colonne. */
+/* =====================================================================
+   IMPAGINAZIONE A4 DEI REPORT (04/09/2026)
+   Prima ogni "pagina logica" era un unico riquadro alto quanto serviva, catturato in una sola immagine e
+   poi TAGLIATO A FETTE alte quanto un A4. Da lì venivano i difetti segnalati da Elisa: fogli completamente
+   bianchi, titoli separati dal loro contenuto, elenchi e tabelle spezzati a metà riga.
+   Ora il flusso è quello di una vera relazione: il generatore riempie un "documento" (un contenitore che
+   cresce quanto vuole), e poi l'impaginatore distribuisce i suoi blocchi su pagine A4 VERE, una per una,
+   fermandosi quando la pagina è piena. Una tabella o un elenco troppo lunghi continuano sulla pagina dopo
+   (la tabella ci riporta la sua intestazione); un titolo di sezione non resta mai da solo in fondo a una
+   pagina; una pagina senza contenuto non viene proprio creata.
+   ===================================================================== */
+
+/** Contenitore in cui il generatore versa i suoi blocchi. Ha la stessa larghezza e lo stesso stile della
+ *  pagina finale (serve perché le misure delle tabelle siano già quelle giuste), ma può crescere in
+ *  altezza quanto vuole: non è una pagina, è la "bozza" da impaginare. */
+function nuovoDocumentoReport(conSidebar=true){
+  const doc = nuovaPaginaReport(conSidebar);
+  doc.classList.add("rp-doc");
+  doc.dataset.documento = "1";
+  return doc;
+}
+
+/** Blocchi che si possono spezzare tra due pagine, e come: le tabelle riga per riga (ripetendo
+ *  l'intestazione), gli elenchi puntati voce per voce. Tutto il resto è atomico e passa intero alla
+ *  pagina successiva. Sotto `minimoResiduo` pezzi non vale la pena spezzare: si sposta tutto. */
+function pezziDivisibili(blocco){
+  if(blocco.tagName === "TABLE" && blocco.classList.contains("rp-table")){
+    const righe = Array.from(blocco.querySelectorAll("tbody tr"));
+    return righe.length >= 6 ? {tipo:"tabella", pezzi:righe, minimoResiduo:3} : null;
+  }
+  if(blocco.tagName === "UL" && blocco.classList.contains("rp-bullets")){
+    const voci = Array.from(blocco.children);
+    return voci.length >= 4 ? {tipo:"elenco", pezzi:voci, minimoResiduo:2} : null;
+  }
+  // La griglia dei campetti si spezza per riquadri (due per riga): senza, un blocco da quattro campi che
+  // non entra nello spazio rimasto salta tutto alla pagina dopo, lasciandone una mezza vuota.
+  // Soglia tenuta a 2 dopo una prova diretta (04/09/2026): impedendo di spezzare le griglie da quattro
+  // campetti il Report Partita passava da 6 a 7 fogli e il riempimento medio scendeva (88% → 66%). Il
+  // difetto vero non era lo spezzare, era che la seconda metà arrivava senza titolo: ora l'impaginatore
+  // le mette sopra l'intestazione "(segue)", quindi conviene spezzare e stampare meno fogli.
+  if(blocco.classList && blocco.classList.contains("rp-campo-griglia")){
+    const celle = Array.from(blocco.children);
+    return celle.length >= 4 ? {tipo:"campi", pezzi:celle, minimoResiduo:2} : null;
+  }
+  return null;
+}
+
+/** Crea la "seconda metà" di un blocco spezzato: per una tabella, una tabella nuova con la stessa
+ *  intestazione e le righe rimaste; per un elenco, un elenco con le voci rimaste. */
+function codaBlocco(blocco, pezziRimasti){
+  if(blocco.classList && blocco.classList.contains("rp-campo-griglia")){
+    const coda = document.createElement("div");
+    coda.className = blocco.className;
+    pezziRimasti.forEach(c => coda.appendChild(c));
+    return coda;
+  }
+  if(blocco.tagName === "TABLE"){
+    const coda = document.createElement("table");
+    coda.className = blocco.className;
+    const thead = blocco.querySelector("thead");
+    coda.innerHTML = (thead ? thead.outerHTML : "") + "<tbody></tbody>";
+    const corpoCoda = coda.querySelector("tbody");
+    pezziRimasti.forEach(tr => corpoCoda.appendChild(tr));
+    return coda;
+  }
+  const coda = document.createElement(blocco.tagName);
+  coda.className = blocco.className;
+  pezziRimasti.forEach(li => coda.appendChild(li));
+  return coda;
+}
+
+/** Distribuisce i blocchi di un documento su pagine A4 vere. Torna l'elenco delle pagine create. */
+function impaginaDocumento(doc, {conSidebar, altezzaUtile}){
+  const banda = doc.centro.querySelector(".rp2-band");
+  const htmlLato = doc.lato ? doc.lato.innerHTML : null;
+  const blocchi = Array.from(doc.corpo.children);
+  const pagine = [];
+  let pagina = null;
+
+  const apriPagina = () => {
+    const prima = pagine.length === 0;
+    // solo la prima pagina di un documento porta fascia e colonna laterale: le pagine di continuazione
+    // usano tutta la larghezza del foglio invece di trascinarsi dietro una colonna vuota
+    const p = nuovaPaginaReport(prima && conSidebar);
+    if(prima && banda) p.centro.insertBefore(banda, p.corpo);
+    if(prima && conSidebar && htmlLato !== null) p.lato.innerHTML = htmlLato;
+    pagine.push(p);
+    pagina = p;
+    return p;
+  };
+  const entra = () => altezzaContenutoPagina(pagina) <= altezzaUtile;
+  // Quando un blocco si spezza tra due pagine, la sua seconda metà arriva sulla pagina dopo senza più il
+  // titolo di sezione, che è rimasto indietro: chi legge il foglio si trova due heatmap (o mezza tabella)
+  // senza sapere di cosa parlano. Ci portiamo dietro il titolo, marcato "(segue)".
+  const intestazioneContinuazione = (titolo) => {
+    if(!titolo) return null;
+    const cont = document.createElement("div");
+    cont.className = "rp-section-title rp-continua";
+    cont.textContent = titolo.textContent.trim() + " (segue)";
+    return cont;
+  };
+  const sistema = (blocco) => {
+    if(blocco.tagName === "TABLE" && blocco.classList.contains("rp-table")) adattaLarghezzeColonneReport(blocco);
+    const cv = blocco.querySelector && blocco.querySelector("canvas");
+    if(cv && typeof Chart !== "undefined" && Chart.getChart){
+      const grafico = Chart.getChart(cv);
+      if(grafico) try{ grafico.resize(); }catch(e){}
+    }
+  };
+
+  apriPagina();
+  let titoloCorrente = null; // ultimo titolo di sezione incontrato: serve per l'intestazione "(segue)"
+  for(const blocco of blocchi){
+    if(blocco.classList && blocco.classList.contains("rp-section-title")) titoloCorrente = blocco;
+    pagina.corpo.appendChild(blocco);
+    sistema(blocco);
+    if(entra()) continue;
+
+    // Non ci sta. Prima si prova a spezzarlo, se è di un tipo che si può spezzare.
+    pagina.corpo.removeChild(blocco);
+    const divisibile = pezziDivisibili(blocco);
+    let spezzato = false;
+    if(divisibile){
+      const contenitore = blocco.tagName === "TABLE" ? blocco.querySelector("tbody") : blocco;
+      const tutti = divisibile.pezzi.slice();
+      tutti.forEach(x => x.remove());
+      pagina.corpo.appendChild(blocco);
+      const tenuti = [];
+      for(const pezzo of tutti){
+        contenitore.appendChild(pezzo);
+        if(entra()){ tenuti.push(pezzo); continue; }
+        contenitore.removeChild(pezzo);
+        break;
+      }
+      const rimasti = tutti.slice(tenuti.length);
+      // vale la pena spezzare solo se resta abbastanza da una parte e dall'altra
+      if(tenuti.length >= divisibile.minimoResiduo && rimasti.length >= divisibile.minimoResiduo){
+        sistema(blocco);
+        const coda = codaBlocco(blocco, rimasti);
+        apriPagina();
+        // una tabella si riporta già dietro la sua intestazione: lì il "(segue)" servirebbe meno, ma per
+        // campetti ed elenchi è l'unico modo di sapere a quale sezione appartiene quello che si sta leggendo
+        const cont = divisibile.tipo === "tabella" ? null : intestazioneContinuazione(titoloCorrente);
+        if(cont) pagina.corpo.appendChild(cont);
+        pagina.corpo.appendChild(coda);
+        sistema(coda);
+        spezzato = true;
+      } else {
+        // rimettiamo tutto insieme e lo spostiamo intero
+        tutti.forEach(x => contenitore.appendChild(x));
+        pagina.corpo.removeChild(blocco);
+      }
+    }
+    if(spezzato) continue;
+
+    // Va tutto sulla pagina nuova. Un titolo di sezione rimasto da solo in fondo alla pagina precedente
+    // lo portiamo con noi: un titolo senza il suo contenuto sotto è il difetto più visibile in stampa.
+    const ultimo = pagina.corpo.lastElementChild;
+    const titoloOrfano = ultimo && ultimo.classList.contains("rp-section-title") ? ultimo : null;
+    apriPagina();
+    if(titoloOrfano) pagina.corpo.appendChild(titoloOrfano);
+    else if(blocco.querySelector && blocco.querySelector("canvas")){
+      // Un blocco di grafici o campetti che scivola da solo sulla pagina dopo (col titolo rimasto indietro
+      // perché seguito dal suo testo introduttivo) è illeggibile: quattro campi senza sapere di che parlano.
+      const cont = intestazioneContinuazione(titoloCorrente);
+      if(cont) pagina.corpo.appendChild(cont);
+    }
+    pagina.corpo.appendChild(blocco);
+    sistema(blocco);
+  }
+
+  // Una pagina che è rimasta senza contenuto non deve diventare un foglio bianco.
+  for(let i = pagine.length - 1; i >= 0; i--){
+    if(!pagine[i].corpo.children.length && !(pagine[i].lato && pagine[i].lato.innerHTML.trim())){
+      pagine[i].remove();
+      pagine.splice(i, 1);
+    }
+  }
+  doc.remove();
+  return pagine;
+}
+
+function nuovaPaginaReport(conSidebar=true){
+  const stage = $("#report-stage");
+  const pagina = document.createElement("div");
+  pagina.className = "rp-page rp2-page";
+  const centro = document.createElement("div");
+  centro.className = "rp2-main";
+  const corpo = document.createElement("div");
+  corpo.className = "rp2-body";
+  centro.appendChild(corpo);
+  if(conSidebar){
+    const lato = document.createElement("div");
+    lato.className = "rp2-side";
+    pagina.appendChild(lato);
+    pagina.lato = lato;
+  }
+  pagina.appendChild(centro);
+  stage.appendChild(pagina);
+  pagina.centro = centro; pagina.corpo = corpo;
+  return pagina;
+}
+
+function iniziali(nome){
+  return String(nome||"").trim().split(/\s+/).filter(Boolean).map(p=>p[0]).slice(0,2).join("").toUpperCase() || "—";
+}
+
+/** Fascia colorata in cima alla colonna principale: titolo del report ed eventuale risultato/badge. */
+function bandaReport(pagina, eyebrow, titolo, sottotitolo, risultato){
+  const band = document.createElement("div");
+  band.className = "rp2-band";
+  band.innerHTML = `<div class="eyebrow">${esc(eyebrow)}</div>
+    <div class="rp2-band-row">
+      <div><div class="tt">${esc(titolo)}</div>${sottotitolo?`<div class="sub">${esc(sottotitolo)}</div>`:""}</div>
+      ${risultato?`<div class="risultato">${esc(risultato)}</div>`:""}
+    </div>`;
+  pagina.centro.insertBefore(band, pagina.corpo);
+}
+
+/** Colonna laterale scura: un giocatore in evidenza (MVP, da tenere d'occhio, leader stagionale...) con
+ *  le sue statistiche come barre e un mini-storico. Se `nome` manca mostra solo l'eyebrow e i gruppi. */
+function sidebarReport(pagina, {eyebrow, nome, ruolo, colore="#5EC4CE", gruppi=[]}){
+  let html = `<div class="rp2-eyebrow">${esc(eyebrow)}</div>`;
+  if(nome){
+    html += `<div class="rp2-avatar" style="border-color:${colore}">${esc(iniziali(nome))}</div>
+      <div class="rp2-nome">${esc(nome)}</div>
+      <div class="rp2-ruolo">${esc(ruolo||"")}</div>`;
+  }
+  gruppi.forEach(g => {
+    html += `<h4>${esc(g.titolo)}</h4>`;
+    (g.barre||[]).forEach(b => {
+      const pct = Math.max(0, Math.min(100, b.pct ?? 0));
+      html += `<div class="rp2-bar-row"><div class="lbl"><span>${esc(b.label)}</span><b>${b.valore}</b></div><div class="rp2-bar-track"><div class="rp2-bar-fill" style="width:${pct}%; background:${b.colore||"#5EC4CE"}"></div></div></div>`;
+    });
+    (g.righe||[]).forEach(r => {
+      html += `<div class="rp2-mini"><span>${esc(r.label)}</span><b${r.colore?` style="color:${r.colore}"`:""}>${r.valore}</b></div>`;
+    });
+  });
+  pagina.lato.innerHTML = html;
+}
+
+/** Piè di pagina numerato: NON viene più incollato una sola volta in fondo al contenuto (prima di questa
+ *  modifica, con un report più lungo di una pagina finiva per comparire solo sull'ultima fetta fisica del
+ *  PDF, lasciando le pagine precedenti senza numerazione) — viene invece rasterizzato a parte da
+ *  esportaPaginaAPdf() e sovrapposto in fondo a OGNI pagina fisica, con il numero corretto. Le due funzioni
+ *  seguenti si occupano solo di costruire/misurare quel piè di pagina isolato. */
+function costruisciFooterReport(n, tot, larghezzaCss){
+  const box = document.createElement("div");
+  box.style.cssText = `width:${larghezzaCss}px; background:#FFFFFF; box-sizing:border-box;`;
+  box.innerHTML = `<div class="rp-foot-b" style="margin:14px 34px 0"><span>Report generato automaticamente il ${dataLabel(new Date())} — dati raccolti dall'utente</span><span>Pagina ${n} di ${tot}</span></div>`;
+  return box;
+}
+/** Altezza (px CSS) del piè di pagina: misurata sul rendering reale invece che una costante fissa, così
+ *  resta corretta anche se in futuro cambia il CSS di `.rp-foot-b`. Va riservata in fondo a ogni pagina
+ *  fisica, quindi sottratta dall'altezza utile per il contenuto prima di calcolare i punti di interruzione. */
+function altezzaFooterReportCss(larghezzaCss){
+  const stage = $("#report-stage");
+  const box = costruisciFooterReport(1, 1, larghezzaCss);
+  stage.appendChild(box);
+  const h = box.getBoundingClientRect().height;
+  stage.removeChild(box);
+  return h;
+}
+/** Rasterizza (html2canvas, stessa scala/config del contenuto) il piè di pagina n/tot da sovrapporre in
+ *  fondo a una pagina fisica del PDF. */
+async function catturaFooterReport(n, tot, larghezzaCss){
+  const stage = $("#report-stage");
+  const box = costruisciFooterReport(n, tot, larghezzaCss);
+  stage.appendChild(box);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const canvas = await html2canvas(box, {scale:2, backgroundColor:"#FFFFFF", logging:false, windowWidth:larghezzaCss});
+  stage.removeChild(box);
+  return canvas;
+}
+/** Ogni KPI può avere anche `d`/`dTipo` (testo + "up"/"down"/"flat") per mostrare, in piccolo sotto il
+ *  valore, il confronto col mese/periodo precedente — es. "+6pt vs mese prec." in verde o rosso. */
+function kpiRowReport(pagina, kpis){
+  const row = document.createElement("div");
+  row.className = "rp-kpi-row";
+  row.innerHTML = kpis.map(k => `<div class="rp-kpi"><div class="l">${esc(k.l)}</div><div class="v">${k.v}</div>${
+    k.d ? `<div class="d ${k.dTipo||"flat"}">${esc(k.d)}</div>` : ""}</div>`).join("");
+  pagina.corpo.appendChild(row);
+}
+
+/** Calcola un confronto rispetto al periodo precedente per una singola KPI: testo pronto ("+6pt vs mese
+ *  prec.") e "tipo" (up/down/flat) da colorare. `soglia` è la variazione minima sotto la quale si
+ *  considera "stabile"; `invert:true` per le metriche dove un aumento è un segnale negativo (es. numero
+ *  di giocatori sotto la soglia di presenza). Ritorna null se manca uno dei due valori da confrontare. */
+function deltaKpi(delta, formatta, soglia=0, invert=false, etichetta="vs mese prec."){
+  if(delta===null || delta===undefined || Number.isNaN(delta)) return null;
+  let tipo = "flat";
+  if(delta > soglia) tipo = invert ? "down" : "up";
+  else if(delta < -soglia) tipo = invert ? "up" : "down";
+  const segno = delta > 0 ? "+" : "";
+  return {testo:`${segno}${formatta(delta)} ${etichetta}`, tipo};
+}
+
+/** Elenco di giocatori con una variazione degna di nota rispetto al mese precedente (presenza e, se
+ *  disponibile, carico di allenamento), da mostrare come righe con badge IN MIGLIORAMENTO/IN CALO/DA
+ *  MONITORARE — la richiesta esplicita dell'utente di vedere "tendenze in calo o in miglioramento" nel
+ *  Report Mensile Allenamenti, non solo i numeri assoluti del mese. */
+function tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE, etichettaPeriodoPrec="il periodo precedente"){
+  const precByName = new Map(righeAllenPrec.map(r => [r.Giocatore, r]));
+  const risultati = [];
+  righeAllen.forEach(r => {
+    const prec = precByName.get(r.Giocatore);
+    if(!prec) return;
+    const deltaPres = (r.Tasso_Presenza_pct!=null && prec.Tasso_Presenza_pct!=null) ? r.Tasso_Presenza_pct - prec.Tasso_Presenza_pct : null;
+    let tipo = null, testo = null;
+    if(haRPE && prec.Carico_Tot){
+      const rapporto = r.Carico_Tot / prec.Carico_Tot;
+      if(rapporto >= 1.5){ tipo = "watch"; testo = `carico di allenamento in forte aumento (${nf(rapporto,1)}× rispetto a ${etichettaPeriodoPrec})`; }
+    }
+    if(!tipo && deltaPres !== null){
+      if(deltaPres >= 12){ tipo = "up"; testo = `presenza in crescita (+${nf0(deltaPres)} punti rispetto a ${etichettaPeriodoPrec})`; }
+      else if(deltaPres <= -12){ tipo = "down"; testo = `presenza in calo (${nf0(deltaPres)} punti rispetto a ${etichettaPeriodoPrec})`; }
+    }
+    if(tipo) risultati.push({giocatore:r.Giocatore, tipo, testo});
+  });
+  return risultati;
+}
+
+const ETICHETTA_FLAG = {up:"IN MIGLIORAMENTO", down:"IN CALO", watch:"DA MONITORARE"};
+function flagGiocatoriReport(pagina, elenco){
+  const wrap = document.createElement("div");
+  wrap.className = "rp-flag-list";
+  wrap.innerHTML = elenco.map(e => `<div class="rp-flag-riga"><span class="rp-flag ${e.tipo}">${ETICHETTA_FLAG[e.tipo]}</span> <b>${esc(e.giocatore)}</b> — ${esc(e.testo)}</div>`).join("");
+  pagina.corpo.appendChild(wrap);
+}
+function titoloSezioneReport(pagina, testo){
+  const h = document.createElement("div");
+  h.className = "rp-section-title"; h.textContent = testo;
+  pagina.corpo.appendChild(h);
+}
+function bulletsReport(pagina, righeHtml){
+  const ul = document.createElement("ul");
+  ul.className = "rp-bullets";
+  ul.innerHTML = righeHtml.map(t => `<li>${t}</li>`).join("");
+  pagina.corpo.appendChild(ul);
+}
+/** Sblocca l'entità HTML minime che `esc()` introduce (&amp; &lt; &gt; &quot; &#39;), solo per misurare i
+ *  caratteri VERI di un nome (es. "D'Angelo" non deve misurare "&#39;" invece di un apostrofo solo). Non è
+ *  un unescape completo, copre solo i 5 caratteri che `esc()` può produrre. */
+function unescConteggio(s){
+  return String(s).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+}
+/** Larghezza in pixel del testo dato, nello stesso font (famiglia/peso/dimensione) davvero applicato
+ *  all'elemento passato — letto dal browser con getComputedStyle, non stimato. Usa un unico canvas
+ *  riutilizzato tra le chiamate (measureText non disegna nulla, serve solo la metrica). */
+function larghezzaTestoPx(testo, elementoStile){
+  const cs = getComputedStyle(elementoStile);
+  if(!larghezzaTestoPx._ctx) larghezzaTestoPx._ctx = document.createElement("canvas").getContext("2d");
+  const ctx = larghezzaTestoPx._ctx;
+  ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  // Il testo va misurato COME VIENE DISEGNATO, non com'è nell'HTML (bug trovato nell'audit del
+  // 04/09/2026): le intestazioni delle tabelle dei report sono rese in maiuscolo e spaziate via CSS
+  // (text-transform:uppercase + letter-spacing), quindi occupano parecchio più della stringa originale.
+  // Misurando la stringa così com'era, quelle colonne risultavano troppo strette e intestazioni come
+  // "Parate" o "Indice" andavano a capo spezzate in mezzo alla parola ("PARAT E", "INDIC E").
+  let t = String(testo);
+  const trasforma = cs.textTransform;
+  if(trasforma === "uppercase") t = t.toUpperCase();
+  else if(trasforma === "lowercase") t = t.toLowerCase();
+  else if(trasforma === "capitalize") t = t.replace(/\b\p{L}/gu, c => c.toUpperCase());
+  const spaziatura = parseFloat(cs.letterSpacing);
+  const extra = Number.isFinite(spaziatura) ? spaziatura * t.length : 0;
+  return ctx.measureText(t).width + extra;
+}
+/** Adatta la larghezza di OGNI colonna di una tabella `.rp-table` GIÀ inserita nel DOM al contenuto che
+ *  porta davvero, al posto delle percentuali fisse della regola CSS di base (22% sulla prima colonna,
+ *  resto diviso a metà tra le altre da table-layout:fixed) — richiesta esplicita dell'utente (03/09/2026):
+ *  "fai la colonna [dei nomi] larga quanto il nome più lungo in rosa e basta, in modo che si possano vedere
+ *  anche i dati presenti in tutte le altre colonne". Restringere solo la prima colonna non bastava: liberava
+ *  spazio ma quello in più finiva diviso a caso tra le altre, e una come "Ruolo" (con valori lunghi tipo
+ *  "Centrocampista") tornava comunque a andare a capo male — quindi la larghezza si misura per TUTTE le
+ *  colonne, non solo la prima.
+ *  Misura il vero rendering del browser (font, peso — incluso il grassetto della prima colonna, voluto — e
+ *  dimensione realmente applicati in QUESTO contesto: pagina intera o la colonna più stretta di un report
+ *  stile "CV", dove `.rp2-body`/`.rp3-body` rimpiccioliscono il testo delle tabelle) invece di stimare in
+ *  caratteri: con un font non monospace come quello dei report, contare i caratteri è impreciso e ha infatti
+ *  prodotto, in un primo tentativo, testo comunque tagliato a capo. Se la somma delle larghezze necessarie
+ *  entra nella tabella, lo spazio in più viene distribuito in proporzione (la tabella resta larga al 100%,
+ *  nessuno spazio vuoto); se invece serve più spazio di quanto ce ne sia (tabella con molte colonne larghe),
+ *  tutte le colonne vengono ridotte in proporzione alla loro necessità, così nessuna sparisce del tutto e
+ *  nessuna monopolizza lo spazio a scapito delle altre. Deve girare DOPO che la tabella è nel DOM (altrimenti
+ *  getComputedStyle non vede il contesto giusto) e prima di qualunque cattura html2canvas della pagina. */
+function adattaLarghezzeColonneReport(tbl){
+  const intestazioni = Array.from(tbl.querySelectorAll("thead th"));
+  if(!intestazioni.length) return;
+  const righe = Array.from(tbl.querySelectorAll("tbody tr"));
+  const necessarie = intestazioni.map((th, i) => {
+    const cs = getComputedStyle(th);
+    const pad = parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+    let larghezza = larghezzaTestoPx(unescConteggio(th.textContent), th) + pad;
+    righe.forEach(tr => {
+      const td = tr.children[i];
+      if(!td) return;
+      const csTd = getComputedStyle(td);
+      const padTd = parseFloat(csTd.paddingLeft)+parseFloat(csTd.paddingRight);
+      larghezza = Math.max(larghezza, larghezzaTestoPx(unescConteggio(td.textContent), td) + padTd);
+    });
+    return larghezza + 2; // piccolo margine di sicurezza per l'arrotondamento del canvas
+  });
+  // Larghezza MINIMA di ogni colonna: la parola singola più lunga che vi compare (intestazione compresa).
+  // Sotto questa soglia il browser è costretto a spezzare una parola a metà, che è esattamente il difetto
+  // trovato nell'audit del 04/09/2026 ("PARAT E", "INDIC E"). Quando lo spazio non basta per tutti, si
+  // riduce in proporzione ma mai sotto questo minimo.
+  const minime = intestazioni.map((th, i) => {
+    const cs = getComputedStyle(th);
+    const pad = parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+    const parolePiuLunga = (el) => unescConteggio(el.textContent).split(/\s+/)
+      .reduce((max, parola) => Math.max(max, larghezzaTestoPx(parola, el)), 0);
+    let min = parolePiuLunga(th) + pad;
+    righe.forEach(tr => {
+      const td = tr.children[i];
+      if(!td) return;
+      const csTd = getComputedStyle(td);
+      min = Math.max(min, parolePiuLunga(td) + parseFloat(csTd.paddingLeft) + parseFloat(csTd.paddingRight));
+    });
+    return min + 2;
+  });
+  // La prima colonna (i nomi) ha una precedenza in più: finché sta dentro il 30% della tabella non viene
+  // ristretta sotto la sua larghezza naturale, così i nomi restano su una riga sola anche nelle tabelle con
+  // molte colonne — era la richiesta originale dell'utente ("larga quanto il nome più lungo in rosa").
+  const larghezzaDisponibile = tbl.getBoundingClientRect().width || 0;
+  if(minime.length) minime[0] = Math.max(minime[0], Math.min(necessarie[0], larghezzaDisponibile*0.30));
+  const totaleNecessario = necessarie.reduce((a,b)=>a+b, 0);
+  const larghezzaTabella = tbl.getBoundingClientRect().width || totaleNecessario;
+  if(totaleNecessario <= 0) return;
+  const fattore = larghezzaTabella / totaleNecessario; // >1 se c'è spazio in più da distribuire, <1 se va tutto ridotto in proporzione
+  const finali = necessarie.map((n, i) => Math.max(n*fattore, minime[i]));
+  // Se i minimi hanno fatto sforare la larghezza disponibile, si toglie il di più solo alle colonne che
+  // stanno sopra il proprio minimo, in proporzione al margine che hanno.
+  const totaleFinale = finali.reduce((a,b)=>a+b, 0);
+  if(totaleFinale > larghezzaTabella){
+    const eccesso = totaleFinale - larghezzaTabella;
+    const margini = finali.map((v,i) => Math.max(0, v - minime[i]));
+    const margineTotale = margini.reduce((a,b)=>a+b, 0);
+    if(margineTotale > 0) finali.forEach((v,i) => { finali[i] = v - eccesso*(margini[i]/margineTotale); });
+  }
+  intestazioni.forEach((th, i) => { th.style.width = Math.round(finali[i])+"px"; });
+}
+/** Tabella generica dei report PDF, sempre con "Giocatore" (o comunque un nome) in prima colonna. */
+/** `righeSpente` (facoltativo, uno booleano per riga) attenua le righe che non portano informazione — in
+ *  pratica i giocatori che quella partita non sono scesi in campo, che riempiono le tabelle di zeri e
+ *  rendono più faticoso trovare chi ha davvero giocato (audit del 04/09/2026). Restano visibili, ma in
+ *  secondo piano: nessun dato viene tolto dal report. */
+function tabellaReport(pagina, intestazioni, righe, righeSpente){
+  const tbl = document.createElement("table");
+  tbl.className = "rp-table";
+  tbl.innerHTML = `<thead><tr>${intestazioni.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${
+    righe.map((r,i)=>`<tr${(righeSpente && righeSpente[i]) ? ' class="rp-riga-spenta"' : ""}>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")
+  }</tbody></table>`;
+  pagina.corpo.appendChild(tbl);
+  adattaLarghezzeColonneReport(tbl);
+}
+/** `altezzaPx` (facoltativa) per i grafici che hanno bisogno di più spazio dei 230px di default — il radar
+ *  del confronto, per esempio, con cinque etichette attorno alla circonferenza. */
+function graficoReport(pagina, id, config, altezzaPx){
+  const wrap = document.createElement("div");
+  wrap.className = "rp-chart-wrap";
+  if(altezzaPx) wrap.style.height = altezzaPx + "px";
+  const cv = document.createElement("canvas");
+  cv.id = id;
+  wrap.appendChild(cv);
+  pagina.corpo.appendChild(wrap);
+  return new Chart(cv, config);
+}
+/** Blocco "Statistiche di squadra" in stile SofaScore, solo la propria squadra: percentuali con barra
+ *  a sinistra, conteggi grezzi senza barra a destra (non hanno una scala 0–100% naturale con cui confrontarli). */
+function statisticheSquadraReport(pagina, colonneRighe){
+  const wrap = document.createElement("div");
+  wrap.className = "stat-squadra-grid";
+  wrap.innerHTML = colonneRighe.map(col => `<div>${col.map(r => `
+    <div class="stat-riga">
+      <div class="r-top"><span class="lab">${esc(r.label)}</span><span class="val">${r.valore}</span></div>
+      ${r.pct!=null ? `<div class="r-bar"><div class="r-bar-fill" style="width:${Math.max(0,Math.min(100,r.pct))}%; background:${r.colore||"#20808D"}"></div></div>` : ""}
+    </div>`).join("")}</div>`).join("");
+  pagina.corpo.appendChild(wrap);
+}
+
+/** Appendice con le statistiche complete di ogni giocatore (nessun taglio, tutti i giocatori), per chi vuole
+ *  andare più a fondo del riepilogo. Divisa in due tabelle per restare leggibile su una pagina a piena larghezza.
+ *  `righeAgg` è nel formato prodotto da aggregaGiocatori() — usata sia per una singola partita sia per la stagione. */
+function tabelleDettaglioGiocatori(pagina, righeAgg, haEventiDisciplinari){
+  // Chi non è sceso in campo riempie queste tabelle di righe a zero: restano (il report deve poter dire
+  // "non ha giocato"), ma attenuate, così si trova subito chi ha giocato davvero — audit del 04/09/2026.
+  const spente = righeAgg.map(a => N(a.Minuti_Totali) <= 0);
+  titoloSezioneReport(pagina, "Fase offensiva");
+  if(tiriPortaRilevati(righeAgg))
+    tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri (in porta)","Prec. tiro","Effic. realizz."],
+      righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
+        `${nf0(a.Tiri_Totali)} (${nf0(a.Tiri_In_Porta)})`, pctTxt(a.Precisione_Tiro_pct,0), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
+  else // tiro in porta non rilevato: vedi segnaTiriPorta
+    tabellaReport(pagina, ["Giocatore","Ruolo","Min","Gol","Ast","Tiri","Realizzazione"],
+      righeAgg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist),
+        nf0(a.Tiri_Totali), pctTxt(a.Efficacia_Realizzativa_pct,0)]), spente);
+  titoloSezioneReport(pagina, "Passaggi, dribbling e fase difensiva");
+  tabellaReport(pagina, ["Giocatore","Passaggi (corr. / tot.)","Prec. pass.","Dribbling (riusc. / tent.)","Succ. drib.","Recuperi","Parate","Tasso errore","Indice"],
+    righeAgg.map(a => [esc(a.Giocatore), `${nf0(a.Passaggi_Corretti)}/${nf0(a.Passaggi_Totali)}`, pctTxt(a.Precisione_Passaggi_pct,0),
+      `${nf0(a.Dribbling_Riusciti)}/${nf0(a.Dribbling_Tentati)}`, pctTxt(a.Successo_Dribbling_pct,0), nf0(a.Recuperi), nf0(a.Parate), pctTxt(a.Tasso_Errore_pct,0), nf(a.Indice_Prestazione_Tot,1)]), spente);
+  if(haEventiDisciplinari){
+    titoloSezioneReport(pagina, "Disciplina e calci piazzati");
+    tabellaReport(pagina, ["Giocatore","Gialli","Rossi","Angoli (con gol)","Punizioni (realizz.)","Rigori (realizz.)"],
+      righeAgg.map(a => [esc(a.Giocatore), nf0(a.Cartellini_Gialli), nf0(a.Cartellini_Rossi),
+        `${nf0(a.Angoli_Tentati)} (${nf0(a.Angoli_Gol)})`, `${nf0(a.Punizioni_Tentate)} (${nf0(a.Punizioni_Realizzate)})`,
+        `${nf0(a.Rigori_Tentati)} (${nf0(a.Rigori_Realizzati)})`]), spente);
+  }
+}
+
+const PALETTE_REPORT = {primary:"#01696F", c1:"#20808D", c2:"#A84B2F", c3:"#1B474D", c4:"#8FC5CD", c5:"#944454", c6:"#C99400", muted:"#6E6D68", grid:"rgba(40,37,29,.12)", text:"#28251D"};
+/** devicePixelRatio alto (04/09/2026): i grafici dei report venivano disegnati alla risoluzione dello
+ *  schermo e poi INGRANDITI dalla cattura per il PDF, che lavora a scala 2 — da lì l'aspetto sgranato
+ *  segnalato da Elisa, più evidente nei grafici a barre orizzontali del report giocatori. Chiedendo a
+ *  Chart.js di disegnare a 3× la dimensione CSS, la cattura ha più pixel di quanti gliene servano e il
+ *  risultato in stampa è nitido. Vale solo per i report: a schermo resta il rapporto naturale. */
+const NITIDEZZA_GRAFICI_REPORT = 3;
+/** Stessa ragione per i campetti dei report (zone e heatmap), disegnati a mano su canvas: a 640px di lato
+ *  corto la cattura a scala 2 li ingrandiva appena, con percentuali ed etichette delle porte molli. */
+const LATO_CAMPO_REPORT_PX = 1280;
+function opzioniGraficoReport(extra={}){
+  return Object.assign({
+    responsive:true, maintainAspectRatio:false, animation:false, devicePixelRatio:NITIDEZZA_GRAFICI_REPORT,
+    plugins:{legend:{display:true, position:"bottom", labels:{color:PALETTE_REPORT.muted, boxWidth:11, boxHeight:11, font:{size:10}, usePointStyle:true, padding:10}}},
+    scales:{
+      x:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{display:false}, border:{color:PALETTE_REPORT.grid}},
+      y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{color:PALETTE_REPORT.grid}, border:{color:PALETTE_REPORT.grid}}
+    }
+  }, extra);
+}
+
+/** Sezione "Zone di recupero e palla persa" per un report (Partita, Stagionale, o allenamenti per
+ *  periodo/stagionale): 2 grafici a zone (recupero/persa) + 2 heatmap vere, dalle stesse coordinate X/Y
+ *  usate a schermo (vedi motore "ZONE DI RECUPERO E PALLA PERSA" più sopra, incluso l'avviso che il nome
+ *  delle colonne X/Y è un'assunzione provvisoria). Non aggiunge nulla al report se non ci sono eventi con
+ *  coordinate valide nel periodo — stesso criterio già usato per il possesso palla (vedi playbook punto 9):
+ *  niente sezione vuota o "non disponibile" a stampa, semplicemente non compare finché non c'è il dato. */
+/** Sezione "Tempo di riconquista della palla" per un report (Partita o Stagionale, 07/10/2026).
+ *  Stesso motore della sezione a schermo (`analizzaRiconquista`), quindi i numeri non possono divergere.
+ *  Non aggiunge niente al report se non c'è nessuna sequenza utilizzabile — stesso criterio del possesso
+ *  palla e delle zone: meglio una sezione assente che una sezione vuota su un foglio stampato. */
+function riconquistaReport(pagina, partite){
+  const a = analizzaRiconquista(partite);
+  if(!a || !a.sequenze) return;
+  titoloSezioneReport(pagina, "Tempo di riconquista della palla");
+
+  const campioneScarso = a.riconquistate < RICONQUISTA_CAMPIONE_MINIMO;
+  kpiRowReport(pagina, [
+    {l:"Tempo tipico (mediana)", v: campioneScarso ? "—" : nf(a.mediana,1)+"s"},
+    {l:`Riaggressione entro ${nf0(RICONQUISTA_IMMEDIATA_SEC)}s`, v: campioneScarso ? "—" : pctTxt(perc(a.entroImmediata, a.riconquistate),0)},
+    {l:`Entro ${nf0(RICONQUISTA_RAPIDA_SEC)}s`, v: campioneScarso ? "—" : pctTxt(perc(a.entroRapida, a.riconquistate),0)},
+    {l:"Palle perse riconquistate", v: pctTxt(perc(a.riconquistate, a.sequenze),0)}
+  ]);
+
+  const bullet = [
+    `${nf0(a.sequenze)} palle perse analizzate, ${nf0(a.riconquistate)} seguite da una riconquista entro ${nf0(RICONQUISTA_SOGLIA_SEC)} secondi.`,
+    "Per ogni palla persa si cerca il primo recupero successivo: l'intervallo fra i due è il tempo di riconquista. Il valore tipico è la <b>mediana</b> e non la media, perché la distribuzione è asimmetrica (tante riconquiste rapide, poche lunghissime) e la media si farebbe trascinare dalla coda."
+  ];
+  if(campioneScarso) bullet.push(`<b>Campione ridotto</b>: solo ${nf0(a.riconquistate)} riconquiste, troppo poche perché la mediana e le percentuali siano una misura. Leggi la distribuzione qui sotto come indicazione.`);
+  if(a.tempo1 && a.tempo2){
+    const d = a.tempo2.mediana - a.tempo1.mediana;
+    bullet.push(Math.abs(d) < 1
+      ? `Fra primo e secondo tempo la reattività non cambia (${nf(a.tempo1.mediana,1)}s contro ${nf(a.tempo2.mediana,1)}s).`
+      : (d > 0
+        ? `Nel secondo tempo la squadra impiega <b>${nf(d,1)}s in più</b> a riprendersi la palla (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s): è il segnale che accompagna il calo di intensità.`
+        : `Nel secondo tempo la squadra riconquista <b>${nf(Math.abs(d),1)}s più in fretta</b> (${nf(a.tempo1.mediana,1)}s → ${nf(a.tempo2.mediana,1)}s).`));
+  }
+  // Le stesse avvertenze della dashboard: un report stampato lo legge chi non ha visto lo schermo, e senza
+  // queste righe quei secondi sembrano misurati meglio di quanto siano.
+  const q = a.qualita;
+  if(q.inDiretta) bullet.push(`${nf0(q.inDiretta)} ${q.inDiretta===1?"partita è stata registrata":"partite sono state registrate"} <b>in diretta</b>: ogni evento porta il ritardo di reazione di chi registrava, e qui i ritardi sono due (sulla perdita e sul recupero), dello stesso ordine di grandezza di ciò che si misura. Valori indicativi, non misure.`);
+  if(q.inDifferitaNonCorretta) bullet.push(`${nf0(q.inDifferitaNonCorretta)} ${q.inDifferitaNonCorretta===1?"partita è stata registrata":"partite sono state registrate"} <b>in differita senza velocità di riproduzione dichiarata</b>: quei tempi sono quelli del cronometro di lavoro, non della partita, quindi questi secondi risultano gonfiati.`);
+  bulletsReport(pagina, bullet);
+
+  tabellaReport(pagina, ["Fascia", "Sequenze", "Quota sulle riconquiste"],
+    a.fasce.map(x => [esc(x.eti), nf0(x.n), pctTxt(perc(x.n, a.riconquistate),0)]));
+
+  if(a.nonRiconquistate || a.chiuseDaGol || a.chiuseDaFineTempo){
+    tabellaReport(pagina, ["Sequenze non conteggiate nella mediana", "Numero", "Perché"], [
+      [`Nessun recupero entro ${nf0(RICONQUISTA_SOGLIA_SEC)}s`, nf0(a.nonRiconquistate), "Oltre quella soglia non è più una transizione"],
+      ["Chiuse da un gol", nf0(a.chiuseDaGol), "La palla riparte da fermo: non è una riconquista"],
+      ["Chiuse dalla fine del tempo", nf0(a.chiuseDaFineTempo), "Mai misurate a cavallo dell'intervallo"]
+    ]);
+    bulletsReport(pagina, ["Queste sequenze restano fuori dalla mediana di proposito: contarle con un tempo convenzionale gonfierebbe la media proprio con i casi peggiori, travestendoli da misura."]);
+  }
+}
+
+function zoneCampoReport(pagina, sessioni, perTempo, mostraPerSquadra){
+  const {recupero, persa} = raccogliEventiZona(sessioni);
+  if(!recupero.length && !persa.length) return;
+  titoloSezioneReport(pagina, "Zone di recupero e palla persa");
+  const baricentroRecupero = calcolaBaricentroMetri(recupero), baricentroPersa = calcolaBaricentroMetri(persa);
+  const bulletsBaricentro = [];
+  if(baricentroRecupero!==null) bulletsBaricentro.push(`Baricentro di recupero stimato: ${nf(baricentroRecupero,1)} m dalla propria porta (solo dagli eventi di recupero con posizione, non un baricentro squadra completo).`);
+  if(baricentroPersa!==null) bulletsBaricentro.push(`Baricentro di perdita palla stimato: ${nf(baricentroPersa,1)} m dalla propria porta.`);
+  // Baricentro di recupero per tempo (solo partite, richiesta dell'utente 03/09/2026, vedi playbook punto 25).
+  const bt = perTempo ? calcolaBaricentroPerTempo(sessioni) : null;
+  if(bt && bt.baricentro1!==null && bt.baricentro2!==null){
+    const delta = bt.baricentro2 - bt.baricentro1;
+    const confronto = Math.abs(delta) < 1 ? "sostanzialmente stabile tra i due tempi"
+      : `${delta>0?"più alto":"più basso"} nel 2° tempo di ${nf(Math.abs(delta),1)} m rispetto al 1°${delta<0?" — possibile calo di intensità/stanchezza":""}`;
+    bulletsBaricentro.push(`Baricentro di recupero per tempo: 1° tempo ${nf(bt.baricentro1,1)} m, 2° tempo ${nf(bt.baricentro2,1)} m — ${confronto}.`);
+  }
+  // Gli stessi due avvisi mostrati a schermo finiscono anche nel PDF: un report stampato viene letto da chi
+  // non ha visto la dashboard, e senza queste due righe la griglia sembra più precisa di quanto sia.
+  const avvisoCampione = avvisoCampioneZone(Math.max(recupero.length, persa.length), "in questo report");
+  bulletsReport(pagina, [
+    `${nf0(recupero.length)} recuperi e ${nf0(persa.length)} palle perse con posizione registrata in questo report.`,
+    "Griglia a 9 zone (terzi di campo): percentuale sul totale eventi con posizione. Heatmap: densità reale, colore più caldo dove gli eventi si concentrano di più.",
+    ...bulletsBaricentro,
+    ...(avvisoCampione ? [avvisoCampione] : []),
+    ...(notaBordiCampo(recupero.concat(persa)) ? [notaBordiCampo(recupero.concat(persa))] : [])
+  ]);
+  const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
+  const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
+  const griglia = document.createElement("div");
+  griglia.className = "rp-campo-griglia";
+  pagina.corpo.appendChild(griglia);
+  const aggiungiCampo = (titolo, disegnaFn, punti, extraOpts) => {
+    const cella = document.createElement("div");
+    const etichetta = document.createElement("div");
+    etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+    cella.appendChild(etichetta);
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
+    wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
+    disegnaFn(cv, punti, extraOpts);
+  };
+  aggiungiCampo("Zone di recupero (%)", disegnaCampoZone, recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+  aggiungiCampo("Zone di palla persa (%)", disegnaCampoZone, persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+  aggiungiCampo("Heatmap recuperi", disegnaCampoHeatmap, recupero, optsBase);
+  aggiungiCampo("Heatmap palle perse", disegnaCampoHeatmap, persa, optsBase);
+  // Riquadro per-squadra (solo allenamenti): il grafico con la totalità sopra resta quello di riferimento,
+  // questo aggiunge solo il confronto di tendenza tra le due squadre — stesso orientamento (porta propria
+  // a sinistra, avversaria a destra per ciascuna squadra). Vedi playbook per la richiesta originale.
+  if(mostraPerSquadra){
+    const perSquadra = raccogliEventiZonaPerSquadra(sessioni);
+    const haEntrambe = (perSquadra.A.recupero.length || perSquadra.A.persa.length) &&
+                        (perSquadra.B.recupero.length || perSquadra.B.persa.length);
+    if(haEntrambe){
+      titoloSezioneReport(pagina, "Recuperi e palle perse per squadra");
+      bulletsReport(pagina, ["Stesso orientamento del grafico con la totalità qui sopra (propria porta a sinistra, avversaria a destra per ciascuna squadra) — utile per confrontare la tendenza di una squadra con l'altra; il dato più affidabile per capire dove si recupera/perde palla in generale resta quello con entrambe le squadre insieme."]);
+      const grigliaSquadra = document.createElement("div");
+      grigliaSquadra.className = "rp-campo-griglia";
+      pagina.corpo.appendChild(grigliaSquadra);
+      const aggiungiCampoSquadra = (titolo, punti, extraOpts) => {
+        const cella = document.createElement("div");
+        const etichetta = document.createElement("div");
+        etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+        cella.appendChild(etichetta);
+        const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+        const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
+        wrap.appendChild(cv); cella.appendChild(wrap); grigliaSquadra.appendChild(cella);
+        disegnaCampoZone(cv, punti, extraOpts);
+      };
+      aggiungiCampoSquadra("Recuperi — Squadra A", perSquadra.A.recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+      aggiungiCampoSquadra("Recuperi — Squadra B", perSquadra.B.recupero, Object.assign({}, optsBase, {colore:"#437A22"}));
+      aggiungiCampoSquadra("Palle perse — Squadra A", perSquadra.A.persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+      aggiungiCampoSquadra("Palle perse — Squadra B", perSquadra.B.persa, Object.assign({}, optsBase, {colore:"#A13544"}));
+    }
+  }
+}
+
+/** Come zoneCampoReport, ma per i punti di tiro/assist dei gol fatti (sezione "DETTAGLIO GOL GAME") —
+ *  richiesta esplicita dell'utente (03/09/2026). Solo partite. Non aggiunge nessuna sezione al PDF se la
+ *  sessione passata non ha gol con posizione: del tutto normale con i file Seven Lab che non includono
+ *  ancora questa sezione, non un errore. */
+function golGameCampoReport(pagina, sessioni){
+  const gol = [], assist = [];
+  (sessioni||[]).forEach(s => { (s.PuntiGol||[]).forEach(p=>gol.push(p)); (s.PuntiAssistGol||[]).forEach(p=>assist.push(p)); });
+  // Senza gol georeferenziati la sezione prima spariva e basta: chi stampava il report non capiva se
+  // mancasse un dato o una funzione. Ora la sezione c'è comunque e dice perché è vuota (04/09/2026).
+  if(!gol.length){
+    titoloSezioneReport(pagina, "Zone di tiro e assist dei gol");
+    const conDati = (typeof stato !== "undefined" && stato.ds && stato.ds.haDatiGolGame);
+    bulletsReport(pagina, [conDati
+      ? "Nessun gol con posizione registrata in questo report: i file inclusi non contengono coordinate di tiro per i gol segnati (o non ci sono gol nel periodo scelto)."
+      : "Dato non disponibile: serve la sezione «DETTAGLIO GOL GAME» nell'export Seven Lab, con le coordinate del punto di tiro e di partenza dell'assist. Nessuno dei file caricati la contiene: appena i tuoi export la includeranno, questa sezione si popola da sola."]);
+    return;
+  }
+  titoloSezioneReport(pagina, "Zone di tiro e assist dei gol");
+  bulletsReport(pagina, [
+    `${nf0(gol.length)} gol con posizione registrata in questo report${assist.length ? ` (di cui ${nf0(assist.length)} assistiti con posizione)` : ""}.`,
+    "Griglia a 9 zone (terzi di campo): percentuale sul totale gol con posizione. Heatmap: densità reale, colore più caldo dove si concentrano di più i punti di tiro/assist.",
+    "Assi dedotti dai valori delle coordinate della sezione «DETTAGLIO GOL GAME» (a differenza delle zone di recupero/palla persa, qui Seven Lab non scrive un'etichetta di controllo incrociato come «Terzo campo»/«Fascia»): da verificare se un file futuro mostrasse un pattern diverso."
+  ]);
+  const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
+  const optsBase = {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", testoChiaro:"#FFFFFF", rampa};
+  const griglia = document.createElement("div");
+  griglia.className = "rp-campo-griglia";
+  pagina.corpo.appendChild(griglia);
+  const aggiungiCampo = (titolo, disegnaFn, punti, extraOpts) => {
+    const cella = document.createElement("div");
+    const etichetta = document.createElement("div");
+    etichetta.className = "rp-campo-etichetta"; etichetta.textContent = titolo;
+    cella.appendChild(etichetta);
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
+    wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella);
+    disegnaFn(cv, punti, extraOpts);
+  };
+  aggiungiCampo("Zone di tiro dei gol (%)", disegnaCampoZone, gol, Object.assign({}, optsBase, {colore:PALETTE_REPORT.c1}));
+  aggiungiCampo("Zone di partenza assist (%)", disegnaCampoZone, assist, Object.assign({}, optsBase, {colore:PALETTE_REPORT.c4}));
+  aggiungiCampo("Heatmap tiri vincenti", disegnaCampoHeatmap, gol, optsBase);
+  aggiungiCampo("Heatmap origine assist", disegnaCampoHeatmap, assist, optsBase);
+}
+
+/** Sezione "Dove entra la palla in porta" nei report PDF — stessa richiesta della sezione a schermo
+ *  (08/10/2026), con la distinzione esplicita chiesta dall'utente fra partita singola e periodo:
+ *  su una gara sola l'elenco gol per gol (pochi, utili uno a uno, con i palloni numerati nel disegno);
+ *  su un periodo il settore preferito di ciascun marcatore, che su una partita sola non significherebbe
+ *  nulla. Il disegno e la griglia dei nove settori ci sono in entrambi i casi.
+ *  Nessuna quota né misura: la porta è disegnata in proporzione, come richiesto esplicitamente. */
+function portaGolReport(pagina, sessioni){
+  const punti = raccogliPuntiPorta(sessioni);
+  const singolaPartita = (sessioni||[]).length === 1;
+  titoloSezioneReport(pagina, "Dove entra la palla in porta");
+  if(!punti.length){
+    const conDati = (typeof stato !== "undefined" && stato.ds && stato.ds.haDatiPortaGol);
+    bulletsReport(pagina, [conDati
+      ? "Nessun gol con il punto d'ingresso in porta registrato in questo report: i file inclusi non hanno queste coordinate (o non ci sono gol nel periodo scelto)."
+      : "Dato non disponibile: servono, nella sezione «DETTAGLIO GOL GAME» dell'export Seven Lab, le coordinate del punto in cui la palla entra in porta sui gol fatti. Nessuno dei file caricati le contiene: appena i tuoi export le includeranno, questa sezione si popola da sola."]);
+    return;
+  }
+  const diag = diagnosticaPorta(sessioni);
+  const {celle, totale} = calcolaSettoriPorta(punti);
+  const bassi = celle.slice(6,9).reduce((a,c)=>a+c.n,0);
+  const alti = celle.slice(0,3).reduce((a,c)=>a+c.n,0);
+  const laterali = celle.filter(c => c.col !== 1).reduce((a,c)=>a+c.n,0);
+  const numera = punti.length <= 9;
+  bulletsReport(pagina, [
+    `${nf0(punti.length)} ${punti.length===1?"gol":"gol"} con il punto d'ingresso in porta registrato${singolaPartita ? " in questa partita" : " nel periodo di questo report"}.`,
+    `Ripartizione in altezza: <b>${nf0(bassi)}</b> nel terzo basso, <b>${nf0(totale-bassi-alti)}</b> a mezza altezza, <b>${nf0(alti)}</b> nel terzo alto. In larghezza: <b>${nf0(laterali)}</b> verso i pali, <b>${nf0(totale-laterali)}</b> nel terzo centrale.`,
+    "La porta è disegnata in proporzione e vista da chi tira: sinistra e destra sono quelle dell'attaccante, non del portiere. Nessuna quota a disegno: il grafico serve a vedere il punto, non a misurarlo." + (numera ? " Ogni pallone porta il numero con cui compare nell'elenco più sotto." : "")
+  ]);
+  const wrap = document.createElement("div");
+  wrap.className = "rp-porta-wrap";
+  const cv = document.createElement("canvas");
+  // A tutta larghezza di pagina la cattura html2canvas lavora su ~1450 px: il canvas va più grande di così,
+  // altrimenti il disegno arriva in stampa già ingrandito (stessa ragione di LATO_CAMPO_REPORT_PX).
+  cv.width = 1800; cv.height = 675; // 8:3, come il riquadro CSS
+  wrap.appendChild(cv);
+  pagina.corpo.appendChild(wrap);
+  disegnaPortaCalcio(cv, punti, {
+    sfondo: "#F4F2EC", erba: "rgba(67,122,34,0.12)", telaio: "#FFFFFF", telaioBordo: "rgba(40,37,29,0.80)",
+    lineaPorta: "rgba(40,37,29,0.62)", lineaSettori: "rgba(40,37,29,0.34)",
+    rete: {veloAlto: "rgba(40,37,29,0.035)", veloBasso: "rgba(40,37,29,0.10)", filo: "rgba(40,37,29,0.22)"},
+    testo: PALETTE_REPORT.muted, testoTenue: "rgba(40,37,29,0.62)",
+    alone: "rgba(1,105,111,0.18)", aloneBordo: PALETTE_REPORT.primary,
+    palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    badgeFondo: PALETTE_REPORT.primary, badgeTesto: "#FFFFFF", numera
+  });
+  // I nove settori: conteggio e percentuale accanto, mai la percentuale da sola.
+  tabellaReport(pagina, ["Settore di porta", "Gol", "% sul totale"],
+    celle.filter(c => c.n > 0).sort((a,b) => b.n - a.n || a.indice - b.indice)
+      .map(c => [esc(c.etichetta), nf0(c.n), nf0(c.pct)+"%"]));
+  if(singolaPartita){
+    tabellaReport(pagina, ["#", "Minuto", "Marcatore", "Settore di porta"],
+      punti.map((p,i) => [String(i+1), p.secondo ? esc(mmssDaSecondi(p.secondo)) : "—",
+        esc(p.marcatore || "Non indicato"), esc(zonaPorta(p.x01,p.y01).etichetta)]));
+  }else{
+    const marcatori = settoriPerMarcatore(punti);
+    tabellaReport(pagina, ["Marcatore", "Gol con posizione", "Settore più frequente", "In quel settore", "Nel terzo basso"],
+      marcatori.map(m => [esc(m.marcatore), nf0(m.gol), esc(m.settore), nf0(m.nSettore), nf0(m.altezzaBassa)+" su "+nf0(m.gol)]));
+  }
+  const avvisi = avvisiPorta(punti, diag);
+  if(avvisi.length) bulletsReport(pagina, avvisi);
+}
+
+/** Campo con le palle perse da cui è nato un gol (report, 12/10/2026 — richiesta dell'utente: «capire in quali
+ *  zone di campo sono stati persi quei palloni che hanno causato un gol subito»). Griglia a 9 zone con il
+ *  NUMERO di palloni in ciascuna (non la percentuale: sono pochi per definizione), colore più intenso dove ce ne
+ *  sono di più, e sopra i punti veri. `numera`: su una partita sola i punti portano il numero della riga
+ *  dell'elenco episodi, così il disegno e la tabella si leggono insieme. */
+function disegnaCampoPersaGol(canvas, episodi, opts){
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = opts.sfondo; ctx.fillRect(0,0,w,h);
+  const conPos = (episodi||[]).filter(e => Number.isFinite(e.x) && Number.isFinite(e.y));
+  const {celle} = calcolaZoneCampo(conPos);
+  const max = Math.max(1, ...celle.map(c => c.conteggio));
+  celle.forEach((c, i) => {
+    if(!c.conteggio) return;
+    const riga = Math.floor(i/3), col = i%3;
+    ctx.fillStyle = hexRgba(opts.colore, 0.12 + 0.38 * (c.conteggio / max));
+    ctx.fillRect(col*w/3, riga*h/3, w/3, h/3);
+    ctx.save();
+    ctx.font = `800 ${Math.round(h*0.085)}px Satoshi, system-ui, sans-serif`;
+    ctx.fillStyle = hexRgba(opts.testo, 0.55); ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText(String(c.conteggio), (col+1)*w/3 - w*0.015, riga*h/3 + h*0.02);
+    ctx.restore();
+  });
+  ctx.strokeStyle = hexRgba(opts.lineaCampo, 0.35); ctx.lineWidth = Math.max(1, w*0.003);
+  ctx.setLineDash([w*0.01, w*0.008]);
+  for(let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(i*w/3,0); ctx.lineTo(i*w/3,h); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i*h/3); ctx.lineTo(w,i*h/3); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  const r = Math.max(6, Math.min(w, h) * (opts.numera ? 0.034 : 0.02));
+  conPos.forEach((e, k) => {
+    const px = Math.min(w - r, Math.max(r, (e.x / CAMPO_LUNGHEZZA_M) * w));
+    const py = Math.min(h - r, Math.max(r, (e.y / CAMPO_LARGHEZZA_M) * h));
+    ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2);
+    ctx.fillStyle = opts.colore; ctx.fill();
+    ctx.lineWidth = Math.max(1.5, r*0.18); ctx.strokeStyle = "#FFFFFF"; ctx.stroke();
+    if(opts.numera){
+      ctx.save();
+      ctx.font = `800 ${Math.round(r*1.15)}px Satoshi, system-ui, sans-serif`;
+      ctx.fillStyle = "#FFFFFF"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(String(e.numero || k+1), px, py + r*0.05);
+      ctx.restore();
+    }
+  });
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
+/** Sezione "Palle perse che diventano gol" nei report (10/10/2026). Su una sessione sola l'elenco degli
+ *  episodi; su un periodo la tabella per giocatore, con il conteggio assoluto accanto alla quota. La frase
+ *  con i nomi è la stessa della dashboard e va anche in "Cosa dicono i dati" (vedi i generatori). Se la
+ *  timeline manca o non ci sono gol, la sezione lo dice invece di sparire. */
+function persaGolReport(pagina, sessioni, tipo){
+  const a = analizzaPersaGol(sessioni, tipo);
+  titoloSezioneReport(pagina, tipo === "partita" ? "Palle perse che diventano gol subiti" : "Palle perse che diventano gol");
+  if(!a){ bulletsReport(pagina, ["Non disponibile: serve la timeline degli eventi con i tempi, che i file di questo report non hanno."]); return; }
+  if(!a.golAnalizzati){
+    bulletsReport(pagina, [(tipo === "partita" && a.golDichiarati > 0)
+      ? `Il file dichiara ${nf0(a.golDichiarati)} gol subiti, ma nella timeline non ne riconosco nessuno (colonne che parlano di gol: ${elencoColonneGol(a)}): la lettura non è possibile finché l'app non impara come sono scritti.`
+      : (tipo === "partita" ? "Nessun gol subito registrato nella timeline: niente da attribuire." : "Nessun gol nelle partitelle di questo periodo: niente da attribuire.")]);
+    return;
+  }
+  const singola = (sessioni||[]).length === 1;
+  const conZona = a.episodi.some(e => e.zona);
+  const righe = [frasePersaGol(a, tipo, true)];
+  if(a.golSenzaPersa) righe.push(`${nf0(a.golSenzaPersa)} ${a.golSenzaPersa===1?"gol non è attribuito":"gol non sono attribuiti"} a una palla persa: nessuna perdita nei ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi prima, oppure la squadra aveva ripreso il pallone nel frattempo.`);
+  if(tipo === "partita" && a.golDichiarati > a.golAnalizzati) righe.push(`Nei metadati risultano ${nf0(a.golDichiarati)} gol subiti, nella timeline ${nf0(a.golAnalizzati)}: i gol senza un evento con il tempo restano fuori da questa lettura.`);
+  righe.push(`Il gol va all'ultima palla persa della squadra che lo subisce, se entro ${nf0(PERSA_GOL_FINESTRA_SEC)} secondi e senza che nel frattempo quella squadra abbia ripreso davvero il pallone (un suo recupero, passaggio o dribbling riuscito, tiro). Dice che la palla è stata persa nel momento sbagliato; diventa un indizio di difficoltà sotto pressing quando lo stesso nome torna su più partite.`);
+  bulletsReport(pagina, righe);
+  if(!a.episodi.length) return;
+  // Dove sono state perse quelle palle: campo a 9 zone con i conteggi e i punti, e accanto le zone in numeri.
+  const conPos = a.episodi.filter(e => Number.isFinite(e.x) && Number.isFinite(e.y));
+  if(conPos.length){
+    a.episodi.forEach((e, k) => { e.numero = k + 1; });
+    const zone = elencoZonePerse(conPos);
+    const griglia = document.createElement("div");
+    griglia.className = "rp-campo-griglia";
+    pagina.corpo.appendChild(griglia);
+    const cellaCampo = document.createElement("div");
+    cellaCampo.innerHTML = `<div class="rp-campo-etichetta">Dove sono state perse le palle diventate gol</div>`;
+    const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+    const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX*0.6);
+    wrap.appendChild(cv); cellaCampo.appendChild(wrap); griglia.appendChild(cellaCampo);
+    disegnaCampoPersaGol(cv, a.episodi, {sfondo:"#F4F2EC", lineaCampo:"#28251D", testo:"#28251D", colore:"#A13544", numera: singola});
+    const cellaZone = document.createElement("div");
+    cellaZone.innerHTML = `<div class="rp-campo-etichetta">Le zone, in numeri</div>
+      <table class="rp-table"><thead><tr><th>Zona del campo</th><th>Palle perse diventate gol</th></tr></thead><tbody>${
+        zone.map(z => `<tr><td>${esc(z.etichetta)}</td><td>${nf0(z.conteggio)}</td></tr>`).join("")}</tbody></table>
+      <div class="rp-nota-campo">${conPos.length < a.episodi.length ? `${nf0(a.episodi.length - conPos.length)} ${a.episodi.length - conPos.length === 1 ? "pallone non ha" : "palloni non hanno"} la posizione nel file e ${a.episodi.length - conPos.length === 1 ? "resta" : "restano"} fuori dal campo. ` : ""}${singola ? "Il numero sul punto è quello della riga nell'elenco qui sotto. " : ""}Propria porta a sinistra; sinistra e destra nel verso d'attacco.</div>`;
+    griglia.appendChild(cellaZone);
+    const tbl = cellaZone.querySelector("table");
+    if(tbl) adattaLarghezzeColonneReport(tbl);
+  }
+  if(singola){
+    const conMarcatore = a.episodi.some(e => e.marcatore);
+    const intest = ["#", "Minuto", "Ha perso palla"].concat(tipo === "allenamento" ? ["Squadra"] : [], ["Gol dopo"], conZona ? ["Zona della perdita"] : [], conMarcatore ? ["Ha segnato"] : []);
+    tabellaReport(pagina, intest, a.episodi.map((e, k) => [String(k+1), esc(mmssDaSecondi(e.secondoPersa)), esc(e.giocatore)]
+      .concat(tipo === "allenamento" ? [esc(e.squadra)] : [], [nf(e.secondi,0)+"s"], conZona ? [e.zona ? esc(e.zona) : "—"] : [], conMarcatore ? [esc(e.marcatore || "—")] : [])));
+  }else{
+    tabellaReport(pagina, ["Giocatore", "Palle perse diventate gol", "Palle perse in tutto", "Quota"].concat(conZona ? ["Dove le perde, più spesso"] : []),
+      a.giocatori.map(g => [esc(g.giocatore), nf0(g.episodi), nf0(g.pallePerse), pctTxt(g.quota,0)]
+        .concat(conZona ? [g.zonaFrequente ? esc(g.zonaFrequente) : "—"] : [])));
+  }
+}
+
+/** Sezione «Gol subiti e chi è in campo» per i report (partita, stagionale, allenamenti), 16/10/2026. Stesso
+ *  motore e stessa frase della dashboard. Se non c'è niente da dire (nessun gol, nessuna formazione
+ *  ricostruibile) la sezione non compare: meglio assente che vuota su un foglio stampato. */
+function inCampoReport(pagina, sessioni, tipo){
+  const a = analizzaInCampo(sessioni, tipo);
+  if(!a.analizzate || !a.golTotali) return;
+  const allen = tipo === "allenamento";
+  const validi = a.giocatori.filter(g => g.valido);
+  titoloSezioneReport(pagina, "Gol subiti e chi è in campo");
+  const verbo = allen ? "segnati" : "subiti";
+  const righe = [fraseInCampo(a, true),
+    `Per ogni giocatore: quanti gol prende ${allen ? "la squadra in cui gioca" : "la squadra"} a partita (50') quando lui è in campo, e quanti ${allen ? "quando non c'è (in allenamento soprattutto l'altra squadra)" : "quando non gioca"}. Media: ${nf(a.ritmoSquadra,1)} gol subiti a partita${allen ? " per squadra" : ""}.`,
+    `«Da tenere d'occhio» e «Segnale chiaro» tengono conto del caso e di quanti giocatori si confrontano insieme. È una correlazione: dice chi era in campo quando si è preso gol, non di chi è la colpa.`];
+  const mancanti = (a.dettaglio||[]).filter(d => d.esclusa || d.golTimeline !== d.golFile);
+  if(a.golFile !== a.golTotali || mancanti.length)
+    righe.push(`Contati ${nf0(a.golTotali)} gol su ${nf0(a.golFile)} ${verbo} nei file: ${mancanti.map(d => d.esclusa
+      ? `${esc(dataLabel(d.data) || d.etichetta)} esclus${allen ? "o" : "a"} (${esc(d.esclusa)})`
+      : `${esc(dataLabel(d.data) || d.etichetta)} con ${nf0(d.golTimeline)} gol nella timeline e ${nf0(d.golFile)} nel file`).join("; ")}.`);
+  bulletsReport(pagina, righe);
+  if(validi.length){
+    const ord = validi.slice().sort((x, y) => y.differenza - x.differenza);
+    graficoReport(pagina, "rp-chart-incampo-"+tipo, {type:"bar", data:{labels:ord.map(g => g.nome), datasets:[
+      {label:"Con lui in campo", data:ord.map(g => +g.ritmoCon.toFixed(2)), backgroundColor:PALETTE_REPORT.c2, borderRadius:3, categoryPercentage:0.78, barPercentage:0.92},
+      {label: allen ? "Senza di lui (l'altra squadra)" : "Senza di lui", data:ord.map(g => +g.ritmoSenza.toFixed(2)), backgroundColor:hexRgba(PALETTE_REPORT.muted, 0.5), borderRadius:3, categoryPercentage:0.78, barPercentage:0.92}]},
+      options: opzioniGraficoReport({indexAxis:"y", plugins:{legend:{display:true, position:"top", align:"start", labels:{color:PALETTE_REPORT.text, boxWidth:11, boxHeight:11, font:{size:10}}}}, scales:{
+        x:{beginAtZero:true, ticks:{color:PALETTE_REPORT.muted, font:{size:10}}, grid:{color:PALETTE_REPORT.grid},
+           title:{display:true, text:"gol subiti a partita (50')", color:PALETTE_REPORT.muted, font:{size:9.5}}},
+        y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}, autoSkip:false}, grid:{display:false}}}})},
+      Math.max(190, ord.length * 26 + 70));
+  }
+  tabellaReport(pagina, ["Giocatore","Ruolo","Min in campo","Gol subiti con lui","A partita con lui","A partita senza","Differenza","Segnale"],
+    a.giocatori.map(g => [esc(g.nome), esc(g.ruolo || "—"), nf0(g.minuti), nf0(g.gol), nf(g.ritmoCon,1),
+      g.valido ? nf(g.ritmoSenza,1) : "—", g.valido ? fmtDiff(g.differenza) : "—", g.segnale ? TESTO_SEGNALE[g.segnale] : "—"]),
+    a.giocatori.map(g => !g.valido));
+  // coppie di difensori per ruolo svolto (16/10/2026): le sole coppie dei report
+  const difTutte = (a.coppieDifensori||[]).slice().sort((x, y) => (y.valido - x.valido) || (!!x.ospite - !!y.ospite) || (x.valido ? y.differenza - x.differenza : y.minuti - x.minuti));
+  if(difTutte.length){
+    etichettaReport(pagina, `Le coppie di difensori di ruolo in campo insieme (righe chiare: meno di ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme o con un ospite, senza confronto)`);
+    tabellaReport(pagina, ["Coppia di difesa","Min insieme","Gol subiti insieme","A partita insieme","A partita senza","Differenza","Segnale"],
+      difTutte.map(c => [`${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` (${esc(dataLabel(c.data) || "")})` : ""}`, minutiCoppiaTxt(c.minuti), nf0(c.gol), nf(c.ritmoCon,1), c.valido ? nf(c.ritmoSenza,1) : "—", c.valido ? fmtDiff(c.differenza) : "—", c.segnale ? TESTO_SEGNALE[c.segnale] : "—"]),
+      difTutte.map(c => !c.valido));
+  }
+  const fzr = analizzaFormazioni(sessioni, tipo);
+  const idonee = (fzr.formazioni||[]).filter(x => x.idoneo);
+  const piuSubiti = idonee.filter(x => x.ga > 0).sort((x, y) => (y.gaAdj - x.gaAdj) || (y.minuti - x.minuti)).slice(0, 3);
+  const piuFatti = idonee.filter(x => x.gf > 0).sort((x, y) => (y.gfAdj - x.gfAdj) || (y.minuti - x.minuti)).slice(0, 3);
+  if(piuSubiti.length || piuFatti.length) etichettaReport(pagina, `Le ${allen ? "squadre" : "formazioni"} con più gol subiti e con più gol fatti (almeno ${nf0(FORMAZIONE_MINUTI_MIN)}' insieme)`);
+  if(piuSubiti.length || piuFatti.length)
+    tabellaReport(pagina, [allen ? "Squadra in campo" : "Formazione in campo", "Verso", "Min insieme", "Gol fatti", "Gol subiti"],
+      piuSubiti.map(x => [nomiFormazione(x, true), "più gol subiti", nf0(x.minuti), nf0(x.gf), nf0(x.ga)])
+        .concat(piuFatti.map(x => [nomiFormazione(x, true), "più gol fatti", nf0(x.minuti), nf0(x.gf), nf0(x.ga)])));
+}
+
+/** Sezione «La formazione migliore» per i report (16/10/2026): stesso motore e stessa frase della dashboard,
+ *  criterio consigliato (saldo reti). Non compare se non c'è una formazione con abbastanza minuti insieme. */
+/** La frase della formazione migliore (criterio consigliato) per «Cosa dicono i dati», o null. */
+function fraseFormazioneMiglioreDi(sessioni, tipo){
+  const fz = analizzaFormazioni(sessioni, tipo);
+  if(!fz.analizzate) return null;
+  return fraseFormazioneMigliore(ordinaFormazioni(fz.formazioni, "saldo").find(x => x.idoneo), fz, "saldo", tipo, true);
+}
+/** Piccola etichetta sopra una tabella di report, per staccarla da quella prima. */
+function etichettaReport(pagina, testo){
+  const d = document.createElement("div"); d.className = "rp-campo-etichetta"; d.style.marginTop = "12px"; d.textContent = testo;
+  pagina.corpo.appendChild(d);
+}
+function formazioneMiglioreReport(pagina, sessioni, tipo){
+  const fz = analizzaFormazioni(sessioni, tipo);
+  if(!fz.analizzate) return;
+  const ordinate = ordinaFormazioni(fz.formazioni, "saldo");
+  const m = ordinate.find(x => x.idoneo);
+  if(!m) return;
+  const allen = tipo === "allenamento";
+  titoloSezioneReport(pagina, "La formazione migliore");
+  bulletsReport(pagina, [fraseFormazioneMigliore(m, fz, "saldo", tipo, true),
+    `Criterio: saldo reti (gol fatti meno gol subiti nei minuti giocati insieme), a parità meno gol subiti, poi più minuti. Solo formazioni rimaste in campo insieme almeno ${nf0(FORMAZIONE_MINUTI_MIN)}'; chi ha giocato pochi minuti viene riportato verso la media della squadra, così due minuti fortunati non bastano.`]);
+  const griglia = document.createElement("div");
+  griglia.className = "rp-campo-griglia";
+  const cellaCampo = document.createElement("div");
+  cellaCampo.innerHTML = `<div class="rp-campo-etichetta">In campo${m.modulo ? ` · ${esc(m.modulo)}` : ""}</div><div class="fz-campo-wrap rp">${campoFormazioneHtml(m, PALETTE_CAMPO_REPORT)}</div><div class="rp-nota-campo" style="margin-top:6px">${notaModuloHtml(m)}</div>`;
+  const cellaNumeri = document.createElement("div");
+  const r = v => nf(v, 1);
+  cellaNumeri.innerHTML = `<div class="rp-campo-etichetta">I numeri</div>
+    <table class="rp-table"><thead><tr><th></th><th>Questa formazione</th><th>Media ${allen ? "squadre" : "squadra"}</th></tr></thead><tbody>
+      <tr><td>Minuti insieme</td><td>${nf0(m.minuti)}'</td><td>—</td></tr>
+      <tr><td>Gol fatti</td><td>${nf0(m.gf)} (${r(m.ritmoGF)} a partita)</td><td>${r(fz.mediaGF)} a partita</td></tr>
+      <tr><td>Gol subiti</td><td>${nf0(m.ga)} (${r(m.ritmoGA)} a partita)</td><td>${r(fz.mediaGA)} a partita</td></tr>
+      <tr><td>Saldo</td><td>${saldoTxt(m.saldo)}</td><td>${fmtDiff(fz.mediaGF - fz.mediaGA)} a partita</td></tr>
+    </tbody></table>
+    <div class="rp-nota-campo">${m.minuti < 2*FORMAZIONE_MINUTI_PRUDENZA ? `Con ${nf0(m.minuti)}' insieme i valori «a partita» sono gonfiati: conta il conteggio vero.` : ""}</div>`;
+  griglia.appendChild(cellaCampo); griglia.appendChild(cellaNumeri);
+  pagina.corpo.appendChild(griglia);
+  const tbl = cellaNumeri.querySelector("table"); if(tbl) adattaLarghezzeColonneReport(tbl);
+  const altre = ordinate.filter(x => x.idoneo && x !== m).slice(0, 4);
+  if(altre.length) tabellaReport(pagina, ["Altre formazioni candidate", "Min insieme", "Gol fatti", "Gol subiti", "Saldo"],
+    altre.map(x => [nomiFormazione(x, true), nf0(x.minuti), nf0(x.gf), nf0(x.ga), saldoTxt(x.saldo)]));
+}
+
+const LARGHEZZA_PAGINA_CSS = 794; // larghezza A4 a 96dpi: usata sia per il rendering (windowWidth di
+                                   // html2canvas) sia per calcolare, negli stessi px CSS, dove si può
+                                   // tagliare una pagina troppo lunga senza spezzare un blocco a metà.
+
+/** Calcola, nei px CSS della pagina (non ancora scalati per il rendering), le altezze a cui è "sicuro"
+ *  iniziare una nuova pagina fisica del PDF: mai in mezzo a un blocco (una tabella, un grafico, l'elenco
+ *  puntato, la riga di KPI...), solo negli spazi tra un blocco e il successivo. Un titolo di sezione
+ *  viene sempre tenuto insieme al blocco che lo segue, per non lasciarlo da solo in fondo a una pagina.
+ *  Se un singolo blocco è più alto di una pagina intera (capita raramente, es. una tabella enorme) non
+ *  c'è modo di evitare di tagliarlo: in quel caso esportaPaginaAPdf ricade sul taglio "alla cieca" solo
+ *  per quel blocco, esattamente come prima di questa modifica. */
+/** Blocchi "atomici" dei figli diretti di un contenitore (un titolo di sezione è sempre tenuto insieme
+ *  al blocco che lo segue — vale sia per ".rp-section-title" nel corpo centrale sia per gli "<h4>" delle
+ *  colonne laterali stile "CV"). Funzione di supporto per puntiDiInterruzionePagina. */
+function blocchiAtomici(container, paginaTop){
+  if(!container || !container.children.length) return [];
+  const grezzi = Array.from(container.children).map(el => {
+    const r = el.getBoundingClientRect();
+    return {top: r.top - paginaTop, bottom: r.bottom - paginaTop, titolo: el.classList.contains("rp-section-title") || el.tagName === "H4"};
+  });
+  const blocchi = [];
+  for(let i=0; i<grezzi.length; i++){
+    if(grezzi[i].titolo && grezzi[i+1]){ blocchi.push({top:grezzi[i].top, bottom:grezzi[i+1].bottom}); i++; }
+    else blocchi.push(grezzi[i]);
+  }
+  return blocchi;
+}
+
+function puntiDiInterruzionePagina(pagina, altezzaPaginaCss){
+  if(!pagina.corpo || !pagina.corpo.children.length) return [];
+  const paginaTop = pagina.getBoundingClientRect().top;
+  // Una pagina con colonna laterale (stile "CV") o due colonne laterali (report di confronto) affianca
+  // al corpo centrale una colonna scura con la sua stessa altezza: html2canvas + il taglio in fette di
+  // esportaPaginaAPdf tagliano l'INTERA larghezza della pagina a una certa altezza, quindi un'interruzione
+  // è sicura solo se non cade in mezzo a un blocco né nel corpo né in NESSUNA colonna laterale. Le colonne
+  // vengono quindi raccolte tutte insieme (pagina.latoA/pagina.latoB per il report a tre colonne, altrimenti
+  // il singolo pagina.lato) e i loro blocchi, ordinati per posizione verticale, vengono uniti in un'unica
+  // lista di intervalli "occupati" prima di calcolare le interruzioni — esattamente come se fosse un'unica
+  // colonna con tutti i blocchi di corpo e laterali mescolati per altezza.
+  const colonne = (pagina.latoA || pagina.latoB) ? [pagina.corpo, pagina.latoA, pagina.latoB] : [pagina.corpo, pagina.lato];
+  const grezzi = colonne.filter(Boolean).flatMap(c => blocchiAtomici(c, paginaTop)).sort((a,b) => a.top - b.top);
+  const blocchi = [];
+  grezzi.forEach(b => {
+    const ultimo = blocchi[blocchi.length-1];
+    if(ultimo && b.top <= ultimo.bottom) ultimo.bottom = Math.max(ultimo.bottom, b.bottom);
+    else blocchi.push({top:b.top, bottom:b.bottom});
+  });
+  const interruzioni = [];
+  let inizioPagina = 0;
+  blocchi.forEach(b => {
+    const altezza = b.bottom - b.top;
+    if(altezza > altezzaPaginaCss){
+      // blocco singolo più alto di una pagina intera: tagliarlo non è evitabile, ma lo si fa comunque
+      // iniziare su una pagina pulita invece di lasciarlo a cavallo con quello che lo precede; i blocchi
+      // successivi ripartono dall'ultima "fetta" (eventualmente parziale) di questo, come farebbe
+      // esportaPaginaAPdf affettandolo per lunghezza pagina.
+      if(b.top > inizioPagina) interruzioni.push(b.top);
+      inizioPagina = b.top + Math.floor(altezza / altezzaPaginaCss) * altezzaPaginaCss;
+      return;
+    }
+    if(b.bottom - inizioPagina > altezzaPaginaCss){
+      interruzioni.push(b.top);
+      inizioPagina = b.top;
+    }
+  });
+  return interruzioni;
+}
+
+/** Confini di fine-pagina fisica per una "pagina" (in px CSS, coordinate della pagina renderizzata):
+ *  prende i punti "sicuri" da puntiDiInterruzionePagina() e aggiunge, tra un punto sicuro e il successivo,
+ *  tutti i tagli forzati dalla rete di sicurezza quando quel segmento è comunque più alto di una pagina
+ *  intera (blocco enorme da solo). Unica fonte di verità sul NUMERO di pagine fisiche che una "pagina"
+ *  produrrà: sia chi deve solo CONTARLE in anticipo (per scrivere "Pagina N di TOT" nel piè di pagina)
+ *  sia chi deve davvero AFFETTARE il canvas catturato (esportaPaginaAPdf) usano questa stessa funzione,
+ *  così le due cose non possono più disallinearsi — prima di questa modifica, contarle con una formula a
+ *  parte (interruzioni.length + 1) sottostimava il totale ogni volta che scattava la rete di sicurezza. */
+/** Altezza REALMENTE occupata dal contenuto: il fondo dell'ultimo blocco, non l'altezza del riquadro —
+ *  che è sempre almeno `min-height:1123px` e ha del padding in fondo. Senza questa distinzione una pagina
+ *  il cui contenuto sforava di pochi pixel il bordo di un foglio produceva un foglio PDF completamente
+ *  bianco: nei PDF reali di Elisa erano vuote 3 pagine su 12 (04/09/2026). Il piè di pagina non c'entra:
+ *  viene catturato a parte e sovrapposto a ogni foglio (vedi esportaPaginaAPdf), quindi tagliare qui lo
+ *  spazio vuoto non lo fa sparire. */
+function altezzaContenutoPagina(pagina){
+  const top = pagina.getBoundingClientRect().top;
+  const colonne = (pagina.latoA || pagina.latoB) ? [pagina.corpo, pagina.latoA, pagina.latoB] : [pagina.corpo, pagina.lato];
+  let fondo = 0;
+  colonne.filter(Boolean).forEach(c => Array.from(c.children).forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.height > 0) fondo = Math.max(fondo, r.bottom - top);
+  }));
+  return fondo;
+}
+
+function confiniFisiciPagina(pagina, altezzaPaginaCss){
+  const interruzioni = puntiDiInterruzionePagina(pagina, altezzaPaginaCss);
+  const MARGINE_FONDO = 24; // un filo d'aria sotto l'ultimo blocco, per non tagliarne il bordo
+  const contenuto = altezzaContenutoPagina(pagina);
+  const altezzaRiquadro = pagina.getBoundingClientRect().height;
+  let altezzaTotale = contenuto > 0 ? Math.min(altezzaRiquadro, contenuto + MARGINE_FONDO) : altezzaRiquadro;
+  // Se il bordo dell'ultimo foglio intero cade DOPO la fine del contenuto vero, quello che resta è solo
+  // spazio vuoto: non vale un foglio in più. Il taglio avviene solo quando non c'è nulla da tagliare.
+  const bordoInteroPrecedente = Math.floor(altezzaTotale / altezzaPaginaCss) * altezzaPaginaCss;
+  if(bordoInteroPrecedente > 0 && bordoInteroPrecedente >= contenuto) altezzaTotale = bordoInteroPrecedente;
+  const bordi = [...interruzioni.filter(v => v < altezzaTotale - 0.01), altezzaTotale];
+  const confini = [];
+  let y = 0;
+  for(const fine of bordi){
+    let restante = fine - y;
+    while(restante > 0.01){
+      const passo = Math.min(altezzaPaginaCss, restante);
+      y += passo;
+      restante -= passo;
+      confini.push(y);
+    }
+  }
+  return confini.length ? confini : [0];
+}
+
+/** Converte una "pagina" (div .rp-page renderizzato fuori schermo) in una o più pagine del PDF.
+ *  Prima veniva sempre forzata dentro un'unica pagina A4: se il contenuto era più alto di una pagina
+ *  (es. Report Partita con possesso palla + disciplina, molto più pieno di quando è stato disegnato il
+ *  layout), l'immagine veniva "schiacciata" verticalmente per farcela stare — risultato illeggibile.
+ *  Poi si è passati ad affettarla in più pagine a intervalli fissi: risolveva lo schiacciamento ma
+ *  tagliava a metà qualunque cosa si trovasse esattamente sul bordo pagina, grafici compresi. Ora i punti
+ *  di taglio si calcolano PRIMA, guardando dove finiscono davvero i blocchi di contenuto nella pagina
+ *  renderizzata: quello che non entra nella pagina corrente scorre intero in quella successiva, su un
+ *  foglio successivo con lo stesso layout (stessi margini, stesso stile — la colonna laterale, se
+ *  presente, non si ripete: il contenuto centrale continua semplicemente sotto di essa).
+ *  `altezzaPaginaCss` arriva già calcolata dal chiamante (generaEScarica / generaReportConfronto) e ha
+ *  già lo spazio del piè di pagina sottratto, cosicché i punti di taglio non finiscano mai sotto il piè di
+ *  pagina che verrà sovrapposto. `numeroIniziale`/`totalePagine` servono per numerare correttamente ogni
+ *  pagina fisica generata qui (il piè di pagina viene ridisegnato una volta per pagina fisica, non più
+ *  incollato una sola volta in fondo al contenuto — prima restava visibile solo sull'ultima fetta).
+ *  Ritorna il numero di pagina successivo da usare per la prossima "pagina" logica. I confini fisici
+ *  (dove finisce ciascuna pagina) arrivano da confiniFisiciPagina(), la stessa funzione che il chiamante
+ *  usa per CONTARE le pagine in anticipo (numero totale nel piè di pagina): usare un'unica fonte di verità
+ *  per contare e per affettare evita che le due cose possano disallinearsi.
+ *  Nota su un bug di conversione trovato e corretto qui (31/08/2026): i confini arrivano in px CSS
+ *  (coordinate reali della pagina renderizzata, "spazio a 794px"), mentre il canvas catturato da
+ *  html2canvas è in px del canvas ("spazio a 794×scale px"). Il codice precedente li convertiva
+ *  moltiplicando per `pxPerPt` (px canvas per punto PDF) invece che per lo scala px-canvas/px-CSS: i due
+ *  rapporti sono diversi (il primo include anche la conversione px-CSS→punto), e usare quello sbagliato
+ *  spostava ogni confine più in basso del dovuto — con contenuto abbastanza lungo, il taglio "sicuro"
+ *  finiva oltre il bordo reale della pagina fisica, vanificando lo scopo della funzione (evitare di
+ *  tagliare un blocco a metà) esattamente nei casi con più contenuto, cioè quelli che contano di più. */
+async function esportaPaginaAPdf(pdf, pagina, isPrima, numeroIniziale, totalePagine, altezzaPaginaCss){
+  const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+  const confiniCss = confiniFisiciPagina(pagina, altezzaPaginaCss);
+
+  const canvas = await html2canvas(pagina, {scale:2, backgroundColor:"#FFFFFF", logging:false, windowWidth:LARGHEZZA_PAGINA_CSS});
+  const pxPerPt = canvas.width / pageW; // px canvas per punto PDF: per posizionare le immagini nel PDF
+  const pxPerCss = canvas.width / LARGHEZZA_PAGINA_CSS; // px canvas per px CSS: per convertire i confini
+  const confini = confiniCss.map(cssY => Math.min(canvas.height, Math.round(cssY * pxPerCss)));
+
+  let y = 0, primaFetta = true, numero = numeroIniziale, footerCanvas = null;
+  for(const fine of confini){
+    const altezzaFetta = fine - y;
+    if(altezzaFetta > 0){
+      if(!(isPrima && primaFetta)) pdf.addPage();
+      const fetta = document.createElement("canvas");
+      fetta.width = canvas.width; fetta.height = altezzaFetta;
+      fetta.getContext("2d").drawImage(canvas, 0, y, canvas.width, altezzaFetta, 0, 0, canvas.width, altezzaFetta);
+      // PNG invece di JPEG: nessun artefatto di compressione sul testo (soprattutto quello chiaro su
+      // sfondo scuro della colonna laterale, segnalato come "grigio, illeggibile" con la JPEG precedente).
+      pdf.addImage(fetta.toDataURL("image/png"), "PNG", 0, 0, pageW, altezzaFetta / pxPerPt);
+
+      // Il piè di pagina è catturato a parte (stessa scala/larghezza del contenuto, quindi la sua altezza
+      // in px canvas è già direttamente confrontabile) e sovrapposto in fondo a OGNI pagina fisica, non
+      // più incollato una sola volta in fondo al contenuto — prima restava visibile solo sull'ultima fetta.
+      footerCanvas = await catturaFooterReport(numero, totalePagine, LARGHEZZA_PAGINA_CSS);
+      const footerHpt = footerCanvas.height / pxPerPt;
+      pdf.addImage(footerCanvas.toDataURL("image/png"), "PNG", 0, pageH - footerHpt, pageW, footerHpt);
+
+      numero += 1;
+      primaFetta = false;
+    }
+    y = fine;
+  }
+  return numero;
+}
+
+/** Innesca il download del PDF in modo robusto anche su mobile. `pdf.save()` di jsPDF, su alcuni
+ *  browser mobili (soprattutto Safari iOS e i browser "in-app"), non avvia un vero download: naviga la
+ *  scheda corrente sul PDF, facendo sparire la dashboard senza modo di tornare indietro — esattamente il
+ *  problema segnalato. Qui si crea invece un vero file (Blob) e si prova ad aprirlo/scaricarlo in una
+ *  scheda separata (target="_blank"), lasciando questa scheda con la dashboard intatta; in più si lascia
+ *  sempre un link manuale visibile nello stato del report, come rete di sicurezza se il tentativo
+ *  automatico non dovesse partire (un tocco reale dell'utente su un link è il modo più affidabile in
+ *  assoluto per far partire un download su qualsiasi browser). */
+function scaricaPdfRobusto(pdf, nomeFile, idEl="#rp-stato-partita"){
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
+  try{
+    const a = document.createElement("a");
+    a.href = url; a.download = nomeFile; a.target = "_blank"; a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }catch(err){ console.error("Download automatico non riuscito:", err); }
+  statoReportConLink(`Report pronto: ${nomeFile}.`, url, nomeFile, idEl);
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
+}
+
+async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partita"){
+  const stage = $("#report-stage");
+  stage.innerHTML = "";
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:"pt", format:"a4"});
+  try{
+    const pageW = pdf.internal.pageSize.getWidth(), pageH = pdf.internal.pageSize.getHeight();
+    const altezzaPaginaCss = pageH * (LARGHEZZA_PAGINA_CSS / pageW) - altezzaFooterReportCss(LARGHEZZA_PAGINA_CSS);
+
+    // Ogni generatore riempie prima un "documento" che può crescere quanto vuole; solo dopo i suoi blocchi
+    // vengono distribuiti su pagine A4 vere (vedi impaginaDocumento). Prima invece ogni generatore
+    // produceva un unico riquadro lunghissimo che veniva poi tagliato a fette: da lì fogli bianchi,
+    // titoli staccati dal contenuto e tabelle spezzate a metà riga.
+    const documenti = [];
+    for(const gen of paginaGeneratori){
+      const doc = nuovoDocumentoReport(!gen.piena);
+      await gen(doc);
+      documenti.push({doc, conSidebar: !gen.piena});
+    }
+    // Chart.js needs a frame to paint onto the offscreen canvases before capture
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const pagineDom = [];
+    documenti.forEach(({doc, conSidebar}) => {
+      pagineDom.push(...impaginaDocumento(doc, {conSidebar, altezzaUtile: altezzaPaginaCss}));
+    });
+    // i grafici spostati su una pagina di larghezza diversa hanno bisogno di un altro frame per ridisegnarsi
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    // Passata di conteggio: quante pagine fisiche del PDF servirà davvero ciascuna "pagina" logica —
+    // serve PRIMA di disegnare qualunque piè di pagina, altrimenti il primo "Pagina 1 di N" scritto
+    // avrebbe un N sbagliato (calcolato solo dopo aver visto tutte le altre pagine).
+    const totalePagine = pagineDom.reduce((tot, pagina) => tot + confiniFisiciPagina(pagina, altezzaPaginaCss).length, 0);
+
+    let numero = 1;
+    for(let i=0;i<pagineDom.length;i++){
+      numero = await esportaPaginaAPdf(pdf, pagineDom[i], i===0, numero, totalePagine, altezzaPaginaCss);
+    }
+    scaricaPdfRobusto(pdf, nomeFile, idEl);
+  } finally {
+    stage.innerHTML = "";
+  }
+}
+
+/** Possesso palla stimato sull'intera stagione: somma i secondi delle quattro categorie di TUTTE le
+ *  partite che hanno gli eventi, poi riapplica le stesse identiche formule di analyzePossession — non è
+ *  quindi una media di percentuali (che darebbe lo stesso peso a una partita di 5' e a una di 50'), ma il
+ *  calcolo vero fatto su tutti i minuti della stagione messi insieme. Torna null se nessuna partita ha
+ *  eventi utilizzabili. Richiesta di Elisa del 04/09/2026: il report stagionale deve dare le stesse
+ *  informazioni di quello di partita, riferite alla stagione. */
+function possessoStagionale(partite){
+  const tot = {ourCertainSec:0, opponentEstimatedSec:0, contestedSec:0, unknownSec:0};
+  let possessi = 0, recuperi = 0, palleParse = 0, partiteUsate = 0;
+  // partite con l'interruttore del possesso (18/10/2026): contano con il dato misurato, non con la stima
+  let misNoi = 0, misLoro = 0, misFerma = 0, partiteMisurate = 0;
+  (partite||[]).forEach(p => {
+    const pm = possessoMisuratoPartita(p);
+    if(pm && pm.noiSec + pm.loroSec > 0){ misNoi += pm.noiSec; misLoro += pm.loroSec; misFerma += pm.fermaSec; partiteMisurate++; return; }
+    const analisi = analizzaEventiPartitaSevenLab({id:p.Match_ID, eventi:p.Eventi, riepilogoTempi:p.RiepilogoTempi});
+    if(!analisi.eventiSquadra.length) return;
+    const pos = analyzePossession(analisi.eventiSquadra);
+    if(!pos || pos.confidencePct === null) return;
+    tot.ourCertainSec += pos.ourCertainSec; tot.opponentEstimatedSec += pos.opponentEstimatedSec;
+    tot.contestedSec += pos.contestedSec; tot.unknownSec += pos.unknownSec;
+    const kpi = calcolaPossessionKpis(pos.sequences, analisi.eventiSquadra);
+    possessi += kpi.possessi; recuperi += kpi.recuperi; palleParse += kpi.palleParse;
+    partiteUsate++;
+  });
+  if(!partiteUsate && !partiteMisurate) return null;
+  const classificato = tot.ourCertainSec + tot.opponentEstimatedSec + tot.contestedSec;
+  const w = POSSESSION_CONFIG_DEFAULT.contestedWeightForUs;
+  const stimNoi = tot.ourCertainSec + w*tot.contestedSec, stimLoro = tot.opponentEstimatedSec + (1-w)*tot.contestedSec;
+  return Object.assign({}, tot, {
+    partiteUsate, partiteMisurate, possessi, recuperi, palleParse, misNoi, misLoro, misFerma,
+    ourPossessionWeightedPct: partiteUsate ? percPossesso(stimNoi, classificato) : null,
+    confidencePct: partiteUsate ? percPossesso(classificato, classificato + tot.unknownSec) : null,
+    pctMisurato: partiteMisurate ? percPossesso(misNoi, misNoi + misLoro) : null,
+    // tutte le partite insieme: misurate con il dato vero, le altre con la stima
+    pctCombinato: percPossesso(stimNoi + misNoi, stimNoi + misNoi + stimLoro + misLoro)
+  });
+}
+
+/* ---- Report Partita ---- */
+/* =====================================================================
+   REPORT PARTITA ESSENZIALE (19/10/2026)
+   Richiesta di Elisa per conto di chi lo legge: «semplificare all'osso» il report della singola partita.
+   Dentro: risultato e nomi delle squadre in alto, marcatori con assist, possesso, tiri generati e subiti,
+   passaggi e dribbling riusciti/sbagliati in percentuale, momentum, heatmap di palle perse e recuperate,
+   zone di tiro e assist dei gol, e in fondo considerazioni e miglioramenti suggeriti.
+   Fuori: migliore in campo, sostituzioni, dati completi dei giocatori, statistiche totali/offensive/
+   difensive, punto d'ingresso in porta, testi che spiegano come leggere i dati.
+   Gli altri report (stagionale, confronto) restano com'erano.
+   ===================================================================== */
+
+/** Il nome della nostra squadra dal titolo di SevenLab («TNT A vs Union Oratori Castellanza»). */
+function nomeSquadraDaTitolo(titolo, avversario){
+  const parti = String(titolo || "").split(/\s+vs\.?\s+/i).map(x => x.trim()).filter(Boolean);
+  if(parti.length !== 2) return "";
+  const norm = x => x.toLowerCase().replace(/\s+/g, " ");
+  if(avversario && norm(parti[1]) === norm(avversario)) return parti[0];
+  if(avversario && norm(parti[0]) === norm(avversario)) return parti[1];
+  return parti[0];
+}
+
+/** Gol fatti con marcatore e assist (dalla timeline: la riga «Assist» della nostra squadra entro 5" dal gol),
+ *  e il punto di tiro/assist dalla sezione «DETTAGLIO GOL GAME» se c'è (abbinato per marcatore, in ordine). */
+function golFattiConAssist(p){
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto));
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const t0 = rigaInizio ? rigaInizio.secondoAssoluto : 0;
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const assistRighe = eventi.filter(e => lato(e) === "A" && (e.raw.Assist === "1" || /^assist$/i.test(String(e.raw.Tipo || "").trim())));
+  const puntiTiro = (p.PuntiGol || []).slice().sort((a, b) => a.secondo - b.secondo);
+  const puntiAssist = (p.PuntiAssistGol || []).slice();
+  const usati = new Set();
+  return golConPunteggio(p).filter(g => g.nostro).map(g => {
+    const a = assistRighe.filter(e => Math.abs(e.secondoAssoluto - g.t) <= 5 && String(e.raw.Giocatore || "").trim() !== g.marcatore)
+      .sort((x, y) => Math.abs(x.secondoAssoluto - g.t) - Math.abs(y.secondoAssoluto - g.t))[0];
+    const k = puntiTiro.findIndex((pt, i) => !usati.has(i) && (!g.marcatore || !pt.marcatore || pt.marcatore === g.marcatore));
+    let tiro = null, partenza = null;
+    if(k >= 0){ usati.add(k); tiro = puntiTiro[k]; partenza = puntiAssist.find(pa => pa.secondo === tiro.secondo) || null; }
+    const assist = a ? String(a.raw.Giocatore || "").trim() : (tiro && tiro.assist ? tiro.assist : null);
+    return {minuto: Math.max(1, Math.ceil((g.t - t0) / 60)), marcatore: g.marcatore || (tiro && tiro.marcatore) || "", assist: assist || null,
+      punteggio: g.punteggio, tiro, partenza};
+  });
+}
+
+/** Campo con i gol numerati: pallino pieno = punto del tiro, pallino vuoto = partenza dell'assist, linea fra i due. */
+function disegnaCampoGolAssist(canvas, gol, opts){
+  const ctx = canvas.getContext("2d"), w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h); ctx.fillStyle = opts.sfondo; ctx.fillRect(0, 0, w, h);
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  const r = Math.max(8, Math.min(w, h) * 0.04);
+  const pos = pt => [Math.min(w - r, Math.max(r, pt.x / CAMPO_LUNGHEZZA_M * w)), Math.min(h - r, Math.max(r, pt.y / CAMPO_LARGHEZZA_M * h))];
+  gol.forEach(g => {
+    if(!g.tiro || !g.partenza) return;
+    const [x1, y1] = pos(g.partenza), [x2, y2] = pos(g.tiro);
+    ctx.save(); ctx.strokeStyle = hexRgba(opts.colore, 0.75); ctx.lineWidth = Math.max(2, w * 0.004); ctx.setLineDash([w * 0.012, w * 0.008]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+  });
+  gol.forEach((g, i) => {
+    if(g.partenza){
+      const [x, y] = pos(g.partenza);
+      ctx.beginPath(); ctx.arc(x, y, r * 0.72, 0, Math.PI * 2); ctx.fillStyle = "#FFFFFF"; ctx.fill();
+      ctx.lineWidth = Math.max(2, r * 0.22); ctx.strokeStyle = opts.colore; ctx.stroke();
+    }
+    if(g.tiro){
+      const [x, y] = pos(g.tiro);
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = opts.colore; ctx.fill();
+      ctx.lineWidth = Math.max(1.5, r * 0.16); ctx.strokeStyle = "#FFFFFF"; ctx.stroke();
+      ctx.save(); ctx.font = `800 ${Math.round(r * 1.1)}px Satoshi, system-ui, sans-serif`; ctx.fillStyle = "#FFFFFF";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(i + 1), x, y + r * 0.05); ctx.restore();
+    }
+  });
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
+/** Considerazioni e miglioramenti: frasi brevi, ognuna con il dato e cosa farne. Regole e soglie nel playbook. */
+function considerazioniPartita(d){
+  const bene = [], lavorare = [];
+  const pct = v => nf0(v) + "%";
+  // finalizzazione
+  if(d.tiri >= 10 && d.gol / d.tiri < 0.10) lavorare.push({peso: 3, t: `${nf0(d.tiri)} tiri e ${nf0(d.gol)} gol (${pct(d.gol / d.tiri * 100)}): allenare la conclusione dopo un movimento e la scelta del tiro da posizione migliore, invece di tirare da lontano.`});
+  else if(d.tiri >= 4 && d.gol / d.tiri >= 0.25) bene.push(`Cinici sotto porta: ${nf0(d.gol)} gol su ${nf0(d.tiri)} tiri.`);
+  // passaggi
+  if(d.passPct !== null && d.passTot >= 20){
+    if(d.passPct < 70) lavorare.push({peso: 3, t: `Passaggi riusciti al ${pct(d.passPct)}: lavorare sulla circolazione corta a uno-due tocchi e sullo smarcamento per dare sempre una linea di passaggio.`});
+    else if(d.passPct < 78) lavorare.push({peso: 1, t: `Passaggi riusciti al ${pct(d.passPct)}: margine sulla precisione negli appoggi sotto pressione (rondo in spazi stretti).`});
+    else if(d.passPct >= 82) bene.push(`Circolazione pulita: ${pct(d.passPct)} di passaggi riusciti.`);
+  }
+  // dribbling
+  if(d.dribPct !== null && d.dribTot >= 8){
+    if(d.dribPct < 50) lavorare.push({peso: 2, t: `Dribbling riusciti al ${pct(d.dribPct)}: lavorare sull'uno contro uno e sulla scelta fra puntare l'uomo e scaricare la palla.`});
+    else if(d.dribPct >= 65) bene.push(`Uno contro uno efficace: ${pct(d.dribPct)} di dribbling riusciti.`);
+  }
+  // tiri subiti
+  if(d.tiriSubiti !== null){
+    if(d.tiriSubiti >= 15 || (d.tiri > 0 && d.tiriSubiti > d.tiri)) lavorare.push({peso: 2, t: `${nf0(d.tiriSubiti)} tiri subiti: accorciare le distanze fra difesa e centrocampo e mettere più pressione su chi ha la palla per togliere conclusioni agli avversari.`});
+    else if(d.tiriSubiti <= 6) bene.push(`Difesa solida: solo ${nf0(d.tiriSubiti)} tiri concessi.`);
+  }
+  // possesso
+  if(d.possesso !== null){
+    if(d.possesso < 45) lavorare.push({peso: 2, t: `Palla agli avversari per il ${pct(100 - d.possesso)}: lavorare sul possesso consolidato e sulla pazienza in costruzione, senza forzare la verticalizzazione.`});
+    else if(d.possesso >= 55) bene.push(`Partita controllata: palla nostra per il ${pct(d.possesso)}.`);
+    if(d.possesso1 !== null && d.possesso2 !== null && d.possesso1 - d.possesso2 >= 10)
+      lavorare.push({peso: 2, t: `Possesso sceso dal ${pct(d.possesso1)} del primo tempo al ${pct(d.possesso2)} del secondo: curare la tenuta fisica e usare le rotazioni prima del calo.`});
+  }
+  // momentum
+  if(d.peggiore && 1 - d.peggiore.quota >= 0.65)
+    lavorare.push({peso: 1, t: `Dal ${d.peggiore.da}' al ${d.peggiore.al}' la palla è stata loro per il ${pct((1 - d.peggiore.quota) * 100)}${d.golNelPeggiore ? `, con ${nf0(d.golNelPeggiore)} ${d.golNelPeggiore === 1 ? "gol subito" : "gol subiti"}` : ""}: preparare come uscire dai momenti di pressione (abbassare il ritmo, giocare col portiere, cambiare lato).`});
+  if(d.migliore && d.migliore.quota >= 0.65) bene.push(`Dal ${d.migliore.da}' al ${d.migliore.al}' la squadra ha tenuto palla per il ${pct(d.migliore.quota * 100)}.`);
+  // gol subiti: dopo possesso loro o nostro
+  if(d.subitiDopoLoro + d.subitiDopoNoi >= 2){
+    if(d.subitiDopoLoro > d.subitiDopoNoi) lavorare.push({peso: 2, t: `${nf0(d.subitiDopoLoro)} dei ${nf0(d.subitiDopoLoro + d.subitiDopoNoi)} gol subiti dopo un lungo possesso avversario: lavorare sulla difesa posizionale (scalate, coperture, marcature in area).`});
+    else if(d.subitiDopoNoi > d.subitiDopoLoro) lavorare.push({peso: 2, t: `${nf0(d.subitiDopoNoi)} dei ${nf0(d.subitiDopoLoro + d.subitiDopoNoi)} gol subiti mentre la palla era soprattutto nostra: curare le marcature preventive quando attacchiamo, per non subire le ripartenze.`});
+  }
+  // palle perse che diventano gol
+  if(d.persaGol >= 2) lavorare.push({peso: 3, t: `${nf0(d.persaGol)} gol subiti entro 15" da una nostra palla persa: lavorare sulla reazione immediata alla perdita e sull'uscita palla più sicura.`});
+  // dove si perde e dove si recupera
+  if(d.perseTot >= 10 && d.perseDif / d.perseTot >= 0.30) lavorare.push({peso: 2, t: `${nf0(d.perseDif)} palle perse su ${nf0(d.perseTot)} nel nostro terzo di campo: allenare l'uscita dal basso sotto pressione, con il portiere come appoggio.`});
+  if(d.recTot >= 10 && d.recOff / d.recTot >= 0.25) bene.push(`Pressione alta: ${nf0(d.recOff)} palloni recuperati nel terzo avversario.`);
+  // riconquista
+  if(d.riconquista !== null){
+    if(d.riconquista > 12) lavorare.push({peso: 1, t: `Servono in media ${nf0(d.riconquista)}" per riprendere palla dopo averla persa: allenare la riaggressione nei primi 5 secondi.`});
+    else if(d.riconquista <= 7) bene.push(`Riaggressione rapida: palla ripresa in ${nf0(d.riconquista)}" dopo la perdita (mediana).`);
+  }
+  // gol fatti dopo possesso nostro
+  if(d.fattiDopoNoi >= 1 && d.fattiDopoNoi === d.golFattiTimeline) bene.push(`${d.fattiDopoNoi === 1 ? "Il gol è nato" : "I gol sono nati"} da fasi di possesso nostro.`);
+  else if(d.fattiDopoLoro >= 1 && d.fattiDopoLoro === d.golFattiTimeline) bene.push(`${d.fattiDopoLoro === 1 ? "Il gol è arrivato" : "I gol sono arrivati"} in ripartenza.`);
+  return {bene: bene.slice(0, 4), lavorare: lavorare.sort((a, b) => b.peso - a.peso).slice(0, 5).map(x => x.t)};
+}
+
+async function generaReportPartita(matchId){
+  const ds = stato.ds;
+  const partita = ds.partite.find(p => p.Match_ID === matchId);
+  if(!partita){ statoReport("Seleziona una partita valida.", false, "#rp-stato-partita"); return; }
+  const righeGara = ds.giocatori.filter(g => g.Match_ID === matchId);
+  const somma = c => righeGara.reduce((a, g) => a + N(g[c]), 0);
+  const passOk = somma("Passaggi_Corretti"), passKo = somma("Passaggi_Sbagliati"), passTot = passOk + passKo;
+  const dribTot = somma("Dribbling_Tentati"), dribKo = somma("Dribbling_Falliti"), dribOk = dribTot - dribKo;
+  const tiri = somma("Tiri_In_Porta") + somma("Tiri_Fuori");
+  const portieri = statistichePortieriDaSessione(partita);
+  const tiriSubiti = portieri.portieri.length ? portieri.portieri.reduce((a, p) => a + p.totaleAffrontati, 0) : null;
+  const nomeNostro = partita.NomeSquadra || "Noi";
+
+  // possesso: misurato con l'interruttore se c'è, altrimenti stimato dai nostri eventi
+  const pm = possessoMisuratoPartita(partita);
+  const mo = pm ? momentumPartita(partita, pm) : null;
+  let possesso = pm ? pm.pctNoi : null, possessoStimato = false;
+  if(possesso === null){
+    const a = analizzaEventiPartitaSevenLab({id: partita.Match_ID, eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
+    const x = a.eventiSquadra.length ? analyzePossession(a.eventiSquadra) : null;
+    if(x && x.confidencePct !== null){ possesso = x.ourPossessionWeightedPct; possessoStimato = true; }
+  }
+  // possesso per tempo (solo misurato)
+  let possesso1 = null, possesso2 = null;
+  if(pm && pm.fine1 !== null){
+    const quota = (a, b) => { let n = 0, l = 0; for(let s = Math.floor(a); s < Math.ceil(b); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) n++; else if(v === 2) l++; } return (n + l) ? n / (n + l) * 100 : null; };
+    possesso1 = quota(pm.inizio, pm.fine1); possesso2 = quota(pm.inizio2, pm.fine);
+  }
+  const gol = golFattiConAssist(partita);
+  const {recupero, persa} = raccogliEventiZona([partita]);
+  const terzo = CAMPO_LUNGHEZZA_M / 3;
+  const pg = analizzaPersaGol([partita], "partita");
+  const ric = analizzaRiconquista([partita]);
+  const subiti = mo ? mo.gol.filter(g => !g.nostro) : [], fatti = mo ? mo.gol.filter(g => g.nostro) : [];
+  const cons = considerazioniPartita({
+    gol: N(partita.Gol_Fatti), tiri, tiriSubiti, passPct: passTot ? passOk / passTot * 100 : null, passTot,
+    dribPct: dribTot ? dribOk / dribTot * 100 : null, dribTot, possesso: possessoStimato ? null : possesso, possesso1, possesso2,
+    migliore: mo ? mo.migliore : null, peggiore: mo ? mo.peggiore : null,
+    golNelPeggiore: (mo && mo.peggiore) ? subiti.filter(g => g.minuto > mo.peggiore.da && g.minuto <= mo.peggiore.al).length : 0,
+    subitiDopoLoro: subiti.filter(g => g.primaLoro > g.primaNoi).length, subitiDopoNoi: subiti.filter(g => g.primaLoro <= g.primaNoi).length,
+    fattiDopoNoi: fatti.filter(g => g.primaNoi >= g.primaLoro).length, fattiDopoLoro: fatti.filter(g => g.primaNoi < g.primaLoro).length, golFattiTimeline: fatti.length,
+    persaGol: pg ? pg.episodi.length : 0,
+    perseTot: persa.length, perseDif: persa.filter(p => p.x < terzo).length, recTot: recupero.length, recOff: recupero.filter(p => p.x >= 2 * terzo).length,
+    riconquista: (ric && ric.riconquistate >= RICONQUISTA_CAMPIONE_MINIMO) ? ric.mediana : null
+  });
+
+  statoReport("Genero il Report Partita…", true, "#rp-stato-partita");
+  await generaEScarica(nomeFileData("Report_Partita_" + matchId, partita.Data), [
+    Object.assign(async (pag) => {
+      // testata: le due squadre e il risultato
+      const band = document.createElement("div");
+      band.className = "rp2-band rp2-tabellone";
+      band.innerHTML = `<div class="eyebrow">Report partita · ${esc(dataLabel(partita.Data))}</div>
+        <div class="rp2-tab-riga"><div class="rp2-tab-sq">${esc(nomeNostro)}</div>
+        <div class="rp2-tab-ris">${nf0(partita.Gol_Fatti)} – ${nf0(partita.Gol_Subiti)}</div>
+        <div class="rp2-tab-sq destra">${esc(partita.Avversario)}</div></div>`;
+      pag.centro.insertBefore(band, pag.corpo);
+      // marcatori
+      if(gol.length){
+        const m = document.createElement("div");
+        m.className = "rp-marcatori";
+        m.innerHTML = `<span class="rp-marcatori-tit">Marcatori</span>` + gol.map((g, i) => `<span class="rp-marcatore"><b>${gol.some(x => x.tiro) ? `<i>${i + 1}</i>` : ""}${g.minuto}' ${esc(g.marcatore || "—")}</b>${g.assist ? ` · assist ${esc(g.assist)}` : ""}</span>`).join("");
+        pag.corpo.appendChild(m);
+      }
+      kpiRowReport(pag, [
+        {l: possessoStimato ? "Possesso (stimato)" : "Possesso", v: possesso !== null ? pctTxt(possesso, 0) : "—"},
+        {l: "Tiri generati", v: nf0(tiri)},
+        {l: "Tiri subiti", v: tiriSubiti !== null ? nf0(tiriSubiti) : "—"}
+      ]);
+      pag.corpo.lastElementChild.style.gridTemplateColumns = "repeat(3,1fr)";
+      kpiRowReport(pag, [
+        {l: "Passaggi corretti", v: passTot ? `${pctTxt(passOk / passTot * 100, 0)} <small>${nf0(passOk)}</small>` : "—"},
+        {l: "Passaggi sbagliati", v: passTot ? `${pctTxt(passKo / passTot * 100, 0)} <small>${nf0(passKo)}</small>` : "—"},
+        {l: "Dribbling riusciti", v: dribTot ? `${pctTxt(dribOk / dribTot * 100, 0)} <small>${nf0(dribOk)}</small>` : "—"},
+        {l: "Dribbling sbagliati", v: dribTot ? `${pctTxt(dribKo / dribTot * 100, 0)} <small>${nf0(dribKo)}</small>` : "—"}
+      ]);
+      if(mo){
+        titoloSezioneReport(pag, "Momentum");
+        etichettaReport(pag, `▲ gol ${nomeNostro} · ▼ gol ${partita.Avversario}`);
+        graficoReport(pag, "rp-chart-momentum", configMomentum(mo, {noi: PALETTE_REPORT.c1, loro: PALETTE_REPORT.c2, testo: PALETTE_REPORT.text, tenue: PALETTE_REPORT.muted, griglia: PALETTE_REPORT.grid}, true), 190);
+      }
+      const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
+      const optsBase = {sfondo: "#F4F2EC", lineaCampo: "#28251D", testo: "#28251D", testoChiaro: "#FFFFFF", rampa};
+      const cellaCampo = (griglia, titolo, disegna) => {
+        const cella = document.createElement("div");
+        cella.innerHTML = `<div class="rp-campo-etichetta">${esc(titolo)}</div>`;
+        const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+        const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX * 0.6);
+        wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella); disegna(cv);
+        return cella;
+      };
+      if(recupero.length || persa.length){
+        titoloSezioneReport(pag, "Palle recuperate e perse");
+        const g = document.createElement("div"); g.className = "rp-campo-griglia"; pag.corpo.appendChild(g);
+        cellaCampo(g, `Palle recuperate (${nf0(recupero.length)})`, cv => disegnaCampoHeatmap(cv, recupero, optsBase));
+        cellaCampo(g, `Palle perse (${nf0(persa.length)})`, cv => disegnaCampoHeatmap(cv, persa, optsBase));
+      }
+      if(gol.some(x => x.tiro)){
+        titoloSezioneReport(pag, "Zone di tiro e assist dei gol");
+        const g = document.createElement("div"); g.className = "rp-campo-griglia"; pag.corpo.appendChild(g);
+        cellaCampo(g, "● tiro del gol   ○ partenza dell'assist", cv => disegnaCampoGolAssist(cv, gol, Object.assign({}, optsBase, {colore: PALETTE_REPORT.c1})));
+        const elenco = document.createElement("div");
+        elenco.innerHTML = `<div class="rp-campo-etichetta">Gol</div><ol class="rp-elenco-gol">${gol.map(x => `<li><b>${x.minuto}' ${esc(x.marcatore || "—")}</b>${x.assist ? `<br>assist ${esc(x.assist)}` : ""}<br><span>${esc(x.punteggio)}</span></li>`).join("")}</ol>`;
+        g.appendChild(elenco);
+      }
+      if(cons.bene.length || cons.lavorare.length){
+        titoloSezioneReport(pag, "Considerazioni e miglioramenti suggeriti");
+        if(cons.bene.length){ etichettaReport(pag, "Cosa ha funzionato"); bulletsReport(pag, cons.bene.map(esc)); }
+        if(cons.lavorare.length){ etichettaReport(pag, "Su cosa lavorare"); bulletsReport(pag, cons.lavorare.map(esc)); }
+      }
+    }, {piena: true})
+  ]);
+}
+
+/* ---- Report Mensile Allenamenti ---- */
+/** Frase di apertura naturale per un periodo allenamenti ("Nel corso della stagione", "In aprile 2026",
+ *  "Tra gennaio 2026 e marzo 2026") — diversa da etichettaPeriodoAllenamento(), pensata per un titolo o
+ *  un'etichetta, non per l'inizio di una frase discorsiva. */
+function fraseInizialePeriodo(da, a){
+  if(!da && !a) return "Nel corso della stagione";
+  if(da === a) return `In ${meseLabel(da)}`;
+  return `Tra ${meseLabel(da)} e ${meseLabel(a)}`;
+}
+
+/** Genera il report allenamenti per un periodo a scelta: un mese singolo (da===a), un arco di più mesi
+ *  (da/a diversi), o tutta la stagione (da e a entrambi null/vuoti — usato dal pulsante "Report
+ *  Stagionale"). Un solo generatore per tutti e tre i casi: il periodo precedente "equivalente" (stessa
+ *  durata in mesi di calendario, calcolato da periodoAllenamentoPrecedente) usato per i confronti è null
+ *  per "tutta la stagione" o quando non c'è abbastanza storico prima dell'inizio scelto — in quel caso le
+ *  sezioni di confronto mostrano semplicemente "non disponibile", esattamente come già accadeva per il
+ *  primo mese in assoluto nella vecchia versione mese-per-mese di questo report. */
+async function generaReportAllenamentoPeriodo(da, a){
+  const ds = stato.ds;
+  const haRPE = ds.haRPE;
+  if(da && a && da > a){ statoReport("L'inizio del periodo deve essere prima della fine.", false, "#rp-stato-allenamento"); return; }
+  const isStagionale = !da && !a;
+  const etichetta = etichettaPeriodoAllenamento(da, a);
+  const periodoCorr = datiAllenamentoIntervallo(da, a);
+  const prevRange = periodoAllenamentoPrecedente(da, a);
+  const periodoPrec = prevRange ? datiAllenamentoIntervallo(prevRange.da, prevRange.a) : {allenamenti:[], presenze:[], statAllenamento:[]};
+  const etichettaPrec = prevRange ? etichettaPeriodoAllenamento(prevRange.da, prevRange.a) : null;
+
+  const {totSess, righe: righeAllen} = ds.haAllenamenti ? aggregaAllenamenti(periodoCorr.allenamenti, periodoCorr.presenze) : {totSess:0, righe:[]};
+  const sottoSoglia = righeAllen.filter(r => r.Tasso_Presenza_pct !== null && r.Tasso_Presenza_pct < 60);
+  const caricoValoriCorr = periodoCorr.presenze.map(p=>p.Carico).filter(c=>c!==null);
+  const caricoMedioCorr = caricoValoriCorr.length ? media(caricoValoriCorr) : null;
+  const caricoValoriPrec = periodoPrec.presenze.map(p=>p.Carico).filter(c=>c!==null);
+  const caricoMedioPrec = caricoValoriPrec.length ? media(caricoValoriPrec) : null;
+  const rapportoCarico = (caricoMedioCorr!==null && caricoMedioPrec) ? caricoMedioCorr/caricoMedioPrec : null;
+  const incrociMese = haRPE ? incrociCaricoRendimento(ds).filter(x => meseNelPeriodo(x.meseCorr, da, a)) : [];
+  // Carico di stanchezza stimato (presenza + minuti in partitelle, senza RPE reale): vedi
+  // stimaCaricoStanchezza. Usato anche come criterio "da tenere d'occhio" quando l'RPE non c'è, al posto
+  // della semplice presenza più bassa usata in una versione precedente di questo report.
+  const stanchezza = stimaCaricoStanchezza(righeAllen, periodoCorr.statAllenamento).righe;
+  const livelloStanchezzaDi = new Map(stanchezza.map(r => [r.Giocatore, r.Livello_Stanchezza]));
+  const piuCaricoGiocatore = haRPE
+    ? righeAllen.slice().sort((a,b)=>b.Carico_Tot-a.Carico_Tot)[0]
+    : stanchezza[0];
+  const ruoloDi = nome => ds.giocatori.find(g=>g.Giocatore===nome)?.Ruolo || "";
+  const aggAllenPrec = (prevRange && ds.haAllenamenti) ? aggregaAllenamenti(periodoPrec.allenamenti, periodoPrec.presenze) : {totSess:0, righe:[]};
+  const righeAllenPrec = aggAllenPrec.righe;
+  const caricoPrecGiocatore = (haRPE && piuCaricoGiocatore) ? righeAllenPrec.find(r => r.Giocatore === piuCaricoGiocatore.Giocatore) : null;
+  const variazioneGiocatore = (haRPE && piuCaricoGiocatore && caricoPrecGiocatore && caricoPrecGiocatore.Carico_Tot) ? piuCaricoGiocatore.Carico_Tot/caricoPrecGiocatore.Carico_Tot : null;
+
+  // Confronto col periodo precedente equivalente: quello che l'utente ha chiesto esplicitamente di vedere
+  // ("percentuali medie, dello scorso mese e del mese terminato" + "tendenze in calo o in miglioramento"),
+  // non solo i numeri assoluti del periodo corrente.
+  const presenzaMedia = media(righeAllen.map(r=>r.Tasso_Presenza_pct));
+  const presenzaMediaPrec = righeAllenPrec.length ? media(righeAllenPrec.map(r=>r.Tasso_Presenza_pct)) : null;
+  const deltaPresenza = (presenzaMedia!=null && presenzaMediaPrec!=null) ? presenzaMedia - presenzaMediaPrec : null;
+  const deltaSessioni = prevRange ? totSess - aggAllenPrec.totSess : null;
+  const minutiTot = righeAllen.reduce((a,r)=>a+r.Minuti_Tot,0);
+  const minutiTotPrec = righeAllenPrec.length ? righeAllenPrec.reduce((a,r)=>a+r.Minuti_Tot,0) : null;
+  const deltaMinuti = minutiTotPrec!=null ? minutiTot - minutiTotPrec : null;
+  const sottoSogliaPrecCount = righeAllenPrec.filter(r=>r.Tasso_Presenza_pct!==null && r.Tasso_Presenza_pct<60).length;
+  const deltaSottoSoglia = righeAllenPrec.length ? sottoSoglia.length - sottoSogliaPrecCount : null;
+  const rpeSquadra = haRPE ? media(righeAllen.map(r=>r.RPE_Medio)) : null;
+  const rpeSquadraPrec = (haRPE && righeAllenPrec.length) ? media(righeAllenPrec.map(r=>r.RPE_Medio)) : null;
+  const deltaRpe = (rpeSquadra!=null && rpeSquadraPrec!=null) ? rpeSquadra - rpeSquadraPrec : null;
+  const dSess = deltaKpi(deltaSessioni, v=>nf0(v), 0, false, "vs periodo prec.");
+  const dPres = deltaKpi(deltaPresenza, v=>nf0(v)+"pt", 2, false, "vs periodo prec.");
+  const dCarico = rapportoCarico!==null ? {testo:`${rapportoCarico>=1?"+":""}${nf0((rapportoCarico-1)*100)}% vs periodo prec.`, tipo: rapportoCarico>=1.15 ? "up" : rapportoCarico<=0.85 ? "down" : "flat"} : null;
+  const dMinuti = deltaKpi(deltaMinuti, v=>nf0(v), 0, false, "vs periodo prec.");
+  const dSottoSoglia = deltaKpi(deltaSottoSoglia, v=>nf0(v), 0, true, "vs periodo prec.");
+  const dRpe = deltaKpi(deltaRpe, v=>nf(v,1), 0.3, false, "vs periodo prec.");
+  const tendenzeMese = righeAllenPrec.length ? tendenzeGiocatoriAllenamento(righeAllen, righeAllenPrec, haRPE, etichettaPrec) : [];
+
+  const titoloReport = isStagionale ? "Report Stagionale Allenamenti" : (da===a ? "Report Mensile Allenamenti" : "Report Periodo Allenamenti");
+  const prefissoFile = isStagionale ? "Report_Stagionale_Allenamenti" : `Report_Allenamenti_${(da||"inizio").replace("-","")}_${(a||"fine").replace("-","")}`;
+
+  statoReport(`Genero il ${titoloReport}…`, true, "#rp-stato-allenamento");
+  await generaEScarica(nomeFileData(prefissoFile, new Date()), [
+    async (pag) => {
+      bandaReport(pag, titoloReport, etichetta, prevRange ? `confronto con ${etichettaPrec}` : "");
+      sidebarReport(pag, {
+        eyebrow:"Da tenere d'occhio", nome:piuCaricoGiocatore?.Giocatore,
+        ruolo: piuCaricoGiocatore ? ruoloDi(piuCaricoGiocatore.Giocatore) : "",
+        colore:"#D8825F",
+        gruppi: piuCaricoGiocatore ? (haRPE ? [
+          {titolo:`Carico di allenamento — ${etichetta}`, barre:[
+            {label:"RPE medio (su 10)", valore:nf(piuCaricoGiocatore.RPE_Medio,1), pct:(piuCaricoGiocatore.RPE_Medio??0)*10, colore:"#D8825F"},
+            {label:"Tasso di presenza", valore:pctTxt(piuCaricoGiocatore.Tasso_Presenza_pct,0), pct:piuCaricoGiocatore.Tasso_Presenza_pct??0, colore:"#5EC4CE"}
+          ]},
+          {titolo:"Carico totale (u.a.)", righe:[
+            ...(caricoPrecGiocatore ? [{label:etichettaPrec, valore:nf0(caricoPrecGiocatore.Carico_Tot)}] : []),
+            {label:etichetta, valore:nf0(piuCaricoGiocatore.Carico_Tot), colore:"#D8825F"},
+            ...(variazioneGiocatore!==null ? [{label:"Variazione", valore:(variazioneGiocatore>=1?"+":"")+nf0((variazioneGiocatore-1)*100)+"%", colore:"#D8825F"}] : [])
+          ]}
+        ] : [
+          {titolo:`Carico di stanchezza stimato più alto — ${etichetta}`, barre:[
+            {label:"Livello stimato (proxy senza RPE)", valore:piuCaricoGiocatore.Livello_Stanchezza, pct:piuCaricoGiocatore.Indice_Stanchezza??0, colore:"#D8825F"}
+          ], righe:[
+            {label:"Presenze", valore:`${nf0(piuCaricoGiocatore.Sessioni_Presenti)}/${nf0(piuCaricoGiocatore.Sessioni_Totali)}`},
+            {label:"Minuti in partitelle", valore:nf0(piuCaricoGiocatore.Minuti_Partitelle)}
+          ]}
+        ]) : []
+      });
+      kpiRowReport(pag, haRPE ? [
+        {l:"Allenamenti nel periodo", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
+        {l:"Carico medio", v: caricoMedioCorr!==null ? nf0(caricoMedioCorr) : "—", ...(dCarico?{d:dCarico.testo, dTipo:dCarico.tipo}:{})},
+        {l:"RPE medio squadra", v: rpeSquadra!=null ? nf(rpeSquadra,1) : "—", ...(dRpe?{d:dRpe.testo, dTipo:dRpe.tipo}:{})}
+      ] : [
+        {l:"Allenamenti nel periodo", v:nf0(totSess), ...(dSess?{d:dSess.testo, dTipo:dSess.tipo}:{})},
+        {l:"Presenza media", v:pctTxt(presenzaMedia,0), ...(dPres?{d:dPres.testo, dTipo:dPres.tipo}:{})},
+        {l:"Minuti tot. squadra", v:nf0(minutiTot), ...(dMinuti?{d:dMinuti.testo, dTipo:dMinuti.tipo}:{})},
+        {l:"Sotto il 60% di presenza", v:nf0(sottoSoglia.length), ...(dSottoSoglia?{d:dSottoSoglia.testo, dTipo:dSottoSoglia.tipo}:{})}
+      ]);
+      titoloSezioneReport(pag, "Cosa dicono i dati");
+      const bullet = [];
+      bullet.push(`${fraseInizialePeriodo(da,a)} la squadra ha svolto ${nf0(totSess)} allenamenti con una presenza media del ${pctTxt(presenzaMedia,0)}${presenzaMediaPrec!=null?` (${pctTxt(presenzaMediaPrec,0)} nel periodo precedente)`:""}.`);
+      if(haRPE && caricoMedioCorr!==null) bullet.push(`Il carico medio di allenamento (sRPE) è stato di ${nf0(caricoMedioCorr)} unità a presenza${caricoMedioPrec!==null?`, contro ${nf0(caricoMedioPrec)} del periodo precedente`:""}.`);
+      if(haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha accumulato il carico più alto del periodo (${nf0(piuCaricoGiocatore.Carico_Tot)} u.a.).`);
+      if(!haRPE && piuCaricoGiocatore) bullet.push(`<b>${esc(piuCaricoGiocatore.Giocatore)}</b> ha il carico di stanchezza stimato più alto del periodo (proxy da presenza e minuti nelle partitelle, non un vero RPE).`);
+      const frasePGAll = frasePersaGol(analizzaPersaGol(periodoCorr.allenamenti, "allenamento"), "allenamento", true);
+      if(frasePGAll) bullet.push(frasePGAll);
+      const fraseICAll = fraseInCampo(analizzaInCampo(periodoCorr.allenamenti, "allenamento"), true);
+      if(fraseICAll) bullet.push(fraseICAll);
+      const fraseFMAll = fraseFormazioneMiglioreDi(periodoCorr.allenamenti, "allenamento");
+      if(fraseFMAll) bullet.push(fraseFMAll);
+      bulletsReport(pag, bullet);
+      titoloSezioneReport(pag, "Tendenze rispetto al periodo precedente");
+      if(!righeAllenPrec.length){
+        bulletsReport(pag, [prevRange ? `Non disponibile: manca un periodo precedente con dati di allenamento da confrontare con ${etichetta}.` : "Non disponibile per un report su tutta la stagione: non c'è un periodo precedente con cui confrontarla."]);
+      } else if(!tendenzeMese.length){
+        bulletsReport(pag, ["Nessuna variazione degna di nota rispetto al periodo precedente: presenza e carico sono rimasti stabili per tutti i giocatori."]);
+      } else {
+        flagGiocatoriReport(pag, tendenzeMese);
+      }
+      titoloSezioneReport(pag, "Segnali da monitorare");
+      const avvisi = [];
+      sottoSoglia.forEach(r => avvisi.push(`<b>${esc(r.Giocatore)}</b>: presenza del ${pctTxt(r.Tasso_Presenza_pct,0)}, sotto la soglia consigliata del 60%.`));
+      if(haRPE && rapportoCarico !== null && rapportoCarico >= 1.5) avvisi.push(`Il carico medio di squadra è aumentato del ${nf0((rapportoCarico-1)*100)}% rispetto al periodo precedente: un salto così rapido è un segnale da monitorare con lo staff.`);
+      incrociMese.filter(x=>x.tipo==="affaticamento").forEach(x => avvisi.push(`<b>${esc(x.Giocatore)}</b>: carico in aumento (${nf(x.rapportoCarico,1)}×) insieme a un calo di rendimento in partita — possibile affaticamento.`));
+      bulletsReport(pag, avvisi.length ? avvisi : ["Nessun segnale particolare da monitorare in questo periodo."]);
+      titoloSezioneReport(pag, "Presenza per giocatore");
+      // altezza proporzionale ai giocatori e nessun nome saltato (stesso difetto del carico in dashboard, 12/10/2026)
+      graficoReport(pag, "rp-chart-presenza", {type:"bar", data:{labels:righeAllen.map(r=>r.Giocatore), datasets:[
+        {label:"Presenza", data:righeAllen.map(r=>r.Tasso_Presenza_pct), backgroundColor:righeAllen.map(r=>(r.Tasso_Presenza_pct??100)<60?PALETTE_REPORT.c2:PALETTE_REPORT.c1), borderRadius:3}
+      ]}, options: opzioniGraficoReport({indexAxis:"y", scales:{x:{min:0,max:100, ticks:{color:PALETTE_REPORT.muted, font:{size:10}, callback:v=>v+"%"}, grid:{color:PALETTE_REPORT.grid}}, y:{ticks:{color:PALETTE_REPORT.muted, font:{size:10}, autoSkip:false}, grid:{display:false}}}})}, Math.max(230, righeAllen.length * 16 + 40));
+    },
+    // Pagina a piena larghezza per i grafici a campo (04/09/2026): attaccati alla pagina con la colonna
+    // laterale restavano larghi poco più di mezza pagina, con le percentuali dentro le zone illeggibili e
+    // una striscia bianca vuota di 230px a sinistra su tutta la seconda pagina fisica.
+    Object.assign(async (pag) => {
+      bandaReport(pag, titoloReport, "Zone di recupero e palla persa", etichetta);
+      // il confronto per squadra viene incluso solo se il report copre una sola sessione (vedi
+      // renderZoneCampo per il perché: le squadre A/B cambiano a ogni allenamento)
+      zoneCampoReport(pag, periodoCorr.allenamenti, false, periodoCorr.allenamenti.length === 1);
+      persaGolReport(pag, periodoCorr.allenamenti, "allenamento");
+      inCampoReport(pag, periodoCorr.allenamenti, "allenamento");
+      formazioneMiglioreReport(pag, periodoCorr.allenamenti, "allenamento");
+    }, {piena:true}),
+    Object.assign(async (pag) => {
+      bandaReport(pag, titoloReport, "Dettaglio per giocatore", `${etichetta} — tutti i giocatori, tutte le voci raccolte`);
+      if(righeAllen.length){
+        titoloSezioneReport(pag, "Presenze e carico di allenamento");
+        const intestazioni = haRPE
+          ? ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza periodo prec.","Carico tot. (sRPE)","RPE medio","Carico stimato","Tendenza"]
+          : ["Giocatore","Ruolo","Sessioni (pres. / tot.)","Presenza","Presenza periodo prec.","Minuti tot.","Carico stimato","Tendenza"];
+        tabellaReport(pag, intestazioni,
+          righeAllen.map(r => {
+            const prec = righeAllenPrec.find(p => p.Giocatore === r.Giocatore);
+            const deltaPres = (prec && r.Tasso_Presenza_pct!=null && prec.Tasso_Presenza_pct!=null) ? r.Tasso_Presenza_pct - prec.Tasso_Presenza_pct : null;
+            const presenzaPrecTxt = prec ? pctTxt(prec.Tasso_Presenza_pct,0) : "—";
+            const tendenzaTxt = deltaPres===null ? `<span class="rp-flag flat">n/d</span>`
+              : deltaPres>=8 ? `<span class="rp-flag up">▲ ${nf0(deltaPres)}pt</span>`
+              : deltaPres<=-8 ? `<span class="rp-flag down">▼ ${nf0(Math.abs(deltaPres))}pt</span>`
+              : `<span class="rp-flag flat">stabile</span>`;
+            const base = [esc(r.Giocatore), esc(ruoloDi(r.Giocatore)), `${nf0(r.Sessioni_Presenti)}/${nf0(r.Sessioni_Totali)}`, pctTxt(r.Tasso_Presenza_pct,0), presenzaPrecTxt];
+            const carico = esc(livelloStanchezzaDi.get(r.Giocatore) || "—");
+            return haRPE ? [...base, nf0(r.Carico_Tot), nf(r.RPE_Medio,1), carico, tendenzaTxt] : [...base, nf0(r.Minuti_Tot), carico, tendenzaTxt];
+          }));
+        if(!haRPE) bulletsReport(pag, ["Carico di allenamento (sRPE) non disponibile: i file caricati non includono l'RPE percepito. La colonna «Carico stimato» è una proxy da presenza e minuti nelle partitelle, non un vero dato RPE."]);
+      } else {
+        bulletsReport(pag, ["Nessun dato di allenamento disponibile per questo periodo."]);
+      }
+    }, {piena:true})
+  ], "#rp-stato-allenamento");
+}
+
+/* ---- Report Stagionale ---- */
+async function generaReportStagionale(){
+  const ds = stato.ds;
+  const sq = riepilogoSquadra(ds.giocatori, ds.partite);
+  const agg = aggregaGiocatori(ds.giocatori);
+  const tendenze = calcolaTendenze(ds.giocatori).filter(t=>t.rilevante).sort((a,b)=>Math.abs(b.delta_totale)-Math.abs(a.delta_totale)).slice(0,6);
+  const incroci = ds.haRPE ? incrociCaricoRendimento(ds).slice(0,6) : [];
+  const qualita = validaDati(ds);
+  const leader = agg[0];
+  // Dati che servono alle sezioni "gemelle" di quelle del report di partita (04/09/2026)
+  const possessoStag = possessoStagionale(ds.partite);
+  const portieriStagione = Array.from(statistichePortieriPeriodo(ds.partite, ds.giocatori).entries())
+    .map(([nome, v]) => Object.assign({nome}, v))
+    .sort((a,b) => b.tiriSubitiTotali - a.tiriSubitiTotali);
+  const vinteStag = ds.partite.filter(p=>p.Gol_Fatti>p.Gol_Subiti).length;
+  const pareggiateStag = ds.partite.filter(p=>p.Gol_Fatti===p.Gol_Subiti).length;
+  const perseStag = ds.partite.filter(p=>p.Gol_Fatti<p.Gol_Subiti).length;
+  const andamentoLeader = leader ? ds.giocatori.filter(g => g.Giocatore === leader.Giocatore)
+    .slice().sort((a,b)=>(a.Data?+a.Data:0)-(b.Data?+b.Data:0))
+    .map(r => ({label:r.EtichettaPartita, valore:nf(r.Indice_Prestazione,1)})) : [];
+
+  statoReport("Genero il Report Stagionale…", true, "#rp-stato-partita");
+  await generaEScarica(nomeFileData("Report_Stagionale", new Date()), [
+    async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Vista stagionale", `${ds.partite.length} partite · aggiornato al ${dataLabel(new Date())}`);
+      sidebarReport(pag, {
+        eyebrow:"Miglior indice stagionale", nome:leader?.Giocatore, ruolo:leader?.Ruolo, colore:"#C99400",
+        gruppi: leader ? [
+          {titolo:"Statistiche stagionali", barre:[
+            {label:"Precisione passaggi", valore:pctTxt(leader.Precisione_Passaggi_pct,0), pct:leader.Precisione_Passaggi_pct??0},
+            {label:"Successo dribbling", valore:pctTxt(leader.Successo_Dribbling_pct,0), pct:leader.Successo_Dribbling_pct??0},
+            {label:"Tasso di errore", valore:pctTxt(leader.Tasso_Errore_pct,0), pct:leader.Tasso_Errore_pct??0, colore:"#D8825F"}
+          ]},
+          ...(andamentoLeader.length ? [{titolo:"Andamento indice, partita per partita", righe:andamentoLeader}] : [])
+        ] : []
+      });
+      kpiRowReport(pag, [
+        {l:"Partite giocate", v:nf0(ds.partite.length)},
+        {l:"Vittorie / Pareggi / Sconfitte", v:`${nf0(vinteStag)} / ${nf0(pareggiateStag)} / ${nf0(perseStag)}`},
+        {l:"Precisione passaggi", v:pctTxt(sq.precisione_passaggi)},
+        {l:"Tasso di errore", v:pctTxt(sq.tasso_errore)}
+      ]);
+      titoloSezioneReport(pag, "Statistiche di squadra");
+      statisticheSquadraReport(pag, [
+        [
+          sq.tiri_porta_rilevati
+            ? {label:"Precisione al tiro", valore:pctTxt(sq.precisione_tiro,0), pct:sq.precisione_tiro??0, colore:PALETTE_REPORT.c1}
+            : {label:"Realizzazione", valore:pctTxt(sq.efficacia_realizzativa,0), pct:sq.efficacia_realizzativa??0, colore:PALETTE_REPORT.c1},
+          {label:"Precisione passaggi", valore:pctTxt(sq.precisione_passaggi,0), pct:sq.precisione_passaggi??0, colore:PALETTE_REPORT.c1},
+          {label:"Successo dribbling", valore:pctTxt(sq.successo_dribbling,0), pct:sq.successo_dribbling??0, colore:PALETTE_REPORT.c1},
+          {label:"Tasso di errore", valore:pctTxt(sq.tasso_errore,0), pct:sq.tasso_errore??0, colore:PALETTE_REPORT.c2}
+        ],
+        [
+          sq.tiri_porta_rilevati
+            ? {label:"Tiri totali (in porta)", valore:`${nf0(sq.tiri_totali)} (${nf0(sq.tiri_in_porta)})`}
+            : {label:"Tiri totali", valore:nf0(sq.tiri_totali)},
+          {label:"Assist", valore:nf0(sq.assist)},
+          {label:"Palloni recuperati", valore:nf0(sq.recuperi)},
+          {label:"Parate", valore:nf0(sq.parate)}
+        ]
+      ]);
+      // Possesso palla stimato sull'intera stagione: stessa sezione del report di partita, stessi numeri,
+      // riferiti a tutte le gare (vedi possessoStagionale) — richiesta di Elisa del 04/09/2026.
+      if(possessoStag && possessoStag.partiteMisurate){
+        // con almeno una partita misurata con l'interruttore (18/10/2026)
+        const ps = possessoStag, misto = ps.partiteUsate > 0;
+        titoloSezioneReport(pag, misto ? "Possesso palla (misurato e stimato)" : "Possesso palla misurato");
+        kpiRowReport(pag, [
+          {l: misto ? "Possesso, tutte le partite" : "Possesso nostro", v:pctTxt(ps.pctCombinato,0)},
+          {l:"Con l'interruttore", v:pctTxt(ps.pctMisurato,0)},
+          {l:"Partite misurate", v:`${nf0(ps.partiteMisurate)} su ${nf0(ps.partiteMisurate + ps.partiteUsate)}`},
+          {l: misto ? "Stimato dagli eventi" : "Palla ferma o n.c.", v: misto ? pctTxt(ps.ourPossessionWeightedPct,0) : mmss(ps.misFerma)}
+        ]);
+        bulletsReport(pag, [
+          `Nelle ${nf0(ps.partiteMisurate)} ${ps.partiteMisurate === 1 ? "partita" : "partite"} con l'interruttore del possesso: palla nostra ${mmss(ps.misNoi)}, palla loro ${mmss(ps.misLoro)}, ferma o non classificabile ${mmss(ps.misFerma)}.`,
+          misto ? `Nelle altre ${nf0(ps.partiteUsate)} il possesso è stimato dai soli nostri eventi, che tendono a dare a noi più possesso di quello vero: il totale mette insieme i due dati, il confronto onesto è fra partite dello stesso tipo.` : `Misurato: la palla è loro quando l'interruttore è acceso, nostra quando è spento e c'è stato un nostro evento negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi; il resto non entra nella percentuale.`,
+          `${nf0(ds.partite.length - ps.partiteMisurate - ps.partiteUsate)} partite su ${nf0(ds.partite.length)} non hanno né l'interruttore né la sezione eventi.`
+        ].filter(t => !/^0 partite/.test(t)));
+      } else if(possessoStag){
+        titoloSezioneReport(pag, "Possesso palla stimato");
+        kpiRowReport(pag, [
+          {l:"Possesso stimato", v:pctTxt(possessoStag.ourPossessionWeightedPct,1)},
+          {l:"Copertura del dato", v:pctTxt(possessoStag.confidencePct,0)},
+          {l:"Affidabilità", v:getConfidenceLabelPossesso(possessoStag.confidencePct)},
+          {l:"Possessi rilevati", v:nf0(possessoStag.possessi)}
+        ]);
+        bulletsReport(pag, [
+          `Possesso certo nostro: ${mmss(possessoStag.ourCertainSec)} · avversario stimato: ${mmss(possessoStag.opponentEstimatedSec)} · palla contesa: ${mmss(possessoStag.contestedSec)} · non classificabile: ${mmss(possessoStag.unknownSec)}.`,
+          possessoStag.palleParse>0 ? `Rapporto recuperi/palle perse: ${nf(possessoStag.recuperi/possessoStag.palleParse,2)} (${nf0(possessoStag.recuperi)} recuperi, ${nf0(possessoStag.palleParse)} palle perse).` : `${nf0(possessoStag.recuperi)} recuperi registrati, nessuna palla persa.`,
+          `Calcolato su ${nf0(possessoStag.partiteUsate)} partite su ${nf0(ds.partite.length)}: le altre non hanno la sezione eventi nei file caricati.`,
+          "Possesso palla stimato da eventi (non possesso ufficiale): calcolato solo dai tuoi eventi di partita, senza i dati dell'avversario. Un passaggio o un dribbling sbagliato non fanno perdere il possesso da soli — solo una «palla persa» esplicita lo assegna all'avversario."
+        ]);
+      }
+    },
+    // Stesse sezioni del Report Partita, a piena larghezza, riferite alla stagione.
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Zone di gioco e dettagli", `${ds.partite.length} partite · aggiornato al ${dataLabel(new Date())}`);
+      if(ds.haEventiDisciplinari){
+        const somma = c => ds.giocatori.reduce((t,g)=>t+N(g[c]),0);
+        titoloSezioneReport(pag, "Disciplina e calci piazzati");
+        kpiRowReport(pag, [
+          {l:"Cartellini gialli", v:nf0(somma("Cartellini_Gialli"))},
+          {l:"Cartellini rossi", v:nf0(somma("Cartellini_Rossi"))},
+          {l:"Angoli (con gol)", v:`${nf0(somma("Angoli_Tentati"))} (${nf0(somma("Angoli_Gol"))})`},
+          {l:"Punizioni/rigori realizzati", v:`${nf0(somma("Punizioni_Realizzate"))}/${nf0(somma("Rigori_Realizzati"))}`}
+        ]);
+        const fallosi = agg.filter(a=>a.Cartellini_Totali>0).slice().sort((a,b)=>(b.Cartellini_Rossi*2+b.Cartellini_Gialli)-(a.Cartellini_Rossi*2+a.Cartellini_Gialli)).slice(0,5);
+        const angoli = agg.filter(a=>a.Angoli_Tentati>=2).slice().sort((a,b)=>b.Angoli_Realizzazione_pct-a.Angoli_Realizzazione_pct).slice(0,3);
+        const punizioni = agg.filter(a=>a.Punizioni_Tentate>=2).slice().sort((a,b)=>b.Realizzazione_Punizioni_pct-a.Realizzazione_Punizioni_pct).slice(0,3);
+        const rigori = agg.filter(a=>a.Rigori_Tentati>=1).slice().sort((a,b)=>b.Realizzazione_Rigori_pct-a.Realizzazione_Rigori_pct).slice(0,3);
+        const testiDisciplina = [];
+        if(fallosi.length) testiDisciplina.push("Più fallosi: "+fallosi.map(a=>`<b>${esc(a.Giocatore)}</b> (${nf0(a.Cartellini_Gialli)} gialli, ${nf0(a.Cartellini_Rossi)} rossi)`).join(", ")+".");
+        if(angoli.length) testiDisciplina.push("Miglior realizzazione sui calci d'angolo: "+angoli.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Angoli_Realizzazione_pct,0)}`).join(", ")+".");
+        if(punizioni.length) testiDisciplina.push("Miglior realizzazione su punizione: "+punizioni.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Punizioni_pct,0)}`).join(", ")+".");
+        if(rigori.length) testiDisciplina.push("Miglior realizzazione su rigore: "+rigori.map(a=>`<b>${esc(a.Giocatore)}</b> ${pctTxt(a.Realizzazione_Rigori_pct,0)}`).join(", ")+".");
+        if(testiDisciplina.length) bulletsReport(pag, testiDisciplina);
+      }
+      if(portieriStagione.length){
+        titoloSezioneReport(pag, "Tiri subiti dal portiere");
+        tabellaReport(pag, ["Portiere","Tiri subiti totali","Parate","Gol subiti"],
+          portieriStagione.map(p => [esc(p.nome), nf0(p.tiriSubitiTotali), nf0(p.parate), nf0(p.golSubiti)]));
+        bulletsReport(pag, [portieriStagione.some(p=>p.stimato)
+          ? `"Tiri subiti totali" è il totale dei tiri affrontati in stagione; dove il file della partita non ha la sezione «STATISTICHE PORTIERI GAME» il dato è stimato come parate del portiere più gol incassati dalla squadra in quella gara.`
+          : `"Tiri subiti totali" è il totale dei tiri affrontati in stagione (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
+      }
+      riconquistaReport(pag, ds.partite);
+      persaGolReport(pag, ds.partite, "partita");
+      inCampoReport(pag, ds.partite, "partita");
+      formazioneMiglioreReport(pag, ds.partite, "partita");
+      zoneCampoReport(pag, ds.partite, true);
+      golGameCampoReport(pag, ds.partite);
+      portaGolReport(pag, ds.partite);
+    }, {piena:true}),
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Lettura della stagione", `${ds.partite.length} partite — sintesi e contributo dei giocatori`);
+      titoloSezioneReport(pag, "Cosa dicono i dati");
+      const bulletStag = [];
+      if(leader) bulletStag.push(`<b>${esc(leader.Giocatore)}</b> ha guidato la stagione con un indice prestazione di ${nf(leader.Indice_Prestazione_Tot,1)} (${nf0(leader.Gol)} gol, ${nf0(leader.Assist)} assist in ${nf0(leader.Partite_Giocate)} partite).`);
+      bulletStag.push(`La squadra ha passato con il ${pctTxt(sq.precisione_passaggi,0)} di precisione e un tasso di errore del ${pctTxt(sq.tasso_errore,0)}.`);
+      bulletStag.push(`${nf0(sq.tiri_totali)} tiri totali in stagione, ${pctTxt(sq.efficacia_realizzativa ?? perc(sq.gol_giocatori, sq.tiri_totali),0)} trasformati in gol.`);
+      const migliorRecuperoStag = agg.slice().sort((a,b)=>b.Recuperi-a.Recuperi)[0];
+      if(migliorRecuperoStag) bulletStag.push(`<b>${esc(migliorRecuperoStag.Giocatore)}</b> ha guidato la fase di non possesso con ${nf0(migliorRecuperoStag.Recuperi)} palloni recuperati.`);
+      bulletStag.push(`Bilancio: ${nf0(vinteStag)} vittorie, ${nf0(pareggiateStag)} pareggi, ${nf0(perseStag)} sconfitte · ${nf0(sq.gol_fatti)} gol fatti e ${nf0(sq.gol_subiti)} subiti.`);
+      const frasePGStag = frasePersaGol(analizzaPersaGol(ds.partite, "partita"), "partita", true);
+      if(frasePGStag) bulletStag.push(frasePGStag);
+      const fraseICStag = fraseInCampo(analizzaInCampo(ds.partite, "partita"), true);
+      if(fraseICStag) bulletStag.push(fraseICStag);
+      const fraseFMStag = fraseFormazioneMiglioreDi(ds.partite, "partita");
+      if(fraseFMStag) bulletStag.push(fraseFMStag);
+      bulletsReport(pag, bulletStag);
+      titoloSezioneReport(pag, "Contributo dei giocatori in stagione");
+      tabellaReport(pag, ["Giocatore","Ruolo","Partite","Min","Gol","Ast","Prec. pass.","Indice tot."],
+        agg.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Partite_Giocate), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]),
+        agg.map(a => a.Minuti_Totali <= 0));
+      titoloSezioneReport(pag, "Andamento gol nella stagione");
+      graficoReport(pag, "rp-chart-gol-stag", {type:"bar", data:{labels:ds.partite.map(p=>p.Etichetta), datasets:[
+        {label:"Gol fatti", data:ds.partite.map(p=>p.Gol_Fatti), backgroundColor:PALETTE_REPORT.c1, borderRadius:3},
+        {label:"Gol subiti", data:ds.partite.map(p=>p.Gol_Subiti), backgroundColor:PALETTE_REPORT.c2, borderRadius:3}
+      ]}, options: opzioniGraficoReport()});
+    }, {piena:true}),
+    // Sezioni che esistono solo qui: hanno senso sulla stagione, non su una singola gara.
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Tendenze e segnali incrociati", "Vista d'insieme su partite e allenamenti");
+      titoloSezioneReport(pag, "Tendenze individuali rilevanti");
+      bulletsReport(pag, tendenze.length ? tendenze.map(t => fraseTendenza(t).replace(t.Giocatore, `<b>${esc(t.Giocatore)}</b>`)) : ["Nessuna tendenza statisticamente rilevante al momento."]);
+      titoloSezioneReport(pag, "Segnali incrociati carico ↔ rendimento");
+      const testi = incroci.map(x => {
+        if(x.tipo==="affaticamento") return `<b>${esc(x.Giocatore)}</b>: carico ${nf(x.rapportoCarico,1)}× tra ${meseBreve(x.mesePrec)} e ${meseBreve(x.meseCorr)} e rendimento in calo di ${nf0(Math.abs(x.deltaIndice))} punti — possibile affaticamento.`;
+        if(x.tipo==="positivo") return `<b>${esc(x.Giocatore)}</b>: carico stabile e rendimento in crescita di ${nf0(x.deltaIndice)} punti tra ${meseBreve(x.mesePrec)} e ${meseBreve(x.meseCorr)}.`;
+        return `<b>${esc(x.Giocatore)}</b>: carico in forte calo e rendimento sceso di ${nf0(Math.abs(x.deltaIndice))} punti tra ${meseBreve(x.mesePrec)} e ${meseBreve(x.meseCorr)}.`;
+      });
+      bulletsReport(pag, testi.length ? testi : [ds.haRPE ? "Nessun segnale incrociato ancora disponibile: servono almeno due mesi consecutivi con partite e allenamenti." : "Non disponibile: richiede il carico di allenamento (sRPE), non presente nei file caricati."]);
+      titoloSezioneReport(pag, "Qualità dei dati");
+      bulletsReport(pag, [qualita.length ? `${qualita.filter(a=>a.tipo==="errore").length} righe da correggere, ${qualita.filter(a=>a.tipo==="attenzione").length} da verificare (dettaglio nella dashboard).` : "Nessuna anomalia rilevata nei dati inseriti per questa stagione."]);
+    }, {piena:true}),
+    Object.assign(async (pag) => {
+      bandaReport(pag, "Report Stagionale", "Statistiche dettagliate", "Tutti i giocatori, tutte le voci raccolte in stagione");
+      tabelleDettaglioGiocatori(pag, agg, ds.haEventiDisciplinari);
+    }, {piena:true})
+  ]);
+}
+
+/* =====================================================================
+   ASSISTENTE IA
+   ===================================================================== */
+const SYSTEM_IA = `Sei un assistente che aiuta l'allenatore di una squadra amatoriale di calcio a 7 a leggere i dati della propria stagione.
+Rispondi SEMPRE in italiano, in modo conciso e concreto, con frasi brevi e al massimo 5 punti.
+Usa SOLO i numeri presenti nel contesto JSON fornito: non inventare statistiche, non stimare valori non presenti.
+Se un dato manca, dillo chiaramente ("questo dato non è nel file caricato").
+Se le partite sono poche (meno di 5), avverti che le indicazioni sono provvisorie.
+Ricorda che l'indice prestazione non è una metrica ufficiale e che le tendenze sono indicazioni statistiche, non giudizi definitivi.
+Non dare consigli medici né diagnosi sugli infortuni: al massimo suggerisci di parlarne con lo staff.`;
+
+function contestoIA(){
+  const f = datiFiltrati();
+  const agg = aggregaGiocatori(f.giocatori);
+  const sq = riepilogoSquadra(f.giocatori, f.partite);
+  const tend = (stato.tendenze || []).filter(t => t.rilevante).map(t => ({
+    giocatore:t.Giocatore, metrica:t.cfg.label, direzione:t.direzione,
+    delta:+t.delta_totale.toFixed(1), r:+t.r.toFixed(2), partite:t.n, giudizio:t.giudizio}));
+  const mesi = stato.ds.mesi.map(m => {
+    const d = datiMese(m); const s = riepilogoSquadra(d.giocatori, d.partite);
+    return {mese:m, partite:d.partite.length, gol_fatti:s.gol_fatti, gol_subiti:s.gol_subiti,
+      precisione_passaggi: s.precisione_passaggi===null?null:+s.precisione_passaggi.toFixed(1),
+      precisione_tiro: s.precisione_tiro===null?null:+s.precisione_tiro.toFixed(1),
+      tasso_errore: s.tasso_errore===null?null:+s.tasso_errore.toFixed(1)};
+  });
+  let allen = null;
+  if(stato.ds.haAllenamenti){
+    const haRPE = stato.ds.haRPE;
+    const a = aggregaAllenamenti(f.allenamenti, f.presenze);
+    allen = {sessioni:a.totSess, carico_srpe_disponibile:haRPE, giocatori:a.righe.map(r=>({giocatore:r.Giocatore,
+      presenza_pct: r.Tasso_Presenza_pct===null?null:+r.Tasso_Presenza_pct.toFixed(0),
+      carico_srpe: haRPE ? r.Carico_Tot : null, rpe_medio: (haRPE && r.RPE_Medio!==null) ? +r.RPE_Medio.toFixed(1) : null})),
+      carico_mensile: haRPE ? caricoMensile(stato.ds.allenamenti, stato.ds.presenze).map(m=>({mese:m.Mese, carico_totale:m.Carico_Tot, carico_medio:m.Carico_Medio===null?null:+m.Carico_Medio.toFixed(0)})) : []};
+  }
+  return {
+    periodo: stato.periodo === "tutto" ? "tutta la stagione" : meseLabel(stato.periodo),
+    partite: f.partite.map(p=>({data:dataLabel(p.Data), avversario:p.Avversario, risultato:p.Risultato})),
+    squadra: {gol_fatti:sq.gol_fatti, gol_subiti:sq.gol_subiti,
+      precisione_passaggi_pct: sq.precisione_passaggi===null?null:+sq.precisione_passaggi.toFixed(1),
+      precisione_tiro_pct: sq.precisione_tiro===null?null:+sq.precisione_tiro.toFixed(1),
+      realizzazione_pct: sq.efficacia_realizzativa===null?null:+sq.efficacia_realizzativa.toFixed(1),
+      successo_dribbling_pct: sq.successo_dribbling===null?null:+sq.successo_dribbling.toFixed(1),
+      tasso_errore_pct: sq.tasso_errore===null?null:+sq.tasso_errore.toFixed(1)},
+    classifica: agg.map(a=>({giocatore:a.Giocatore, ruolo:a.Ruolo, partite:a.Partite_Giocate, minuti:a.Minuti_Totali,
+      gol:a.Gol, assist:a.Assist, precisione_passaggi_pct:a.Precisione_Passaggi_pct===null?null:+a.Precisione_Passaggi_pct.toFixed(1),
+      precisione_tiro_pct:a.Precisione_Tiro_pct===null?null:+a.Precisione_Tiro_pct.toFixed(1),
+      tiri:a.Tiri_Totali, realizzazione_pct:a.Efficacia_Realizzativa_pct===null?null:+a.Efficacia_Realizzativa_pct.toFixed(1),
+      successo_dribbling_pct:a.Successo_Dribbling_pct===null?null:+a.Successo_Dribbling_pct.toFixed(1),
+      tasso_errore_pct:a.Tasso_Errore_pct===null?null:+a.Tasso_Errore_pct.toFixed(1),
+      parate:a.Parate, indice_prestazione:+a.Indice_Prestazione_Tot.toFixed(1)})),
+    tendenze_rilevanti: tend, aggregati_mensili: mesi, allenamenti: allen,
+    disciplina_calci_piazzati_disponibile: stato.ds.haEventiDisciplinari,
+    disciplina_calci_piazzati: stato.ds.haEventiDisciplinari ? agg.map(a=>({giocatore:a.Giocatore,
+      cartellini_gialli:a.Cartellini_Gialli, cartellini_rossi:a.Cartellini_Rossi,
+      angoli_tentati:a.Angoli_Tentati, angoli_realizzazione_pct:a.Angoli_Realizzazione_pct===null?null:+a.Angoli_Realizzazione_pct.toFixed(0),
+      punizioni_tentate:a.Punizioni_Tentate, punizioni_realizzazione_pct:a.Realizzazione_Punizioni_pct===null?null:+a.Realizzazione_Punizioni_pct.toFixed(0),
+      rigori_tentati:a.Rigori_Tentati, rigori_realizzazione_pct:a.Realizzazione_Rigori_pct===null?null:+a.Realizzazione_Rigori_pct.toFixed(0)})) : []
+  };
+}
+
+const MEMORIA_CHIAVE = "local" + "Storage";
+function memoria(){
+  try{
+    const m = window[MEMORIA_CHIAVE];
+    if(!m) return null;
+    const t = "__prova_calcio7__";
+    m.setItem(t, "1"); m.removeItem(t);
+    return m;
+  }catch(e){ return null; }
+}
+function memoriaLeggi(k){ try{ const m = memoria(); return m ? m.getItem(k) : null; }catch(e){ return null; } }
+function memoriaScrivi(k, v){ try{ const m = memoria(); if(!m) return false; m.setItem(k, v); return true; }catch(e){ return false; } }
+function memoriaRimuovi(k){ try{ const m = memoria(); if(m) m.removeItem(k); }catch(e){} }
+function localOk(){ return memoria() !== null; }
+function statoChiave(msg){ $("#ia-stato-chiave").textContent = msg; }
+
+async function chiediIA(){
+  const box = $("#ia-risposta");
+  const chiave = ($("#ia-chiave").value || stato.chiaveIA || "").trim();
+  const domanda = $("#ia-domanda").value.trim();
+  box.classList.remove("nascosto");
+  if(!stato.ds){ box.textContent = "Carica prima i dati (i file Seven Lab o i dati di esempio): senza numeri non c'è nulla da analizzare."; return; }
+  if(!chiave){ box.textContent = "Inserisci la tua chiave API OpenAI nel campo qui sopra. Senza chiave non posso contattare il modello."; return; }
+  if(!domanda){ box.textContent = "Scrivi una domanda, per esempio: «Chi sta migliorando di più?» oppure «Su cosa lavoriamo in allenamento questa settimana?»."; return; }
+  box.textContent = "Sto ragionando sui tuoi dati…";
+  try{
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method:"POST",
+      headers:{"Content-Type":"application/json", "Authorization":"Bearer "+chiave},
+      body: JSON.stringify({model:"gpt-4o-mini", temperature:0.2, messages:[
+        {role:"system", content:SYSTEM_IA},
+        {role:"user", content:"Dati aggregati della squadra (JSON):\n"+JSON.stringify(contestoIA())+"\n\nDomanda dell'allenatore: "+domanda}
+      ]})
+    });
+    if(res.status === 401){ box.textContent = "La chiave API è stata rifiutata (errore 401). Controlla di averla copiata per intero e che sia ancora attiva."; return; }
+    if(res.status === 429){ box.textContent = "OpenAI ha risposto «troppe richieste o credito esaurito» (errore 429). Riprova tra qualche minuto o controlla il credito del tuo account."; return; }
+    if(!res.ok){ box.textContent = "OpenAI ha risposto con un errore (codice "+res.status+"). Riprova più tardi."; return; }
+    const j = await res.json();
+    const txt = j?.choices?.[0]?.message?.content;
+    box.textContent = txt ? txt : "La risposta è arrivata vuota. Riprova riformulando la domanda.";
+  }catch(err){
+    box.textContent = "Non riesco a raggiungere OpenAI: controlla la connessione a internet. (Dettaglio tecnico: "+(err?.message||"errore di rete")+")";
+  }
+}
+
+/* ---- Report Confronto tra due giocatori ---- */
+
+/* La vecchia pagina a tre colonne (nuovaPaginaReportConfronto: colonna scura a sinistra, contenuto in
+   mezzo, colonna scura a destra) è stata rimossa il 04/09/2026. Le due colonne laterali erano alte quanto
+   tutta la pagina e sbordavano sul foglio successivo, e mostravano cose diverse a destra e a sinistra
+   perché ciascuna elencava solo i punti di forza trovati per il proprio giocatore. Ora il Report Confronto
+   usa lo stesso motore a pagine A4 degli altri report, con due schede simmetriche dentro il corpo pagina
+   (vedi schedeConfrontoReport). */
+
+/** Tabella "Indicatore / Giocatore A / Giocatore B" per la colonna centrale del report, con la stessa
+ *  logica di evidenziazione del migliore usata a schermo (RIGHE_CONFRONTO + classeMiglior), ma con una
+ *  classe CSS a sé (rp-migliore) perché il report usa una tavolozza di colori fissa, non le variabili
+ *  CSS del tema chiaro/scuro dell'app. */
+/** Le due schede dei giocatori a confronto, affiancate nel corpo della pagina. Prima erano due colonne
+ *  laterali alte quanto tutta la pagina: sballavano l'impaginazione (quella di destra sbordava sul foglio
+ *  successivo) e soprattutto mostravano COSE DIVERSE a sinistra e a destra, perché ogni colonna elencava
+ *  solo i "punti di forza" trovati per quel giocatore — se uno non ne aveva, il suo lato restava mezzo
+ *  vuoto. Segnalato da Elisa il 04/09/2026: «non mostra gli stessi dati da dx a sx». Ora le due schede
+ *  hanno per costruzione le STESSE righe, e dove un valore non c'è si scrive "—". */
+function schedeConfrontoReport(pagina, a, b, rankA, rankB, unitaPl="Partite"){
+  const righe = (g, rank) => [
+    [`${unitaPl} · minuti`, `${nf0(g.Partite_Giocate)} · ${nf0(g.Minuti_Totali)}'`],
+    ["Indice prestazione", `${nf(g.Indice_Prestazione_Tot,1)} · ${rank}° in squadra`],
+    ["Gol · assist", `${nf0(g.Gol)} · ${nf0(g.Assist)}`],
+    ["Precisione passaggi", pctTxt(g.Precisione_Passaggi_pct,0)],
+    tiriPortaRilevati([a, b]) ? ["Precisione al tiro", pctTxt(g.Precisione_Tiro_pct,0)] : ["Realizzazione", pctTxt(g.Efficacia_Realizzativa_pct,0)],
+    ["Successo dribbling", pctTxt(g.Successo_Dribbling_pct,0)],
+    ["Tasso di errore", pctTxt(g.Tasso_Errore_pct,0)]
+  ];
+  const scheda = (g, rank, colore, etichetta) => `
+    <div class="rp-cf-scheda">
+      <div class="rp-cf-eyebrow">${esc(etichetta)}</div>
+      <div class="rp-cf-testa">
+        <div class="rp-cf-avatar" style="border-color:${colore}">${esc(iniziali(g.Giocatore))}</div>
+        <div><div class="rp-cf-nome">${esc(g.Giocatore)}</div><div class="rp-cf-ruolo">${esc(g.Ruolo)}</div></div>
+      </div>
+      ${righe(g, rank).map(([l,v]) => `<div class="rp-cf-riga"><span>${esc(l)}</span><b>${esc(v)}</b></div>`).join("")}
+    </div>`;
+  const blocco = document.createElement("div");
+  blocco.className = "rp-cf-schede";
+  blocco.innerHTML = scheda(a, rankA, "#C99400", "Giocatore A") + scheda(b, rankB, "#5EC4CE", "Giocatore B");
+  pagina.corpo.appendChild(blocco);
+}
+
+/** Punti di forza dell'uno sull'altro, affiancati e simmetrici: ogni colonna dice sempre qualcosa, anche
+ *  quando un giocatore non ha nessun vantaggio netto (in quel caso lo dichiara, invece di restare vuota). */
+function puntiForzaConfrontoReport(pagina, a, b){
+  const colonna = (mio, altro) => {
+    const punti = insightConfrontoLato(mio, altro);
+    return `<div class="rp-cf-forza">
+      <div class="rp-cf-forza-tit">${esc(mio.Giocatore)}, dove è avanti</div>
+      ${punti.length
+        ? `<ul class="rp-bullets">${punti.map(x=>`<li>${esc(x.label)}: <b>${esc(x.valore)}</b></li>`).join("")}</ul>`
+        : `<p class="rp-cf-nessuno">Nessun vantaggio netto su ${esc(altro.Giocatore)} tra gli indicatori confrontati.</p>`}
+    </div>`;
+  };
+  const blocco = document.createElement("div");
+  blocco.className = "rp-cf-forze";
+  blocco.innerHTML = colonna(a, b) + colonna(b, a);
+  pagina.corpo.appendChild(blocco);
+}
+
+function tabellaConfrontoReport(pagina, a, b, righe){
+  const tbl = document.createElement("table");
+  tbl.className = "rp-table rp-table-confronto";
+  tbl.innerHTML = `<thead><tr><th>Indicatore</th><th>${esc(a.Giocatore)}</th><th>${esc(b.Giocatore)}</th></tr></thead>
+    <tbody>${righe.map(r => {
+      const va = r.get(a), vb = r.get(b);
+      return `<tr><td>${esc(r.label)}</td>
+        <td${classeMiglior(r, va, vb, true, "rp-migliore")}>${formattaValoreConfronto(r, va)}</td>
+        <td${classeMiglior(r, va, vb, false, "rp-migliore")}>${formattaValoreConfronto(r, vb)}</td></tr>`;
+    }).join("")}</tbody>`;
+  pagina.corpo.appendChild(tbl);
+}
+
+/** Fino a 3 indicatori (tra i 5 del radar) dove `mio` batte `altro`, ordinati per margine — il cuore
+ *  della colonna laterale: non ripete la tabella centrale, la riassume in chiave "perché scegliere lui/lei". */
+function insightConfrontoLato(mio, altro){
+  const metriche = [
+    ["Precisione al tiro", mio.Precisione_Tiro_pct, altro.Precisione_Tiro_pct],
+    ["Precisione passaggi", mio.Precisione_Passaggi_pct, altro.Precisione_Passaggi_pct],
+    ["Successo dribbling", mio.Successo_Dribbling_pct, altro.Successo_Dribbling_pct],
+    ["Efficacia realizzativa", mio.Efficacia_Realizzativa_pct, altro.Efficacia_Realizzativa_pct],
+    ["Affidabilità (100 − errore)", mio.Tasso_Errore_pct===null?null:100-mio.Tasso_Errore_pct, altro.Tasso_Errore_pct===null?null:100-altro.Tasso_Errore_pct]
+  ];
+  return metriche
+    // Il margine deve arrotondare ad almeno 1 punto: altrimenti comparirebbe un "punto di forza" con un
+    // "(+0pt)" accanto, che sembra un errore invece di un vero vantaggio.
+    .filter(([,v1,v2]) => v1!==null && v2!==null && Math.round(v1-v2) >= 1)
+    .sort((x,y) => (y[1]-y[2]) - (x[1]-x[2]))
+    .slice(0,3)
+    .map(([label,v1,v2]) => ({label, valore:`${pctTxt(v1,0)} (+${nf0(v1-v2)}pt)`, colore:"#8FD9C4"}));
+}
+
+/** Se i due giocatori hanno ruoli diversi, confronta `mio` con la media (pesata sui totali) di chi
+ *  gioca nel ruolo `ruoloAltro` nel periodo: risponde direttamente alla domanda "per statistiche,
+ *  potrebbe coprire l'altro ruolo?". Solo indicatori in percentuale, confrontabili a prescindere da
+ *  quanti giocatori compongono il gruppo di riferimento (a differenza di conteggi grezzi come i recuperi). */
+function compatibilitaRuoloReport(mio, ruoloAltro, righeDataset){
+  const peer = righeDataset.filter(g => g.Ruolo === ruoloAltro);
+  if(!peer.length) return null;
+  const base = riepilogoSquadra(peer, []);
+  const voci = [
+    ["Precisione passaggi", mio.Precisione_Passaggi_pct, base.precisione_passaggi, "alto"],
+    ["Precisione al tiro", mio.Precisione_Tiro_pct, base.precisione_tiro, "alto"],
+    ["Tasso di errore", mio.Tasso_Errore_pct, base.tasso_errore, "basso"]
+  ].filter(([,v1,v2]) => v1!==null && v2!==null);
+  if(!voci.length) return null;
+  return voci.map(([label,v1,v2,meglio]) => {
+    // Confronta gli arrotondamenti mostrati (pctTxt a 0 decimali), non i valori grezzi: altrimenti "24%
+    // vs 24%" può risultare colorato come se uno battesse l'altro per una differenza invisibile a schermo.
+    const r1 = Math.round(v1), r2 = Math.round(v2);
+    const colore = r1 === r2 ? "#B9C9C4" : (meglio==="alto" ? r1>r2 : r1<r2) ? "#8FD9C4" : "#E8A2AE";
+    return {label, valore:`${pctTxt(v1,0)} vs ${pctTxt(v2,0)}`, colore};
+  });
+}
+
+async function generaReportConfronto(nomeA, nomeB, cfg=CONFRONTO_PARTITE){
+  const idStato = cfg === CONFRONTO_ALLENAMENTO ? "#cfa-rp-stato" : "#cf-rp-stato";
+  const titoloReport = cfg === CONFRONTO_ALLENAMENTO ? "Report Confronto Allenamenti" : "Report Confronto";
+  if(!nomeA || !nomeB || nomeA === nomeB){ statoReport("Scegli due giocatori diversi nella sezione Confronto per generare il report.", false, idStato); return; }
+  const f = datiFiltrati();
+  const sorgente = cfg.righeDa(f) || [];
+  const agg = aggregaGiocatori(sorgente);
+  const a = agg.find(x => x.Giocatore === nomeA), b = agg.find(x => x.Giocatore === nomeB);
+  if(!a || !b){ statoReport("Dati insufficienti per uno dei due giocatori nel periodo scelto.", false, idStato); return; }
+
+  const rankA = agg.findIndex(x => x.Giocatore === a.Giocatore) + 1;
+  const rankB = agg.findIndex(x => x.Giocatore === b.Giocatore) + 1;
+  const stessoRuolo = a.Ruolo === b.Ruolo;
+  const righeStat = righeConfrontoPer(cfg.unitaPl, a, b);
+
+  statoReport(`Genero il ${titoloReport}…`, true, idStato);
+  // Dalla v1.23.0 passa dallo stesso motore degli altri report (generaEScarica + impaginaDocumento): pagine
+  // A4 vere a piena larghezza, invece della vecchia pagina a tre colonne che sbordava sul foglio dopo.
+  const metricheRadar = [
+    ["Precisione passaggi", a.Precisione_Passaggi_pct, b.Precisione_Passaggi_pct],
+    ["Precisione al tiro", a.Precisione_Tiro_pct, b.Precisione_Tiro_pct],
+    ["Successo dribbling", a.Successo_Dribbling_pct, b.Successo_Dribbling_pct],
+    ["Efficacia realizzativa", a.Efficacia_Realizzativa_pct, b.Efficacia_Realizzativa_pct],
+    ["Affidabilità (100 − errore)", a.Tasso_Errore_pct===null?null:100-a.Tasso_Errore_pct, b.Tasso_Errore_pct===null?null:100-b.Tasso_Errore_pct]
+  ].filter(([nome]) => nome !== "Precisione al tiro" || tiriPortaRilevati([a, b]));
+  const prefissoFile = cfg === CONFRONTO_ALLENAMENTO ? "Report_Confronto_Allenamenti" : "Report_Confronto";
+  await generaEScarica(nomeFileData(`${prefissoFile}_${a.Giocatore.replace(/\s+/g,"")}_${b.Giocatore.replace(/\s+/g,"")}`, new Date()), [
+    Object.assign(async (pag) => {
+      bandaReport(pag, titoloReport, `${a.Giocatore} vs ${b.Giocatore}`,
+        `${stessoRuolo ? "Stesso ruolo (" + a.Ruolo + ")" : a.Ruolo + " vs " + b.Ruolo} · ${stato.periodo==="tutto" ? "Tutta la stagione" : meseLabel(stato.periodo)}${cfg === CONFRONTO_ALLENAMENTO ? " · dati delle partitelle di allenamento" : ""}`);
+      schedeConfrontoReport(pag, a, b, rankA, rankB, cfg.unitaPl);
+      titoloSezioneReport(pag, "Punti di forza a confronto");
+      puntiForzaConfrontoReport(pag, a, b);
+      if(!stessoRuolo){
+        const compA = compatibilitaRuoloReport(a, b.Ruolo, sorgente);
+        const compB = compatibilitaRuoloReport(b, a.Ruolo, sorgente);
+        if(compA || compB){
+          titoloSezioneReport(pag, "Compatibilità con il ruolo dell'altro");
+          bulletsReport(pag, [
+            `<b>${esc(a.Giocatore)}</b> nel ruolo di ${esc(b.Ruolo)}: ${compA ? compA.map(r=>`${esc(r.label)} ${esc(r.valore)}`).join(" · ") : "dati insufficienti"}.`,
+            `<b>${esc(b.Giocatore)}</b> nel ruolo di ${esc(a.Ruolo)}: ${compB ? compB.map(r=>`${esc(r.label)} ${esc(r.valore)}`).join(" · ") : "dati insufficienti"}.`
+          ]);
+        }
+      }
+      titoloSezioneReport(pag, "Confronto diretto");
+      graficoReport(pag, "rp-cf-radar", {
+        type:"radar",
+        data:{labels:metricheRadar.map(m=>m[0]), datasets:[
+          {label:a.Giocatore, data:metricheRadar.map(m=>m[1]===null?0:m[1]), borderColor:PALETTE_REPORT.c1, backgroundColor:PALETTE_REPORT.c1+"33", pointBackgroundColor:PALETTE_REPORT.c1, borderWidth:2.4},
+          {label:b.Giocatore, data:metricheRadar.map(m=>m[2]===null?0:m[2]), borderColor:PALETTE_REPORT.c2, backgroundColor:PALETTE_REPORT.c2+"33", pointBackgroundColor:PALETTE_REPORT.c2, borderWidth:2.4}
+        ]},
+        options: opzioniGraficoReport({
+          scales:{r:{min:0, max:100, ticks:{stepSize:25, color:PALETTE_REPORT.muted, font:{size:9}, backdropColor:"transparent", callback:v=>v+"%"},
+            grid:{color:PALETTE_REPORT.grid}, angleLines:{color:PALETTE_REPORT.grid}, pointLabels:{color:PALETTE_REPORT.text, font:{size:10}}}}
+        })
+      }, 380);
+      titoloSezioneReport(pag, "Tutti gli indicatori");
+      tabellaConfrontoReport(pag, a, b, righeStat);
+      bulletsReport(pag, ["La cella evidenziata è il valore migliore tra i due per quell'indicatore."]
+        .concat(cfg === CONFRONTO_ALLENAMENTO
+          ? ["Tutti i numeri di questo report vengono dalle partitelle di allenamento, non dalle partite ufficiali: servono a leggere anche i giocatori che in stagione hanno giocato poco o niente. Con un numero di presenze molto diverso tra i due, i totali non sono pienamente confrontabili — guardare la riga «Sessioni frequentate» prima di trarre conclusioni."]
+          : []));
+    }, {piena:true})
+  ], idStato);
+}
+
+/* =====================================================================
+   EVENTI
+   ===================================================================== */
+function initTema(){
+  let salvato = null;
+  salvato = memoriaLeggi("tema-calcio7");
+  const scuroPreferito = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const tema = salvato || (scuroPreferito ? "scuro" : "chiaro");
+  applicaTema(tema);
+}
+function applicaTema(tema){
+  document.documentElement.dataset.tema = tema;
+  $("#btn-tema").textContent = tema === "scuro" ? "Tema chiaro" : "Tema scuro";
+  $("#btn-tema").setAttribute("aria-label", tema === "scuro" ? "Passa al tema chiaro" : "Passa al tema scuro");
+  memoriaScrivi("tema-calcio7", tema);
+  if(stato.ds){ distruggiGrafici(); render(); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Sempre visibile, anche prima di caricare qualunque file e anche se per qualche motivo il resto
+  // dell'inizializzazione dovesse fallire più sotto: serve solo a poter verificare, dopo un
+  // aggiornamento su GitHub, che la versione online sia davvero quella nuova. Per questo viene
+  // impostata per prima, prima di qualunque codice che dipende dalle librerie esterne (Chart.js ecc.).
+  const elVersione = $("#versione-app");
+  if(elVersione){
+    elVersione.textContent = `Versione ${VERSIONE_APP.numero} · ${dataLabel(new Date(VERSIONE_APP.data+"T00:00:00"))}`;
+    elVersione.title = VERSIONE_APP.note;
+  }
+
+  initTema();
+  aggiornaAltezzaBarraFissa();
+  window.addEventListener("resize", aggiornaAltezzaBarraFissa);
+  Chart.defaults.font.family = "Satoshi, system-ui, sans-serif";
+  Chart.defaults.font.size = 12;
+
+  $("#btn-tema").addEventListener("click", () => applicaTema(document.documentElement.dataset.tema === "scuro" ? "chiaro" : "scuro"));
+  $("#btn-scegli").addEventListener("click", () => $("#input-file").click());
+  $("#input-file").addEventListener("change", e => { if(e.target.files.length) gestisciFileSelezionati(e.target.files); e.target.value = ""; });
+  $("#pannello-file").addEventListener("click", e => {
+    const btn = e.target.closest("[data-elimina-sessione]");
+    if(!btn) return;
+    eliminaSessioneSalvata(btn.getAttribute("data-elimina-sessione"));
+    ricaricaDaSessioni();
+  });
+  // riprende automaticamente da dove si era rimasti se ci sono già file Seven Lab salvati nel browser
+  // regola dei tempi del 12/10/2026 applicata anche alle sessioni già salvate (vedi rivalutaTempiSessioniSalvate)
+  // Dal 16/10/2026 l'archivio si carica in modo asincrono (IndexedDB) e poi si sincronizza con il cloud.
+  initCloud();
+  avviaArchivio().then(() => {
+    try{ rivalutaTempiSessioniSalvate(); }catch(e){ console.warn("Rivalutazione tempi non riuscita", e); }
+    if(leggiSessioniSalvate().length) ricaricaDaSessioni(); else renderPannelloFile();
+    if(accessoCloud()){ ultimaSincAuto = Date.now(); sincronizza(); }
+  });
+  $("#btn-demo").addEventListener("click", () => {
+    try{
+      const ds = preparaDataset(JSON.parse(JSON.stringify(DATI_DEMO)));
+      distruggiGrafici();
+      attivaDashboard(ds, "Dati di esempio · 4 partite");
+    }catch(err){
+      mostraErrore("Errore nei dati di esempio: "+esc(err.message));
+      $("#errore-caricamento").classList.remove("nascosto");
+    }
+  });
+  $("#btn-nuovo").addEventListener("click", () => {
+    distruggiGrafici();
+    stato.ds = null;
+    $("#dashboard").classList.add("nascosto");
+    $("#sez-caricamento").classList.remove("nascosto");
+    $("#barra-filtri").classList.add("nascosto");
+    $("#tab-switcher").classList.add("nascosto");
+    $("#nav-sezioni").classList.add("nascosto");
+    $("#btn-nuovo").classList.add("nascosto");
+    $("#badge-dataset").classList.add("nascosto");
+    $("#input-file").value = "";
+    window.scrollTo({top:0});
+  });
+  const dz = $("#dropzone");
+  ["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add("attivo"); }));
+  ["dragleave","drop"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("attivo"); }));
+  dz.addEventListener("drop", e => { const f = e.dataTransfer?.files; if(f && f.length) gestisciFileSelezionati(f); });
+
+  $("#sel-periodo").addEventListener("change", e => { stato.periodo = e.target.value; distruggiGrafici(); render(); });
+  $("#sel-all-da").addEventListener("change", e => { stato.allenamentoDashDa = e.target.value || null; renderAllenamenti(); });
+  $("#sel-all-a").addEventListener("change", e => { stato.allenamentoDashA = e.target.value || null; renderAllenamenti(); });
+  $("#sel-giocatore").addEventListener("change", e => { stato.giocatore = e.target.value; renderGiocatore(datiFiltrati()); renderAndamentoIndividuale(); renderPersaGiocatorePartita(datiFiltrati()); });
+  const selPG = $("#pg-sel-giocatore");
+  if(selPG) selPG.addEventListener("change", e => { stato.persaGiocatoreAll = e.target.value; renderPersaGiocatoreAllenamento(datiFiltrati()); });
+  const selPGP = $("#pgp-sel-ambito");
+  if(selPGP) selPGP.addEventListener("change", e => { stato.persaAmbitoPartita = e.target.value; renderPersaGiocatorePartita(datiFiltrati()); });
+  const selZone = $("#zn-sel-sessione");
+  if(selZone) selZone.addEventListener("change", e => { stato.zoneSessione = e.target.value; renderZoneAllenamento(datiFiltrati()); });
+  const selPOS = $("#pos-sel-partita");
+  if(selPOS) selPOS.addEventListener("change", e => { stato.possessoPartita = e.target.value; renderPossessoPartita(datiFiltrati()); adattaLarghezzeColonneSchermo(); });
+  const selPGL = $("#pgl-sel-partita");
+  if(selPGL) selPGL.addEventListener("change", e => { stato.persaGolPartita = e.target.value;
+    renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", datiFiltrati().partite, "partita"); adattaLarghezzeColonneSchermo(); });
+  const selPGLA = $("#pgl-sel-allenamento");
+  if(selPGLA) selPGLA.addEventListener("change", e => { stato.persaGolAllenamento = e.target.value;
+    renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", datiFiltrati().allenamenti, "allenamento"); adattaLarghezzeColonneSchermo(); });
+  const selICP = $("#icp-sel-partita");
+  if(selICP) selICP.addEventListener("change", e => { stato.inCampoPartita = e.target.value;
+    renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", datiFiltrati().partite, "partita"); adattaLarghezzeColonneSchermo(); });
+  const selFMP = $("#fm-sel-partita");
+  if(selFMP) selFMP.addEventListener("change", e => { stato.formazionePartita = e.target.value; renderFormazioneMigliore("partita"); adattaLarghezzeColonneSchermo(); });
+  const selFMCP = $("#fm-sel-criterio-partita");
+  if(selFMCP) selFMCP.addEventListener("change", e => { stato.criterioFormazionePartita = e.target.value; renderFormazioneMigliore("partita"); adattaLarghezzeColonneSchermo(); });
+  const selFMCA = $("#fm-sel-criterio-allenamento");
+  if(selFMCA) selFMCA.addEventListener("change", e => { stato.criterioFormazioneAllenamento = e.target.value; renderFormazioneMigliore("allenamento"); adattaLarghezzeColonneSchermo(); });
+  const selICA = $("#icp-sel-allenamento");
+  if(selICA) selICA.addEventListener("change", e => { stato.inCampoAllenamento = e.target.value;
+    renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", datiFiltrati().allenamenti, "allenamento"); adattaLarghezzeColonneSchermo(); });
+  const cfaA = $("#cfa-sel-a"), cfaB = $("#cfa-sel-b"), cfaBtn = $("#cfa-btn-report");
+  if(cfaA) cfaA.addEventListener("change", e => { stato.confrontoAllA = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
+  if(cfaB) cfaB.addEventListener("change", e => { stato.confrontoAllB = e.target.value; renderConfrontoAllenamento(datiFiltrati()); });
+  if(cfaBtn) cfaBtn.addEventListener("click", async () => {
+    try{ await generaReportConfronto(stato.confrontoAllA, stato.confrontoAllB, CONFRONTO_ALLENAMENTO); }
+    catch(err){ statoReport("Errore nella generazione del report: "+err.message, false, "#cfa-rp-stato"); }
+  });
+  $("#cf-sel-a").addEventListener("change", e => { stato.confrontoA = e.target.value; renderConfronto(datiFiltrati()); });
+  $("#cf-sel-b").addEventListener("change", e => { stato.confrontoB = e.target.value; renderConfronto(datiFiltrati()); });
+  $("#cf-btn-report").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#cf-btn-report"); btn.disabled = true;
+    try{ await generaReportConfronto(stato.confrontoA, stato.confrontoB); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#cf-rp-stato"); }
+    finally{ btn.disabled = false; }
+  });
+
+  $("#rp-btn-partita").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#rp-btn-partita"); btn.disabled = true;
+    try{ await generaReportPartita($("#rp-sel-partita").value); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
+    finally{ btn.disabled = false; }
+  });
+  $("#rp-btn-periodo-allenamento").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#rp-btn-periodo-allenamento"); btn.disabled = true;
+    try{ await generaReportAllenamentoPeriodo($("#rp-sel-all-da").value || null, $("#rp-sel-all-a").value || null); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
+    finally{ btn.disabled = false; }
+  });
+  $("#rp-btn-stagionale-allenamento").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#rp-btn-stagionale-allenamento"); btn.disabled = true;
+    try{ await generaReportAllenamentoPeriodo(null, null); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
+    finally{ btn.disabled = false; }
+  });
+  $("#rp-btn-stagionale").addEventListener("click", async () => {
+    if(!stato.ds) return;
+    const btn = $("#rp-btn-stagionale"); btn.disabled = true;
+    try{ await generaReportStagionale(); }
+    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
+    finally{ btn.disabled = false; }
+  });
+
+  if(localOk()){
+    const k = memoriaLeggi("openai-key-calcio7");
+    if(k){ $("#ia-chiave").value = k; statoChiave("Chiave ricordata su questo dispositivo."); }
+    else statoChiave("La chiave può essere salvata solo su questo dispositivo, nel browser.");
+  } else {
+    statoChiave("Questo browser non permette di salvare la chiave: resterà in memoria solo per questa sessione.");
+  }
+  $("#ia-salva").addEventListener("click", () => {
+    stato.chiaveIA = $("#ia-chiave").value.trim();
+    if(localOk()){
+      if(memoriaScrivi("openai-key-calcio7", stato.chiaveIA)) statoChiave("Chiave salvata su questo dispositivo.");
+      else statoChiave("Non è stato possibile salvare la chiave nel browser: resta in memoria per questa sessione.");
+    } else {
+      statoChiave("Chiave tenuta solo in memoria per questa sessione.");
+    }
+  });
+  $("#ia-invia").addEventListener("click", chiediIA);
+  $("#ia-domanda").addEventListener("keydown", e => { if(e.key === "Enter" && (e.metaKey || e.ctrlKey)) chiediIA(); });
+  $("#ia-dimentica").addEventListener("click", () => {
+    stato.chiaveIA = "";
+    $("#ia-chiave").value = "";
+    memoriaRimuovi("openai-key-calcio7");
+    statoChiave("Chiave dimenticata: non è più salvata su questo dispositivo.");
+  });
+
+  /* ---------------------------------------------------------------------
+     Tab "Dashboard Partita" / "Dashboard Allenamento" / "Giocatori": separano fisicamente
+     le sezioni della dashboard, mostrando solo quelle della scheda attiva (attributo
+     data-tab-sezione sul <section>) più le sezioni comuni a tutte le schede (Report PDF,
+     Qualità dei dati, Metodologia, Assistente IA), che non hanno quell'attributo e restano
+     sempre visibili sotto la scheda scelta. La barra dei filtri periodo/giocatore in alto
+     resta unica e vale per tutte le schede, così come i calcoli in app.js: qui si cambia
+     solo cosa viene mostrato, non come viene calcolato. La preferenza si ricorda nel browser.
+     --------------------------------------------------------------------- */
+  function impostaTabDashboard(tab){
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      const attiva = b.dataset.tab === tab;
+      b.classList.toggle("attiva", attiva);
+      b.setAttribute("aria-selected", attiva ? "true" : "false");
+    });
+    document.querySelectorAll("[data-tab-sezione]").forEach(el => {
+      el.classList.toggle("nascosto", el.dataset.tabSezione !== tab);
+    });
+    document.querySelectorAll("#nav-sezioni a[data-tab]").forEach(a => {
+      a.classList.toggle("nascosto", a.dataset.tab !== tab);
+    });
+    if(localOk()) memoriaScrivi("calcio7-tab-dashboard", tab);
+    aggiornaAltezzaBarraFissa(); // cambiando scheda l'indice mostra voci diverse: la barra può cambiare altezza
+  }
+  document.querySelectorAll(".tab-btn").forEach(b => {
+    b.addEventListener("click", () => impostaTabDashboard(b.dataset.tab));
+  });
+  impostaTabDashboard((localOk() && memoriaLeggi("calcio7-tab-dashboard")) || "partita");
+});
