@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.43.0",
-  data: "2026-10-18",
-  note: "Possesso palla misurato e momentum (18/10/2026): dalla partita del 18/10 SevenLab scrive i tratti dell'interruttore del possesso, e il tempo degli avversari diventa un dato misurato. Nuova sezione «Possesso palla e momentum» nella dashboard Partita, una partita alla volta: possesso nostro e degli avversari, palla ferma, possessi avversari, e il grafico del momentum ogni 2 minuti con i gol. Anche il Report Partita usa il dato misurato e mostra il momentum; il Report Stagionale separa partite misurate e stimate. Comprende la 1.42.0 (formazione nel modulo, coppie sul ruolo di partenza)."
+  numero: "1.44.0",
+  data: "2026-10-19",
+  note: "Report Partita essenziale (19/10/2026): risultato e nomi delle squadre in alto, marcatori con assist, possesso, tiri generati e subiti, passaggi e dribbling riusciti/sbagliati, momentum, heatmap di palle recuperate e perse, zone di tiro e assist dei gol, e in fondo «Considerazioni e miglioramenti suggeriti». Tolti migliore in campo, sostituzioni, dati completi dei giocatori, statistiche totali e testi di spiegazione. Report Stagionale e Confronto invariati. Comprende la 1.43.0 (possesso misurato e momentum)."
 };
 
 /* =====================================================================
@@ -2457,7 +2457,7 @@ function assemblaDataset(grezzo){
     Note: r.Note ?? "", Eventi: r.Eventi ?? null, RiepilogoTempi: r.RiepilogoTempi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
     StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
-    PossessoAvversario: r.PossessoAvversario ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null, NomeSquadra: r.NomeSquadra ?? "",
     ScalaTempi: r.ScalaTempi ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
@@ -2504,7 +2504,7 @@ function assemblaDataset(grezzo){
     Durata_Minuti_Sessione: N(r.Durata_Minuti_Sessione), Note: r.Note ?? "", Eventi: r.Eventi ?? null,
     DatiSpaziali: r.DatiSpaziali ?? null,
     StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
-    PossessoAvversario: r.PossessoAvversario ?? null,
+    PossessoAvversario: r.PossessoAvversario ?? null, NomeSquadra: r.NomeSquadra ?? "",
     ScalaTempi: r.ScalaTempi ?? null
   })).filter(a => a.Sessione_ID).sort((a,b)=>(a.Data?a.Data.getTime():0)-(b.Data?b.Data.getTime():0));
   allenamenti.forEach((a,i) => { a.Mese = meseKey(a.Data); a.Ordine = i+1; a.Etichetta = dataCorta(a.Data)+" "+a.Tipo_Allenamento;
@@ -2654,6 +2654,7 @@ function costruisciDatasetDaSessioni(sessioniSalvate){
         Avversario: (s.meta["Avversario"]||"").trim() || "Avversario non indicato",
         Competizione: "", Gol_Fatti: N(s.meta["Gol fatti"]), Gol_Subiti: N(s.meta["Gol subiti"]),
         Durata_Minuti: N(s.meta["Durata minuti"]) * fm, Modulo: (s.meta["Modulo iniziale"]||"").trim() || "Non indicato",
+        NomeSquadra: nomeSquadraDaTitolo(s.meta["Titolo"], (s.meta["Avversario"]||"").trim()),
         Forza_Avversario: null, Note: "", Eventi: s.eventi || null, RiepilogoTempi: s.riepilogoTempi || null,
         DatiSpaziali: s.datiSpaziali || null,
         StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
@@ -8335,198 +8336,247 @@ function possessoStagionale(partite){
 }
 
 /* ---- Report Partita ---- */
+/* =====================================================================
+   REPORT PARTITA ESSENZIALE (19/10/2026)
+   Richiesta di Elisa per conto di chi lo legge: «semplificare all'osso» il report della singola partita.
+   Dentro: risultato e nomi delle squadre in alto, marcatori con assist, possesso, tiri generati e subiti,
+   passaggi e dribbling riusciti/sbagliati in percentuale, momentum, heatmap di palle perse e recuperate,
+   zone di tiro e assist dei gol, e in fondo considerazioni e miglioramenti suggeriti.
+   Fuori: migliore in campo, sostituzioni, dati completi dei giocatori, statistiche totali/offensive/
+   difensive, punto d'ingresso in porta, testi che spiegano come leggere i dati.
+   Gli altri report (stagionale, confronto) restano com'erano.
+   ===================================================================== */
+
+/** Il nome della nostra squadra dal titolo di SevenLab («TNT A vs Union Oratori Castellanza»). */
+function nomeSquadraDaTitolo(titolo, avversario){
+  const parti = String(titolo || "").split(/\s+vs\.?\s+/i).map(x => x.trim()).filter(Boolean);
+  if(parti.length !== 2) return "";
+  const norm = x => x.toLowerCase().replace(/\s+/g, " ");
+  if(avversario && norm(parti[1]) === norm(avversario)) return parti[0];
+  if(avversario && norm(parti[0]) === norm(avversario)) return parti[1];
+  return parti[0];
+}
+
+/** Gol fatti con marcatore e assist (dalla timeline: la riga «Assist» della nostra squadra entro 5" dal gol),
+ *  e il punto di tiro/assist dalla sezione «DETTAGLIO GOL GAME» se c'è (abbinato per marcatore, in ordine). */
+function golFattiConAssist(p){
+  const norm = normalizzaEventiSevenLab({eventi: p.Eventi, riepilogoTempi: p.RiepilogoTempi});
+  const eventi = (norm.eventi || []).filter(e => Number.isFinite(e.secondoAssoluto));
+  const rigaInizio = eventi.find(e => e.raw["Inizio partita"] === "1");
+  const t0 = rigaInizio ? rigaInizio.secondoAssoluto : 0;
+  const lato = e => String(e.raw.Team ?? e.raw.Squadra ?? "A").trim().toUpperCase() === "B" ? "B" : "A";
+  const assistRighe = eventi.filter(e => lato(e) === "A" && (e.raw.Assist === "1" || /^assist$/i.test(String(e.raw.Tipo || "").trim())));
+  const puntiTiro = (p.PuntiGol || []).slice().sort((a, b) => a.secondo - b.secondo);
+  const puntiAssist = (p.PuntiAssistGol || []).slice();
+  const usati = new Set();
+  return golConPunteggio(p).filter(g => g.nostro).map(g => {
+    const a = assistRighe.filter(e => Math.abs(e.secondoAssoluto - g.t) <= 5 && String(e.raw.Giocatore || "").trim() !== g.marcatore)
+      .sort((x, y) => Math.abs(x.secondoAssoluto - g.t) - Math.abs(y.secondoAssoluto - g.t))[0];
+    const k = puntiTiro.findIndex((pt, i) => !usati.has(i) && (!g.marcatore || !pt.marcatore || pt.marcatore === g.marcatore));
+    let tiro = null, partenza = null;
+    if(k >= 0){ usati.add(k); tiro = puntiTiro[k]; partenza = puntiAssist.find(pa => pa.secondo === tiro.secondo) || null; }
+    const assist = a ? String(a.raw.Giocatore || "").trim() : (tiro && tiro.assist ? tiro.assist : null);
+    return {minuto: Math.max(1, Math.ceil((g.t - t0) / 60)), marcatore: g.marcatore || (tiro && tiro.marcatore) || "", assist: assist || null,
+      punteggio: g.punteggio, tiro, partenza};
+  });
+}
+
+/** Campo con i gol numerati: pallino pieno = punto del tiro, pallino vuoto = partenza dell'assist, linea fra i due. */
+function disegnaCampoGolAssist(canvas, gol, opts){
+  const ctx = canvas.getContext("2d"), w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h); ctx.fillStyle = opts.sfondo; ctx.fillRect(0, 0, w, h);
+  disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
+  const r = Math.max(8, Math.min(w, h) * 0.04);
+  const pos = pt => [Math.min(w - r, Math.max(r, pt.x / CAMPO_LUNGHEZZA_M * w)), Math.min(h - r, Math.max(r, pt.y / CAMPO_LARGHEZZA_M * h))];
+  gol.forEach(g => {
+    if(!g.tiro || !g.partenza) return;
+    const [x1, y1] = pos(g.partenza), [x2, y2] = pos(g.tiro);
+    ctx.save(); ctx.strokeStyle = hexRgba(opts.colore, 0.75); ctx.lineWidth = Math.max(2, w * 0.004); ctx.setLineDash([w * 0.012, w * 0.008]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+  });
+  gol.forEach((g, i) => {
+    if(g.partenza){
+      const [x, y] = pos(g.partenza);
+      ctx.beginPath(); ctx.arc(x, y, r * 0.72, 0, Math.PI * 2); ctx.fillStyle = "#FFFFFF"; ctx.fill();
+      ctx.lineWidth = Math.max(2, r * 0.22); ctx.strokeStyle = opts.colore; ctx.stroke();
+    }
+    if(g.tiro){
+      const [x, y] = pos(g.tiro);
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = opts.colore; ctx.fill();
+      ctx.lineWidth = Math.max(1.5, r * 0.16); ctx.strokeStyle = "#FFFFFF"; ctx.stroke();
+      ctx.save(); ctx.font = `800 ${Math.round(r * 1.1)}px Satoshi, system-ui, sans-serif`; ctx.fillStyle = "#FFFFFF";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(i + 1), x, y + r * 0.05); ctx.restore();
+    }
+  });
+  disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
+/** Considerazioni e miglioramenti: frasi brevi, ognuna con il dato e cosa farne. Regole e soglie nel playbook. */
+function considerazioniPartita(d){
+  const bene = [], lavorare = [];
+  const pct = v => nf0(v) + "%";
+  // finalizzazione
+  if(d.tiri >= 10 && d.gol / d.tiri < 0.10) lavorare.push({peso: 3, t: `${nf0(d.tiri)} tiri e ${nf0(d.gol)} gol (${pct(d.gol / d.tiri * 100)}): allenare la conclusione dopo un movimento e la scelta del tiro da posizione migliore, invece di tirare da lontano.`});
+  else if(d.tiri >= 4 && d.gol / d.tiri >= 0.25) bene.push(`Cinici sotto porta: ${nf0(d.gol)} gol su ${nf0(d.tiri)} tiri.`);
+  // passaggi
+  if(d.passPct !== null && d.passTot >= 20){
+    if(d.passPct < 70) lavorare.push({peso: 3, t: `Passaggi riusciti al ${pct(d.passPct)}: lavorare sulla circolazione corta a uno-due tocchi e sullo smarcamento per dare sempre una linea di passaggio.`});
+    else if(d.passPct < 78) lavorare.push({peso: 1, t: `Passaggi riusciti al ${pct(d.passPct)}: margine sulla precisione negli appoggi sotto pressione (rondo in spazi stretti).`});
+    else if(d.passPct >= 82) bene.push(`Circolazione pulita: ${pct(d.passPct)} di passaggi riusciti.`);
+  }
+  // dribbling
+  if(d.dribPct !== null && d.dribTot >= 8){
+    if(d.dribPct < 50) lavorare.push({peso: 2, t: `Dribbling riusciti al ${pct(d.dribPct)}: lavorare sull'uno contro uno e sulla scelta fra puntare l'uomo e scaricare la palla.`});
+    else if(d.dribPct >= 65) bene.push(`Uno contro uno efficace: ${pct(d.dribPct)} di dribbling riusciti.`);
+  }
+  // tiri subiti
+  if(d.tiriSubiti !== null){
+    if(d.tiriSubiti >= 15 || (d.tiri > 0 && d.tiriSubiti > d.tiri)) lavorare.push({peso: 2, t: `${nf0(d.tiriSubiti)} tiri subiti: accorciare le distanze fra difesa e centrocampo e mettere più pressione su chi ha la palla per togliere conclusioni agli avversari.`});
+    else if(d.tiriSubiti <= 6) bene.push(`Difesa solida: solo ${nf0(d.tiriSubiti)} tiri concessi.`);
+  }
+  // possesso
+  if(d.possesso !== null){
+    if(d.possesso < 45) lavorare.push({peso: 2, t: `Palla agli avversari per il ${pct(100 - d.possesso)}: lavorare sul possesso consolidato e sulla pazienza in costruzione, senza forzare la verticalizzazione.`});
+    else if(d.possesso >= 55) bene.push(`Partita controllata: palla nostra per il ${pct(d.possesso)}.`);
+    if(d.possesso1 !== null && d.possesso2 !== null && d.possesso1 - d.possesso2 >= 10)
+      lavorare.push({peso: 2, t: `Possesso sceso dal ${pct(d.possesso1)} del primo tempo al ${pct(d.possesso2)} del secondo: curare la tenuta fisica e usare le rotazioni prima del calo.`});
+  }
+  // momentum
+  if(d.peggiore && 1 - d.peggiore.quota >= 0.65)
+    lavorare.push({peso: 1, t: `Dal ${d.peggiore.da}' al ${d.peggiore.al}' la palla è stata loro per il ${pct((1 - d.peggiore.quota) * 100)}${d.golNelPeggiore ? `, con ${nf0(d.golNelPeggiore)} ${d.golNelPeggiore === 1 ? "gol subito" : "gol subiti"}` : ""}: preparare come uscire dai momenti di pressione (abbassare il ritmo, giocare col portiere, cambiare lato).`});
+  if(d.migliore && d.migliore.quota >= 0.65) bene.push(`Dal ${d.migliore.da}' al ${d.migliore.al}' la squadra ha tenuto palla per il ${pct(d.migliore.quota * 100)}.`);
+  // gol subiti: dopo possesso loro o nostro
+  if(d.subitiDopoLoro + d.subitiDopoNoi >= 2){
+    if(d.subitiDopoLoro > d.subitiDopoNoi) lavorare.push({peso: 2, t: `${nf0(d.subitiDopoLoro)} dei ${nf0(d.subitiDopoLoro + d.subitiDopoNoi)} gol subiti dopo un lungo possesso avversario: lavorare sulla difesa posizionale (scalate, coperture, marcature in area).`});
+    else if(d.subitiDopoNoi > d.subitiDopoLoro) lavorare.push({peso: 2, t: `${nf0(d.subitiDopoNoi)} dei ${nf0(d.subitiDopoLoro + d.subitiDopoNoi)} gol subiti mentre la palla era soprattutto nostra: curare le marcature preventive quando attacchiamo, per non subire le ripartenze.`});
+  }
+  // palle perse che diventano gol
+  if(d.persaGol >= 2) lavorare.push({peso: 3, t: `${nf0(d.persaGol)} gol subiti entro 15" da una nostra palla persa: lavorare sulla reazione immediata alla perdita e sull'uscita palla più sicura.`});
+  // dove si perde e dove si recupera
+  if(d.perseTot >= 10 && d.perseDif / d.perseTot >= 0.30) lavorare.push({peso: 2, t: `${nf0(d.perseDif)} palle perse su ${nf0(d.perseTot)} nel nostro terzo di campo: allenare l'uscita dal basso sotto pressione, con il portiere come appoggio.`});
+  if(d.recTot >= 10 && d.recOff / d.recTot >= 0.25) bene.push(`Pressione alta: ${nf0(d.recOff)} palloni recuperati nel terzo avversario.`);
+  // riconquista
+  if(d.riconquista !== null){
+    if(d.riconquista > 12) lavorare.push({peso: 1, t: `Servono in media ${nf0(d.riconquista)}" per riprendere palla dopo averla persa: allenare la riaggressione nei primi 5 secondi.`});
+    else if(d.riconquista <= 7) bene.push(`Riaggressione rapida: palla ripresa in ${nf0(d.riconquista)}" dopo la perdita (mediana).`);
+  }
+  // gol fatti dopo possesso nostro
+  if(d.fattiDopoNoi >= 1 && d.fattiDopoNoi === d.golFattiTimeline) bene.push(`${d.fattiDopoNoi === 1 ? "Il gol è nato" : "I gol sono nati"} da fasi di possesso nostro.`);
+  else if(d.fattiDopoLoro >= 1 && d.fattiDopoLoro === d.golFattiTimeline) bene.push(`${d.fattiDopoLoro === 1 ? "Il gol è arrivato" : "I gol sono arrivati"} in ripartenza.`);
+  return {bene: bene.slice(0, 4), lavorare: lavorare.sort((a, b) => b.peso - a.peso).slice(0, 5).map(x => x.t)};
+}
+
 async function generaReportPartita(matchId){
   const ds = stato.ds;
   const partita = ds.partite.find(p => p.Match_ID === matchId);
   if(!partita){ statoReport("Seleziona una partita valida.", false, "#rp-stato-partita"); return; }
   const righeGara = ds.giocatori.filter(g => g.Match_ID === matchId);
-  const sGara = riepilogoSquadra(righeGara, [partita]);
-  const aggGara = aggregaGiocatori(righeGara);
-  const mvp = aggGara[0];
+  const somma = c => righeGara.reduce((a, g) => a + N(g[c]), 0);
+  const passOk = somma("Passaggi_Corretti"), passKo = somma("Passaggi_Sbagliati"), passTot = passOk + passKo;
+  const dribTot = somma("Dribbling_Tentati"), dribKo = somma("Dribbling_Falliti"), dribOk = dribTot - dribKo;
+  const tiri = somma("Tiri_In_Porta") + somma("Tiri_Fuori");
+  const portieri = statistichePortieriDaSessione(partita);
+  const tiriSubiti = portieri.portieri.length ? portieri.portieri.reduce((a, p) => a + p.totaleAffrontati, 0) : null;
+  const nomeNostro = partita.NomeSquadra || "Noi";
 
-  // stagione fin qui (fino a e inclusa questa partita)
-  const partiteFinQui = ds.partite.filter(p => p.Ordine <= partita.Ordine);
-  const idsFinQui = new Set(partiteFinQui.map(p=>p.Match_ID));
-  const giocFinQui = ds.giocatori.filter(g => idsFinQui.has(g.Match_ID));
-  const aggStagione = aggregaGiocatori(giocFinQui);
-  const tendenze = calcolaTendenze(giocFinQui).filter(t=>t.rilevante).sort((a,b)=>Math.abs(b.delta_totale)-Math.abs(a.delta_totale)).slice(0,5);
-
-  const ultimePresenzeMvp = mvp ? giocFinQui.filter(g => g.Giocatore === mvp.Giocatore)
-    .slice().sort((a,b)=>(b.Data?+b.Data:0)-(a.Data?+a.Data:0)).slice(0,4)
-    .map(r => ({label:r.EtichettaPartita, valore:nf(r.Indice_Prestazione,1)})) : [];
-
-  // Possesso palla stimato (solo se la partita viene da un file Seven Lab con la sezione eventi;
-  // sui dati demo o su un Excel senza eventi questa parte resta semplicemente assente dal report).
-  const analisiEventi = analizzaEventiPartitaSevenLab({id: partita.Match_ID, eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
-  const eventiSquadra = analisiEventi.eventiSquadra;
-  const recuperiTempi = analisiEventi.recuperi;
-  const possessoCalcolato = eventiSquadra.length ? analyzePossession(eventiSquadra) : null;
-  const possesso = (possessoCalcolato && possessoCalcolato.confidencePct !== null) ? possessoCalcolato : null;
-  const possessoKpi = possesso ? calcolaPossessionKpis(possesso.sequences, eventiSquadra) : null;
-  // possesso MISURATO con l'interruttore (18/10/2026): se c'è, sostituisce la stima nel report
-  const possessoMis = possessoMisuratoPartita(partita);
-  const momentumMis = possessoMis ? momentumPartita(partita, possessoMis) : null;
-
-  // Cartellini, angoli, punizioni e rigori di questa partita: letti dalle colonne per giocatore (vedi
-  // costruisciDatasetDaSessioni), disponibili solo con l'export Seven Lab aggiornato del 25/08/2026.
-  let disciplinaGaraTot = null;
-  if(righeGara.some(g => g.Cartellini_Gialli !== null)){
-    const somma = c => righeGara.reduce((a,g)=>a+N(g[c]),0);
-    disciplinaGaraTot = {
-      gialli: somma("Cartellini_Gialli"), rossi: somma("Cartellini_Rossi"),
-      angoli: {tentati: somma("Angoli_Tentati"), gol: somma("Angoli_Gol")},
-      punizione: {tentati: somma("Punizioni_Tentate"), ok: somma("Punizioni_Realizzate")},
-      rigore: {tentati: somma("Rigori_Tentati"), ok: somma("Rigori_Realizzati")}
-    };
+  // possesso: misurato con l'interruttore se c'è, altrimenti stimato dai nostri eventi
+  const pm = possessoMisuratoPartita(partita);
+  const mo = pm ? momentumPartita(partita, pm) : null;
+  let possesso = pm ? pm.pctNoi : null, possessoStimato = false;
+  if(possesso === null){
+    const a = analizzaEventiPartitaSevenLab({id: partita.Match_ID, eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
+    const x = a.eventiSquadra.length ? analyzePossession(a.eventiSquadra) : null;
+    if(x && x.confidencePct !== null){ possesso = x.ourPossessionWeightedPct; possessoStimato = true; }
   }
-
-  // Tiri subiti dal/dai portiere/i di questa partita: dalla sezione "STATISTICHE PORTIERI GAME" (03/09/2026).
-  // Mostriamo "Totale tiri affrontati" di Seven Lab come "Tiri subiti totali" (richiesta esplicita
-  // dell'utente il 03/09/2026, dopo una prima versione basata sulla sua formula tiro-subito-più-parata) con
-  // parate e gol subiti come dettaglio — vedi statistichePortieriDaSessione per la definizione dei campi.
-  const portieriGaraGame = statistichePortieriDaSessione(partita);
+  // possesso per tempo (solo misurato)
+  let possesso1 = null, possesso2 = null;
+  if(pm && pm.fine1 !== null){
+    const quota = (a, b) => { let n = 0, l = 0; for(let s = Math.floor(a); s < Math.ceil(b); s++){ const v = pm.stati[s - pm.s0]; if(v === 1) n++; else if(v === 2) l++; } return (n + l) ? n / (n + l) * 100 : null; };
+    possesso1 = quota(pm.inizio, pm.fine1); possesso2 = quota(pm.inizio2, pm.fine);
+  }
+  const gol = golFattiConAssist(partita);
+  const {recupero, persa} = raccogliEventiZona([partita]);
+  const terzo = CAMPO_LUNGHEZZA_M / 3;
+  const pg = analizzaPersaGol([partita], "partita");
+  const ric = analizzaRiconquista([partita]);
+  const subiti = mo ? mo.gol.filter(g => !g.nostro) : [], fatti = mo ? mo.gol.filter(g => g.nostro) : [];
+  const cons = considerazioniPartita({
+    gol: N(partita.Gol_Fatti), tiri, tiriSubiti, passPct: passTot ? passOk / passTot * 100 : null, passTot,
+    dribPct: dribTot ? dribOk / dribTot * 100 : null, dribTot, possesso: possessoStimato ? null : possesso, possesso1, possesso2,
+    migliore: mo ? mo.migliore : null, peggiore: mo ? mo.peggiore : null,
+    golNelPeggiore: (mo && mo.peggiore) ? subiti.filter(g => g.minuto > mo.peggiore.da && g.minuto <= mo.peggiore.al).length : 0,
+    subitiDopoLoro: subiti.filter(g => g.primaLoro > g.primaNoi).length, subitiDopoNoi: subiti.filter(g => g.primaLoro <= g.primaNoi).length,
+    fattiDopoNoi: fatti.filter(g => g.primaNoi >= g.primaLoro).length, fattiDopoLoro: fatti.filter(g => g.primaNoi < g.primaLoro).length, golFattiTimeline: fatti.length,
+    persaGol: pg ? pg.episodi.length : 0,
+    perseTot: persa.length, perseDif: persa.filter(p => p.x < terzo).length, recTot: recupero.length, recOff: recupero.filter(p => p.x >= 2 * terzo).length,
+    riconquista: (ric && ric.riconquistate >= RICONQUISTA_CAMPIONE_MINIMO) ? ric.mediana : null
+  });
 
   statoReport("Genero il Report Partita…", true, "#rp-stato-partita");
-  await generaEScarica(nomeFileData("Report_Partita_"+matchId, partita.Data), [
-    async (pag) => {
-      bandaReport(pag, "Report Partita", partita.Avversario, `${dataLabel(partita.Data)} · ${esc(partita.Competizione||"Amichevole")}`, partita.Risultato);
-      sidebarReport(pag, {
-        eyebrow:"Giocatore della partita", nome:mvp?.Giocatore, ruolo:mvp?.Ruolo, colore:"#C99400",
-        gruppi: mvp ? [
-          {titolo:"Statistiche in questa gara", barre:[
-            mvp.TiriPortaRilevati !== false
-              ? {label:"Precisione al tiro", valore:pctTxt(mvp.Precisione_Tiro_pct,0), pct:mvp.Precisione_Tiro_pct??0}
-              : {label:"Realizzazione", valore:pctTxt(mvp.Efficacia_Realizzativa_pct,0), pct:mvp.Efficacia_Realizzativa_pct??0},
-            {label:"Precisione passaggi", valore:pctTxt(mvp.Precisione_Passaggi_pct,0), pct:mvp.Precisione_Passaggi_pct??0},
-            {label:"Successo dribbling", valore:pctTxt(mvp.Successo_Dribbling_pct,0), pct:mvp.Successo_Dribbling_pct??0}
-          ]},
-          ...(ultimePresenzeMvp.length ? [{titolo:"Ultime presenze (indice)", righe:ultimePresenzeMvp}] : [])
-        ] : []
-      });
+  await generaEScarica(nomeFileData("Report_Partita_" + matchId, partita.Data), [
+    Object.assign(async (pag) => {
+      // testata: le due squadre e il risultato
+      const band = document.createElement("div");
+      band.className = "rp2-band rp2-tabellone";
+      band.innerHTML = `<div class="eyebrow">Report partita · ${esc(dataLabel(partita.Data))}</div>
+        <div class="rp2-tab-riga"><div class="rp2-tab-sq">${esc(nomeNostro)}</div>
+        <div class="rp2-tab-ris">${nf0(partita.Gol_Fatti)} – ${nf0(partita.Gol_Subiti)}</div>
+        <div class="rp2-tab-sq destra">${esc(partita.Avversario)}</div></div>`;
+      pag.centro.insertBefore(band, pag.corpo);
+      // marcatori
+      if(gol.length){
+        const m = document.createElement("div");
+        m.className = "rp-marcatori";
+        m.innerHTML = `<span class="rp-marcatori-tit">Marcatori</span>` + gol.map((g, i) => `<span class="rp-marcatore"><b>${gol.some(x => x.tiro) ? `<i>${i + 1}</i>` : ""}${g.minuto}' ${esc(g.marcatore || "—")}</b>${g.assist ? ` · assist ${esc(g.assist)}` : ""}</span>`).join("");
+        pag.corpo.appendChild(m);
+      }
       kpiRowReport(pag, [
-        {l:"Gol segnati", v:nf0(partita.Gol_Fatti)},
-        {l:"Precisione passaggi", v:pctTxt(sGara.precisione_passaggi)},
-        {l:"Successo dribbling", v:pctTxt(sGara.successo_dribbling)},
-        {l:"Palloni recuperati", v:nf0(sGara.recuperi)}
+        {l: possessoStimato ? "Possesso (stimato)" : "Possesso", v: possesso !== null ? pctTxt(possesso, 0) : "—"},
+        {l: "Tiri generati", v: nf0(tiri)},
+        {l: "Tiri subiti", v: tiriSubiti !== null ? nf0(tiriSubiti) : "—"}
       ]);
-      titoloSezioneReport(pag, "Statistiche di squadra");
-      statisticheSquadraReport(pag, [
-        [
-          sGara.tiri_porta_rilevati
-            ? {label:"Precisione al tiro", valore:pctTxt(sGara.precisione_tiro,0), pct:sGara.precisione_tiro??0, colore:PALETTE_REPORT.c1}
-            : {label:"Realizzazione", valore:pctTxt(sGara.efficacia_realizzativa,0), pct:sGara.efficacia_realizzativa??0, colore:PALETTE_REPORT.c1},
-          {label:"Precisione passaggi", valore:pctTxt(sGara.precisione_passaggi,0), pct:sGara.precisione_passaggi??0, colore:PALETTE_REPORT.c1},
-          {label:"Successo dribbling", valore:pctTxt(sGara.successo_dribbling,0), pct:sGara.successo_dribbling??0, colore:PALETTE_REPORT.c1},
-          {label:"Tasso di errore", valore:pctTxt(sGara.tasso_errore,0), pct:sGara.tasso_errore??0, colore:PALETTE_REPORT.c2}
-        ],
-        [
-          sGara.tiri_porta_rilevati
-            ? {label:"Tiri totali (in porta)", valore:`${nf0(sGara.tiri_totali)} (${nf0(sGara.tiri_in_porta)})`}
-            : {label:"Tiri totali", valore:nf0(sGara.tiri_totali)},
-          {label:"Assist", valore:nf0(sGara.assist)},
-          {label:"Palloni recuperati", valore:nf0(sGara.recuperi)},
-          {label:"Parate", valore:nf0(sGara.parate)}
-        ]
+      pag.corpo.lastElementChild.style.gridTemplateColumns = "repeat(3,1fr)";
+      kpiRowReport(pag, [
+        {l: "Passaggi corretti", v: passTot ? `${pctTxt(passOk / passTot * 100, 0)} <small>${nf0(passOk)}</small>` : "—"},
+        {l: "Passaggi sbagliati", v: passTot ? `${pctTxt(passKo / passTot * 100, 0)} <small>${nf0(passKo)}</small>` : "—"},
+        {l: "Dribbling riusciti", v: dribTot ? `${pctTxt(dribOk / dribTot * 100, 0)} <small>${nf0(dribOk)}</small>` : "—"},
+        {l: "Dribbling sbagliati", v: dribTot ? `${pctTxt(dribKo / dribTot * 100, 0)} <small>${nf0(dribKo)}</small>` : "—"}
       ]);
-      bulletsReport(pag, ["Solo statistiche della tua squadra — un confronto vero con l'avversario (stile SofaScore) richiederebbe di segnare anche i suoi tiri, corner, falli e cartellini, che oggi non tracci."]);
-      if(possessoMis){
-        titoloSezioneReport(pag, "Possesso palla e momentum");
-        kpiRowReport(pag, [
-          {l:"Possesso nostro", v:pctTxt(possessoMis.pctNoi,0)},
-          {l:"Possesso avversari", v:pctTxt(possessoMis.pctLoro,0)},
-          {l:"Palla ferma o n.c.", v:mmss(possessoMis.fermaSec)},
-          {l:"Possessi avversari", v:nf0(possessoMis.possessiLoro)}
-        ]);
-        bulletsReport(pag, frasiMomentum(possessoMis, momentumMis, true).concat([
-          `Palla nostra ${mmss(possessoMis.noiSec)} · palla loro ${mmss(possessoMis.loroSec)} (interruttore acceso; possesso avversario medio ${nf0(possessoMis.durataMediaLoro)}", il più lungo ${mmss(possessoMis.piuLungoLoro)}) · ferma o non classificabile ${mmss(possessoMis.fermaSec)}.`,
-          `Misurato con l'interruttore del possesso di SevenLab: la palla è loro quando è acceso, nostra quando è spento e c'è stato un nostro evento negli ultimi ${nf0(POSSESSO_MISURATO_GAP_SEC)} secondi; il resto (rimesse, falli, gol, cambi) non entra nella percentuale.`]));
-        if(momentumMis){
-          etichettaReport(pag, `Momentum: barre di ${nf0(MOMENTUM_FINESTRA_SEC/60)}' verso l'alto quando la palla è stata soprattutto nostra, verso il basso soprattutto loro · ▲ gol fatto, ▼ gol subito`);
-          graficoReport(pag, "rp-chart-momentum", configMomentum(momentumMis, {noi: PALETTE_REPORT.c1, loro: PALETTE_REPORT.c2, testo: PALETTE_REPORT.text, tenue: PALETTE_REPORT.muted, griglia: PALETTE_REPORT.grid}, true), 190);
-        }
-      } else if(possesso){
-        titoloSezioneReport(pag, "Possesso palla stimato");
-        kpiRowReport(pag, [
-          {l:"Possesso stimato", v:pctTxt(possesso.ourPossessionWeightedPct,1)},
-          {l:"Copertura del dato", v:pctTxt(possesso.confidencePct,0)},
-          {l:"Affidabilità", v:getConfidenceLabelPossesso(possesso.confidencePct)},
-          {l:"Possessi rilevati", v:nf0(possessoKpi.possessi)}
-        ]);
-        bulletsReport(pag, [
-          `Possesso certo nostro: ${mmss(possesso.ourCertainSec)} · avversario stimato: ${mmss(possesso.opponentEstimatedSec)} · palla contesa: ${mmss(possesso.contestedSec)} · non classificabile: ${mmss(possesso.unknownSec)}.`,
-          possessoKpi.palleParse>0 ? `Rapporto recuperi/palle perse: ${possessoKpi.recuperoSuPerditaRatio ?? "—"} (${nf0(possessoKpi.recuperi)} recuperi, ${nf0(possessoKpi.palleParse)} palle perse).` : `${nf0(possessoKpi.recuperi)} recuperi registrati, nessuna palla persa.`,
-          recuperiTempi
-            ? `Tempi rilevati automaticamente dalla pausa: 1° tempo ${mmss(recuperiTempi.durataTempo1Sec)} (recupero stimato ${mmss(recuperiTempi.recupero1Sec)}), 2° tempo ${mmss(recuperiTempi.durataTempo2Sec)} (recupero stimato ${mmss(recuperiTempi.recupero2Sec)}).`
-            : "Nel file non è stata trovata una pausa: la partita è trattata come un tempo unico (nessun dato sul recupero).",
-          "Possesso palla stimato da eventi (non possesso ufficiale): calcolato solo dai tuoi eventi di partita, senza i dati dell'avversario. Un passaggio o un dribbling sbagliato non fanno perdere il possesso da soli — solo una «palla persa» esplicita lo assegna all'avversario."
-        ]);
+      if(mo){
+        titoloSezioneReport(pag, "Momentum");
+        etichettaReport(pag, `▲ gol ${nomeNostro} · ▼ gol ${partita.Avversario}`);
+        graficoReport(pag, "rp-chart-momentum", configMomentum(mo, {noi: PALETTE_REPORT.c1, loro: PALETTE_REPORT.c2, testo: PALETTE_REPORT.text, tenue: PALETTE_REPORT.muted, griglia: PALETTE_REPORT.grid}, true), 190);
       }
-    },
-    // Da qui in poi PAGINE A PIENA LARGHEZZA (04/09/2026). Prima tutto questo stava attaccato alla pagina
-    // di copertina, che ha la colonna laterale scura: la colonna è alta solo quanto il suo contenuto, ma il
-    // corpo restava comunque largo 564px invece di 794 per TUTTE le pagine fisiche generate da quella
-    // pagina logica — cioè una striscia bianca vuota di 230px a sinistra per due pagine intere di PDF, con
-    // i campetti e le tabelle schiacciati in mezza pagina. Separandole, i grafici a campo raddoppiano di
-    // dimensione e le tabelle respirano; la copertina resta corta e piena.
-    Object.assign(async (pag) => {
-      bandaReport(pag, "Report Partita", "Zone di gioco e dettagli", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)}`);
-      if(disciplinaGaraTot){
-        titoloSezioneReport(pag, "Disciplina e calci piazzati");
-        kpiRowReport(pag, [
-          {l:"Cartellini gialli", v:nf0(disciplinaGaraTot.gialli)},
-          {l:"Cartellini rossi", v:nf0(disciplinaGaraTot.rossi)},
-          {l:"Angoli (con gol)", v:`${nf0(disciplinaGaraTot.angoli.tentati)} (${nf0(disciplinaGaraTot.angoli.gol)})`},
-          {l:"Punizioni/rigori realizzati", v:`${nf0(disciplinaGaraTot.punizione.ok)}/${nf0(disciplinaGaraTot.rigore.ok)}`}
-        ]);
-        bulletsReport(pag, [
-          `Punizioni: ${nf0(disciplinaGaraTot.punizione.ok)} realizzate su ${nf0(disciplinaGaraTot.punizione.tentati)} battute · Rigori: ${nf0(disciplinaGaraTot.rigore.ok)} realizzati su ${nf0(disciplinaGaraTot.rigore.tentati)} battuti.`
-        ]);
+      const rampa = rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544");
+      const optsBase = {sfondo: "#F4F2EC", lineaCampo: "#28251D", testo: "#28251D", testoChiaro: "#FFFFFF", rampa};
+      const cellaCampo = (griglia, titolo, disegna) => {
+        const cella = document.createElement("div");
+        cella.innerHTML = `<div class="rp-campo-etichetta">${esc(titolo)}</div>`;
+        const wrap = document.createElement("div"); wrap.className = "rp-campo-wrap";
+        const cv = document.createElement("canvas"); cv.width = LATO_CAMPO_REPORT_PX; cv.height = Math.round(LATO_CAMPO_REPORT_PX * 0.6);
+        wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella); disegna(cv);
+        return cella;
+      };
+      if(recupero.length || persa.length){
+        titoloSezioneReport(pag, "Palle recuperate e perse");
+        const g = document.createElement("div"); g.className = "rp-campo-griglia"; pag.corpo.appendChild(g);
+        cellaCampo(g, `Palle recuperate (${nf0(recupero.length)})`, cv => disegnaCampoHeatmap(cv, recupero, optsBase));
+        cellaCampo(g, `Palle perse (${nf0(persa.length)})`, cv => disegnaCampoHeatmap(cv, persa, optsBase));
       }
-      if(portieriGaraGame.portieri.length){
-        titoloSezioneReport(pag, "Tiri subiti dal portiere");
-        tabellaReport(pag, ["Portiere","Tiri subiti totali","Parate","Gol subiti"],
-          portieriGaraGame.portieri.map(p => [esc(p.portiere), nf0(p.totaleAffrontati), nf0(p.parate), nf0(p.golSubiti)]));
-        bulletsReport(pag, [`"Tiri subiti totali" è il totale dei tiri affrontati dal portiere in questa partita (Seven Lab); "Parate" e "Gol subiti" sono il dettaglio di come sono andati a finire.`]);
+      if(gol.some(x => x.tiro)){
+        titoloSezioneReport(pag, "Zone di tiro e assist dei gol");
+        const g = document.createElement("div"); g.className = "rp-campo-griglia"; pag.corpo.appendChild(g);
+        cellaCampo(g, "● tiro del gol   ○ partenza dell'assist", cv => disegnaCampoGolAssist(cv, gol, Object.assign({}, optsBase, {colore: PALETTE_REPORT.c1})));
+        const elenco = document.createElement("div");
+        elenco.innerHTML = `<div class="rp-campo-etichetta">Gol</div><ol class="rp-elenco-gol">${gol.map(x => `<li><b>${x.minuto}' ${esc(x.marcatore || "—")}</b>${x.assist ? `<br>assist ${esc(x.assist)}` : ""}<br><span>${esc(x.punteggio)}</span></li>`).join("")}</ol>`;
+        g.appendChild(elenco);
       }
-      riconquistaReport(pag, [partita]);
-      persaGolReport(pag, [partita], "partita");
-      inCampoReport(pag, [partita], "partita");
-      formazioneMiglioreReport(pag, [partita], "partita");
-      zoneCampoReport(pag, [partita], true);
-      golGameCampoReport(pag, [partita]);
-      portaGolReport(pag, [partita]);
-    }, {piena:true}),
-    Object.assign(async (pag) => {
-      bandaReport(pag, "Report Partita", "Lettura della gara", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — sintesi e contributo dei giocatori`);
-      titoloSezioneReport(pag, "Cosa dicono i dati");
-      const bullet = [];
-      if(mvp) bullet.push(`<b>${esc(mvp.Giocatore)}</b> ha guidato la squadra con un indice prestazione di ${nf(mvp.Indice_Prestazione_Tot,1)} (${nf0(mvp.Gol)} gol, ${nf0(mvp.Assist)} assist).`);
-      bullet.push(`La squadra ha passato con il ${pctTxt(sGara.precisione_passaggi,0)} di precisione e un tasso di errore del ${pctTxt(sGara.tasso_errore,0)}.`);
-      bullet.push(`${nf0(sGara.tiri_totali)} tiri totali, ${pctTxt(sGara.efficacia_realizzativa ?? perc(sGara.gol_giocatori, sGara.tiri_totali),0)} trasformati in gol.`);
-      const miglioreRecupero = aggGara.slice().sort((a,b)=>b.Recuperi-a.Recuperi)[0];
-      if(miglioreRecupero) bullet.push(`<b>${esc(miglioreRecupero.Giocatore)}</b> ha guidato la fase di non possesso con ${nf0(miglioreRecupero.Recuperi)} palloni recuperati.`);
-      // palle perse che sono costate un gol, con i nomi (richiesta dell'utente del 10/10/2026)
-      const frasePG = frasePersaGol(analizzaPersaGol([partita], "partita"), "partita", true);
-      if(frasePG) bullet.push(frasePG);
-      // chi era in campo quando si è preso gol, con i nomi (richiesta dell'utente del 16/10/2026)
-      const fraseIC = fraseInCampo(analizzaInCampo([partita], "partita"), true);
-      if(fraseIC) bullet.push(fraseIC);
-      const fraseFM = fraseFormazioneMiglioreDi([partita], "partita");
-      if(fraseFM) bullet.push(fraseFM);
-      bulletsReport(pag, bullet);
-      titoloSezioneReport(pag, "Contributo dei giocatori");
-      tabellaReport(pag, ["Giocatore","Ruolo","Min","Gol","Ast","Prec. pass.","Indice"],
-        aggGara.map(a => [esc(a.Giocatore), esc(a.Ruolo), nf0(a.Minuti_Totali), nf0(a.Gol), nf0(a.Assist), pctTxt(a.Precisione_Passaggi_pct,0), nf(a.Indice_Prestazione_Tot,1)]),
-        aggGara.map(a => a.Minuti_Totali <= 0));
-    }, {piena:true}),
-    // La pagina "Stagione fin qui" (tendenze, classifica stagionale, andamento gol) è stata TOLTA da qui il
-    // 04/09/2026 su richiesta esplicita di Elisa: un report di partita deve parlare solo di quella partita,
-    // e le stesse informazioni riferite alla stagione stanno nel Report Stagionale, che è stato riscritto
-    // per rispecchiare sezione per sezione questo report.
-    Object.assign(async (pag) => {
-      bandaReport(pag, "Report Partita", "Statistiche dettagliate", `${esc(partita.Avversario)} · ${dataLabel(partita.Data)} — tutti i giocatori, tutte le voci raccolte`);
-      tabelleDettaglioGiocatori(pag, aggGara, !!disciplinaGaraTot);
-    }, {piena:true})
+      if(cons.bene.length || cons.lavorare.length){
+        titoloSezioneReport(pag, "Considerazioni e miglioramenti suggeriti");
+        if(cons.bene.length){ etichettaReport(pag, "Cosa ha funzionato"); bulletsReport(pag, cons.bene.map(esc)); }
+        if(cons.lavorare.length){ etichettaReport(pag, "Su cosa lavorare"); bulletsReport(pag, cons.lavorare.map(esc)); }
+      }
+    }, {piena: true})
   ]);
 }
 
