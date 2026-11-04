@@ -1,0 +1,32 @@
+name: Sveglia cloud SevenLab
+
+# Il piano gratuito di Supabase mette in pausa il cloud dopo circa 7 giorni senza richieste.
+# Due volte a settimana questo controllo fa una richiesta al cloud, così resta acceso.
+# Indirizzo e chiave pubblica vengono letti da app.js: se cambiano lì, qui non serve toccare niente.
+# Se un giorno fallisce, GitHub manda una mail: vuol dire che il cloud non risponde.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1,4"   # lunedì e giovedì alle 7:17 ora italiana (6:17 UTC)
+  workflow_dispatch:          # pulsante «Run workflow» per provarlo a mano
+
+permissions:
+  contents: read
+
+jobs:
+  sveglia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Richiesta al cloud
+        run: |
+          URL=$(grep -oE 'https://[a-z0-9]+\.supabase\.co' app.js | head -n1)
+          CHIAVE=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' app.js | head -n1)
+          if [ -z "$URL" ] || [ -z "$CHIAVE" ]; then
+            echo "Indirizzo o chiave del cloud non trovati in app.js"; exit 1
+          fi
+          CODICE=$(curl -s -o risposta.txt -w '%{http_code}' --max-time 60 \
+            "$URL/rest/v1/analysis_sessions?select=id&limit=1" \
+            -H "apikey: $CHIAVE")
+          echo "Risposta del cloud: $CODICE"
+          if [ "$CODICE" != "200" ]; then cat risposta.txt; exit 1; fi
