@@ -448,6 +448,12 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
 .rp-table td{padding:7px 9px; border-bottom:1px solid #EDEBE4; color:#28251D; overflow-wrap:break-word; white-space:normal; text-align:left; line-height:1.35}
 .rp-table tr td:first-child, .rp-table tr th:first-child{padding-left:0}
 .rp-table td:first-child, .rp-table th:first-child{width:22%}
+.rp-classifiche td{vertical-align:top; font-size:12px}
+.rp-classifiche td span{display:block; color:#6E6D68; font-size:10.5px; margin-top:1px}
+.rp-classifiche td.voce{font-weight:700; color:#171614}
+.rp-etichetta-profilo{display:inline-block; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:2px 7px; border-radius:5px; margin-right:6px; color:#fff}
+.rp-etichetta-profilo.off{background:#A84B2F} .rp-etichetta-profilo.def{background:#20808D}
+.badge-prova{font-size:11px; font-weight:700; padding:2px 8px; border-radius:99px; background:var(--surface-alt); border:1px dashed var(--muted); color:var(--muted)}
 /* le tabelle dei report ereditano per errore da "thead th"/"tbody td:first-child" (pensate per le tabelle
    interattive scorrevoli, .tabella-scroll) sia la posizione "sticky" sia uno sfondo legato al tema chiaro/scuro
    dell'app: nei report va tolta entrambe le cose, perché il report è statico, sempre a sfondo bianco, e in
@@ -594,6 +600,65 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
   .tab-btn .etichetta-corta{display:inline}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+/* ---------- situazioni che si ripetono (1.46.0) ---------- */
+.sit-sommario{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin-bottom:16px}
+.sit-stat{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:12px 14px; display:flex; flex-direction:column; gap:2px; box-shadow:var(--shadow)}
+.sit-stat .v{font-size:26px; font-weight:900; color:var(--primary-hover); letter-spacing:-.03em; line-height:1.1; font-variant-numeric:tabular-nums lining-nums}
+.sit-stat .l{font-size:12px; color:var(--muted); font-weight:600}
+.sit-gruppi{display:grid; grid-template-columns:minmax(0,1fr); gap:14px}
+.sit-gruppo{min-width:0}
+.sit-tit{font-size:12.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:800; display:flex; align-items:center; gap:8px; margin-bottom:4px}
+.sit-conta{font-size:11px; background:var(--primary-soft); color:var(--primary); border-radius:99px; padding:1px 8px; letter-spacing:0}
+.sit-riga{display:grid; grid-template-columns:136px minmax(0,1fr) auto; gap:14px; align-items:start; padding:12px 0;
+  border-top:1px solid color-mix(in srgb, var(--border) 60%, transparent)}
+.sit-tit + .sit-riga{border-top:none}
+.sit-forza{justify-self:start; font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; white-space:nowrap; letter-spacing:.02em; margin-top:2px}
+.sit-forza.ripete.neg{background:var(--c2); color:#fff}
+.sit-forza.ripete.pos{background:var(--success); color:#fff}
+.sit-forza.occhio{color:var(--warning); box-shadow:inset 0 0 0 1.5px var(--warning)}
+html[data-tema="scuro"] .sit-forza.ripete.neg, html[data-tema="scuro"] .sit-forza.ripete.pos{color:#171614}
+.sit-frase{font-size:14.5px; line-height:1.5; max-width:82ch}
+.sit-frase b{font-weight:800}
+.sit-pallini{display:flex; flex-direction:column; align-items:flex-end; gap:4px; min-width:64px}
+.sit-pallini-fila{display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; max-width:124px}
+.sit-pallino{width:10px; height:10px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--faint)}
+.sit-pallino.si{background:var(--primary); box-shadow:none}
+.sit-pallini-txt{font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap}
+.sit-grafico{margin:2px 0 6px}
+.sit-grafico .grafico-wrap{height:220px}
+.sit-tabella{min-width:760px}
+td.sit-cella-buona{color:var(--success); font-weight:800}
+td.sit-cella-debole{color:var(--danger); font-weight:800}
+.sit-risultato{font-weight:800; padding:1px 8px; border-radius:6px}
+.sit-risultato.v{background:color-mix(in srgb, var(--success) 16%, transparent); color:var(--success)}
+.sit-risultato.p{background:color-mix(in srgb, var(--danger) 14%, transparent); color:var(--danger)}
+.sit-risultato.n{background:color-mix(in srgb, var(--muted) 16%, transparent); color:var(--muted)}
+.sit-nota{margin-top:8px}
+@media (max-width:720px){
+  .sit-sommario{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .sit-riga{grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"forza pallini" "frase frase"; gap:8px 10px}
+  .sit-forza{grid-area:forza}
+  .sit-pallini{grid-area:pallini; flex-direction:row; align-items:center; gap:8px; min-width:0}
+  .sit-frase{grid-area:frase; font-size:14px}
+}
+/* report */
+.rp-sit-lista{margin:2px 0 10px}
+.rp-sit-riga{display:grid; grid-template-columns:118px minmax(0,1fr) 96px; gap:12px; align-items:start; padding:8px 0;
+  border-bottom:1px solid #EDEBE4; font-size:12.5px; color:#28251D; line-height:1.45}
+.rp-sit-riga:last-child{border-bottom:none}
+.rp-sit-riga b{font-weight:800}
+.rp-sit-forza{justify-self:start; font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:99px; white-space:nowrap; text-transform:uppercase; letter-spacing:.03em; margin-top:1px}
+.rp-sit-forza.ripete.neg{background:#A84B2F; color:#fff}
+.rp-sit-forza.ripete.pos{background:#437A22; color:#fff}
+.rp-sit-forza.occhio{background:#F7E9DA; color:#964219}
+.rp-sit-pallini{display:flex; flex-direction:column; align-items:flex-end; gap:3px}
+.rp-sit-pallini span{display:flex; gap:3px; flex-wrap:wrap; justify-content:flex-end}
+.rp-sit-pallini i{width:8px; height:8px; border-radius:50%; border:1.3px solid #A9A8A3; display:block; box-sizing:border-box}
+.rp-sit-pallini i.si{background:#01696F; border-color:#01696F}
+.rp-sit-pallini small{font-size:10px; color:#6E6D68}
+.rp-sit-cella-buona{color:#437A22; font-weight:800}
+.rp-sit-cella-debole{color:#A13544; font-weight:800}
+
 </style>
 </head>
 <body>
@@ -659,6 +724,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     <a href="#sez-persa-gol-partita" data-tab="partita">Palle perse e gol subiti</a>
     <a href="#sez-incampo-partita" data-tab="partita">Gol subiti e chi è in campo</a>
     <a href="#sez-formazione-partita" data-tab="partita">La formazione migliore</a>
+    <a href="#sez-situazioni-partita" data-tab="partita">Situazioni che si ripetono</a>
     <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
@@ -672,6 +738,7 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
     <a href="#sez-persa-gol-allenamento" data-tab="allenamento">Palle perse e gol</a>
     <a href="#sez-incampo-allenamento" data-tab="allenamento">Gol subiti e chi è in campo</a>
     <a href="#sez-formazione-allenamento" data-tab="allenamento">La formazione migliore</a>
+    <a href="#sez-situazioni-allenamento" data-tab="allenamento">Situazioni che si ripetono</a>
     <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
@@ -894,6 +961,13 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
       <div id="contenuto-formazione-partita"></div>
     </section>
 
+    <!-- 7h. SITUAZIONI CHE SI RIPETONO (partita) — 1.46.0 -->
+    <section id="sez-situazioni-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">15</span><h2>Situazioni che si ripetono</h2></div>
+      <p class="sez-desc">Quello che è tornato in più partite del periodo: cosa succede prima dei gol, in quali momenti si segna e si subisce, le abitudini dei giocatori e cosa cambia da una partita all'altra.</p>
+      <div id="contenuto-situazioni-partita"></div>
+    </section>
+
     <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) — spostata in fondo alla scheda partita il 16/10/2026 -->
     <section id="sez-report-partita" data-tab-sezione="partita">
       <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
@@ -985,6 +1059,13 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
           <select id="fm-sel-criterio-allenamento"></select></div>
       </div>
       <div id="contenuto-formazione-allenamento"></div>
+    </section>
+
+    <!-- 8b8. SITUAZIONI CHE SI RIPETONO (allenamento) — 1.46.0 -->
+    <section id="sez-situazioni-allenamento" data-tab-sezione="allenamento">
+      <div class="sez-testa"><span class="sez-num">13</span><h2>Situazioni che si ripetono (allenamento)</h2></div>
+      <p class="sez-desc">Quello che è tornato in più partitelle del periodo: cosa succede prima dei gol, in quali momenti, le abitudini dei giocatori e cosa cambia da un allenamento all'altro.</p>
+      <div id="contenuto-situazioni-allenamento"></div>
     </section>
 
     <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
@@ -1099,6 +1180,8 @@ td.cella-testo{white-space:normal !important; text-align:left !important; line-h
           <p>Chi è in campo si ricostruisce dalla timeline: titolari sono i giocatori con minuti che non hanno come primo cambio un ingresso (o che giocano palloni prima di entrare); ogni «Cambio entra» mette in campo, ogni «Cambio esce» o cartellino rosso toglie. In allenamento la squadra interna è quella scritta sulle righe del giocatore, fino a un eventuale «Cambio squadra». Una partita in cui risultano più di 7 giocatori in campo, o palloni giocati da chi risulta in panchina, viene esclusa: manca un cambio. Per ogni giocatore <code>gol subiti ogni 50' con lui = gol subiti con lui in campo / minuti in campo × 50</code>, e lo stesso «senza di lui» sul tempo restante (in allenamento: le due squadre interne sommate). Lo stesso per le coppie di difensori: due giocatori della stessa squadra, entrambi difensori di ruolo (il ruolo di partenza scritto nel tabellino, non la posizione data con un cambio), in campo nello stesso istante, con almeno 10' insieme e 10' senza. Le coppie con un ospite si mostrano, una per allenamento, ma non si confrontano. Soglie: almeno 10' in campo e 10' senza. Il segnale nasce dal test binomiale esatto a due code (con n gol e una quota q di minuti in campo, i gol «suoi» per puro caso sarebbero Binomiale(n, q)), corretto per il numero di confronti con Benjamini-Hochberg: <strong>chiaro</strong> se la probabilità corretta è sotto 0,10, <strong>da tenere d'occhio</strong> se lo è solo quella grezza. È una correlazione, non un'attribuzione di colpa.</p>
           <h4>Formazioni e formazione migliore</h4>
           <p>Formazione = l'insieme dei giocatori in campo nello stesso momento per la stessa squadra (in allenamento: la squadra interna), ricavato dagli stessi tratti a formazione costante della sezione precedente; se torna in campo, anche in partite diverse, somma minuti e gol. Per ogni formazione: minuti insieme, gol fatti e gol subiti mentre era in campo. Per scegliere la migliore il criterio consigliato è il <strong>saldo reti</strong> (gol fatti − gol subiti), a parità meno gol subiti, poi più minuti; si possono scegliere anche «meno gol subiti» o «più gol fatti». Servono almeno 5' insieme, e per la scelta ogni formazione parte come se avesse già giocato 10' al ritmo medio della squadra: <code>stima = (gol + media al minuto × 10) / (minuti + 10) × 50</code>. Chi ha giocato tanto insieme resta quasi com'è, chi ha giocato poco viene riportato verso la media. I numeri mostrati sono quelli veri. Sul campo ognuno è nella casella del modulo impostato in Seven Lab (P, D1, D2, C1…: colonna «Slot» della sezione «RUOLI EVENTI») tenuta più a lungo in quella formazione; il modulo (2-3-1, 3-2-1…) si conta dalle caselle, senza il portiere. Senza quella sezione si usano i ruoli.</p>
+          <h4>Situazioni che si ripetono</h4>
+          <p>Il sistema prova sempre lo stesso elenco di situazioni su tutte le sessioni del periodo e mostra solo quelle che sono successe in almeno due sessioni. <strong>Prima dei gol</strong>: gol subiti entro 15" da un nostro errore (palla persa, passaggio sbagliato o dribbling fallito) senza che la squadra abbia ripreso il pallone; gol fatti entro 15" da un nostro recupero; gol subiti nei 3' dopo un cambio; gol nati da palla inattiva. <strong>Momenti</strong>: gol nei primi e negli ultimi 5' di ogni tempo e nei 5' dopo un gol; precisione passaggi e palle perse nel secondo tempo (in allenamento: nella seconda metà della partitella). <strong>Giocatori</strong>: la zona dove un giocatore perde palla, se ci perde palla molto più della squadra; l'errore dopo l'errore (la sua giocata successiva, fra 3" e 90", è di nuovo un errore); il calo dopo 15' consecutivi in campo rispetto ai primi 10' (solo partite). <strong>Da una sessione all'altra</strong>: i numeri di ogni sessione affiancati; da 5 sessioni, il legame fra ogni voce e il risultato (in allenamento: con RPE e durata), con il coefficiente di Spearman, segnalato da 0,7 in su. Per le situazioni legate a un momento la quota di gol in quel momento deve essere almeno 1,5 volte la quota di tempo che occupa; «Si ripete» con almeno 3 casi e probabilità di caso (test binomiale) sotto il 10%, «Da tenere d'occhio» con almeno 2 casi e sotto il 30%. Per le altre: «Si ripete» con almeno 3 casi e il 30% dei gol, «Da tenere d'occhio» con almeno 2 e il 20%. Sono ricorrenze, non cause: dicono dove guardare.</p>
           <h4>Nessun dato biometrico richiesto</h4>
           <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
           <h4>Pulizia dei dati</h4>
