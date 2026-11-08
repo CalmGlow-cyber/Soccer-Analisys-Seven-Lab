@@ -659,6 +659,21 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 .rp-sit-cella-buona{color:#437A22; font-weight:800}
 .rp-sit-cella-debole{color:#A13544; font-weight:800}
 
+/* ---------- tiri e respinte (1.47.0) ---------- */
+.tenue{color:var(--muted); font-weight:500; font-size:.92em}
+.tiri-legenda{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:8px; font-size:12px; color:var(--muted)}
+.tiri-leg{display:inline-flex; align-items:center; gap:6px; white-space:nowrap}
+.tiri-leg i{display:inline-block; width:11px; height:11px; border-radius:50%}
+#sez-tiri-partita .card:nth-child(odd) .tiri-leg i.g{background:var(--primary-hover); box-shadow:0 0 0 1.5px #fff, 0 0 0 2.5px var(--primary-hover)}
+#sez-tiri-partita .card:nth-child(odd) .tiri-leg i.p{background:color-mix(in srgb, var(--c1) 55%, transparent); box-shadow:inset 0 0 0 1.5px var(--c1)}
+#sez-tiri-partita .card:nth-child(odd) .tiri-leg i.f{box-shadow:inset 0 0 0 2px var(--c1)}
+#sez-tiri-partita .card:nth-child(even) .tiri-leg i.g{background:var(--danger); box-shadow:0 0 0 1.5px #fff, 0 0 0 2.5px var(--danger)}
+#sez-tiri-partita .card:nth-child(even) .tiri-leg i.p{background:color-mix(in srgb, var(--c2) 55%, transparent); box-shadow:inset 0 0 0 1.5px var(--c2)}
+#sez-tiri-partita .card:nth-child(even) .tiri-leg i.f{box-shadow:inset 0 0 0 2px var(--c2)}
+.tiri-leg i.a{border-radius:0; width:16px; height:0; border-top:2px dashed var(--muted)}
+.tiri-tab td:nth-child(5), .tiri-tab th:nth-child(5){border-left:1px solid var(--border)}
+.rp-elenco-resp li{margin-bottom:5px}
+
 </style>
 </head>
 <body>
@@ -716,6 +731,8 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <a href="#sez-tendenze" data-tab="partita">Tendenze individuali</a>
     <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
     <a href="#sez-zone-partita" data-tab="partita">Zone recupero/palla persa</a>
+    <a href="#sez-respinte-partita" data-tab="partita">Respinte dei difensori</a>
+    <a href="#sez-tiri-partita" data-tab="partita">Da dove si tira</a>
     <a href="#sez-golgame-partita" data-tab="partita">Zone tiro e assist gol</a>
     <a href="#sez-porta-partita" data-tab="partita">Dove entra la palla in porta</a>
     <a href="#sez-subentrati" data-tab="partita">Impatto dei subentrati</a>
@@ -833,23 +850,45 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
       <div id="contenuto-zone-partita"></div>
     </section>
 
+    <!-- 6b2b. RESPINTE DEI DIFENSORI (partita) — 1.47.0 -->
+    <section id="sez-respinte-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">07</span><h2>Respinte dei difensori</h2></div>
+      <p class="sez-desc">Dove i nostri difensori respingono un pallone, e chi lo fa. Da SevenLab la respinta è un evento diverso dal recupero: il recupero è palla nostra, la respinta ferma l'azione avversaria ma la palla resta contesa o va via.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="resp-sel-partita">Partita</label>
+          <select id="resp-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-respinte-partita"></div>
+    </section>
+
+    <!-- 6b2c. DA DOVE SI TIRA (partita) — 1.47.0 -->
+    <section id="sez-tiri-partita" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">08</span><h2>Da dove si tira</h2></div>
+      <p class="sez-desc">Da dove partono i nostri tiri e da dove arrivano i tiri verso la nostra porta, con l'esito di ognuno e la distanza dalla porta. Richiede la posizione di ogni tiro nel CSV di SevenLab.</p>
+      <div class="toolbar">
+        <div class="campo"><label for="tiri-sel-partita">Partita</label>
+          <select id="tiri-sel-partita"></select></div>
+      </div>
+      <div id="contenuto-tiri-partita"></div>
+    </section>
+
     <!-- 6b3. ZONE DI TIRO E ASSIST DEI GOL (Game) -->
     <section id="sez-golgame-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di tiro e assist dei gol</h2></div>
+      <div class="sez-testa"><span class="sez-num">09</span><h2>Zone di tiro e assist dei gol</h2></div>
       <p class="sez-desc">Su richiesta del mister: da dove si segna di più e da dove arrivano di più gli assist che portano al gol, sul periodo selezionato in alto. Richiede che i file caricati includano la sezione «DETTAGLIO GOL GAME» — un dato che Seven Lab non esporta ancora in tutti gli export.</p>
       <div id="contenuto-golgame-partita"></div>
     </section>
 
     <!-- 6b4. DOVE ENTRA LA PALLA IN PORTA (punto d'ingresso dei gol fatti) -->
     <section id="sez-porta-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">08</span><h2>Dove entra la palla in porta</h2></div>
+      <div class="sez-testa"><span class="sez-num">10</span><h2>Dove entra la palla in porta</h2></div>
       <p class="sez-desc">Su richiesta del mister: una porta da calcio disegnata in proporzione, con un pallone su ogni punto in cui la palla è entrata sui gol fatti, sul periodo selezionato in alto. Richiede che l'export Seven Lab includa, nella sezione «DETTAGLIO GOL GAME», le coordinate del punto d'ingresso in porta — un dato nuovo, che i file più vecchi non hanno.</p>
       <div id="contenuto-porta-partita"></div>
     </section>
 
     <!-- 6b4. IMPATTO DEI SUBENTRATI -->
     <section id="sez-subentrati" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">09</span><h2>Impatto dei subentrati</h2></div>
+      <div class="sez-testa"><span class="sez-num">11</span><h2>Impatto dei subentrati</h2></div>
       <p class="sez-desc">Chi, entrando a partita in corso, non solo rende bene ma sposta davvero la gara. Incrocia il minuto d'ingresso (dall'evento «Cambio entra» della timeline), i minuti giocati da subentrato, le convocazioni e il contributo ai gol, e mette a confronto il rendimento del giocatore quando entra con quello che ha quando parte titolare.</p>
       <div id="contenuto-subentrati"></div>
     </section>
@@ -911,7 +950,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 7d. TEMPO DI RICONQUISTA DELLA PALLA (partita) -->
     <!-- 7c-bis. POSSESSO PALLA E MOMENTUM (partita singola, 18/10/2026) -->
     <section id="sez-possesso-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">10</span><h2>Possesso palla e momentum</h2></div>
+      <div class="sez-testa"><span class="sez-num">12</span><h2>Possesso palla e momentum</h2></div>
       <p class="sez-desc">Quanto tempo la palla è stata nostra e quanto degli avversari, e come è cambiato lungo la partita. Con l'interruttore del possesso di SevenLab il tempo degli avversari è misurato; nelle partite senza interruttore il possesso è solo stimato dai nostri eventi e il momentum non c'è. Si guarda una partita alla volta.</p>
       <div class="toolbar">
         <div class="campo"><label for="pos-sel-partita">Partita</label>
@@ -921,14 +960,14 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     </section>
 
     <section id="sez-riconquista" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">11</span><h2>Tempo di riconquista della palla</h2></div>
+      <div class="sez-testa"><span class="sez-num">13</span><h2>Tempo di riconquista della palla</h2></div>
       <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso: è la misura della reattività nella transizione negativa. Si parte da ogni palla persa e si cerca il primo recupero successivo — nessun dato nuovo da raccogliere, entrambi gli eventi sono già nella timeline di Seven Lab. Le sequenze interrotte da un gol, dalla fine del tempo o che superano il minuto vengono contate a parte invece di entrare nella media.</p>
       <div id="contenuto-riconquista"></div>
     </section>
 
     <!-- 7e. PALLE PERSE CHE DIVENTANO GOL SUBITI (partita) -->
     <section id="sez-persa-gol-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">12</span><h2>Palle perse che diventano gol subiti</h2></div>
+      <div class="sez-testa"><span class="sez-num">14</span><h2>Palle perse che diventano gol subiti</h2></div>
       <p class="sez-desc">Quali palle perse si sono trasformate in un gol avversario entro 15 secondi, e chi le ha perse. Serve a capire quale giocatore tende a sbagliare nei momenti in cui l'avversario aggredisce. Nessun dato nuovo da raccogliere: palla persa e gol subito sono già nella timeline di Seven Lab.</p>
       <div class="toolbar">
         <div class="campo"><label for="pgl-sel-partita">Partita</label>
@@ -939,7 +978,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 
     <!-- 7f. GOL SUBITI E CHI È IN CAMPO (partita) -->
     <section id="sez-incampo-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">13</span><h2>Gol subiti e chi è in campo</h2></div>
+      <div class="sez-testa"><span class="sez-num">15</span><h2>Gol subiti e chi è in campo</h2></div>
       <p class="sez-desc">Quanti gol prende la squadra quando un giocatore è in campo, rispetto a quando non c'è — e lo stesso per le coppie di difensori di ruolo in campo insieme. Serve a capire se con certi giocatori, o certe coppie di difesa, la squadra regge meno. Nessun dato nuovo da raccogliere: chi è in campo si ricava dai cambi della timeline.</p>
       <div class="toolbar">
         <div class="campo"><label for="icp-sel-partita">Partita</label>
@@ -950,7 +989,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 
     <!-- 7g. LA FORMAZIONE MIGLIORE (partita) -->
     <section id="sez-formazione-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">14</span><h2>La formazione migliore</h2></div>
+      <div class="sez-testa"><span class="sez-num">16</span><h2>La formazione migliore</h2></div>
       <p class="sez-desc">Fra le formazioni che sono davvero scese in campo insieme, quella che ha funzionato meglio: di base quella che, nei minuti giocati insieme, ha segnato più gol di quanti ne ha presi. Per tutto il periodo o per una partita sola.</p>
       <div class="toolbar">
         <div class="campo"><label for="fm-sel-partita">Partita</label>
@@ -963,7 +1002,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 
     <!-- 7h. SITUAZIONI CHE SI RIPETONO (partita) — 1.46.0 -->
     <section id="sez-situazioni-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><span class="sez-num">15</span><h2>Situazioni che si ripetono</h2></div>
+      <div class="sez-testa"><span class="sez-num">17</span><h2>Situazioni che si ripetono</h2></div>
       <p class="sez-desc">Quello che è tornato in più partite del periodo: cosa succede prima dei gol, in quali momenti si segna e si subisce, le abitudini dei giocatori e cosa cambia da una partita all'altra.</p>
       <div id="contenuto-situazioni-partita"></div>
     </section>
@@ -1182,6 +1221,8 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
           <p>Formazione = l'insieme dei giocatori in campo nello stesso momento per la stessa squadra (in allenamento: la squadra interna), ricavato dagli stessi tratti a formazione costante della sezione precedente; se torna in campo, anche in partite diverse, somma minuti e gol. Per ogni formazione: minuti insieme, gol fatti e gol subiti mentre era in campo. Per scegliere la migliore il criterio consigliato è il <strong>saldo reti</strong> (gol fatti − gol subiti), a parità meno gol subiti, poi più minuti; si possono scegliere anche «meno gol subiti» o «più gol fatti». Servono almeno 5' insieme, e per la scelta ogni formazione parte come se avesse già giocato 10' al ritmo medio della squadra: <code>stima = (gol + media al minuto × 10) / (minuti + 10) × 50</code>. Chi ha giocato tanto insieme resta quasi com'è, chi ha giocato poco viene riportato verso la media. I numeri mostrati sono quelli veri. Sul campo ognuno è nella casella del modulo impostato in Seven Lab (P, D1, D2, C1…: colonna «Slot» della sezione «RUOLI EVENTI») tenuta più a lungo in quella formazione; il modulo (2-3-1, 3-2-1…) si conta dalle caselle, senza il portiere. Senza quella sezione si usano i ruoli.</p>
           <h4>Situazioni che si ripetono</h4>
           <p>Il sistema prova sempre lo stesso elenco di situazioni su tutte le sessioni del periodo e mostra solo quelle che sono successe in almeno due sessioni. <strong>Prima dei gol</strong>: gol subiti entro 15" da un nostro errore (palla persa, passaggio sbagliato o dribbling fallito) senza che la squadra abbia ripreso il pallone; gol fatti entro 15" da un nostro recupero; gol subiti nei 3' dopo un cambio; gol nati da palla inattiva. <strong>Momenti</strong>: gol nei primi e negli ultimi 5' di ogni tempo e nei 5' dopo un gol; precisione passaggi e palle perse nel secondo tempo (in allenamento: nella seconda metà della partitella). <strong>Giocatori</strong>: la zona dove un giocatore perde palla, se ci perde palla molto più della squadra; l'errore dopo l'errore (la sua giocata successiva, fra 3" e 90", è di nuovo un errore); il calo dopo 15' consecutivi in campo rispetto ai primi 10' (solo partite). <strong>Da una sessione all'altra</strong>: i numeri di ogni sessione affiancati; da 5 sessioni, il legame fra ogni voce e il risultato (in allenamento: con RPE e durata), con il coefficiente di Spearman, segnalato da 0,7 in su. Per le situazioni legate a un momento la quota di gol in quel momento deve essere almeno 1,5 volte la quota di tempo che occupa; «Si ripete» con almeno 3 casi e probabilità di caso (test binomiale) sotto il 10%, «Da tenere d'occhio» con almeno 2 casi e sotto il 30%. Per le altre: «Si ripete» con almeno 3 casi e il 30% dei gol, «Da tenere d'occhio» con almeno 2 e il 20%. Sono ricorrenze, non cause: dicono dove guardare.</p>
+          <h4>Tiri e respinte sul campo</h4>
+          <p><strong>Da dove si tira</strong>: un pallino per ogni tiro con posizione, letto dalle righe dei tiri nella sezione «DATI SPAZIALI» del CSV di SevenLab (i nostri verso la porta a destra, quelli subiti verso la nostra porta a sinistra). Se le righe dei gol mancano, i gol si prendono da «DETTAGLIO GOL GAME». La distanza è in linea d'aria dal centro della porta, in tre fasce: entro 8 m, da 8 a 16 m, oltre 16 m. <strong>Respinte</strong>: dalla colonna «Respinte» del riepilogo, dalla colonna «Respinta» della timeline e dalle righe «Respinta» di «DATI SPAZIALI»; non entrano mai nei calcoli dei recuperi. Nei file registrati prima del tasto «Respinta» le respinte sono dentro i recuperi e non si possono separare.</p>
           <h4>Nessun dato biometrico richiesto</h4>
           <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
           <h4>Pulizia dei dati</h4>
