@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.47.0",
+  numero: "1.49.0",
   data: "2026-11-08",
-  note: "Tiri e respinte sul campo (08/11/2026): due sezioni nuove nella dashboard Partita, «Respinte dei difensori» (zone, heatmap, chi respinge, con i recuperi accanto) e «Da dove si tira» (mappa e heatmap dei nostri tiri e dei tiri subiti, fasce di distanza dalla porta, chi tira e da dove), con selettore della partita; le stesse mappe nel Report Partita e nel Report Stagionale, e due considerazioni nuove sui tiri. Respinta separata dal recupero: legge la colonna «Respinte», la colonna «Respinta» della timeline e le righe «Respinta» di DATI SPAZIALI (SevenLab Video 0.10.0), e nessun calcolo sui recuperi le conta. I tiri con posizione si leggono dalle righe di DATI SPAZIALI. Comprende la 1.46.0."
+  note: "Tiri sul campo dal CSV vero (08/11/2026): legge la sezione «TIRI SUL CAMPO GAME» di SevenLab Video 0.14.1 (partenza, arrivo ed esito dei nostri tiri; tiri subiti, parate e gol subiti con il punto in porta). Nella mappa dei nostri tiri il gol è un pallone, il tiro senza gol un pallino vuoto con la linea fino all'arrivo (piena in porta, tratteggiata respinto, a puntini fuori); nuova porta «Dove entrano i gol subiti». Partite registrate senza video, solo con risultato e gol: contano per risultato, gol, chi è in campo e formazioni, non per le statistiche dei giocatori, il possesso, le palle perse → gol e le situazioni; etichetta nel pannello dei file e nota sotto la classifica. Comprende la 1.48.0."
 };
 
 /* =====================================================================
@@ -654,9 +654,21 @@ function parsaFileSevenLab(testo){
     if(!possessoAvversario.length) possessoAvversario = null;
   }
 
+  // Sezione «TIRI SUL CAMPO GAME» (SevenLab Video 0.14.1, primo file vero il 08/11/2026): una riga per ogni tiro
+  // nostro senza gol e per ogni tiro subito / parata / gol subito, con partenza, arrivo, esito e punto in porta.
+  // Vedi estraiTiriRespinteDaSessione per le colonne e le coordinate.
+  let tiriCampoGame = null;
+  const titoloTiri = Object.keys(sezioni).find(t => /tiri\s+sul\s+campo/i.test(t));
+  if(titoloTiri && sezioni[titoloTiri].length > 1){
+    const [intT, ...righeT] = sezioni[titoloTiri];
+    tiriCampoGame = righeT.map(c => { const o = {}; intT.forEach((h, idx) => o[String(h).trim()] = c[idx] ?? ""); return o; })
+      .filter(o => String(o["Evento"] || "").trim());
+    if(!tiriCampoGame.length) tiriCampoGame = null;
+  }
+
   // Correzione dei tempi per le sessioni registrate da video: un solo punto, prima che qualunque calcolo
   // tocchi questi secondi (vedi il blocco "TEMPI DELLE SESSIONI REGISTRATE IN DIFFERITA" più sopra).
-  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame, possessoAvversario});
+  return normalizzaTempiDifferita({tipo, meta, righe, eventi, riepilogoTempi, datiSpaziali, statistichePortieriGame, dettaglioGolGame, possessoAvversario, tiriCampoGame});
 }
 
 /** Ricava un identificativo di sessione leggibile dal nome del file (es. "partita_3.csv" → "partita_3"). */
@@ -697,7 +709,9 @@ const CLOUD = {
   chiave: "sb_publishable_YwcEhLvfxVtQtaichsSSUw_nKVsCuzv", // chiave pubblica: l'accesso ai dati lo decidono login e RLS
   tabella: "analysis_sessions"
 };
-const CHIAVE_ACCESSO_CLOUD = "analysis-cloud-accesso-v1";
+// Il portale dei mister (stesso sito, cartella /mister/) tiene il suo accesso a parte (1.48.0): entrando lì con
+// un account di prova non si esce da Analysis.
+const CHIAVE_ACCESSO_CLOUD = (typeof window !== "undefined" && window.PORTALE_MISTER) ? "analysis-portale-accesso-v1" : "analysis-cloud-accesso-v1";
 const archivio = {sessioni: [], sinc: {}, pronto: false, db: null};
 
 /* ---- memoria del dispositivo ---- */
@@ -867,6 +881,97 @@ async function restCloud(metodo, query, corpo, prefer){
   return r.status === 204 ? null : r.json().catch(() => null);
 }
 
+/* =====================================================================
+   PORTALE MISTER (1.48.0, 08/11/2026) — parti comuni ad Analysis e al portale
+   Il portale (cartella /mister/ dello stesso sito) carica questo stesso app.js con window.PORTALE_MISTER = true:
+   così i mister vedono gli stessi calcoli di Analysis, senza una copia del codice da tenere allineata.
+   Cloud: tabelle analysis_lettori (mister abilitati, solo lettura), analysis_portale (sezioni visibili),
+   analysis_push (iscrizioni alle notifiche, solo la funzione), funzione «portale-mister» (account, eventi,
+   notifiche). Vedi playbook punto 70.
+   ===================================================================== */
+const IN_PORTALE = typeof window !== "undefined" && !!window.PORTALE_MISTER;
+const URL_FUNZIONE_PORTALE = CLOUD.url + "/functions/v1/portale-mister";
+const URL_PORTALE_MISTER = "https://" + SITO_PUBBLICATO + "/mister/";
+
+/** Catalogo delle sezioni del portale: chiave, scheda, in quali viste compaiono, titolo e una riga per i mister.
+ *  Le chiavi sono quelle salvate nel cloud (analysis_portale.sezioni = {chiave: false} per le nascoste). */
+const SEZIONI_PORTALE = [
+  {k: "lettura", tipo: "partite", modi: ["singola"], titolo: "La partita", desc: "Risultato, marcatori, numeri della gara e cosa dicono i dati."},
+  {k: "kpi", tipo: "partite", modi: ["stagione"], sez: "sez-kpi", titolo: "Numeri della stagione", desc: "Gol, precisione, realizzazione: il totale della stagione e il confronto con il mese prima."},
+  {k: "andamento", tipo: "partite", modi: ["stagione"], sez: "sez-andamento", titolo: "Andamento partita per partita", desc: "Come cambiano gol, passaggi e realizzazione da una partita all'altra."},
+  {k: "classifica", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-classifica", titolo: "Giocatori", desc: "I numeri di ogni giocatore."},
+  {k: "possesso", tipo: "partite", modi: ["singola"], sez: "sez-possesso-partita", titolo: "Possesso e momentum", desc: "Chi ha avuto la palla, e quando."},
+  {k: "zone", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-zone-partita", titolo: "Dove recuperiamo e perdiamo palla", desc: "Le zone del campo dei recuperi e delle palle perse."},
+  {k: "respinte", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-respinte-partita", titolo: "Respinte dei difensori", desc: "Dove respingiamo, e chi lo fa."},
+  {k: "tiri", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-tiri-partita", titolo: "Da dove si tira", desc: "Da dove tiriamo noi e da dove ci tirano."},
+  {k: "golgame", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-golgame-partita", titolo: "Da dove segniamo", desc: "Zone di tiro e di assist dei nostri gol."},
+  {k: "porta", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-porta-partita", titolo: "Dove entra la palla in porta", desc: "Il punto della porta dove sono entrati i nostri gol."},
+  {k: "riconquista", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-riconquista", titolo: "Tempo di riconquista", desc: "Quanto ci mettiamo a riprendere palla dopo averla persa."},
+  {k: "persagol", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-persa-gol-partita", titolo: "Palle perse che diventano gol", desc: "Le palle perse da cui è nato un gol avversario entro 15 secondi."},
+  {k: "incampo", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-incampo-partita", titolo: "Gol subiti e chi è in campo", desc: "Quanti gol prende la squadra con ogni giocatore in campo."},
+  {k: "formazione", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-formazione-partita", titolo: "La formazione migliore", desc: "I sette che hanno funzionato meglio insieme."},
+  {k: "situazioni", tipo: "partite", modi: ["stagione"], sez: "sez-situazioni-partita", titolo: "Situazioni che si ripetono", desc: "Quello che è tornato in più partite."},
+  {k: "kpi-all", tipo: "allenamenti", modi: ["stagione"], sez: "sez-kpi-stat-allenamento", titolo: "Numeri degli allenamenti", desc: "Le statistiche delle partitelle."},
+  {k: "classifica-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-classifica-stat-allenamento", titolo: "Giocatori in allenamento", desc: "I numeri di ogni giocatore nelle partitelle."},
+  {k: "carico", tipo: "allenamenti", modi: ["stagione"], sez: "sez-allenamenti", titolo: "Presenze e carico", desc: "Presenze, minuti e fatica degli allenamenti."},
+  {k: "zone-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-zone-allenamento", titolo: "Dove recuperiamo e perdiamo palla", desc: "Le zone del campo nelle partitelle."},
+  {k: "persagol-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-persa-gol-allenamento", titolo: "Palle perse che diventano gol", desc: "Nelle partitelle, chi perde la palla da cui nasce un gol."},
+  {k: "incampo-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-incampo-allenamento", titolo: "Gol subiti e chi è in campo", desc: "Nelle partitelle, quanti gol si prendono con ogni giocatore in campo."},
+  {k: "formazione-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-formazione-allenamento", titolo: "La formazione migliore", desc: "I sette che hanno funzionato meglio insieme nelle partitelle."},
+  {k: "situazioni-all", tipo: "allenamenti", modi: ["stagione"], sez: "sez-situazioni-allenamento", titolo: "Situazioni che si ripetono", desc: "Quello che è tornato in più allenamenti."}
+];
+
+/** Chiamata alla funzione del cloud del portale, con il token di chi è entrato (se c'è). */
+async function chiamaFunzionePortale(corpo){
+  const t = await tokenCloud();
+  const h = {"Content-Type": "application/json", "apikey": CLOUD.chiave};
+  if(t) h["Authorization"] = "Bearer " + t;
+  const r = await fetch(URL_FUNZIONE_PORTALE, {method: "POST", headers: h, body: JSON.stringify(corpo)});
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok || j.errore) throw new Error(j.errore || ("Errore del cloud (" + r.status + ")"));
+  return j;
+}
+/** Lettura/scrittura di una tabella qualsiasi del cloud con il token di chi è entrato. */
+async function restTabella(metodo, tabella, query, corpo, prefer){
+  const t = await tokenCloud();
+  if(!t) throw new Error("Accesso scaduto: rientra con email e password.");
+  const h = {"apikey": CLOUD.chiave, "Authorization": "Bearer " + t};
+  if(corpo !== undefined) h["Content-Type"] = "application/json";
+  if(prefer) h["Prefer"] = prefer;
+  const r = await fetch(CLOUD.url + "/rest/v1/" + tabella + (query || ""), {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)});
+  if(!r.ok){ const j = await r.json().catch(() => ({})); throw new Error(j.message || ("Errore del cloud (" + r.status + ")")); }
+  return r.status === 204 ? null : r.json().catch(() => null);
+}
+/** Iscrizione alle notifiche di questo dispositivo (service worker sw.js nella radice del sito). */
+function supportaNotifiche(){ return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window; }
+function inModalitaApp(){ return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true; }
+function eIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+async function registraServiceWorker(percorso, ambito){
+  if(!("serviceWorker" in navigator)) return null;
+  try{ return await navigator.serviceWorker.register(percorso, {scope: ambito}); }catch(e){ console.warn("service worker", e); return null; }
+}
+function chiaveDaB64u(s){
+  const p = String(s).replace(/-/g, "+").replace(/_/g, "/"); const bin = atob(p + "===".slice((p.length + 3) % 4));
+  return Uint8Array.from(bin, c => c.charCodeAt(0));
+}
+async function iscrivitiNotifiche(reg){
+  if(!supportaNotifiche()) throw new Error("Questo browser non riceve notifiche.");
+  if(eIOS() && !inModalitaApp()) throw new Error("Su iPhone le notifiche arrivano solo all'app aperta dalla schermata Home: aggiungila prima alla Home e aprila da lì.");
+  const permesso = await Notification.requestPermission();   // prima di qualunque altra attesa: va fatto dentro il tocco
+  if(permesso !== "granted") throw new Error("Notifiche non consentite. Si riattivano dalle impostazioni del telefono.");
+  const r = reg || await Promise.race([navigator.serviceWorker.ready, new Promise((_, no) => setTimeout(() => no(new Error("Il servizio delle notifiche non è pronto: ricarica la pagina e riprova.")), 8000))]);
+  const {chiave} = await chiamaFunzionePortale({azione: "chiave"});
+  let sub = await r.pushManager.getSubscription();
+  if(sub){
+    // iscrizione fatta con un'altra chiave (non dovrebbe succedere): la si rifà
+    const k = sub.options && sub.options.applicationServerKey ? new Uint8Array(sub.options.applicationServerKey) : null;
+    const attesa = chiaveDaB64u(chiave);
+    if(k && (k.length !== attesa.length || k.some((v, i) => v !== attesa[i]))){ await sub.unsubscribe(); sub = null; }
+  }
+  if(!sub) sub = await r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: chiaveDaB64u(chiave)});
+  return sub.toJSON();
+}
+
 /* ---- sincronizzazione ---- */
 const statoCloud = {inCorso: false, ultima: null, errore: null, ancora: false};
 let timerSinc = null, ultimaSincAuto = 0;
@@ -1005,7 +1110,7 @@ function aggiungiSessioneDaTesto(nomeFile, testo){
   const sessione = {id, tipo:parsed.tipo, nomeFile, caricatoIl:new Date().toISOString(), meta:parsed.meta,
     righe:parsed.righe, eventi:parsed.eventi, riepilogoTempi:parsed.riepilogoTempi, datiSpaziali:parsed.datiSpaziali,
     statistichePortieriGame:parsed.statistichePortieriGame, dettaglioGolGame:parsed.dettaglioGolGame,
-    possessoAvversario:parsed.possessoAvversario || null, scalaTempi:parsed.scalaTempi || null};
+    possessoAvversario:parsed.possessoAvversario || null, scalaTempi:parsed.scalaTempi || null, tiriCampoGame:parsed.tiriCampoGame || null};
   const attuali = leggiSessioniSalvate();
   const idx = attuali.findIndex(s => s.id === id);
   if(idx >= 0) attuali[idx] = sessione; else attuali.push(sessione);
@@ -2458,6 +2563,7 @@ function assemblaDataset(grezzo){
     DatiSpaziali: r.DatiSpaziali ?? null,
     StatistichePortieriGame: r.StatistichePortieriGame ?? null, DettaglioGolGame: r.DettaglioGolGame ?? null,
     PossessoAvversario: r.PossessoAvversario ?? null, NomeSquadra: r.NomeSquadra ?? "",
+    TiriCampoGame: r.TiriCampoGame ?? null, SoloEssenziali: !!r.SoloEssenziali,
     ScalaTempi: r.ScalaTempi ?? null
   })).filter(p => p.Match_ID)
     .sort((a,b) => (a.Data?a.Data.getTime():0) - (b.Data?b.Data.getTime():0));
@@ -2646,13 +2752,45 @@ function normalizzaNomiSessioni(sessioni){
  *  sessioni di prova di SevenLab Video), resta fuori da tutte le analisi; nel pannello dei file si può includere. */
 const sessioneDiProva = s => !!s && (/\b(di|da) test\b|^\s*test\b|\btest\s*\d+\b|\bdi prova\b/i.test(String((s.meta && s.meta["Titolo"]) || "")) || /^test_/i.test(String(s.nomeFile || "")));
 const sessioneEsclusa = s => sessioneDiProva(s) && !s.includiProva;
+/* PARTITE REGISTRATE SOLO CON GLI EVENTI ESSENZIALI (1.49.0, 08/11/2026). Elisa: quando non vede la partita e non
+   ha il video registra solo quello che sa (risultato, gol, assist, cambi, cartellini, gol subiti) — primo caso:
+   partita del 08/11 vs O.M. Sacconago. Quei file valgono per risultato, gol, chi è in campo e formazioni, ma non
+   per le statistiche di gioco: lì passaggi, recuperi, palle perse e dribbling sono zero perché non registrati,
+   non perché non ci sono stati, e i tiri coincidono con i gol. Regola: partita in cui la somma di passaggi,
+   recuperi, palle perse e dribbling di tutti i giocatori è zero. Le righe dei giocatori di queste partite non
+   entrano nelle statistiche dei giocatori (classifica, indici, radar, tendenze, report); la partita resta per
+   risultato, gol fatti e subiti, andamento dei risultati, gol subiti e chi è in campo, formazione migliore; è
+   esclusa da possesso stimato, palle perse → gol e situazioni che si ripetono, che leggono eventi mancanti. */
+function partitaSoloEssenziale(s){
+  if(!s || s.tipo !== "partita" || !Array.isArray(s.righe) || !s.righe.length) return false;
+  const colonne = ["Passaggi corretti", "Passaggi sbagliati", "Recuperi", "Palle perse", "Dribbling riusciti", "Dribbling falliti"];
+  if(!colonne.some(c => s.righe.some(r => r[c] !== undefined))) return false;   // file di formato diverso: non si giudica
+  return s.righe.reduce((a, r) => a + colonne.reduce((b, c) => b + N(r[c]), 0), 0) === 0;
+}
+/** Nota sotto le tabelle dei giocatori: quali partite non sono contate e i loro marcatori. */
+function notaPartiteEssenziali(cont, partite){
+  if(!cont || !stato.ds) return;
+  const ess = (partite || []).filter(p => p.SoloEssenziali);
+  if(!ess.length) return;
+  const righe = stato.ds.giocatoriEssenziali || [];
+  const elenco = ess.map(p => {
+    const gol = righe.filter(g => g.Match_ID === p.Match_ID && (N(g.Gol) || N(g.Assist)))
+      .map(g => `${esc(g.Giocatore)}${N(g.Gol) ? ` ${nf0(g.Gol)} gol` : ""}${N(g.Assist) ? `${N(g.Gol) ? "," : ""} ${nf0(g.Assist)} assist` : ""}`);
+    return `<strong>${esc(dataCorta(p.Data))} vs ${esc(p.Avversario)}</strong> (${nf0(p.Gol_Fatti)}–${nf0(p.Gol_Subiti)})${gol.length ? ": " + gol.join(", ") : ""}`;
+  });
+  const n = document.createElement("p");
+  n.className = "nota-piccola nota-essenziali";
+  n.innerHTML = `${ess.length === 1 ? "Non contata qui la partita" : "Non contate qui le partite"} registrat${ess.length === 1 ? "a" : "e"} senza video, solo con risultato, gol, assist e cambi: ${elenco.join("; ")}. ${ess.length === 1 ? "Vale" : "Valgono"} per il risultato, i gol e chi è in campo, non per le statistiche di gioco.`;
+  cont.appendChild(n);
+}
+
 function costruisciDatasetDaSessioni(sessioniTutte){
   const sessioniSalvate = (sessioniTutte || []).filter(s => !sessioneEsclusa(s));
   if(!sessioniSalvate.length && (sessioniTutte || []).length) throw new Error("Hai caricato solo sessioni di prova (con «test» nel titolo): sono escluse dalle analisi. Nel pannello dei file puoi includerle.");
   if(!sessioniSalvate.length) throw new Error("Non hai ancora caricato nessun file. Carica almeno un file partita o allenamento esportato da Seven Lab.");
   // nomi scritti in modi diversi (maiuscole, spazi) riportati a una grafia sola, su copie: vedi normalizzaNomiSessioni
   const {sessioni, unioni: unioniNomi} = normalizzaNomiSessioni(sessioniSalvate);
-  const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [];
+  const partiteRaw = [], giocatoriRaw = [], allenamentiRaw = [], presenzeRaw = [], statAllenamentoRaw = [], essenzialiRaw = [];
   sessioni.forEach(s => {
     // Regola dell'utente (10/10/2026): una sessione senza metodo di rilevazione è diretta — vale anche per
     // quelle già salvate nel browser da versioni precedenti. E i minuti di una sessione in differita salvata
@@ -2660,6 +2798,7 @@ function costruisciDatasetDaSessioni(sessioniTutte){
     const scala = scalaTempiEffettiva(s.scalaTempi);
     const fm = fattoreMinutiArretrati(s.scalaTempi);
     if(s.tipo === "partita"){
+      const essenziale = partitaSoloEssenziale(s); // 1.49.0: registrata senza video, solo risultato e gol
       partiteRaw.push({
         Match_ID: s.id, Data: parseDataSevenLab(s.meta["Data"]),
         Avversario: (s.meta["Avversario"]||"").trim() || "Avversario non indicato",
@@ -2670,6 +2809,7 @@ function costruisciDatasetDaSessioni(sessioniTutte){
         DatiSpaziali: s.datiSpaziali || null,
         StatistichePortieriGame: s.statistichePortieriGame || null, DettaglioGolGame: s.dettaglioGolGame || null,
         PossessoAvversario: s.possessoAvversario || null,
+        TiriCampoGame: s.tiriCampoGame || null, SoloEssenziali: essenziale,
         ScalaTempi: scala
       });
       (s.righe||[]).forEach(r => {
@@ -2684,7 +2824,7 @@ function costruisciDatasetDaSessioni(sessioniTutte){
         // "Tiri subiti rilevati" (03/09/2026, partita_3.csv): conteggio per giocatore dell'evento "Tiro
         // subito" nella timeline — in pratica valorizzato solo per il portiere in campo. Assente negli export
         // più vecchi: null (non 0), per non far sembrare un dato vero un semplice "non disponibile".
-        giocatoriRaw.push({
+        (essenziale ? essenzialiRaw : giocatoriRaw).push({
           Match_ID: s.id, Giocatore: String(r["Giocatore"]||"").trim(), Ruolo: String(r["Ruolo"]||"").trim(),
           Minuti_Giocati: N(r["Minuti giocati"]) * fm, Gol: N(r["Gol"]), Assist: N(r["Assist"]),
           Tiri_In_Porta: tiriPorta, Tiri_Fuori: Math.max(0, tiriTot - tiriPorta),
@@ -2763,6 +2903,7 @@ function costruisciDatasetDaSessioni(sessioniTutte){
   const ds = assemblaDataset({Partite:partiteRaw, Statistiche_Giocatori:giocatoriRaw, Allenamenti:allenamentiRaw,
     Presenze_Allenamento:presenzeRaw, Statistiche_Allenamento:statAllenamentoRaw});
   ds.unioniNomi = unioniNomi;
+  ds.giocatoriEssenziali = essenzialiRaw.map(r => ({Match_ID: r.Match_ID, Giocatore: r.Giocatore, Ruolo: r.Ruolo, Gol: N(r.Gol), Assist: N(r.Assist), Minuti_Giocati: N(r.Minuti_Giocati)}));
   return ds;
 }
 
@@ -3334,6 +3475,7 @@ function episodiPersaGolSessione(sessione, tipo){
 
 /** Riepilogo su più sessioni dello stesso tipo, con il dettaglio per giocatore. */
 function analizzaPersaGol(sessioni, tipo){
+  sessioni = (sessioni || []).filter(s => !s.SoloEssenziali); // partite senza palle perse registrate (1.49.0)
   const episodi = [], perseTot = new Map(), nonAttribuiti = [], colonneGol = {};
   let golAnalizzati = 0, golSenzaPersa = 0, senzaTimeline = 0, golDichiarati = 0, sessioniConTimeline = 0;
   let inDiretta = 0;
@@ -6204,6 +6346,7 @@ function renderPersaGiocatorePartita(f){
 /* --------- Possesso palla e momentum, partita singola (18/10/2026) --------- */
 const paletteMomentumSchermo = () => ({noi: colore("c1"), loro: colore("c2"), testo: colore("text"), tenue: colore("muted"), griglia: colore("grid")});
 function renderPossessoPartita(f){
+  f = Object.assign({}, f, {partite: (f.partite || []).filter(p => !p.SoloEssenziali)}); // 1.49.0
   const cont = $("#contenuto-possesso-partita");
   if(!cont) return;
   const sel = $("#pos-sel-partita");
@@ -7294,6 +7437,7 @@ function sitTraSessioni(prep, tipo){
 
 /** Punto d'ingresso: tutte le situazioni del periodo per un tipo di sessione. */
 function analizzaSituazioni(sessioni, tipo){
+  sessioni = (sessioni || []).filter(s => !s.SoloEssenziali); // senza errori e recuperi registrati falserebbero le quote (1.49.0)
   const prep = (sessioni || []).map(s => sitPreparaSessione(s, tipo)).filter(Boolean);
   if(!prep.length) return null;
   const tra = sitTraSessioni(prep, tipo);
@@ -7544,10 +7688,18 @@ function distanzaDallaPorta(p, portaX){ return Math.hypot(p.x - portaX, p.y - TI
 function fasciaDistanza(d){ return d <= TIRI_FASCE_DISTANZA[0] ? 0 : (d <= TIRI_FASCE_DISTANZA[1] ? 1 : 2); }
 
 /** Tiri e respinte con posizione di UNA sessione (partita). Torna {tiri, subiti, respinte, conTiri, conSubiti,
- *  conRespinte, golDaDettaglio, girati}. `tiri`/`subiti`: {x, y, esito, giocatore, distanza}. */
+ *  conRespinte, golDaDettaglio, girati, fonte}. `tiri`/`subiti`: {x, y, esito, giocatore, distanza, arrivo?, porta?}.
+ *  FONTE PRINCIPALE dal 08/11/2026 (SevenLab Video 0.14.1, primo file vero: partita del 08/11 vs Celesta Legnano):
+ *  sezione «TIRI SUL CAMPO GAME», una riga per evento: Evento «Tiro» (nostro, con Arrivo X/Y ed Esito «in porta»,
+ *  «fuori» o «respinto in campo»), «Tiro subito», «Parata», «Gol subito» (con Porta X/Y e Zona porta). Coordinate
+ *  come in DETTAGLIO GOL GAME: X 0-30 = larghezza, Y 0-50 = lunghezza con Y = 0 la NOSTRA porta; quindi qui
+ *  x (lunghezza nell'app) = Y del file e y (larghezza) = X del file, senza giri. Arrivo Y > 50 = oltre la linea
+ *  di fondo. I nostri gol NON sono in questa sezione: restano in DETTAGLIO GOL GAME (punto del tiro e punto in
+ *  porta) e si aggiungono da lì. Ripiego per file senza questa sezione: righe di tiro in DATI SPAZIALI (1.47.0). */
 function estraiTiriRespinteDaSessione(s){
   const righe = Array.isArray(s.DatiSpaziali) ? s.DatiSpaziali : [];
   let tiri = [], subiti = []; const respinte = [];
+  const daSezione = Array.isArray(s.TiriCampoGame) && s.TiriCampoGame.length;
   righe.forEach(r => {
     const c = classificaRigaTiroRespinta(r);
     if(!c) return;
@@ -7559,26 +7711,56 @@ function estraiTiriRespinteDaSessione(s){
       if(p) respinte.push({x: p.x, y: p.y, giocatore, team: team || "A"});
       return;
     }
+    if(daSezione) return;                       // i tiri arrivano dalla sezione dedicata
     const p = coordinateRigaSpaziale(r, c.cosa === "subito");
     if(!p) return;
     (c.cosa === "subito" ? subiti : tiri).push({x: p.x, y: p.y, esito: c.esito, giocatore, team});
   });
-  // Orientamento: i nostri tiri vanno verso x = 50, quelli subiti verso x = 0. Se la maggioranza dei punti di
-  // questa sessione è nella metà opposta, il riferimento delle righe è l'altro: si gira il campo (x e y).
   const girati = {tiri: false, subiti: false};
-  const mediana = arr => { const v = arr.map(p => p.x).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
-  const gira = arr => arr.map(p => Object.assign({}, p, {x: CAMPO_LUNGHEZZA_M - p.x, y: CAMPO_LARGHEZZA_M - p.y}));
-  const mt = mediana(tiri), ms = mediana(subiti);
-  if(mt !== null && mt < CAMPO_LUNGHEZZA_M / 2){ tiri = gira(tiri); girati.tiri = true; }
-  if(ms !== null && ms > CAMPO_LUNGHEZZA_M / 2){ subiti = gira(subiti); girati.subiti = true; }
-  // gol fatti: se la sessione ha tiri con posizione ma nessuna riga di gol, li prendiamo da DETTAGLIO GOL GAME
+  if(daSezione){
+    const num = v => coordinataValida(v);
+    s.TiriCampoGame.forEach(r => {
+      const ev = String(r["Evento"] || "").trim().toLowerCase();
+      const px = num(r["Partenza X m"]), py = num(r["Partenza Y m"]);
+      if(px === null || py === null) return;
+      const giocatore = String(r["Giocatore"] || "").trim() || null;
+      const secondo = num(r["Secondo"]);
+      if(ev === "tiro"){
+        const es = String(r["Esito"] || "").trim().toLowerCase();
+        const esito = /porta/.test(es) ? "porta" : /fuori/.test(es) ? "fuori" : /respint/.test(es) ? "respinto" : "tiro";
+        const ax = num(r["Arrivo X m"]), ay = num(r["Arrivo Y m"]);
+        tiri.push({x: py, y: px, esito, giocatore, secondo, arrivo: (ax !== null && ay !== null) ? {x: ay, y: ax} : null});
+      } else if(/subit|parat/.test(ev)){
+        const esito = /gol/.test(ev) ? "gol" : /parat/.test(ev) ? "parata" : "tiro";
+        const qx = num(r["Porta X m"]), qy = num(r["Porta Y m"]);
+        subiti.push({x: py, y: px, esito, giocatore, secondo,
+          porta: (esito === "gol" && qx !== null && qy !== null) ? {x01: Math.min(1, Math.max(0, qx / PORTA_LARGHEZZA_M)), y01: Math.min(1, Math.max(0, qy / PORTA_ALTEZZA_M))} : null});
+      }
+    });
+  } else {
+    // ripiego 1.47.0: orientamento dedotto (i nostri tiri vanno verso x = 50, quelli subiti verso x = 0)
+    const mediana = arr => { const v = arr.map(p => p.x).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
+    const gira = arr => arr.map(p => Object.assign({}, p, {x: CAMPO_LUNGHEZZA_M - p.x, y: CAMPO_LARGHEZZA_M - p.y}));
+    const mt = mediana(tiri), ms = mediana(subiti);
+    if(mt !== null && mt < CAMPO_LUNGHEZZA_M / 2){ tiri = gira(tiri); girati.tiri = true; }
+    if(ms !== null && ms > CAMPO_LUNGHEZZA_M / 2){ subiti = gira(subiti); girati.subiti = true; }
+  }
+  // i nostri gol: da DETTAGLIO GOL GAME, con il punto d'ingresso in porta quando c'è
   let golDaDettaglio = 0;
   if(tiri.length && !tiri.some(t => t.esito === "gol")){
-    (s.PuntiGol || []).forEach(g => { tiri.push({x: g.x, y: g.y, esito: "gol", giocatore: g.marcatore || null, team: "A", daDettaglio: true}); golDaDettaglio++; });
+    const porta = (s.PuntiPorta || []).slice();
+    (s.PuntiGol || []).forEach(g => {
+      const i = porta.findIndex(p => p.secondo === g.secondo);
+      const pp = i >= 0 ? porta.splice(i, 1)[0] : null;
+      tiri.push({x: g.x, y: g.y, esito: "gol", giocatore: g.marcatore || null, team: "A", daDettaglio: true, secondo: g.secondo,
+        porta: pp ? {x01: pp.x01, y01: pp.y01} : null});
+      golDaDettaglio++;
+    });
   }
   tiri.forEach(t => { t.distanza = distanzaDallaPorta(t, CAMPO_LUNGHEZZA_M); });
   subiti.forEach(t => { t.distanza = distanzaDallaPorta(t, 0); });
-  return {tiri, subiti, respinte, conTiri: tiri.length > 0, conSubiti: subiti.length > 0, conRespinte: respinte.length > 0, golDaDettaglio, girati};
+  return {tiri, subiti, respinte, conTiri: tiri.length > 0, conSubiti: subiti.length > 0, conRespinte: respinte.length > 0,
+    golDaDettaglio, girati, fonte: daSezione ? "sezione" : (tiri.length || subiti.length ? "spaziali" : null)};
 }
 
 /** Respinte dichiarate in una sessione: somma della colonna «Respinte» del riepilogo se c'è, altrimenti le
@@ -7664,42 +7846,72 @@ function analizzaRespinte(sessioni, righeGiocatori){
     xMediana: dist.length ? dist[Math.floor(dist.length / 2)] : null};
 }
 
-/** Mappa dei tiri: campo con gli archi di 8 e 16 m dalla porta attaccata e un pallino per tiro.
- *  Pallino pieno = gol, pieno chiaro = in porta/parato, anello vuoto = tiro senza esito (fuori o respinto).
- *  `opts.porta`: "destra" (nostri tiri) o "sinistra" (tiri subiti). */
+/** Mappa dei tiri sul campo. Nostri tiri (`opts.porta` = "destra"): il gol è un pallone da calcio sul punto del
+ *  tiro; un tiro senza gol è un pallino vuoto sul punto del tiro, con la linea fino a dove è finito (piena se
+ *  in porta, tratteggiata se respinto in campo, a puntini se fuori) e un puntino sull'arrivo. Tiri subiti
+ *  (`opts.porta` = "sinistra"): pallone per il gol subito, pallino pieno chiaro per la parata, vuoto per il tiro
+ *  senza parata. Archi tratteggiati a 8 e 16 m dalla porta attaccata. Richiesta di Elisa del 08/11/2026. */
 function disegnaCampoTiri(canvas, tiri, opts){
   const ctx = canvas.getContext("2d"), w = canvas.width, h = canvas.height;
   ctx.clearRect(0, 0, w, h); ctx.fillStyle = opts.sfondo; ctx.fillRect(0, 0, w, h);
   disegnaSagomaCampo(ctx, w, h, hexRgba(opts.lineaCampo, 0.6));
   const sx = w / CAMPO_LUNGHEZZA_M, sy = h / CAMPO_LARGHEZZA_M;
   const px = opts.porta === "sinistra" ? 0 : w, py = h / 2;
-  // archi di distanza (in metri: x e y hanno la stessa scala solo se il canvas è 5:3, come qui)
   ctx.save();
   ctx.setLineDash([w * 0.008, w * 0.007]); ctx.lineWidth = Math.max(1, w * 0.0025);
   TIRI_FASCE_DISTANZA.forEach((m, i) => {
-    ctx.strokeStyle = hexRgba(opts.colore, i === 0 ? 0.55 : 0.35);
+    ctx.strokeStyle = hexRgba(opts.lineaCampo, i === 0 ? 0.45 : 0.3);
     ctx.beginPath(); ctx.ellipse(px, py, m * sx, m * sy, 0, 0, Math.PI * 2); ctx.stroke();
   });
   ctx.setLineDash([]);
   ctx.font = `700 ${Math.max(10, Math.round(h * 0.036))}px Satoshi, system-ui, sans-serif`;
-  ctx.fillStyle = hexRgba(opts.testo, 0.62); ctx.textBaseline = "middle";
+  ctx.fillStyle = hexRgba(opts.testo, 0.55); ctx.textBaseline = "middle";
   ctx.textAlign = opts.porta === "sinistra" ? "left" : "right";
-  // etichetta sull'arco, in alto (a 55° dall'asse della porta), dove di solito non ci sono tiri
   TIRI_FASCE_DISTANZA.forEach(m => {
     const a = 55 * Math.PI / 180, dx = m * sx * Math.cos(a) + w * 0.008;
     ctx.fillText(`${m} m`, opts.porta === "sinistra" ? px + dx : px - dx, py - m * sy * Math.sin(a));
   });
   ctx.restore();
-  const r = Math.max(4, Math.min(w, h) * 0.022);
-  const ordine = {tiro: 0, porta: 1, parata: 1, gol: 2};
+  const r = Math.max(4, Math.min(w, h) * 0.02);
+  const pos = (x, y, margine) => [Math.min(w - margine, Math.max(margine, x * sx)), Math.min(h - margine, Math.max(margine, y * sy))];
+  const pallone = {palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A"};
+  // 1. linee verso l'arrivo (sotto i pallini)
+  (tiri || []).forEach(t => {
+    if(!t.arrivo || t.esito === "gol") return;
+    const [x1, y1] = pos(t.x, t.y, r), [x2, y2] = pos(t.arrivo.x, t.arrivo.y, r * 0.4);
+    ctx.save();
+    ctx.strokeStyle = hexRgba(t.esito === "fuori" ? (opts.coloreFuori || opts.colore) : opts.colore, t.esito === "porta" ? 0.85 : 0.65);
+    ctx.lineWidth = Math.max(1.4, w * 0.0032); ctx.lineCap = "round";
+    if(t.esito === "respinto") ctx.setLineDash([w * 0.011, w * 0.007]);
+    else if(t.esito === "fuori") ctx.setLineDash([w * 0.002, w * 0.006]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(x2, y2, Math.max(2, r * 0.32), 0, Math.PI * 2);
+    ctx.fillStyle = hexRgba(t.esito === "fuori" ? (opts.coloreFuori || opts.colore) : opts.colore, 0.95); ctx.fill();
+    ctx.restore();
+  });
+  // 2. pallini: prima i tiri senza gol, poi i gol sopra
+  const ordine = {tiro: 0, respinto: 0, fuori: 0, porta: 1, parata: 1, gol: 2};
   (tiri || []).slice().sort((a, b) => (ordine[a.esito] || 0) - (ordine[b.esito] || 0)).forEach(t => {
-    const x = Math.min(w - r, Math.max(r, t.x * sx)), y = Math.min(h - r, Math.max(r, t.y * sy));
-    ctx.beginPath(); ctx.arc(x, y, t.esito === "gol" ? r * 1.15 : r, 0, Math.PI * 2);
-    if(t.esito === "gol"){ ctx.fillStyle = opts.coloreGol || opts.colore; ctx.fill(); ctx.lineWidth = Math.max(1.5, r * 0.28); ctx.strokeStyle = "#FFFFFF"; ctx.stroke(); }
-    else if(t.esito === "porta" || t.esito === "parata"){ ctx.fillStyle = hexRgba(opts.colore, 0.55); ctx.fill(); ctx.lineWidth = Math.max(1.2, r * 0.22); ctx.strokeStyle = opts.colore; ctx.stroke(); }
-    else { ctx.fillStyle = hexRgba(opts.sfondo, 0.85); ctx.fill(); ctx.lineWidth = Math.max(1.5, r * 0.3); ctx.strokeStyle = hexRgba(opts.colore, 0.9); ctx.stroke(); }
+    const [x, y] = pos(t.x, t.y, r * 1.2);
+    if(t.esito === "gol"){ disegnaPallone(ctx, x, y, r * 1.2, pallone); return; }
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    if(t.esito === "parata"){ ctx.fillStyle = hexRgba(opts.colore, 0.55); ctx.fill(); ctx.lineWidth = Math.max(1.2, r * 0.22); ctx.strokeStyle = opts.colore; ctx.stroke(); }
+    else { ctx.fillStyle = hexRgba(opts.sfondo, 0.92); ctx.fill(); ctx.lineWidth = Math.max(1.6, r * 0.3); ctx.strokeStyle = hexRgba(opts.colore, 0.95); ctx.stroke(); }
   });
   disegnaEtichettePorte(ctx, w, h, opts.testo);
+}
+
+/** La stessa mappa ma solo sulla metà campo dove stanno i tiri (quella avversaria per i nostri, la nostra per
+ *  i subiti), più grande: sul telefono la mappa intera lasciava i tiri ammucchiati vicino alla porta (08/11/2026).
+ *  Si disegna il campo intero su una tela nascosta con le proporzioni giuste (50×30) e se ne copia la metà. */
+function disegnaCampoTiriMeta(canvas, tiri, opts){
+  const W = canvas.width, H = canvas.height;
+  const off = document.createElement("canvas"); off.width = Math.round(H * CAMPO_LUNGHEZZA_M / CAMPO_LARGHEZZA_M); off.height = H;
+  disegnaCampoTiri(off, tiri, opts);
+  const ctx = canvas.getContext("2d"), meta = off.width / 2;
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(off, opts.porta === "sinistra" ? 0 : meta, 0, meta, H, 0, 0, W, H);
 }
 
 /* ---------- Tiri e respinte: dashboard e report (1.47.0) ---------- */
@@ -7724,7 +7936,9 @@ function optsCampoSchermo(){
 function optsCampoReport(){
   return {sfondo: "#F4F2EC", lineaCampo: "#28251D", testo: "#28251D", testoChiaro: "#FFFFFF", rampa: rampaHeatmap(PALETTE_REPORT.c6, PALETTE_REPORT.c2, "#A13544")};
 }
-const LEGENDA_TIRI_HTML = `<span class="tiri-leg"><i class="g"></i>gol</span><span class="tiri-leg"><i class="p"></i>in porta / parato</span><span class="tiri-leg"><i class="f"></i>fuori o respinto</span><span class="tiri-leg"><i class="a"></i>8 e 16 m dalla porta</span>`;
+const LEGENDA_TIRI_NOSTRI = `<span class="tiri-leg"><i class="pal"></i>gol</span><span class="tiri-leg"><i class="f"></i>tiro senza gol</span><span class="tiri-leg"><i class="l-porta"></i>in porta</span><span class="tiri-leg"><i class="l-resp"></i>respinto in campo</span><span class="tiri-leg"><i class="l-fuori"></i>fuori</span><span class="tiri-leg"><i class="a"></i>8 e 16 m</span>`;
+const LEGENDA_TIRI_SUBITI = `<span class="tiri-leg"><i class="pal"></i>gol subito</span><span class="tiri-leg"><i class="p"></i>parata</span><span class="tiri-leg"><i class="f"></i>tiro senza parata</span><span class="tiri-leg"><i class="a"></i>8 e 16 m</span>`;
+const LEGENDA_TIRI_HTML = LEGENDA_TIRI_NOSTRI;
 
 /** Frase di sintesi: da dove tiriamo e da dove ci tirano. */
 function fraseTiri(a){
@@ -7772,7 +7986,7 @@ function renderTiriCampo(f){
   cont.innerHTML = `
     ${fraseTiri(a) ? `<div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseTiri(a)}</span></div>` : ""}
     <div class="griglia g-kpi" style="margin-top:14px">
-      ${kpi("Nostri tiri con posizione", nf0(a.nostri.n), `${nf0(a.nostri.gol)} gol · ${ambito}`)}
+      ${kpi("Nostri tiri con posizione", nf0(a.nostri.n), `${nf0(a.nostri.gol)} gol${a.tiri.some(t => t.arrivo) ? ` · ${nf0(a.tiri.filter(t => t.esito === "porta").length)} in porta · ${nf0(a.tiri.filter(t => t.esito === "respinto").length)} respinti · ${nf0(a.tiri.filter(t => t.esito === "fuori").length)} fuori` : ""} · ${ambito}`)}
       ${kpi("Distanza tipica dei nostri tiri", a.nostri.distanzaMediana !== null ? nf(a.nostri.distanzaMediana, 0) + " m" : "—", `${vicini(a.nostri)} da entro 8 m`)}
       ${kpi("Tiri subiti con posizione", nf0(a.loro.n), `${nf0(a.loro.gol)} gol subiti${a.loro.inPorta ? ` · ${nf0(a.loro.inPorta)} parati` : ""}`)}
       ${kpi("Distanza tipica dei tiri subiti", a.loro.distanzaMediana !== null ? nf(a.loro.distanzaMediana, 0) + " m" : "—", `${vicini(a.loro)} da entro 8 m`)}
@@ -7780,15 +7994,15 @@ function renderTiriCampo(f){
     <div class="griglia g-2 g-campi" style="margin-top:16px">
       <div class="card">
         <div class="grafico-titolo">Da dove tiriamo</div>
-        <div class="grafico-sub">${a.nostri.n ? `${nf0(a.nostri.n)} tiri, uno per pallino; la porta che attacchiamo è a destra.` : "Nessun nostro tiro con posizione."}</div>
-        <div class="grafico-wrap-campo"><canvas id="tiri-mappa-nostri" width="640" height="384"></canvas></div>
-        <div class="tiri-legenda">${LEGENDA_TIRI_HTML}</div>
+        <div class="grafico-sub">${a.nostri.n ? `${nf0(a.nostri.n)} tiri, dal punto in cui partono; la linea arriva dove è finito il tiro. La porta che attacchiamo è a destra; qui si vede solo la metà campo avversaria.` : "Nessun nostro tiro con posizione."}</div>
+        <div class="grafico-wrap-meta"><canvas id="tiri-mappa-nostri" width="640" height="768"></canvas></div>
+        <div class="tiri-legenda">${LEGENDA_TIRI_NOSTRI}</div>
       </div>
       <div class="card">
         <div class="grafico-titolo">Da dove ci tirano</div>
-        <div class="grafico-sub">${a.loro.n ? `${nf0(a.loro.n)} tiri verso la nostra porta, che è a sinistra.` : "Nessun tiro subito con posizione."}</div>
-        <div class="grafico-wrap-campo"><canvas id="tiri-mappa-subiti" width="640" height="384"></canvas></div>
-        <div class="tiri-legenda">${LEGENDA_TIRI_HTML}</div>
+        <div class="grafico-sub">${a.loro.n ? `${nf0(a.loro.n)} tiri verso la nostra porta, che è a sinistra. Qui si vede solo la nostra metà campo.` : "Nessun tiro subito con posizione."}</div>
+        <div class="grafico-wrap-meta"><canvas id="tiri-mappa-subiti" width="640" height="768"></canvas></div>
+        <div class="tiri-legenda">${LEGENDA_TIRI_SUBITI}</div>
       </div>
       <div class="card">
         <div class="grafico-titolo">Heatmap dei nostri tiri</div>
@@ -7801,6 +8015,11 @@ function renderTiriCampo(f){
         <div class="grafico-wrap-campo"><canvas id="tiri-heat-subiti" width="640" height="384"></canvas></div>
       </div>
     </div>
+    ${a.subiti.some(t => t.porta) ? `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Dove entrano i gol subiti</div>
+      <div class="grafico-sub">La nostra porta vista da chi tira, con un pallone dove è entrata la palla su ogni gol subito.</div>
+      <div class="grafico-wrap-porta"><canvas id="tiri-porta-subiti" width="1440" height="540"></canvas></div>
+    </div>` : ""}
     <div class="card" style="margin-top:16px">
       <div class="grafico-titolo">Per distanza dalla porta</div>
       <div class="grafico-sub">Distanza in linea d'aria dal centro della porta attaccata. La quota accanto ai tiri è sul totale con posizione.</div>
@@ -7820,10 +8039,11 @@ function renderTiriCampo(f){
       </table></div>
     </div>` : ""}
     ${note.length ? `<p class="nota-piccola" style="margin-top:12px">${note.join(" ")}</p>` : ""}
-    <p class="nota-piccola">Un pallino per tiro: pieno se è gol, pieno chiaro se è andato in porta o è stato parato, vuoto se è finito fuori o è stato respinto. Gli archi tratteggiati sono a 8 e 16 metri dal centro della porta.</p>`;
+    <p class="nota-piccola">Nostri tiri: il pallone è un gol, il pallino vuoto un tiro senza gol con la linea fino a dove è finito (piena se è andato in porta, tratteggiata se è stato respinto in campo, a puntini se è finito fuori). Tiri subiti: pallone per il gol, pallino pieno per la parata, vuoto per il tiro senza parata. Gli archi tratteggiati sono a 8 e 16 metri dal centro della porta. I nostri gol arrivano dalla sezione «DETTAGLIO GOL GAME», gli altri tiri da «TIRI SUL CAMPO GAME».</p>`;
   const o = optsCampoSchermo();
-  disegnaCampoTiri($("#tiri-mappa-nostri"), a.tiri, Object.assign({}, o, {colore: colore("c1"), coloreGol: colore("primary-hover"), porta: "destra"}));
-  disegnaCampoTiri($("#tiri-mappa-subiti"), a.subiti, Object.assign({}, o, {colore: colore("c2"), coloreGol: colore("danger"), porta: "sinistra"}));
+  disegnaCampoTiriMeta($("#tiri-mappa-nostri"), a.tiri, Object.assign({}, o, {colore: colore("c1"), coloreFuori: colore("c2"), porta: "destra"}));
+  if($("#tiri-porta-subiti")) disegnaPortaCalcio($("#tiri-porta-subiti"), a.subiti.filter(t => t.porta).map(t => t.porta), opzioniPortaSubiti(false));
+  disegnaCampoTiriMeta($("#tiri-mappa-subiti"), a.subiti, Object.assign({}, o, {colore: colore("c2"), coloreGol: colore("danger"), porta: "sinistra"}));
   disegnaCampoHeatmap($("#tiri-heat-nostri"), a.tiri, o);
   disegnaCampoHeatmap($("#tiri-heat-subiti"), a.subiti, o);
 }
@@ -7892,6 +8112,18 @@ function renderRespinte(f){
   }
 }
 
+/** Opzioni della porta disegnata per i gol subiti (stessa porta dei gol fatti, alone rosso). */
+function opzioniPortaSubiti(report){
+  if(report) return {sfondo: "#F4F2EC", erba: "rgba(67,122,34,.14)", telaio: "#FFFFFF", telaioBordo: "rgba(40,37,29,.7)", lineaPorta: "rgba(110,109,104,.7)",
+    lineaSettori: "rgba(110,109,104,.4)", rete: {veloAlto: "rgba(110,109,104,.04)", veloBasso: "rgba(110,109,104,.11)", filo: "rgba(110,109,104,.26)"},
+    testo: "#6E6D68", testoTenue: "rgba(110,109,104,.85)", palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    alone: "rgba(161,53,68,.18)", aloneBordo: "#A13544", badgeFondo: "#A13544", badgeTesto: "#FFFFFF", numera: false};
+  return {sfondo: colore("surface-alt"), erba: hexRgba(colore("success"), 0.12), telaio: colore("surface"), telaioBordo: hexRgba(colore("text"), 0.70),
+    lineaPorta: hexRgba(colore("muted"), 0.70), lineaSettori: hexRgba(colore("muted"), 0.40),
+    rete: {veloAlto: hexRgba(colore("muted"), 0.04), veloBasso: hexRgba(colore("muted"), 0.11), filo: hexRgba(colore("muted"), 0.26)},
+    testo: colore("muted"), testoTenue: hexRgba(colore("muted"), 0.85), palloneFondo: "#FFFFFF", palloneMacchia: "#1A1A1A", palloneBordo: "#1A1A1A",
+    alone: hexRgba(colore("danger"), 0.18), aloneBordo: colore("danger"), badgeFondo: colore("danger"), badgeTesto: "#FFFFFF", numera: false};
+}
 /* ---- report ---- */
 function cellaCampoReportMappe(griglia, titolo, disegna){
   const cella = document.createElement("div");
@@ -7901,7 +8133,7 @@ function cellaCampoReportMappe(griglia, titolo, disegna){
   wrap.appendChild(cv); cella.appendChild(wrap); griglia.appendChild(cella); disegna(cv);
   return cella;
 }
-const LEGENDA_TIRI_REPORT = "● gol   ◉ in porta / parato   ○ fuori o respinto   ┄ 8 e 16 m dalla porta";
+const LEGENDA_TIRI_REPORT = "Nostri tiri: pallone = gol · ○ tiro senza gol, con la linea fino all'arrivo (piena in porta, tratteggiata respinto, a puntini fuori). Tiri subiti: pallone = gol · ● parata · ○ tiro. Archi a 8 e 16 m.";
 
 /** Report: mappe dei tiri fatti e subiti. `essenziale`: solo i campi e la legenda (Report Partita). */
 function tiriReport(pagina, sessioni, essenziale){
@@ -7922,9 +8154,16 @@ function tiriReport(pagina, sessioni, essenziale){
   etichettaReport(pagina, LEGENDA_TIRI_REPORT);
   const o = optsCampoReport();
   const g = document.createElement("div"); g.className = "rp-campo-griglia"; pagina.corpo.appendChild(g);
-  cellaCampoReportMappe(g, `Nostri tiri (${nf0(a.nostri.n)} · ${nf0(a.nostri.gol)} gol)`, cv => disegnaCampoTiri(cv, a.tiri, Object.assign({}, o, {colore: PALETTE_REPORT.c1, coloreGol: PALETTE_REPORT.c3, porta: "destra"})));
+  cellaCampoReportMappe(g, `Nostri tiri (${nf0(a.nostri.n)} · ${nf0(a.nostri.gol)} gol)`, cv => disegnaCampoTiri(cv, a.tiri, Object.assign({}, o, {colore: PALETTE_REPORT.c1, coloreFuori: PALETTE_REPORT.c2, porta: "destra"})));
   cellaCampoReportMappe(g, `Tiri subiti (${nf0(a.loro.n)} · ${nf0(a.loro.gol)} gol)`, cv => disegnaCampoTiri(cv, a.subiti, Object.assign({}, o, {colore: PALETTE_REPORT.c2, coloreGol: "#A13544", porta: "sinistra"})));
   pagina = pag0;
+  const golSubitiPorta = a.subiti.filter(t => t.porta).map(t => t.porta);
+  if(golSubitiPorta.length){
+    const gp = document.createElement("div"); gp.className = "rp-porta-subiti";
+    gp.innerHTML = `<div class="rp-campo-etichetta">Dove entrano i gol subiti (${nf0(golSubitiPorta.length)})</div>`;
+    const cv = document.createElement("canvas"); cv.width = 1440; cv.height = 540; gp.appendChild(cv); pagina.corpo.appendChild(gp);
+    disegnaPortaCalcio(cv, golSubitiPorta, opzioniPortaSubiti(true));
+  }
   if(!essenziale){
     const g2 = document.createElement("div"); g2.className = "rp-campo-griglia"; pagina.corpo.appendChild(g2);
     cellaCampoReportMappe(g2, "Heatmap dei nostri tiri", cv => disegnaCampoHeatmap(cv, a.tiri, o));
@@ -8060,6 +8299,7 @@ function render(){
   renderKPI(f);
   renderAndamento(f);
   renderClassifica(f);
+  notaPartiteEssenziali($("#contenuto-classifica"), f.partite);
   renderTendenze(f);
   renderKPIAllenamentoStat(f);
   renderAndamentoAllenamentoStat(f);
@@ -8256,6 +8496,7 @@ function renderPannelloFile(){
         ${badgeMetodo}
         <span class="riga-file-nome">${esc(s.nomeFile)}</span>
         <span class="riga-file-dett">${dataLabel(dataSess)} · ${desc}</span>
+        ${partitaSoloEssenziale(s) ? `<span class="badge-prova">Senza video · solo risultato e gol</span>` : ""}
         ${sessioneDiProva(s) ? `<span class="badge-prova">${s.includiProva ? "Prova · inclusa" : "Prova · esclusa dalle analisi"}</span><button type="button" class="btn piccolo" data-prova-sessione="${esc(s.id)}">${s.includiProva ? "Escludi" : "Includi"}</button>` : ""}
         <button type="button" class="btn piccolo pericolo" data-elimina-sessione="${esc(s.id)}">Elimina</button>
         ${avvisi.map(t => `<div class="riga-file-avviso">${esc(t)}</div>`).join("")}
@@ -9566,6 +9807,7 @@ async function generaEScarica(nomeFile, paginaGeneratori, idEl="#rp-stato-partit
  *  eventi utilizzabili. Richiesta di Elisa del 04/09/2026: il report stagionale deve dare le stesse
  *  informazioni di quello di partita, riferite alla stagione. */
 function possessoStagionale(partite){
+  partite = (partite || []).filter(p => !p.SoloEssenziali); // 1.49.0
   const tot = {ourCertainSec:0, opponentEstimatedSec:0, contestedSec:0, unknownSec:0};
   let possessi = 0, recuperi = 0, palleParse = 0, partiteUsate = 0;
   // partite con l'interruttore del possesso (18/10/2026): contano con il dato misurato, non con la stima
@@ -9738,11 +9980,9 @@ function considerazioniPartita(d){
   return {bene: bene.slice(0, 4), lavorare: lavorare.sort((a, b) => b.peso - a.peso).slice(0, 5).map(x => x.t)};
 }
 
-async function generaReportPartita(matchId){
-  const ds = stato.ds;
-  const partita = ds.partite.find(p => p.Match_ID === matchId);
-  if(!partita){ statoReport("Seleziona una partita valida.", false, "#rp-stato-partita"); return; }
-  const righeGara = ds.giocatori.filter(g => g.Match_ID === matchId);
+/** Numeri della partita usati dal Report Partita e dalla scheda «La partita» del Portale Mister (1.48.0). */
+function calcolaLetturaPartita(ds, partita){
+  const righeGara = ds.giocatori.filter(g => g.Match_ID === partita.Match_ID);
   const somma = c => righeGara.reduce((a, g) => a + N(g[c]), 0);
   const passOk = somma("Passaggi_Corretti"), passKo = somma("Passaggi_Sbagliati"), passTot = passOk + passKo;
   const dribTot = somma("Dribbling_Tentati"), dribKo = somma("Dribbling_Falliti"), dribOk = dribTot - dribKo;
@@ -9755,7 +9995,7 @@ async function generaReportPartita(matchId){
   const pm = possessoMisuratoPartita(partita);
   const mo = pm ? momentumPartita(partita, pm) : null;
   let possesso = pm ? pm.pctNoi : null, possessoStimato = false;
-  if(possesso === null){
+  if(possesso === null && !partita.SoloEssenziali){
     const a = analizzaEventiPartitaSevenLab({id: partita.Match_ID, eventi: partita.Eventi, riepilogoTempi: partita.RiepilogoTempi});
     const x = a.eventiSquadra.length ? analyzePossession(a.eventiSquadra) : null;
     if(x && x.confidencePct !== null){ possesso = x.ourPossessionWeightedPct; possessoStimato = true; }
@@ -9772,7 +10012,7 @@ async function generaReportPartita(matchId){
   const pg = analizzaPersaGol([partita], "partita");
   const ric = analizzaRiconquista([partita]);
   const subiti = mo ? mo.gol.filter(g => !g.nostro) : [], fatti = mo ? mo.gol.filter(g => g.nostro) : [];
-  const cons = considerazioniPartita({
+  const cons = partita.SoloEssenziali ? {bene: [], lavorare: []} : considerazioniPartita({
     gol: N(partita.Gol_Fatti), tiri, tiriSubiti, passPct: passTot ? passOk / passTot * 100 : null, passTot,
     dribPct: dribTot ? dribOk / dribTot * 100 : null, dribTot, possesso: possessoStimato ? null : possesso, possesso1, possesso2,
     migliore: mo ? mo.migliore : null, peggiore: mo ? mo.peggiore : null,
@@ -9784,6 +10024,15 @@ async function generaReportPartita(matchId){
     riconquista: (ric && ric.riconquistate >= RICONQUISTA_CAMPIONE_MINIMO) ? ric.mediana : null,
     mappe: partita.MappeTiri && (partita.MappeTiri.conTiri || partita.MappeTiri.conSubiti) ? analizzaTiri([partita]) : null
   });
+
+  return {righeGara, passOk, passKo, passTot, dribTot, dribKo, dribOk, tiri, portieri, tiriSubiti, nomeNostro, pm, mo, possesso, possessoStimato, possesso1, possesso2, gol, recupero, persa, pg, ric, subiti, fatti, cons};
+}
+
+async function generaReportPartita(matchId){
+  const ds = stato.ds;
+  const partita = ds.partite.find(p => p.Match_ID === matchId);
+  if(!partita){ statoReport("Seleziona una partita valida.", false, "#rp-stato-partita"); return; }
+  const {righeGara, passOk, passKo, passTot, dribTot, dribKo, dribOk, tiri, portieri, tiriSubiti, nomeNostro, pm, mo, possesso, possessoStimato, possesso1, possesso2, gol, recupero, persa, pg, ric, subiti, fatti, cons} = calcolaLetturaPartita(ds, partita);
 
   statoReport("Genero il Report Partita…", true, "#rp-stato-partita");
   await generaEScarica(nomeFileData("Report_Partita_" + matchId, partita.Data), [
@@ -9803,6 +10052,7 @@ async function generaReportPartita(matchId){
         m.innerHTML = `<span class="rp-marcatori-tit">Marcatori</span>` + gol.map((g, i) => `<span class="rp-marcatore"><b>${gol.some(x => x.tiro) ? `<i>${i + 1}</i>` : ""}${g.minuto}' ${esc(g.marcatore || "—")}</b>${g.assist ? ` · assist ${esc(g.assist)}` : ""}</span>`).join("");
         pag.corpo.appendChild(m);
       }
+      if(partita.SoloEssenziali) bulletsReport(pag, ["Partita registrata senza video: ci sono il risultato, i gol, gli assist e i cambi, non le statistiche di gioco."]);
       kpiRowReport(pag, [
         {l: possessoStimato ? "Possesso (stimato)" : "Possesso", v: possesso !== null ? pctTxt(possesso, 0) : "—"},
         {l: "Tiri generati", v: nf0(tiri)},
@@ -9815,6 +10065,7 @@ async function generaReportPartita(matchId){
         {l: "Dribbling riusciti", v: dribTot ? `${pctTxt(dribOk / dribTot * 100, 0)} <small>${nf0(dribOk)}</small>` : "—"},
         {l: "Dribbling sbagliati", v: dribTot ? `${pctTxt(dribKo / dribTot * 100, 0)} <small>${nf0(dribKo)}</small>` : "—"}
       ]);
+      if(partita.SoloEssenziali) pag.corpo.querySelectorAll(".rp-kpi-row").forEach(el => el.remove()); // numeri di gioco non registrati
       if(mo){
         titoloSezioneReport(pag, "Momentum");
         etichettaReport(pag, `▲ gol ${nomeNostro} · ▼ gol ${partita.Avversario}`);
@@ -10542,7 +10793,175 @@ function applicaTema(tema){
   if(stato.ds){ distruggiGrafici(); render(); }
 }
 
+/* ---------- Pannello «Portale Mister» in Analysis (1.48.0) ---------- */
+const statoMister = {lettori: [], sezioni: {}, caricato: false, errore: null};
+function dataOraBreve(iso){
+  if(!iso) return null;
+  const d = new Date(iso); if(isNaN(d)) return null;
+  const oggi = new Date(), ieri = new Date(Date.now() - 864e5);
+  const ora = d.toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit"});
+  if(d.toDateString() === oggi.toDateString()) return "oggi " + ora;
+  if(d.toDateString() === ieri.toDateString()) return "ieri " + ora;
+  return d.toLocaleDateString("it-IT", {day: "2-digit", month: "2-digit"}) + " " + ora;
+}
+/** Password leggibile da dettare al telefono: due parole di calcio e quattro cifre. */
+function generaPasswordMister(){
+  const parole = ["Rete", "Palo", "Dribbling", "Assist", "Cross", "Tiro", "Corner", "Pressing", "Tacco", "Rovesciata", "Parata", "Mister", "Campo", "Fascia"];
+  const r = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+  let a = parole[r(parole.length)], b = parole[r(parole.length)];
+  while(b === a) b = parole[r(parole.length)];
+  return `${a}-${b}-${String(1000 + r(9000))}`;
+}
+async function caricaDatiMister(){
+  statoMister.errore = null;
+  try{
+    statoMister.lettori = await restTabella("GET", "analysis_lettori", "?select=*&order=creato_il.asc") || [];
+    const c = await restTabella("GET", "analysis_portale", "?select=sezioni&id=eq.1") || [];
+    statoMister.sezioni = (c[0] && c[0].sezioni) || {};
+    statoMister.caricato = true;
+  }catch(e){ statoMister.errore = messaggioErroreCloud(e); }
+}
+function chipMister(ok, testo){ return `<span class="mst-chip ${ok ? "si" : "no"}">${ok ? "✓" : "—"} ${esc(testo)}</span>`; }
+function renderPannelloMister(){
+  const box = $("#mister-corpo");
+  if(!box) return;
+  if(!accessoCloud()){
+    box.innerHTML = `<p class="dlg-testo">Per gestire il portale entra prima nel cloud con il pulsante <strong>«Sincronizza i dispositivi»</strong> (stessa email e password di SevenLab).</p>`;
+    return;
+  }
+  if(statoMister.errore){ box.innerHTML = `<p class="cloud-msg-errore">${esc(statoMister.errore)}</p><button type="button" class="btn" data-mst="ricarica">Riprova</button>`; return; }
+  if(!statoMister.caricato){ box.innerHTML = `<p class="dlg-testo">Carico i mister…</p>`; return; }
+  const lettori = statoMister.lettori;
+  const righe = lettori.map(l => `
+    <div class="mst-lettore${l.attivo ? "" : " spento"}">
+      <div class="mst-nome"><strong>${esc(l.nome || l.email)}</strong><span>${esc(l.email)}</span></div>
+      <div class="mst-chips">
+        ${l.attivo ? "" : `<span class="mst-chip no">accesso tolto</span>`}
+        ${chipMister(!!l.primo_accesso, l.ultimo_accesso ? "ultimo accesso " + dataOraBreve(l.ultimo_accesso) : "mai entrato")}
+        ${chipMister(!!l.app_installata, "app sulla Home")}
+        ${chipMister(!!l.notifiche_attive, "notifiche")}
+      </div>
+      <div class="mst-azioni">
+        <button type="button" class="btn piccolo" data-mst="password" data-email="${esc(l.email)}">Nuova password</button>
+        ${l.attivo ? `<button type="button" class="btn piccolo pericolo" data-mst="togli" data-email="${esc(l.email)}">Togli accesso</button>`
+          : `<button type="button" class="btn piccolo" data-mst="ridai" data-email="${esc(l.email)}" data-nome="${esc(l.nome)}">Ridai accesso</button>`}
+      </div>
+      <form class="mst-form-pw nascosto" data-email="${esc(l.email)}">
+        <input type="text" class="mst-pw" autocomplete="off" spellcheck="false" value="${esc(generaPasswordMister())}" aria-label="Nuova password">
+        <button type="submit" class="btn piccolo primario">Salva</button>
+      </form>
+    </div>`).join("");
+  const gruppo = tipo => SEZIONI_PORTALE.filter(s => s.tipo === tipo).map(s => `
+    <label class="mst-sez"><input type="checkbox" data-sez="${esc(s.k)}" ${statoMister.sezioni[s.k] === false ? "" : "checked"}>
+      <span>${esc(s.titolo)}<small>${s.modi.length === 2 ? "stagione e singola" : (s.modi[0] === "singola" ? "solo singola" : "solo stagione")}</small></span></label>`).join("");
+  box.innerHTML = `
+    <div class="mst-link"><span>Indirizzo del portale</span><code>${esc(URL_PORTALE_MISTER)}</code>
+      <button type="button" class="btn piccolo" data-mst="copia">Copia il link</button></div>
+    <h3 class="mst-tit">Mister ${lettori.length ? `<span class="sit-conta">${nf0(lettori.filter(l => l.attivo).length)}</span>` : ""}</h3>
+    ${righe || `<p class="dlg-testo">Nessun mister ancora. Aggiungi il primo qui sotto (puoi provare con un tuo indirizzo diverso da quello di Analysis, per esempio con «+prova» prima della chiocciola).</p>`}
+    <form id="mst-nuovo" class="mst-nuovo" autocomplete="off">
+      <div class="mst-tit-piccolo">Aggiungi un mister</div>
+      <input id="mst-nome" type="text" placeholder="Nome (es. Andrea)" maxlength="80">
+      <input id="mst-email" type="email" placeholder="Email" inputmode="email" required>
+      <div class="mst-pw-riga"><input id="mst-pw" type="text" spellcheck="false" value="${esc(generaPasswordMister())}" aria-label="Password" required>
+        <button type="button" class="btn piccolo" data-mst="genera">Un'altra</button></div>
+      <button type="submit" class="btn primario">Crea l'account</button>
+      <p class="dlg-nota">La password la scegli tu e la comunichi tu: dal portale il mister non la può cambiare. Se la dimentica, gliene dai una nuova da qui.</p>
+    </form>
+    <div id="mst-msg" class="dlg-msg" role="status"></div>
+    <h3 class="mst-tit">Cosa vedono</h3>
+    <p class="dlg-nota">Le modifiche valgono subito per tutti i mister, senza aggiornare il sito.</p>
+    <div class="mst-sezioni"><div><div class="mst-tit-piccolo">Partite</div>${gruppo("partite")}</div><div><div class="mst-tit-piccolo">Allenamenti</div>${gruppo("allenamenti")}</div></div>
+    <h3 class="mst-tit">Le tue notifiche</h3>
+    <p class="dlg-nota">Ti avviso quando un mister entra la prima volta, installa l'app e attiva le notifiche. Su iPhone funziona solo con Analysis aperta dalla schermata Home.</p>
+    <div class="azioni-dlg"><button type="button" class="btn primario" data-mst="notifiche">Attiva le notifiche su questo dispositivo</button>
+      <button type="button" class="btn" data-mst="prova">Manda una prova</button></div>
+    <div id="mst-msg-notifiche" class="dlg-msg" role="status"></div>`;
+}
+async function apriPannelloMister(){
+  const dlg = $("#dlg-mister");
+  if(dlg && dlg.showModal && !dlg.open) dlg.showModal(); else if(dlg) dlg.setAttribute("open", "");
+  statoMister.caricato = false; renderPannelloMister();
+  if(accessoCloud()){ await caricaDatiMister(); renderPannelloMister(); }
+}
+function initPannelloMister(){
+  const dlg = $("#dlg-mister");
+  if(!dlg) return;
+  $("#btn-mister")?.addEventListener("click", apriPannelloMister);
+  $("#btn-mister-chiudi")?.addEventListener("click", () => { if(dlg.close) dlg.close(); else dlg.removeAttribute("open"); });
+  const msg = t => { const m = $("#mst-msg"); if(m) m.innerHTML = t; };
+  dlg.addEventListener("click", async e => {
+    const b = e.target.closest("[data-mst]"); if(!b) return;
+    const az = b.dataset.mst, email = b.dataset.email;
+    if(az === "ricarica"){ await apriPannelloMister(); return; }
+    if(az === "copia"){ try{ await navigator.clipboard.writeText(URL_PORTALE_MISTER); b.textContent = "Copiato"; }catch(err){ b.textContent = "Copia a mano"; } return; }
+    if(az === "genera"){ $("#mst-pw").value = generaPasswordMister(); return; }
+    if(az === "password"){ const f = dlg.querySelector(`.mst-form-pw[data-email="${CSS.escape(email)}"]`); f && f.classList.toggle("nascosto"); return; }
+    if(az === "togli" || az === "ridai"){
+      b.disabled = true;
+      try{
+        if(az === "togli"){ await chiamaFunzionePortale({azione: "togli-lettore", email}); }
+        else await chiamaFunzionePortale({azione: "crea-lettore", email, nome: b.dataset.nome || ""});
+        await caricaDatiMister(); renderPannelloMister();
+      }catch(err){ b.disabled = false; msg(`<span class="cloud-msg-errore">${esc(err.message)}</span>`); }
+      return;
+    }
+    if(az === "notifiche" || az === "prova"){
+      const m = $("#mst-msg-notifiche"); b.disabled = true;
+      try{
+        if(az === "notifiche"){
+          const sub = await iscrivitiNotifiche(null);   // service worker già registrato all'apertura di Analysis
+          const r = await chiamaFunzionePortale({azione: "iscrivi", sub});
+          m.textContent = r.arrivate ? "Notifiche attive: dovrebbe esserti arrivata una notifica di conferma." : "Iscrizione salvata, ma la notifica di conferma non è partita: riprova con «Manda una prova».";
+        } else {
+          const r = await chiamaFunzionePortale({azione: "prova"});
+          m.textContent = r.arrivate ? `Prova mandata a ${nf0(r.arrivate)} ${r.arrivate === 1 ? "dispositivo" : "dispositivi"}.` : "Nessun dispositivo con le notifiche attive.";
+        }
+      }catch(err){ m.innerHTML = `<span class="cloud-msg-errore">${esc(err.message)}</span>`; }
+      b.disabled = false;
+    }
+  });
+  dlg.addEventListener("change", async e => {
+    const c = e.target.closest("[data-sez]"); if(!c) return;
+    const sez = Object.assign({}, statoMister.sezioni);
+    if(c.checked) delete sez[c.dataset.sez]; else sez[c.dataset.sez] = false;
+    try{
+      await restTabella("PATCH", "analysis_portale", "?id=eq.1", {sezioni: sez, aggiornato_il: new Date().toISOString()}, "return=minimal");
+      statoMister.sezioni = sez;
+    }catch(err){ c.checked = !c.checked; msg(`<span class="cloud-msg-errore">${esc(err.message)}</span>`); }
+  });
+  dlg.addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = e.target;
+    if(f.id === "mst-nuovo"){
+      const nome = $("#mst-nome").value.trim(), email = $("#mst-email").value.trim().toLowerCase(), password = $("#mst-pw").value.trim();
+      msg("Creo l'account…");
+      try{
+        await chiamaFunzionePortale({azione: "crea-lettore", email, nome, password});
+        await caricaDatiMister(); renderPannelloMister();
+        msg(`Account pronto. Manda a <strong>${esc(nome || email)}</strong>: il link <strong>${esc(URL_PORTALE_MISTER)}</strong>, l'email <strong>${esc(email)}</strong> e la password <strong>${esc(password)}</strong>.`);
+      }catch(err){ msg(`<span class="cloud-msg-errore">${esc(err.message)}</span>`); }
+      return;
+    }
+    if(f.classList.contains("mst-form-pw")){
+      const email = f.dataset.email, password = f.querySelector(".mst-pw").value.trim();
+      const l = statoMister.lettori.find(x => x.email === email);
+      msg("Salvo la nuova password…");
+      try{
+        await chiamaFunzionePortale({azione: "crea-lettore", email, nome: l ? l.nome : "", password});
+        f.classList.add("nascosto");
+        msg(`Nuova password per <strong>${esc((l && l.nome) || email)}</strong>: <strong>${esc(password)}</strong>. Comunicagliela tu.`);
+      }catch(err){ msg(`<span class="cloud-msg-errore">${esc(err.message)}</span>`); }
+    }
+  });
+  // la notifica «un mister è entrato» apre Analysis con #mister: si apre il pannello
+  if(location.hash === "#mister") setTimeout(apriPannelloMister, 600);
+  // service worker per le notifiche (nessuna cache: Analysis si aggiorna come prima)
+  if(location.protocol === "https:") registraServiceWorker("sw.js", "./");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  if(window.PORTALE_MISTER) return; // nel portale l'avvio lo fa mister/portale.js
   // Sempre visibile, anche prima di caricare qualunque file e anche se per qualche motivo il resto
   // dell'inizializzazione dovesse fallire più sotto: serve solo a poter verificare, dopo un
   // aggiornamento su GitHub, che la versione online sia davvero quella nuova. Per questo viene
@@ -10579,6 +10998,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // regola dei tempi del 12/10/2026 applicata anche alle sessioni già salvate (vedi rivalutaTempiSessioniSalvate)
   // Dal 16/10/2026 l'archivio si carica in modo asincrono (IndexedDB) e poi si sincronizza con il cloud.
   initCloud();
+  initPannelloMister();
   avviaArchivio().then(() => {
     try{ rivalutaTempiSessioniSalvate(); }catch(e){ console.warn("Rivalutazione tempi non riuscita", e); }
     if(leggiSessioniSalvate().length) ricaricaDaSessioni(); else renderPannelloFile();

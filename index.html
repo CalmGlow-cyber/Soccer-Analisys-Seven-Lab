@@ -15,6 +15,11 @@
      apple-touch-icon.png va quindi caricato nella repo accanto a index.html e app.js. iOS applica da
      sé gli angoli arrotondati, perciò il file è quadrato e pieno. -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#01696F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Analysis">
 <meta name="apple-mobile-web-app-title" content="Analysis">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -674,6 +679,46 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 .tiri-tab td:nth-child(5), .tiri-tab th:nth-child(5){border-left:1px solid var(--border)}
 .rp-elenco-resp li{margin-bottom:5px}
 
+/* ---------- pannello Portale Mister (1.48.0) ---------- */
+#dlg-mister{border:1px solid var(--border); border-radius:14px; background:var(--surface); color:var(--text); padding:20px; width:min(560px, calc(100vw - 32px)); max-height:calc(100vh - 40px); overflow:auto; box-shadow:0 18px 50px rgba(0,0,0,.25)}
+#dlg-mister::backdrop{background:rgba(20,18,15,.45)}
+.mst-link{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; background:var(--surface-alt); border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:12px 0 4px; font-size:13px}
+.mst-link span{color:var(--muted); font-weight:700; text-transform:uppercase; font-size:11px; letter-spacing:.07em; width:100%}
+.mst-link code{font-size:12.5px; word-break:break-all; flex:1}
+.mst-tit{font-size:15px; margin:18px 0 8px; display:flex; align-items:center; gap:8px}
+.mst-tit-piccolo{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:800; margin-bottom:6px}
+.mst-lettore{border:1px solid var(--border); border-radius:11px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; margin-bottom:8px}
+.mst-lettore.spento{opacity:.6}
+.mst-nome{display:flex; flex-direction:column; gap:1px}
+.mst-nome span{font-size:12.5px; color:var(--muted); word-break:break-all}
+.mst-chips{display:flex; flex-wrap:wrap; gap:6px}
+.mst-chip{font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:99px; white-space:nowrap}
+.mst-chip.si{background:color-mix(in srgb, var(--success) 15%, transparent); color:var(--success)}
+.mst-chip.no{background:color-mix(in srgb, var(--muted) 14%, transparent); color:var(--muted)}
+.mst-azioni{display:flex; gap:6px; flex-wrap:wrap}
+.mst-form-pw, .mst-pw-riga{display:flex; gap:6px}
+.mst-form-pw input, .mst-pw-riga input{flex:1; min-width:0}
+.mst-nuovo{display:flex; flex-direction:column; gap:8px; border:1px dashed var(--border); border-radius:11px; padding:12px; margin-top:6px}
+.mst-nuovo input, .mst-form-pw input{font-size:15px; padding:9px 11px; border-radius:9px; border:1px solid var(--border); background:var(--surface); color:var(--text)}
+.mst-sezioni{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media (max-width:520px){ .mst-sezioni{grid-template-columns:1fr} }
+.mst-sez{display:flex; gap:8px; align-items:flex-start; padding:5px 0; font-size:14px; cursor:pointer}
+.mst-sez input{margin-top:3px; accent-color:var(--primary)}
+.mst-sez small{display:block; color:var(--muted); font-size:11.5px}
+
+/* ---------- tiri sul campo (1.49.0) ---------- */
+.tiri-leg i.pal{background:#fff; box-shadow:inset 0 0 0 1.5px #1A1A1A; position:relative}
+.tiri-leg i.pal::after{content:""; position:absolute; left:3px; top:3px; width:5px; height:5px; border-radius:1px; background:#1A1A1A}
+.tiri-leg i.l-porta, .tiri-leg i.l-resp, .tiri-leg i.l-fuori{border-radius:0; width:18px; height:0; background:none}
+#sez-tiri-partita .tiri-leg i.l-porta{border-top:2.5px solid var(--c1)}
+#sez-tiri-partita .tiri-leg i.l-resp{border-top:2.5px dashed var(--c1)}
+#sez-tiri-partita .tiri-leg i.l-fuori{border-top:2.5px dotted var(--c2)}
+.nota-essenziali{margin-top:10px}
+.rp-porta-subiti{margin:4px 0 10px}
+.rp-porta-subiti canvas{width:70%; display:block; margin:0 auto; border-radius:6px}
+.grafico-wrap-meta{position:relative; width:100%; max-width:440px; margin:0 auto; aspect-ratio:5/6}
+.grafico-wrap-meta canvas{width:100%; height:100%; display:block; border-radius:8px}
+
 </style>
 </head>
 <body>
@@ -691,6 +736,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <div class="spazio"></div>
     <span id="badge-dataset" class="badge nascosto">Nessun dato</span>
     <button class="btn piccolo cloud-fuori" id="btn-cloud" type="button" aria-haspopup="dialog">Sincronizza i dispositivi</button>
+    <button class="btn piccolo" id="btn-mister" type="button" aria-haspopup="dialog">Mister</button>
     <button class="btn piccolo" id="btn-tema" aria-label="Cambia tema">Tema scuro</button>
     <button class="btn piccolo nascosto" id="btn-nuovo">Carica un altro file</button>
   </div>
@@ -1223,6 +1269,8 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
           <p>Il sistema prova sempre lo stesso elenco di situazioni su tutte le sessioni del periodo e mostra solo quelle che sono successe in almeno due sessioni. <strong>Prima dei gol</strong>: gol subiti entro 15" da un nostro errore (palla persa, passaggio sbagliato o dribbling fallito) senza che la squadra abbia ripreso il pallone; gol fatti entro 15" da un nostro recupero; gol subiti nei 3' dopo un cambio; gol nati da palla inattiva. <strong>Momenti</strong>: gol nei primi e negli ultimi 5' di ogni tempo e nei 5' dopo un gol; precisione passaggi e palle perse nel secondo tempo (in allenamento: nella seconda metà della partitella). <strong>Giocatori</strong>: la zona dove un giocatore perde palla, se ci perde palla molto più della squadra; l'errore dopo l'errore (la sua giocata successiva, fra 3" e 90", è di nuovo un errore); il calo dopo 15' consecutivi in campo rispetto ai primi 10' (solo partite). <strong>Da una sessione all'altra</strong>: i numeri di ogni sessione affiancati; da 5 sessioni, il legame fra ogni voce e il risultato (in allenamento: con RPE e durata), con il coefficiente di Spearman, segnalato da 0,7 in su. Per le situazioni legate a un momento la quota di gol in quel momento deve essere almeno 1,5 volte la quota di tempo che occupa; «Si ripete» con almeno 3 casi e probabilità di caso (test binomiale) sotto il 10%, «Da tenere d'occhio» con almeno 2 casi e sotto il 30%. Per le altre: «Si ripete» con almeno 3 casi e il 30% dei gol, «Da tenere d'occhio» con almeno 2 e il 20%. Sono ricorrenze, non cause: dicono dove guardare.</p>
           <h4>Tiri e respinte sul campo</h4>
           <p><strong>Da dove si tira</strong>: un pallino per ogni tiro con posizione, letto dalle righe dei tiri nella sezione «DATI SPAZIALI» del CSV di SevenLab (i nostri verso la porta a destra, quelli subiti verso la nostra porta a sinistra). Se le righe dei gol mancano, i gol si prendono da «DETTAGLIO GOL GAME». La distanza è in linea d'aria dal centro della porta, in tre fasce: entro 8 m, da 8 a 16 m, oltre 16 m. <strong>Respinte</strong>: dalla colonna «Respinte» del riepilogo, dalla colonna «Respinta» della timeline e dalle righe «Respinta» di «DATI SPAZIALI»; non entrano mai nei calcoli dei recuperi. Nei file registrati prima del tasto «Respinta» le respinte sono dentro i recuperi e non si possono separare.</p>
+          <h4>Partite registrate senza video</h4>
+          <p>Una partita in cui passaggi, recuperi, palle perse e dribbling sono zero per tutti i giocatori è stata registrata solo con gli eventi essenziali (risultato, gol, assist, cambi, cartellini): conta per il risultato, i gol, chi è in campo e la formazione migliore, ma non entra nelle statistiche dei giocatori, nel possesso stimato, nelle palle perse che diventano gol e nelle situazioni che si ripetono. Nel pannello dei file ha l'etichetta «Senza video · solo risultato e gol».</p>
           <h4>Nessun dato biometrico richiesto</h4>
           <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
           <h4>Pulizia dei dati</h4>
@@ -1285,6 +1333,14 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
   </div>
   <p id="cloud-stato" class="dlg-stato" role="status"></p>
   <p class="dlg-nota">Su ogni dispositivo basta entrare una volta. Uscire non cancella i file da questo dispositivo né dal cloud.</p>
+</dialog>
+
+<!-- Portale Mister (1.48.0) -->
+<dialog id="dlg-mister" aria-labelledby="dlg-mister-titolo">
+  <div class="dlg-testa"><h2 id="dlg-mister-titolo">Portale Mister</h2>
+    <button type="button" class="btn piccolo" id="btn-mister-chiudi" aria-label="Chiudi">Chiudi</button></div>
+  <p class="dlg-testo">La pagina per gli allenatori: vedono dal telefono i dati di Analysis, sempre aggiornati, senza poter cambiare niente.</p>
+  <div id="mister-corpo"></div>
 </dialog>
 
 <script src="app.js"></script>
