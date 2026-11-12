@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.49.0",
-  data: "2026-11-08",
-  note: "Tiri sul campo dal CSV vero (08/11/2026): legge la sezione «TIRI SUL CAMPO GAME» di SevenLab Video 0.14.1 (partenza, arrivo ed esito dei nostri tiri; tiri subiti, parate e gol subiti con il punto in porta). Nella mappa dei nostri tiri il gol è un pallone, il tiro senza gol un pallino vuoto con la linea fino all'arrivo (piena in porta, tratteggiata respinto, a puntini fuori); nuova porta «Dove entrano i gol subiti». Partite registrate senza video, solo con risultato e gol: contano per risultato, gol, chi è in campo e formazioni, non per le statistiche dei giocatori, il possesso, le palle perse → gol e le situazioni; etichetta nel pannello dei file e nota sotto la classifica. Comprende la 1.48.0."
+  numero: "1.51.0",
+  data: "2026-11-12",
+  note: "Cura e affidabilità (12/11/2026). Grafica: pannello dei file richiudibile con l'esito di ogni caricamento, note lunghe raccolte sotto «Come leggere questi dati», descrizioni delle sezioni riscritte e accorciate, indice che segue lo scorrimento, andamento su due colonne, sezioni più distanziate. Precisione: confronti fra mesi sulla media a partita (non sui totali), nuova tabella «Cosa contiene ogni file» con il controllo di coerenza fra riepilogo e timeline, avvisi sui doppioni, niente più falsi allarmi sulle durate degli allenamenti. Affidabilità: richieste al cloud con tempo massimo e nuovi tentativi, conferma prima di eliminare un file, una sezione che dà errore non blocca più le altre, file vuoti o sostituiti segnalati. Comprende la 1.50.0."
 };
 
 /* =====================================================================
@@ -836,10 +836,10 @@ function messaggioErroreCloud(err){
   const sulSito = /github\.io$/i.test(location.hostname || "");
   if(location.protocol === "file:" || !sulSito)
     return `Da qui il cloud non si raggiunge: questa pagina è una copia aperta fuori dal sito (${location.protocol === "file:" ? "il file scaricato" : "un'anteprima"}). Apri il sito pubblicato, ${SITO_PUBBLICATO}, ed entra da lì.`;
-  return "Non riesco a raggiungere il cloud di SevenLab: controlla la connessione (o un'estensione che blocca i siti esterni) e riprova.";
+  return "Non riesco a raggiungere il cloud di SevenLab" + (/tempo scaduto/.test(testo) ? " (non ha risposto in tempo)" : "") + ": controlla la connessione e riprova. Se la connessione funziona, il cloud può essere fermo per qualche minuto: i file restano al sicuro su questo dispositivo e si sincronizzano al prossimo tentativo.";
 }
 async function chiamataAuth(percorso, corpo){
-  const r = await fetch(CLOUD.url + "/auth/v1/" + percorso, {method:"POST", headers:{"apikey": CLOUD.chiave, "Content-Type":"application/json"}, body: JSON.stringify(corpo)});
+  const r = await fetchSicuro(CLOUD.url + "/auth/v1/" + percorso, {method:"POST", headers:{"apikey": CLOUD.chiave, "Content-Type":"application/json"}, body: JSON.stringify(corpo)}, {timeout: 20000, tentativi: 2});
   const j = await r.json().catch(() => ({}));
   if(!r.ok) throw new Error(j.error_description || j.msg || j.message || ("Errore di accesso (" + r.status + ")"));
   return j;
@@ -872,7 +872,8 @@ async function restCloud(metodo, query, corpo, prefer){
   const h = {"apikey": CLOUD.chiave, "Authorization": "Bearer " + t};
   if(corpo !== undefined) h["Content-Type"] = "application/json";
   if(prefer) h["Prefer"] = prefer;
-  const r = await fetch(CLOUD.url + "/rest/v1/" + CLOUD.tabella + query, {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)});
+  // invii e modifiche sono ripetibili senza danni (stessa riga, stesso contenuto): si riprova anche quelli
+  const r = await fetchSicuro(CLOUD.url + "/rest/v1/" + CLOUD.tabella + query, {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)}, {timeout: corpo === undefined ? 30000 : 60000, tentativi: 3});
   if(!r.ok){
     const j = await r.json().catch(() => ({}));
     if(r.status === 401 || r.status === 403 || j.code === "42501") throw new Error("Questo account non è autorizzato a salvare i dati dell'app (serve la stessa email abilitata in SevenLab).");
@@ -926,7 +927,7 @@ async function chiamaFunzionePortale(corpo){
   const t = await tokenCloud();
   const h = {"Content-Type": "application/json", "apikey": CLOUD.chiave};
   if(t) h["Authorization"] = "Bearer " + t;
-  const r = await fetch(URL_FUNZIONE_PORTALE, {method: "POST", headers: h, body: JSON.stringify(corpo)});
+  const r = await fetchSicuro(URL_FUNZIONE_PORTALE, {method: "POST", headers: h, body: JSON.stringify(corpo)}, {timeout: 30000, tentativi: corpo && corpo.azione === "chiave" ? 2 : 1});
   const j = await r.json().catch(() => ({}));
   if(!r.ok || j.errore) throw new Error(j.errore || ("Errore del cloud (" + r.status + ")"));
   return j;
@@ -938,7 +939,7 @@ async function restTabella(metodo, tabella, query, corpo, prefer){
   const h = {"apikey": CLOUD.chiave, "Authorization": "Bearer " + t};
   if(corpo !== undefined) h["Content-Type"] = "application/json";
   if(prefer) h["Prefer"] = prefer;
-  const r = await fetch(CLOUD.url + "/rest/v1/" + tabella + (query || ""), {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)});
+  const r = await fetchSicuro(CLOUD.url + "/rest/v1/" + tabella + (query || ""), {method: metodo, headers: h, body: corpo === undefined ? undefined : JSON.stringify(corpo)}, {timeout: 45000, tentativi: metodo === "GET" ? 3 : 1});
   if(!r.ok){ const j = await r.json().catch(() => ({})); throw new Error(j.message || ("Errore del cloud (" + r.status + ")")); }
   return r.status === 204 ? null : r.json().catch(() => null);
 }
@@ -971,6 +972,156 @@ async function iscrivitiNotifiche(reg){
   if(!sub) sub = await r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: chiaveDaB64u(chiave)});
   return sub.toJSON();
 }
+
+/* =====================================================================
+   AFFIDABILITÀ E CURA (1.51.0, 12/11/2026). Elisa: «rendila graficamente migliore e funzionalmente più affidabile
+   e precisa» — stessa identità, tutte le dashboard; controllo generale dei calcoli, caricamento e cloud, avvisi
+   sui dati dubbi. Qui: richieste al cloud con tempo massimo e nuovi tentativi, sezioni protette una dall'altra,
+   esito del caricamento sempre visibile, controllo di coerenza dei file, copertura dei dati, note lunghe
+   raccolte sotto «Come leggere questi dati», indice che segue lo scorrimento.
+   ===================================================================== */
+/** fetch con tempo massimo e nuovi tentativi sugli errori di rete (mai sulle risposte del server). */
+async function fetchSicuro(url, opts, cfg){
+  const c = Object.assign({timeout: 25000, tentativi: 1}, cfg || {});
+  let ultimo = null;
+  for(let i = 0; i < c.tentativi; i++){
+    const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(() => ctrl.abort(), c.timeout) : null;
+    try{
+      const r = await fetch(url, Object.assign({}, opts, ctrl ? {signal: ctrl.signal} : {}));
+      if(timer) clearTimeout(timer);
+      return r;
+    }catch(e){
+      if(timer) clearTimeout(timer);
+      ultimo = e;
+      if(i < c.tentativi - 1) await new Promise(ok => setTimeout(ok, 700 * (i + 1)));
+    }
+  }
+  // tempo scaduto o rete assente: stesso tipo di errore, così il messaggio in chiaro è uno solo
+  throw new TypeError("Failed to fetch" + (ultimo && ultimo.name === "AbortError" ? " (tempo scaduto)" : ""));
+}
+
+/** Esegue il disegno di una sezione senza che un suo errore fermi le altre; gli errori finiscono in un avviso. */
+const erroriSezioni = [];
+function sicuro(nome, fn){
+  try{ fn(); }
+  catch(err){ console.error("Sezione «" + nome + "»", err); erroriSezioni.push(nome); }
+}
+function mostraErroriSezioni(){
+  let box = document.getElementById("errore-sezioni");
+  if(!erroriSezioni.length){ if(box) box.remove(); return; }
+  if(!box){ box = document.createElement("div"); box.id = "errore-sezioni"; const d = document.getElementById("dashboard"); if(!d) return; d.insertBefore(box, d.firstChild); }
+  box.innerHTML = `<div class="avviso errore"><span class="ic" aria-hidden="true">✕</span><span><strong>${erroriSezioni.length === 1 ? "Una parte non si è potuta mostrare" : "Alcune parti non si sono potute mostrare"}</strong> (${erroriSezioni.map(n => esc(n.replace(/^render/, ""))).join(", ")}). Il resto della dashboard funziona: segnalalo indicando quale file hai caricato per ultimo.</span></div>`;
+}
+
+/* ---- controllo di coerenza e copertura dei dati, sessione per sessione ---- */
+const COERENZA_COLONNE = [["Gol", "Gol", "gol"], ["Passaggi_Corretti", "Passaggio corretto", "passaggi riusciti"], ["Passaggi_Sbagliati", "Passaggio sbagliato", "passaggi sbagliati"],
+  ["Recuperi", "Recupero", "recuperi"], ["Palle_Perse", "Palla persa", "palle perse"], ["Tiri_Totali", "Tiro", "tiri"], ["Dribbling_Falliti", "Dribbling fallito", "dribbling falliti"]];
+/** Confronta, per una sessione, il riepilogo dei giocatori con la timeline degli eventi: se SevenLab ha scritto le due
+ *  parti del file in modo coerente i conteggi coincidono. Torna {controllato, differenze:[testo]}. */
+function coerenzaSessione(s, righe, tipo){
+  const ev = Array.isArray(s.Eventi) ? s.Eventi : [];
+  if(!ev.length || !("Secondo totale" in ev[0]) || !righe.length) return {controllato: false, differenze: []};
+  const nostro = e => tipo !== "partita" || String(e.Team ?? "A").trim().toUpperCase() !== "B";
+  const diff = [];
+  COERENZA_COLONNE.forEach(([col, flag, nome]) => {
+    if(!(flag in ev[0])) return;
+    const a = righe.reduce((x, g) => x + N(g[col]), 0), b = ev.filter(e => String(e[flag]).trim() === "1" && nostro(e)).length;
+    if(Math.abs(a - b) >= 1) diff.push(`${nome}: ${nf0(a)} nel riepilogo, ${nf0(b)} nella timeline`);
+  });
+  if(tipo === "partita" && "Gol subito" in ev[0]){
+    const sub = ev.filter(e => String(e["Gol subito"]).trim() === "1").length;
+    if(sub !== N(s.Gol_Subiti)) diff.push(`gol subiti: ${nf0(s.Gol_Subiti)} nel risultato, ${nf0(sub)} nella timeline`);
+  }
+  return {controllato: true, differenze: diff};
+}
+function coperturaDati(ds){
+  const righe = [];
+  ds.partite.forEach(p => {
+    const rg = ds.giocatori.filter(g => g.Match_ID === p.Match_ID), m = p.MappeTiri || {};
+    righe.push({id: p.Match_ID, data: p.Data, nome: `vs ${p.Avversario}`, tipo: "Partita", metodo: (p.ScalaTempi || {}).metodo === "differita" ? "da video" : "dal vivo",
+      senzaVideo: p.SoloEssenziali, eventi: (p.Eventi || []).length, posizioni: (p.EventiZona || []).length, possesso: Array.isArray(p.PossessoAvversario) && p.PossessoAvversario.length > 0,
+      tiri: (m.conTiri || m.conSubiti) ? (m.tiri || []).length + (m.subiti || []).length : 0, respinte: !!p.HaRespinte,
+      coerenza: p.SoloEssenziali ? {controllato: false, differenze: []} : coerenzaSessione(p, rg, "partita")});
+  });
+  ds.allenamenti.forEach(a => {
+    const rg = ds.statAllenamento.filter(g => g.Sessione_ID === a.Sessione_ID);
+    righe.push({id: a.Sessione_ID, data: a.Data, nome: a.Tipo_Allenamento || "Allenamento", tipo: "Allenamento", metodo: (a.ScalaTempi || {}).metodo === "differita" ? "da video" : "dal vivo",
+      senzaVideo: false, eventi: (a.Eventi || []).length, posizioni: (a.EventiZona || []).length, possesso: null, tiri: null, respinte: null,
+      coerenza: coerenzaSessione(a, rg, "allenamento")});
+  });
+  return righe.sort((x, y) => (y.data ? +y.data : 0) - (x.data ? +x.data : 0));
+}
+/** Sessioni che sembrano la stessa caricata due volte con nomi di file diversi. */
+function sessioniDoppie(ds){
+  const viste = new Map(), doppie = [];
+  const chiave = (tipo, s) => [tipo, s.Data ? +s.Data : "", tipo === "partita" ? (s.Avversario + "|" + s.Gol_Fatti + "-" + s.Gol_Subiti) : (s.Tipo_Allenamento + "|" + (s.Eventi || []).length)].join("|");
+  ds.partite.forEach(p => { const k = chiave("partita", p); if(viste.has(k)) doppie.push([viste.get(k), p.Match_ID, `${dataLabel(p.Data)} vs ${p.Avversario}`]); else viste.set(k, p.Match_ID); });
+  ds.allenamenti.forEach(a => { const k = chiave("allenamento", a); if(viste.has(k)) doppie.push([viste.get(k), a.Sessione_ID, `allenamento del ${dataLabel(a.Data)}`]); else viste.set(k, a.Sessione_ID); });
+  return doppie;
+}
+function tabellaCoperturaHtml(ds){
+  const righe = coperturaDati(ds);
+  const si = v => v === null ? `<span class="cop-na">·</span>` : (v ? `<span class="cop-si">✓</span>` : `<span class="cop-no">—</span>`);
+  return `<div class="card cop-card">
+    <div class="grafico-titolo">Cosa contiene ogni file</div>
+    <div class="grafico-sub">Più dati ha un file, più sezioni può alimentare. «Controllo» confronta il riepilogo dei giocatori con la timeline degli eventi dello stesso file: se tornano, il file è coerente.</div>
+    <div class="tabella-scroll"><table class="cop-tab">
+      <caption class="solo-sr">Dati presenti in ogni sessione caricata</caption>
+      <thead><tr><th scope="col">Sessione</th><th scope="col">Rilevazione</th><th scope="col">Eventi</th><th scope="col">Posizioni recuperi e perse</th><th scope="col">Possesso misurato</th><th scope="col">Tiri con posizione</th><th scope="col">Respinte</th><th scope="col">Controllo</th></tr></thead>
+      <tbody>${righe.map(r => `<tr>
+        <td>${esc(dataCorta(r.data))} · ${esc(r.nome)}<span class="cop-tipo">${esc(r.tipo)}${r.senzaVideo ? " · senza video" : ""}</span></td>
+        <td>${r.senzaVideo ? "—" : esc(r.metodo)}</td><td>${r.eventi ? nf0(r.eventi) : si(false)}</td><td>${r.posizioni ? nf0(r.posizioni) : si(false)}</td>
+        <td>${si(r.possesso)}</td><td>${r.tiri === null ? si(null) : (r.tiri ? nf0(r.tiri) : si(false))}</td><td>${si(r.respinte)}</td>
+        <td>${!r.coerenza.controllato ? `<span class="cop-na">non controllabile</span>` : (r.coerenza.differenze.length ? `<span class="cop-diff" title="${esc(r.coerenza.differenze.join("; "))}">${nf0(r.coerenza.differenze.length)} ${r.coerenza.differenze.length === 1 ? "differenza" : "differenze"}</span>` : `<span class="cop-si">✓ torna</span>`)}</td>
+      </tr>`).join("")}</tbody>
+    </table></div>
+  </div>`;
+}
+
+/* ---- note lunghe raccolte sotto «Come leggere questi dati» ---- */
+let compattaInCorso = false;
+function compattaNote(){
+  if(compattaInCorso) return;
+  compattaInCorso = true;
+  try{
+    const toccati = new Set();
+    document.querySelectorAll("p.nota-piccola").forEach(p => {
+      const g = p.parentElement;
+      if(!g || p.closest("details") || p.classList.contains("nota-essenziali") || p.querySelector("button, select, input")) return;
+      if(!(g.tagName === "SECTION" || /^contenuto-/.test(g.id || ""))) return;
+      let d = Array.from(g.children).find(c => c.tagName === "DETAILS" && c.classList.contains("note-sezione"));
+      if(!d){ d = document.createElement("details"); d.className = "note-sezione"; d.innerHTML = "<summary>Come leggere questi dati</summary>"; }
+      d.appendChild(p); toccati.add(g); g._noteSezione = d;
+    });
+    toccati.forEach(g => g.appendChild(g._noteSezione));   // sempre in fondo alla sezione
+  } finally { compattaInCorso = false; }
+}
+/** Evidenzia nell'indice la sezione che si sta guardando. */
+function aggiornaIndiceAttivo(){
+  const nav = document.getElementById("nav-sezioni");
+  if(!nav || nav.classList.contains("nascosto")) return;
+  const soglia = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--altezza-fissa")) || 0) + 40;
+  let attiva = null;
+  nav.querySelectorAll("a:not(.nascosto)").forEach(a => {
+    const sez = document.getElementById((a.getAttribute("href") || "").slice(1));
+    if(sez && !sez.classList.contains("nascosto") && sez.getBoundingClientRect().top <= soglia) attiva = a;
+  });
+  nav.querySelectorAll("a.attiva").forEach(a => { if(a !== attiva) a.classList.remove("attiva"); });
+  if(attiva && !attiva.classList.contains("attiva")){
+    attiva.classList.add("attiva");
+    const sinistra = attiva.offsetLeft - nav.clientWidth / 2 + attiva.clientWidth / 2;
+    nav.scrollTo({left: Math.max(0, sinistra), behavior: "smooth"});
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  let timer = null;
+  const pianifica = () => { clearTimeout(timer); timer = setTimeout(compattaNote, 60); };
+  new MutationObserver(pianifica).observe(document.body, {childList: true, subtree: true});
+  pianifica();
+  let attesa = false;
+  window.addEventListener("scroll", () => { if(attesa) return; attesa = true; requestAnimationFrame(() => { attesa = false; aggiornaIndiceAttivo(); }); }, {passive: true});
+});
 
 /* ---- sincronizzazione ---- */
 const statoCloud = {inCorso: false, ultima: null, errore: null, ancora: false};
@@ -4044,6 +4195,7 @@ function riepilogoSquadra(righe, partite){
     tiri_porta_rilevati: tiriPortaRilevati(righe),
     precisione_tiro: tiriPortaRilevati(righe) ? perc(s("Tiri_In_Porta"), tiriTot) : null,
     efficacia_realizzativa: perc(s("Gol"), tiriTot),
+    passaggi_corretti: s("Passaggi_Corretti"), passaggi_totali: passTot,
     precisione_passaggi: perc(s("Passaggi_Corretti"), passTot),
     successo_dribbling: perc(dribRius, dribTent),
     tasso_errore: perc(s("Passaggi_Sbagliati")+s("Dribbling_Falliti"), azioni),
@@ -4349,7 +4501,7 @@ function validaDati(ds){
   const idUsati = new Set(ds.giocatori.map(g=>g.Match_ID));
   ds.giocatori.forEach(g => { if(!idPartite.has(g.Match_ID))
     add("errore", `La riga di <strong>${esc(g.Giocatore)}</strong> ha Match_ID «${esc(g.Match_ID)}», che non esiste nel foglio Partite: quella partita non entra nei calcoli di data e periodo.`); });
-  ds.partite.forEach(p => { if(!idUsati.has(p.Match_ID))
+  ds.partite.forEach(p => { if(!idUsati.has(p.Match_ID) && !p.SoloEssenziali)
     add("attenzione", `La partita <strong>${esc(p.Match_ID)}</strong> (${dataLabel(p.Data)} vs ${esc(p.Avversario)}) non ha nessuna riga giocatore in Statistiche_Giocatori.`); });
   ds.giocatori.forEach(g => {
     const dove = `${esc(g.Giocatore)} — ${esc(g.Match_ID)}`;
@@ -4380,9 +4532,18 @@ function validaDati(ds){
       add("attenzione", `${dove}: RPE fuori dalla scala 1–10 (${nf(p.RPE,0)}). Il carico di allenamento risulta distorto.`);
     if(!p.Presente && p.Minuti_Allenamento > 0)
       add("attenzione", `${dove}: segnato assente ma con ${nf0(p.Minuti_Allenamento)} minuti di allenamento. Il carico è stato messo a 0.`);
-    if(p.DurataSessione !== null && p.Minuti_Allenamento > p.DurataSessione && p.DurataSessione > 0)
-      add("attenzione", `${dove}: ${nf0(p.Minuti_Allenamento)} minuti di allenamento su una sessione di ${nf0(p.DurataSessione)} minuti.`);
   });
+  // 1.51.0: durata dichiarata più corta dei minuti giocati — un avviso per sessione e solo oltre 2 minuti di scarto
+  // (prima: uno per giocatore, anche per mezzo minuto di arrotondamento: 80 righe di falsi allarmi sui file veri).
+  ds.allenamenti.forEach(a => {
+    const max = Math.max(0, ...ds.presenze.filter(p => p.Sessione_ID === a.Sessione_ID).map(p => N(p.Minuti_Allenamento)));
+    if(a.Durata_Minuti_Sessione > 0 && max - a.Durata_Minuti_Sessione > 2)
+      add("attenzione", `<strong>${esc(a.Sessione_ID)}</strong> (${dataLabel(a.Data)}): il file dichiara una durata di ${nf0(a.Durata_Minuti_Sessione)} minuti, ma i giocatori arrivano a ${nf0(max)} minuti giocati. Di solito è il marcatore di fine sessione scritto troppo presto da SevenLab: i calcoli usano i minuti giocati e gli eventi, che sono giusti.`);
+  });
+  coperturaDati(ds).forEach(r => { if(r.coerenza.differenze.length)
+    add("attenzione", `<strong>${esc(r.id)}</strong> (${esc(dataCorta(r.data))} ${esc(r.nome)}): riepilogo dei giocatori e timeline degli eventi non coincidono — ${esc(r.coerenza.differenze.join("; "))}. Le classifiche usano il riepilogo, le analisi sui tempi la timeline: su questa sessione possono dare numeri leggermente diversi.`); });
+  sessioniDoppie(ds).forEach(([a, b, cosa]) =>
+    add("errore", `Sembra la stessa sessione caricata due volte con due nomi di file: <strong>${esc(a)}</strong> e <strong>${esc(b)}</strong> (${esc(cosa)}). Se è un doppione eliminane una dal pannello dei file, altrimenti i suoi numeri contano doppio.`));
   // nomi unificati (12/10/2026): non è un errore, ma va detto cosa è stato unito
   (ds.unioniNomi || []).forEach(u => add("attenzione",
     `Nome scritto in modi diversi nei file: ${u.varianti.map(v => "«"+esc(v)+"»").join(", ")} ${u.varianti.length === 1 ? "è stato unito" : "sono stati uniti"} a <strong>«${esc(u.nome)}»</strong>, la grafia più usata. Se fossero persone diverse, scrivi i nomi in modo che si distinguano anche senza maiuscole.`));
@@ -4513,11 +4674,13 @@ function renderKPI(f){
   }
   const perGara = v => f.partite.length>0 ? v/f.partite.length : null;
   const kpi = [
-    {eti:"Gol fatti", val:nf0(s.gol_fatti), nota: f.partite.length? nf(perGara(s.gol_fatti),1)+" a partita":"", raw:s.gol_fatti,
-      prevRaw: sPrec?sPrec.gol_fatti:null, currRaw: sCorr?sCorr.gol_fatti:null, meglio:"alto", dec:0, unit:""},
+    // 1.51.0: il confronto fra due mesi è sulla media a partita, non sul totale: due mesi con un numero diverso di
+    // partite non si confrontano sui gol sommati (prima «+2 gol» poteva voler dire solo «una partita in più»).
+    {eti:"Gol fatti", val:nf0(s.gol_fatti), nota: f.partite.length? nf(perGara(s.gol_fatti),1)+" a partita · "+nf0(f.partite.length)+(f.partite.length===1?" partita":" partite"):"", raw:s.gol_fatti,
+      prevRaw: (sPrec && sPrec.partite)?sPrec.gol_fatti/sPrec.partite:null, currRaw: (sCorr && sCorr.partite)?sCorr.gol_fatti/sCorr.partite:null, meglio:"alto", dec:1, unit:"/partita"},
     {eti:"Gol subiti", val:nf0(s.gol_subiti), nota: f.partite.length? nf(perGara(s.gol_subiti),1)+" a partita":"", raw:s.gol_subiti,
-      prevRaw: sPrec?sPrec.gol_subiti:null, currRaw: sCorr?sCorr.gol_subiti:null, meglio:"basso", dec:0, unit:""},
-    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.gol_giocatori)+" gol e "+nf0(s.assist)+" assist dai giocatori",
+      prevRaw: (sPrec && sPrec.partite)?sPrec.gol_subiti/sPrec.partite:null, currRaw: (sCorr && sCorr.partite)?sCorr.gol_subiti/sCorr.partite:null, meglio:"basso", dec:1, unit:"/partita"},
+    {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota:nf0(s.passaggi_corretti)+" riusciti su "+nf0(s.passaggi_totali),
       prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
     s.tiri_porta_rilevati
       ? {eti:"Precisione tiro", val:pctTxt(s.precisione_tiro), nota:nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali),
@@ -4542,9 +4705,9 @@ function renderKPI(f){
       const cls = Math.abs(d) < (k.dec===0?0.5:0.05) ? "neutro" : (buono ? "su":"giu");
       const freccia = d > 0 ? "▲" : (d < 0 ? "▼" : "▬");
       const etichetta = cls==="neutro" ? "stabile" : (buono ? "in miglioramento" : "in peggioramento");
-      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)} · ${etichetta}</span></div>`;
+      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)}${cls==="neutro" ? " · stabile" : (buono ? " · meglio" : " · peggio")}</span></div>`;
     } else {
-      delta = `<div class="kpi-delta neutro"><span>Confronto mese su mese non disponibile</span></div>`;
+      delta = `<div class="kpi-delta neutro"><span>Nessun mese precedente da confrontare</span></div>`;
     }
     return `<div class="kpi"><div class="kpi-eti">${esc(k.eti)}</div><div class="kpi-valore">${k.val}</div>${delta}${k.nota?`<div class="kpi-nota">${esc(k.nota)}</div>`:""}</div>`;
   }).join("");
@@ -4853,6 +5016,7 @@ function renderKPIAllenamentoStat(f){
     return {media: conteggi.reduce((a,b)=>a+b,0)/conteggi.length, min: Math.min(...conteggi), max: Math.max(...conteggi)};
   })();
   const mCorr = meseCorrenteRiferimentoAllenamento(f.mese), mPrec = mesePrecedenteConDatiAllenamento(f.mese);
+  const nSessMese = m => new Set(datiMeseAllenamento(m).statAllenamento.map(g => g.Sessione_ID)).size;
   let sPrec = null, sCorr = null;
   if(mPrec){
     const dPrec = datiMeseAllenamento(mPrec), dCorr = datiMeseAllenamento(mCorr);
@@ -4868,8 +5032,8 @@ function renderKPIAllenamentoStat(f){
     {eti:"Giocatori per sessione", val:presenzaSess.media!==null?nf(presenzaSess.media,1):"—",
       nota: presenzaSess.min===presenzaSess.max ? "Sempre lo stesso numero di presenti" : `Da ${nf0(presenzaSess.min)} a ${nf0(presenzaSess.max)} presenti: i totali qui sotto risentono di questa differenza`,
       raw:presenzaSess.media, prevRaw:null, currRaw:null},
-    {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist", raw:s.gol_giocatori,
-      prevRaw: sPrec?sPrec.gol_giocatori:null, currRaw: sCorr?sCorr.gol_giocatori:null, meglio:"alto", dec:0, unit:""},
+    {eti:"Gol segnati", val:nf0(s.gol_giocatori), nota:nf0(s.assist)+" assist · "+nf(s.gol_giocatori/nSessioni,1)+" a sessione", raw:s.gol_giocatori,
+      prevRaw: (sPrec && nSessMese(mPrec))?sPrec.gol_giocatori/nSessMese(mPrec):null, currRaw: (sCorr && nSessMese(mCorr))?sCorr.gol_giocatori/nSessMese(mCorr):null, meglio:"alto", dec:1, unit:"/sessione"},
     {eti:"Precisione passaggi", val:pctTxt(s.precisione_passaggi), nota: s.tiri_porta_rilevati ? nf0(s.tiri_in_porta)+" tiri in porta su "+nf0(s.tiri_totali) : nf0(s.tiri_totali)+" tiri totali",
       prevRaw: sPrec?sPrec.precisione_passaggi:null, currRaw: sCorr?sCorr.precisione_passaggi:null, meglio:"alto", dec:1, unit:" pt"},
     s.tiri_porta_rilevati
@@ -4893,9 +5057,9 @@ function renderKPIAllenamentoStat(f){
       const cls = Math.abs(d) < (k.dec===0?0.5:0.05) ? "neutro" : (buono ? "su":"giu");
       const freccia = d > 0 ? "▲" : (d < 0 ? "▼" : "▬");
       const etichetta = cls==="neutro" ? "stabile" : (buono ? "in miglioramento" : "in peggioramento");
-      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)} · ${etichetta}</span></div>`;
+      delta = `<div class="kpi-delta ${cls}"><span aria-hidden="true">${freccia}</span><span>${d>0?"+":""}${nf(d,k.dec)}${k.unit} vs ${meseBreve(mPrec)}${cls==="neutro" ? " · stabile" : (buono ? " · meglio" : " · peggio")}</span></div>`;
     } else if(k.eti !== "Sessioni con statistiche") {
-      delta = `<div class="kpi-delta neutro"><span>Confronto mese su mese non disponibile</span></div>`;
+      delta = `<div class="kpi-delta neutro"><span>Nessun mese precedente da confrontare</span></div>`;
     }
     return `<div class="kpi"><div class="kpi-eti">${esc(k.eti)}</div><div class="kpi-valore">${k.val}</div>${delta}${k.nota?`<div class="kpi-nota">${esc(k.nota)}</div>`:""}</div>`;
   }).join("");
@@ -7652,6 +7816,21 @@ function appendiceSituazioniReport(pagina, sessioni, tipo, titoloReport, sottoti
 const TIRI_FASCE_DISTANZA = [8, 16];              // metri dal centro della porta: vicino / media distanza / lontano
 const TIRI_FASCE_ETICHETTE = ["entro 8 m", "da 8 a 16 m", "oltre 16 m"];
 const TIRI_PORTA_Y = CAMPO_LARGHEZZA_M / 2;
+/* EXPECTED GOALS (1.50.0, 12/11/2026). Elisa: «dai dati che ti fornisco riusciamo a inserire gli xG?» — sì, dalla
+   posizione di partenza di ogni tiro (sezione «TIRI SUL CAMPO GAME», dal 08/11/2026). Modello geometrico: probabilità
+   di gol da distanza dal centro della porta e angolo sotto cui si vede la porta, con una curva logistica tarata sui
+   valori di riferimento del calcio (≈0,55 da 5,5 m centrale, ≈0,25 dal dischetto a 11 m, ≈0,10 da 16,5 m, ≈0,03 da
+   25 m) e applicata alla porta vera del campionato di Elisa: 6×2 m (detto il 11/11/2026; il CSV disegna la porta
+   7,32×2,44 ma è solo il sistema di coordinate). Non sa se il tiro è di testa, su rigore, a porta vuota o con un
+   difensore davanti: è una stima di partenza, da ritarare sui tiri della squadra quando saranno qualche centinaio. */
+const PORTA_CALCIO7_LARGHEZZA_M = 6;
+const XG_COEFF = {base: 0.1415, angolo: 0.8528, distanza: -0.1610};
+function xgTiro(t, portaX){
+  const dx = Math.abs(portaX - t.x), mezza = PORTA_CALCIO7_LARGHEZZA_M / 2;
+  const angolo = Math.abs(Math.atan2(t.y - (TIRI_PORTA_Y - mezza), dx) - Math.atan2(t.y - (TIRI_PORTA_Y + mezza), dx));
+  const d = Math.hypot(dx, t.y - TIRI_PORTA_Y);
+  return 1 / (1 + Math.exp(-(XG_COEFF.base + XG_COEFF.angolo * angolo + XG_COEFF.distanza * d)));
+}
 
 /** Tipo di una riga di DATI SPAZIALI per le mappe nuove: {cosa:"respinta"|"tiro"|"subito", esito} oppure null. */
 function classificaRigaTiroRespinta(r){
@@ -7757,8 +7936,8 @@ function estraiTiriRespinteDaSessione(s){
       golDaDettaglio++;
     });
   }
-  tiri.forEach(t => { t.distanza = distanzaDallaPorta(t, CAMPO_LUNGHEZZA_M); });
-  subiti.forEach(t => { t.distanza = distanzaDallaPorta(t, 0); });
+  tiri.forEach(t => { t.distanza = distanzaDallaPorta(t, CAMPO_LUNGHEZZA_M); t.xg = xgTiro(t, CAMPO_LUNGHEZZA_M); });
+  subiti.forEach(t => { t.distanza = distanzaDallaPorta(t, 0); t.xg = xgTiro(t, 0); });
   return {tiri, subiti, respinte, conTiri: tiri.length > 0, conSubiti: subiti.length > 0, conRespinte: respinte.length > 0,
     golDaDettaglio, girati, fonte: daSezione ? "sezione" : (tiri.length || subiti.length ? "spaziali" : null)};
 }
@@ -7778,9 +7957,13 @@ function respinteDichiarateSessione(s, righeGiocatori){
 function analizzaTiri(sessioni){
   const tiri = [], subiti = [];
   let partiteTiri = 0, partiteSubiti = 0, golDaDettaglio = 0, girate = 0;
+  const perPartita = [];
   (sessioni || []).forEach(s => {
     const m = s.MappeTiri || estraiTiriRespinteDaSessione(s);
     const et = s.Etichetta || "";
+    const somma = arr => arr.reduce((a, t) => a + (t.xg || 0), 0);
+    if(m.conTiri || m.conSubiti) perPartita.push({id: s.Match_ID, data: s.Data, avversario: s.Avversario, ordine: s.Ordine || 0, golF: s.Gol_Fatti, golS: s.Gol_Subiti,
+      xgF: m.conTiri ? somma(m.tiri) : null, xgS: m.conSubiti ? somma(m.subiti) : null, tiri: m.tiri.length, subiti: m.subiti.length});
     if(m.conTiri){ partiteTiri++; m.tiri.forEach(t => tiri.push(Object.assign({sessione: et}, t))); }
     if(m.conSubiti){ partiteSubiti++; m.subiti.forEach(t => subiti.push(Object.assign({sessione: et}, t))); }
     golDaDettaglio += m.golDaDettaglio || 0;
@@ -7794,7 +7977,7 @@ function analizzaTiri(sessioni){
     });
     const gol = arr.filter(t => t.esito === golEsito).length;
     const dist = arr.map(t => t.distanza).sort((a, b) => a - b);
-    return {n: arr.length, gol, fasce, distanzaMediana: dist.length ? dist[Math.floor(dist.length / 2)] : null,
+    return {n: arr.length, gol, fasce, distanzaMediana: dist.length ? dist[Math.floor(dist.length / 2)] : null, xg: arr.reduce((a, t) => a + (t.xg || 0), 0),
       inPorta: arr.filter(t => t.esito === "porta" || t.esito === "parata").length};
   };
   // per giocatore (nostri tiri): tiri, gol, distanza mediana, zona più frequente
@@ -7803,10 +7986,11 @@ function analizzaTiri(sessioni){
   const giocatori = Array.from(perG.entries()).map(([giocatore, arr]) => {
     const d = arr.map(t => t.distanza).sort((a, b) => a - b);
     const z = elencoZonePerse(arr)[0];
-    return {giocatore, tiri: arr.length, gol: arr.filter(t => t.esito === "gol").length, distanza: d[Math.floor(d.length / 2)],
+    return {giocatore, tiri: arr.length, gol: arr.filter(t => t.esito === "gol").length, distanza: d[Math.floor(d.length / 2)], xg: arr.reduce((a, t) => a + (t.xg || 0), 0),
       vicini: arr.filter(t => fasciaDistanza(t.distanza) === 0).length, zona: z ? z.etichetta : null, zonaN: z ? z.conteggio : 0};
   }).sort((a, b) => (b.tiri - a.tiri) || (b.gol - a.gol) || a.giocatore.localeCompare(b.giocatore, "it"));
-  return {tiri, subiti, partiteTiri, partiteSubiti, golDaDettaglio, girate, nostri: riassunto(tiri, "gol"), loro: riassunto(subiti, "gol"), giocatori};
+  return {tiri, subiti, partiteTiri, partiteSubiti, golDaDettaglio, girate, nostri: riassunto(tiri, "gol"), loro: riassunto(subiti, "gol"), giocatori,
+    perPartita: perPartita.sort((a, b) => b.ordine - a.ordine)};
 }
 
 /** Respinte su più partite: punti con posizione, totali dichiarati e tabella per giocatore. */
@@ -7943,6 +8127,7 @@ const LEGENDA_TIRI_HTML = LEGENDA_TIRI_NOSTRI;
 /** Frase di sintesi: da dove tiriamo e da dove ci tirano. */
 function fraseTiri(a){
   const parti = [];
+  if(a.nostri.n >= 3) parti.push(`Con i tiri fatti ci si potevano aspettare <strong>${nf(a.nostri.xg, 1)} gol</strong> (xG), ne sono arrivati <strong>${nf0(a.nostri.gol)}</strong>${a.nostri.gol - a.nostri.xg >= 1 ? ": sopra le attese" : (a.nostri.xg - a.nostri.gol >= 1 ? ": sotto le attese" : "")}${a.loro.n >= 3 ? `; agli avversari abbiamo concesso <strong>${nf(a.loro.xg, 1)} xG</strong> e ${nf0(a.loro.gol)} gol` : ""}.`);
   const prev = r => r.fasce.slice().sort((x, y) => y.tiri - x.tiri)[0];
   if(a.nostri.n >= 3){
     const f = prev(a.nostri);
@@ -7990,6 +8175,8 @@ function renderTiriCampo(f){
       ${kpi("Distanza tipica dei nostri tiri", a.nostri.distanzaMediana !== null ? nf(a.nostri.distanzaMediana, 0) + " m" : "—", `${vicini(a.nostri)} da entro 8 m`)}
       ${kpi("Tiri subiti con posizione", nf0(a.loro.n), `${nf0(a.loro.gol)} gol subiti${a.loro.inPorta ? ` · ${nf0(a.loro.inPorta)} parati` : ""}`)}
       ${kpi("Distanza tipica dei tiri subiti", a.loro.distanzaMediana !== null ? nf(a.loro.distanzaMediana, 0) + " m" : "—", `${vicini(a.loro)} da entro 8 m`)}
+      ${kpi("xG fatti", a.nostri.n ? nf(a.nostri.xg, 1) : "—", a.nostri.n ? `${nf0(a.nostri.gol)} gol veri · ${nf(a.nostri.xg / a.nostri.n, 2)} a tiro` : "nessun tiro con posizione")}
+      ${kpi("xG concessi", a.loro.n ? nf(a.loro.xg, 1) : "—", a.loro.n ? `${nf0(a.loro.gol)} gol subiti · ${nf(a.loro.xg / a.loro.n, 2)} a tiro` : "nessun tiro subito con posizione")}
     </div>
     <div class="griglia g-2 g-campi" style="margin-top:16px">
       <div class="card">
@@ -8034,11 +8221,21 @@ function renderTiriCampo(f){
       <div class="grafico-sub">Solo i tiri con posizione${singola ? "" : " delle partite scelte"}. La distanza è quella tipica (mediana).</div>
       <div class="tabella-scroll"><table>
         <caption class="solo-sr">Tiri con posizione per giocatore</caption>
-        <thead><tr><th scope="col">Giocatore</th><th scope="col">Tiri</th><th scope="col">Gol</th><th scope="col">Distanza tipica</th><th scope="col">Da entro 8 m</th><th scope="col">Zona più frequente</th></tr></thead>
-        <tbody>${a.giocatori.map(g => `<tr><td>${esc(g.giocatore)}</td><td>${nf0(g.tiri)}</td><td>${nf0(g.gol)}</td><td>${nf(g.distanza, 0)} m</td><td>${nf0(g.vicini)}</td><td>${g.zona ? esc(g.zona) + (g.tiri > 1 ? ` <span class="tenue">(${nf0(g.zonaN)} su ${nf0(g.tiri)})</span>` : "") : "—"}</td></tr>`).join("")}</tbody>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col">Tiri</th><th scope="col">Gol</th><th scope="col">Distanza tipica</th><th scope="col">Da entro 8 m</th><th scope="col">xG</th><th scope="col">Gol − xG</th><th scope="col">Zona più frequente</th></tr></thead>
+        <tbody>${a.giocatori.map(g => `<tr><td>${esc(g.giocatore)}</td><td>${nf0(g.tiri)}</td><td>${nf0(g.gol)}</td><td>${nf(g.distanza, 0)} m</td><td>${nf0(g.vicini)}</td><td>${nf(g.xg, 1)}</td><td class="${g.gol - g.xg >= 0.5 ? "sit-cella-buona" : (g.xg - g.gol >= 0.5 ? "sit-cella-debole" : "")}">${g.gol - g.xg >= 0 ? "+" : "−"}${nf(Math.abs(g.gol - g.xg), 1)}</td><td>${g.zona ? esc(g.zona) + (g.tiri > 1 ? ` <span class="tenue">(${nf0(g.zonaN)} su ${nf0(g.tiri)})</span>` : "") : "—"}</td></tr>`).join("")}</tbody>
+      </table></div>
+    </div>` : ""}
+    ${a.perPartita.length > 1 ? `<div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">xG partita per partita</div>
+      <div class="grafico-sub">Gol che ci si poteva aspettare dalle occasioni create e concesse, accanto al risultato vero.</div>
+      <div class="tabella-scroll"><table>
+        <caption class="solo-sr">Expected goals per partita</caption>
+        <thead><tr><th scope="col">Partita</th><th scope="col">Risultato</th><th scope="col">xG fatti</th><th scope="col">xG concessi</th></tr></thead>
+        <tbody>${a.perPartita.map(p => `<tr><td>${esc(dataCorta(p.data))} vs ${esc(p.avversario)}</td><td>${nf0(p.golF)}–${nf0(p.golS)}</td><td>${p.xgF !== null ? nf(p.xgF, 1) : "—"}</td><td>${p.xgS !== null ? nf(p.xgS, 1) : "—"}</td></tr>`).join("")}</tbody>
       </table></div>
     </div>` : ""}
     ${note.length ? `<p class="nota-piccola" style="margin-top:12px">${note.join(" ")}</p>` : ""}
+    <p class="nota-piccola"><strong>xG (expected goals)</strong>: per ogni tiro, la probabilità che diventi gol vista solo da dove parte (distanza e angolo verso la porta da 6 metri). La somma dice quanti gol ci si poteva aspettare. È una stima di partenza: non sa se il tiro è di testa, su rigore o con un difensore davanti, e si ritara sui tiri della squadra quando saranno qualche centinaio.</p>
     <p class="nota-piccola">Nostri tiri: il pallone è un gol, il pallino vuoto un tiro senza gol con la linea fino a dove è finito (piena se è andato in porta, tratteggiata se è stato respinto in campo, a puntini se è finito fuori). Tiri subiti: pallone per il gol, pallino pieno per la parata, vuoto per il tiro senza parata. Gli archi tratteggiati sono a 8 e 16 metri dal centro della porta. I nostri gol arrivano dalla sezione «DETTAGLIO GOL GAME», gli altri tiri da «TIRI SUL CAMPO GAME».</p>`;
   const o = optsCampoSchermo();
   disegnaCampoTiriMeta($("#tiri-mappa-nostri"), a.tiri, Object.assign({}, o, {colore: colore("c1"), coloreFuori: colore("c2"), porta: "destra"}));
@@ -8154,8 +8351,8 @@ function tiriReport(pagina, sessioni, essenziale){
   etichettaReport(pagina, LEGENDA_TIRI_REPORT);
   const o = optsCampoReport();
   const g = document.createElement("div"); g.className = "rp-campo-griglia"; pagina.corpo.appendChild(g);
-  cellaCampoReportMappe(g, `Nostri tiri (${nf0(a.nostri.n)} · ${nf0(a.nostri.gol)} gol)`, cv => disegnaCampoTiri(cv, a.tiri, Object.assign({}, o, {colore: PALETTE_REPORT.c1, coloreFuori: PALETTE_REPORT.c2, porta: "destra"})));
-  cellaCampoReportMappe(g, `Tiri subiti (${nf0(a.loro.n)} · ${nf0(a.loro.gol)} gol)`, cv => disegnaCampoTiri(cv, a.subiti, Object.assign({}, o, {colore: PALETTE_REPORT.c2, coloreGol: "#A13544", porta: "sinistra"})));
+  cellaCampoReportMappe(g, `Nostri tiri (${nf0(a.nostri.n)} · ${nf0(a.nostri.gol)} gol · xG ${nf(a.nostri.xg, 1)})`, cv => disegnaCampoTiri(cv, a.tiri, Object.assign({}, o, {colore: PALETTE_REPORT.c1, coloreFuori: PALETTE_REPORT.c2, porta: "destra"})));
+  cellaCampoReportMappe(g, `Tiri subiti (${nf0(a.loro.n)} · ${nf0(a.loro.gol)} gol · xG ${nf(a.loro.xg, 1)})`, cv => disegnaCampoTiri(cv, a.subiti, Object.assign({}, o, {colore: PALETTE_REPORT.c2, coloreGol: "#A13544", porta: "sinistra"})));
   pagina = pag0;
   const golSubitiPorta = a.subiti.filter(t => t.porta).map(t => t.porta);
   if(golSubitiPorta.length){
@@ -8277,15 +8474,18 @@ function renderFormazioneMigliore(tipo){
 function renderQualita(){
   const cont = $("#contenuto-qualita");
   const av = validaDati(stato.ds);
+  const copertura = (stato.ds.partite.some(p => p.Eventi) || stato.ds.allenamenti.some(a => a.Eventi)) ? tabellaCoperturaHtml(stato.ds) : "";
   if(av.length === 0){
-    cont.innerHTML = `<div class="avviso ok"><span class="ic" aria-hidden="true">✓</span><span><strong>Nessun problema rilevato.</strong> Tutti i controlli automatici sono passati: identificativi coerenti, nessun duplicato, valori nei range previsti.</span></div>`;
+    cont.innerHTML = copertura + `<div class="avviso ok"><span class="ic" aria-hidden="true">✓</span><span><strong>Nessun problema rilevato.</strong> Tutti i controlli automatici sono passati: identificativi coerenti, nessun duplicato, valori nei range previsti.</span></div>`;
     return;
   }
   const errori = av.filter(a=>a.tipo==="errore"), attenzioni = av.filter(a=>a.tipo==="attenzione");
-  cont.innerHTML = `
-    <p class="kpi-nota" style="margin-top:0">${nf0(errori.length)} da correggere · ${nf0(attenzioni.length)} da verificare</p>
-    ${errori.map(a=>`<div class="avviso errore"><span class="ic" aria-hidden="true">✕</span><span><strong>Da correggere:</strong> ${a.testo}</span></div>`).join("")}
-    ${attenzioni.map(a=>`<div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span><strong>Da verificare:</strong> ${a.testo}</span></div>`).join("")}`;
+  const riga = a => `<div class="avviso ${a.tipo}"><span class="ic" aria-hidden="true">${a.tipo === "errore" ? "✕" : "!"}</span><span><strong>${a.tipo === "errore" ? "Da correggere:" : "Da verificare:"}</strong> ${a.testo}</span></div>`;
+  cont.innerHTML = copertura + `
+    <p class="kpi-nota" style="margin:14px 0 8px">${nf0(errori.length)} da correggere · ${nf0(attenzioni.length)} da verificare</p>
+    ${errori.map(riga).join("")}
+    ${attenzioni.slice(0, 4).map(riga).join("")}
+    ${attenzioni.length > 4 ? `<details class="note-sezione"><summary>Mostra le altre ${nf0(attenzioni.length - 4)} cose da verificare</summary>${attenzioni.slice(4).map(riga).join("")}</details>` : ""}`;
 }
 
 /* =====================================================================
@@ -8294,45 +8494,48 @@ function renderQualita(){
 function render(){
   if(!stato.ds) return;
   const f = datiFiltrati();
+  erroriSezioni.length = 0;
   const nomiPeriodo = stato.periodo === "tutto" ? "Tutta la stagione" : meseLabel(stato.periodo);
   $("#riepilogo-filtri").textContent = `${nomiPeriodo} · ${nf0(f.partite.length)} partite · ${nf0(new Set(f.giocatori.map(g=>g.Giocatore)).size)} giocatori`;
-  renderKPI(f);
-  renderAndamento(f);
-  renderClassifica(f);
-  notaPartiteEssenziali($("#contenuto-classifica"), f.partite);
-  renderTendenze(f);
-  renderKPIAllenamentoStat(f);
-  renderAndamentoAllenamentoStat(f);
-  renderClassificaAllenamentoStat(f);
-  renderTendenzeAllenamentoStat(f);
-  renderAndamentoIndividuale();
-  renderGiocatore(f);
-  renderConfronto(f);
-  renderPersaGiocatorePartita(f);
-  renderZoneCampo("contenuto-zone-partita", f.partite, f.partite);
-  renderRespinte(f);
-  renderTiriCampo(f);
-  renderGolGameCampo("contenuto-golgame-partita", f.partite);
-  renderPortaGol("contenuto-porta-partita", f.partite);
-  renderSubentrati(f);
-  renderPossessoPartita(f);
-  renderRiconquista(f);
-  renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita");
-  renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita");
-  renderFormazioneMigliore("partita");
-  renderSituazioni("partita");
-  renderAllenamenti();
-  renderIncroci();
-  renderZoneAllenamento(f);
-  renderPersaGiocatoreAllenamento(f);
-  renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento");
-  renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", f.allenamenti, "allenamento");
-  renderFormazioneMigliore("allenamento");
-  renderSituazioni("allenamento");
-  renderConfrontoAllenamento(f);
-  renderQualita();
+  sicuro("renderKPI", () => renderKPI(f));
+  sicuro("renderAndamento", () => renderAndamento(f));
+  sicuro("renderClassifica", () => renderClassifica(f));
+  sicuro("notaPartiteEssenziali", () => notaPartiteEssenziali($("#contenuto-classifica"), f.partite));
+  sicuro("renderTendenze", () => renderTendenze(f));
+  sicuro("renderKPIAllenamentoStat", () => renderKPIAllenamentoStat(f));
+  sicuro("renderAndamentoAllenamentoStat", () => renderAndamentoAllenamentoStat(f));
+  sicuro("renderClassificaAllenamentoStat", () => renderClassificaAllenamentoStat(f));
+  sicuro("renderTendenzeAllenamentoStat", () => renderTendenzeAllenamentoStat(f));
+  sicuro("renderAndamentoIndividuale", () => renderAndamentoIndividuale());
+  sicuro("renderGiocatore", () => renderGiocatore(f));
+  sicuro("renderConfronto", () => renderConfronto(f));
+  sicuro("renderPersaGiocatorePartita", () => renderPersaGiocatorePartita(f));
+  sicuro("renderZoneCampo", () => renderZoneCampo("contenuto-zone-partita", f.partite, f.partite));
+  sicuro("renderRespinte", () => renderRespinte(f));
+  sicuro("renderTiriCampo", () => renderTiriCampo(f));
+  sicuro("renderGolGameCampo", () => renderGolGameCampo("contenuto-golgame-partita", f.partite));
+  sicuro("renderPortaGol", () => renderPortaGol("contenuto-porta-partita", f.partite));
+  sicuro("renderSubentrati", () => renderSubentrati(f));
+  sicuro("renderPossessoPartita", () => renderPossessoPartita(f));
+  sicuro("renderRiconquista", () => renderRiconquista(f));
+  sicuro("renderPersaGol", () => renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita"));
+  sicuro("renderInCampo", () => renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita"));
+  sicuro("renderFormazioneMigliore", () => renderFormazioneMigliore("partita"));
+  sicuro("renderSituazioni", () => renderSituazioni("partita"));
+  sicuro("renderAllenamenti", () => renderAllenamenti());
+  sicuro("renderIncroci", () => renderIncroci());
+  sicuro("renderZoneAllenamento", () => renderZoneAllenamento(f));
+  sicuro("renderPersaGiocatoreAllenamento", () => renderPersaGiocatoreAllenamento(f));
+  sicuro("renderPersaGol", () => renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento"));
+  sicuro("renderInCampo", () => renderInCampo("contenuto-incampo-allenamento", "icp-sel-allenamento", "inCampoAllenamento", f.allenamenti, "allenamento"));
+  sicuro("renderFormazioneMigliore", () => renderFormazioneMigliore("allenamento"));
+  sicuro("renderSituazioni", () => renderSituazioni("allenamento"));
+  sicuro("renderConfrontoAllenamento", () => renderConfrontoAllenamento(f));
+  sicuro("renderQualita", () => renderQualita());
   aggiornaSelettoriReport();
   adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
+  mostraErroriSezioni();
+  aggiornaIndiceAttivo();
 }
 
 function attivaDashboard(ds, etichettaOrigine){
@@ -8420,18 +8623,26 @@ async function gestisciFileSelezionati(fileList){
   $("#errore-caricamento").classList.add("nascosto");
   const csv = file.filter(f => /\.csv$/i.test(f.name));
   if(csv.length){
-    const nonCsv = file.filter(f => !/\.csv$/i.test(f.name));
-    const errori = [];
-    for(const f of nonCsv) errori.push(`«${esc(f.name)}» non è un .csv: ignorato in questo caricamento multiplo.`);
+    // 1.51.0: l'esito del caricamento (file letti, sostituiti, rifiutati) resta scritto in cima al pannello dei file,
+    // che si vede sempre; prima gli errori finivano in un riquadro nascosto quando la dashboard era già aperta.
+    const esito = {letti: [], sostituiti: [], errori: [], quando: new Date()};
+    file.filter(f => !/\.csv$/i.test(f.name)).forEach(f => esito.errori.push(`«${esc(f.name)}» non è un file .csv: non caricato.`));
     for(const f of csv){
       try{
         const testo = await leggiTestoFile(f);
-        aggiungiSessioneDaTesto(f.name, testo);
+        if(!String(testo || "").trim()) throw new Error("il file è vuoto.");
+        const prima = leggiSessioniSalvate().find(s => s.id === idDaNomeFile(f.name));
+        const s = aggiungiSessioneDaTesto(f.name, testo);
+        const etichetta = `${esc(f.name)} (${s.tipo === "partita" ? "partita vs " + esc((s.meta["Avversario"] || "").trim() || "—") : "allenamento"}, ${esc(dataLabel(parseDataSevenLab(s.meta["Data"])))})`;
+        if(prima){
+          const cambiata = (prima.meta["Data"] || "") !== (s.meta["Data"] || "") || (prima.meta["Avversario"] || "") !== (s.meta["Avversario"] || "");
+          esito.sostituiti.push(etichetta + (cambiata ? ` — <strong>attenzione</strong>: ha preso il posto di un file con lo stesso nome ma di un'altra sessione (${esc(dataLabel(parseDataSevenLab(prima.meta["Data"])))}). Se erano due sessioni diverse, rinomina il file e ricaricale tutte e due.` : ""));
+        } else esito.letti.push(etichetta);
       }catch(err){
-        errori.push(`«${esc(f.name)}»: ${err && err.message ? err.message : "errore di lettura."}`);
+        esito.errori.push(`«${esc(f.name)}»: ${esc(err && err.message ? err.message : "errore di lettura.")}`);
       }
     }
-    if(errori.length){ mostraErrore(errori.join("<br>")); $("#errore-caricamento").classList.remove("nascosto"); }
+    stato.esitoCaricamento = esito;
     ricaricaDaSessioni();
     return;
   }
@@ -8476,7 +8687,17 @@ function renderPannelloFile(){
   const sessioni = leggiSessioniSalvate().slice().sort((a,b) => (a.caricatoIl||"").localeCompare(b.caricatoIl||""));
   if(!sessioni.length){ box.classList.add("nascosto"); box.innerHTML = ""; return; }
   box.classList.remove("nascosto");
-  box.innerHTML = `<h3 style="font-size:15px">File caricati (${sessioni.length})</h3>
+  const es = stato.esitoCaricamento;
+  const esitoHtml = es ? `<div class="esito-caricamento">
+      ${es.letti.length ? `<div class="avviso ok"><span class="ic" aria-hidden="true">✓</span><span><strong>${es.letti.length === 1 ? "Caricato" : "Caricati"}:</strong> ${es.letti.join("; ")}.</span></div>` : ""}
+      ${es.sostituiti.length ? `<div class="avviso attenzione"><span class="ic" aria-hidden="true">↻</span><span><strong>${es.sostituiti.length === 1 ? "Aggiornato" : "Aggiornati"}</strong> (c'era già un file con lo stesso nome): ${es.sostituiti.join("; ")}.</span></div>` : ""}
+      ${es.errori.length ? `<div class="avviso errore"><span class="ic" aria-hidden="true">✕</span><span><strong>Non caricati:</strong><br>${es.errori.join("<br>")}</span></div>` : ""}
+    </div>` : "";
+  const nAvvisi = sessioni.filter(s => { const sc = scalaTempiEffettiva(s.scalaTempi); return (sc.avvisi && sc.avvisi.length) || sc.avviso; }).length;
+  const nP = sessioni.filter(s => s.tipo === "partita").length;
+  const aperto = stato.pannelloFileAperto !== undefined ? stato.pannelloFileAperto : (sessioni.length <= 3 || !!(es && es.errori.length));
+  box.innerHTML = esitoHtml + `<details class="file-dettagli"${aperto ? " open" : ""}>
+    <summary><span class="file-tit">File caricati (${sessioni.length})</span><span class="file-riassunto">${nf0(nP)} ${nP === 1 ? "partita" : "partite"} · ${nf0(sessioni.length - nP)} ${sessioni.length - nP === 1 ? "allenamento" : "allenamenti"}${nAvvisi ? ` · ${nf0(nAvvisi)} con un avviso` : ""}</span></summary>
     <div class="lista-file">${sessioni.map(s => {
       const dataSess = parseDataSevenLab(s.meta["Data"]);
       const desc = s.tipo === "partita" ? ("vs "+esc((s.meta["Avversario"]||"").trim()||"—")) : (esc((s.meta["Formato"]||"").trim())||"allenamento");
@@ -8501,7 +8722,9 @@ function renderPannelloFile(){
         <button type="button" class="btn piccolo pericolo" data-elimina-sessione="${esc(s.id)}">Elimina</button>
         ${avvisi.map(t => `<div class="riga-file-avviso">${esc(t)}</div>`).join("")}
       </div>`;
-    }).join("")}</div>`;
+    }).join("")}</div></details>`;
+  const det = box.querySelector("details.file-dettagli");
+  if(det) det.addEventListener("toggle", () => { stato.pannelloFileAperto = det.open; });
 }
 
 /* =====================================================================
@@ -8510,7 +8733,7 @@ function renderPannelloFile(){
 function aggiornaSelettoriReport(){
   if(!stato.ds) return;
   const selP = $("#rp-sel-partita");
-  selP.innerHTML = stato.ds.partite.slice().reverse().map(p =>
+  if(selP) selP.innerHTML = stato.ds.partite.slice().reverse().map(p =>
     `<option value="${esc(p.Match_ID)}">${dataLabel(p.Data)} · vs ${esc(p.Avversario)} (${p.Risultato})</option>`).join("");
   popolaSelettoriPeriodoAllenamento();
 }
@@ -10991,6 +11214,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const btn = e.target.closest("[data-elimina-sessione]");
     if(!btn) return;
+    // 1.51.0: un tocco sbagliato cancellava la sessione anche dal cloud e dagli altri dispositivi
+    const daTogliere = leggiSessioniSalvate().find(s => s.id === btn.getAttribute("data-elimina-sessione"));
+    if(!confirm(`Eliminare ${daTogliere ? daTogliere.nomeFile : "questo file"}?\n\nSparisce da tutte le analisi${accessoCloud() ? ", dal cloud, dagli altri dispositivi e dal Portale Mister" : ""}. Per riaverlo dovrai ricaricare il CSV.`)) return;
+    stato.esitoCaricamento = null;
     eliminaSessioneSalvata(btn.getAttribute("data-elimina-sessione"));
     ricaricaDaSessioni();
   });
@@ -11083,59 +11310,11 @@ document.addEventListener("DOMContentLoaded", () => {
     finally{ btn.disabled = false; }
   });
 
-  $("#rp-btn-partita").addEventListener("click", async () => {
-    if(!stato.ds) return;
-    const btn = $("#rp-btn-partita"); btn.disabled = true;
-    try{ await generaReportPartita($("#rp-sel-partita").value); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
-    finally{ btn.disabled = false; }
-  });
-  $("#rp-btn-periodo-allenamento").addEventListener("click", async () => {
-    if(!stato.ds) return;
-    const btn = $("#rp-btn-periodo-allenamento"); btn.disabled = true;
-    try{ await generaReportAllenamentoPeriodo($("#rp-sel-all-da").value || null, $("#rp-sel-all-a").value || null); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
-    finally{ btn.disabled = false; }
-  });
-  $("#rp-btn-stagionale-allenamento").addEventListener("click", async () => {
-    if(!stato.ds) return;
-    const btn = $("#rp-btn-stagionale-allenamento"); btn.disabled = true;
-    try{ await generaReportAllenamentoPeriodo(null, null); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-allenamento"); }
-    finally{ btn.disabled = false; }
-  });
-  $("#rp-btn-stagionale").addEventListener("click", async () => {
-    if(!stato.ds) return;
-    const btn = $("#rp-btn-stagionale"); btn.disabled = true;
-    try{ await generaReportStagionale(); }
-    catch(err){ statoReport("Errore nella generazione del PDF: "+(err?.message||"riprova."), false, "#rp-stato-partita"); }
-    finally{ btn.disabled = false; }
-  });
-
-  if(localOk()){
-    const k = memoriaLeggi("openai-key-calcio7");
-    if(k){ $("#ia-chiave").value = k; statoChiave("Chiave ricordata su questo dispositivo."); }
-    else statoChiave("La chiave può essere salvata solo su questo dispositivo, nel browser.");
-  } else {
-    statoChiave("Questo browser non permette di salvare la chiave: resterà in memoria solo per questa sessione.");
-  }
-  $("#ia-salva").addEventListener("click", () => {
-    stato.chiaveIA = $("#ia-chiave").value.trim();
-    if(localOk()){
-      if(memoriaScrivi("openai-key-calcio7", stato.chiaveIA)) statoChiave("Chiave salvata su questo dispositivo.");
-      else statoChiave("Non è stato possibile salvare la chiave nel browser: resta in memoria per questa sessione.");
-    } else {
-      statoChiave("Chiave tenuta solo in memoria per questa sessione.");
-    }
-  });
-  $("#ia-invia").addEventListener("click", chiediIA);
-  $("#ia-domanda").addEventListener("keydown", e => { if(e.key === "Enter" && (e.metaKey || e.ctrlKey)) chiediIA(); });
-  $("#ia-dimentica").addEventListener("click", () => {
-    stato.chiaveIA = "";
-    $("#ia-chiave").value = "";
-    memoriaRimuovi("openai-key-calcio7");
-    statoChiave("Chiave dimenticata: non è più salvata su questo dispositivo.");
-  });
+  // 1.50.0 (Elisa, 09/11/2026): tolti i report PDF di squadra (Partita, Stagionale, Allenamenti: ora ci sono il
+  // Portale Mister e la dashboard) e l'Assistente IA. Restano i Report Confronto fra due giocatori. Le funzioni
+  // che generavano i report restano nel codice (alcune servono al portale e al Report Confronto), senza pulsanti.
+  // La chiave API eventualmente salvata nel browser si cancella.
+  memoriaRimuovi("openai-key-calcio7");
 
   /* ---------------------------------------------------------------------
      Tab "Dashboard Partita" / "Dashboard Allenamento" / "Giocatori": separano fisicamente

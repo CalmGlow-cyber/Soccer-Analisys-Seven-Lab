@@ -719,6 +719,65 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 .grafico-wrap-meta{position:relative; width:100%; max-width:440px; margin:0 auto; aspect-ratio:5/6}
 .grafico-wrap-meta canvas{width:100%; height:100%; display:block; border-radius:8px}
 
+/* ---------- cura grafica (1.51.0): stessa identità, più ordine ---------- */
+main section[data-tab-sezione]{margin-bottom:0; padding:30px 0 34px; border-top:1px solid color-mix(in srgb, var(--border) 70%, transparent)}
+main section[data-tab-sezione]:first-of-type{border-top:0}
+.sez-testa{margin-bottom:6px}
+.sez-testa h2{font-size:22px; letter-spacing:-.02em}
+.sez-desc{font-size:14.5px; line-height:1.5; margin:2px 0 18px; max-width:72ch}
+.kpi-delta{align-items:baseline; line-height:1.3}
+.kpi-delta span:last-child{text-wrap:balance}
+.kpi-nota{line-height:1.4}
+@media (min-width:900px){
+  #contenuto-andamento, #contenuto-andamento-stat-allenamento{grid-template-columns:repeat(2, minmax(0,1fr))}
+}
+.toolbar select, .report-toolbar select{max-width:min(100%, 460px)}
+.grafico-titolo{letter-spacing:-.01em}
+/* indice: la sezione che si sta guardando */
+.nav-sezioni a.attiva{background:var(--primary-soft); color:var(--primary); border-color:color-mix(in srgb, var(--primary) 35%, var(--border)); font-weight:700}
+/* note lunghe raccolte */
+details.note-sezione{margin-top:14px; border:1px solid color-mix(in srgb, var(--border) 75%, transparent); border-radius:10px; background:color-mix(in srgb, var(--surface) 60%, transparent); padding:0 14px}
+details.note-sezione > summary{cursor:pointer; list-style:none; padding:10px 0; font-size:13px; font-weight:700; color:var(--muted); display:flex; align-items:center; gap:8px}
+details.note-sezione > summary::-webkit-details-marker{display:none}
+details.note-sezione > summary::before{content:"+"; display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--primary-soft); color:var(--primary); font-weight:800; font-size:13px; flex:none}
+details.note-sezione[open] > summary::before{content:"−"}
+details.note-sezione > summary:hover{color:var(--text)}
+details.note-sezione[open]{padding-bottom:12px}
+details.note-sezione .nota-piccola{margin-top:0; margin-bottom:10px; font-size:13px}
+details.note-sezione .nota-piccola:last-child{margin-bottom:0}
+details.note-sezione .avviso{margin-bottom:8px}
+/* pannello dei file */
+#pannello-file{padding:14px 18px}
+details.file-dettagli > summary{cursor:pointer; list-style:none; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+details.file-dettagli > summary::-webkit-details-marker{display:none}
+details.file-dettagli > summary::after{content:"Mostra"; margin-left:auto; font-size:12.5px; font-weight:700; color:var(--primary); border:1px solid color-mix(in srgb, var(--primary) 35%, var(--border)); border-radius:99px; padding:3px 12px}
+details.file-dettagli[open] > summary::after{content:"Nascondi"}
+.file-tit{font-size:15px; font-weight:800}
+.file-riassunto{font-size:13px; color:var(--muted)}
+.esito-caricamento{display:flex; flex-direction:column; gap:8px; margin-bottom:12px}
+.esito-caricamento .avviso{margin:0}
+/* copertura dei dati */
+.cop-card{margin-bottom:6px}
+.cop-tab{min-width:760px}
+.cop-tab td:first-child{white-space:normal}
+.cop-tipo{display:block; font-size:11.5px; font-weight:500; color:var(--muted)}
+.cop-si{color:var(--success); font-weight:800}
+.cop-no{color:var(--faint)}
+.cop-na{color:var(--faint); font-size:12px}
+.cop-diff{color:var(--warning); font-weight:800; cursor:help; border-bottom:1px dotted currentColor}
+#errore-sezioni{margin-bottom:16px}
+@media (max-width:720px){
+  main section[data-tab-sezione]{padding:22px 0 26px}
+  .sez-testa h2{font-size:19px}
+  details.file-dettagli > summary::after{margin-left:0}
+}
+@media (max-width:560px){
+  .griglia.g-kpi{grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
+  .kpi{padding:12px}
+  .kpi-valore{font-size:24px}
+  .kpi-eti{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -788,7 +847,6 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <a href="#sez-incampo-partita" data-tab="partita">Gol subiti e chi è in campo</a>
     <a href="#sez-formazione-partita" data-tab="partita">La formazione migliore</a>
     <a href="#sez-situazioni-partita" data-tab="partita">Situazioni che si ripetono</a>
-    <a href="#sez-report-partita" data-tab="partita">Report Partita e Stagionale</a>
     <a href="#sez-kpi-stat-allenamento" data-tab="allenamento">KPI da allenamento</a>
     <a href="#sez-andamento-stat-allenamento" data-tab="allenamento">Andamento da allenamento</a>
     <a href="#sez-classifica-stat-allenamento" data-tab="allenamento">Classifica da allenamento</a>
@@ -802,14 +860,12 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <a href="#sez-incampo-allenamento" data-tab="allenamento">Gol subiti e chi è in campo</a>
     <a href="#sez-formazione-allenamento" data-tab="allenamento">La formazione migliore</a>
     <a href="#sez-situazioni-allenamento" data-tab="allenamento">Situazioni che si ripetono</a>
-    <a href="#sez-report-allenamento" data-tab="allenamento">Report allenamenti</a>
     <a href="#sez-andamento-giocatore" data-tab="giocatori">Andamento per giocatore</a>
     <a href="#sez-giocatore" data-tab="giocatori">Vista giocatore</a>
     <a href="#sez-confronto" data-tab="giocatori">Confronto giocatori</a>
     <a href="#sez-persa-giocatore-partita" data-tab="giocatori">Dove perde palla</a>
     <a href="#sez-qualita">Qualità dei dati</a>
     <a href="#sez-metodo">Metodologia</a>
-    <a href="#sez-ia">Assistente IA</a>
   </nav>
 </div>
 
@@ -860,39 +916,39 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 5. CLASSIFICA -->
     <section id="sez-classifica" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori</h2></div>
-      <p class="sez-desc">Clicca su un'intestazione per ordinare. Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole partite. La sparkline mostra l'indice prestazione partita per partita.</p>
+      <p class="sez-desc">Tocca un'intestazione per ordinare. Le percentuali sono calcolate sui totali del periodo.</p>
       <div id="contenuto-classifica"></div>
     </section>
 
     <!-- 6. TENDENZE -->
     <section id="sez-tendenze" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">04</span><h2>Tendenze individuali con retta di interpolazione</h2></div>
-      <p class="sez-desc">Per ogni giocatore i punti sono le sue partite in ordine cronologico; la retta tratteggiata è la retta di interpolazione (regressione lineare ai minimi quadrati) che riassume la direzione dell'andamento. Servono almeno 3 partite giocate.</p>
+      <p class="sez-desc">Per ogni giocatore, le sue partite in ordine di tempo e la retta che ne riassume la direzione. Servono almeno 3 partite giocate.</p>
       <div id="contenuto-tendenze"></div>
     </section>
 
     <!-- 6b. COINVOLGIMENTO E FORMAZIONI (sempre tutta la stagione) -->
     <section id="sez-coinvolgimento-formazioni" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">05</span><h2>Coinvolgimento e formazioni</h2></div>
-      <p class="sez-desc">Vista sempre riferita a tutta la stagione, indipendente dal filtro periodo qui sopra: chi tocca più palloni in proporzione al tempo in campo, e quale modulo tattico rende di più.</p>
+      <p class="sez-desc">Sempre su tutta la stagione, qualunque sia il periodo scelto in alto.</p>
 
       <h3 class="sotto-tit">Giocatori più coinvolti nel gioco</h3>
-      <p class="sez-desc">Azioni totali (passaggi tentati + tiri tentati + dribbling tentati) rapportate a una partita intera di calcio a 7 — 50 minuti, due tempi da 25 — su tutta la stagione. È una stima di quanto un giocatore è coinvolto nella manovra con i dati che raccogli oggi: non misura chi riceve più palloni dai compagni (servirebbe registrare anche i passaggi ricevuti, dato che al momento non hai), ma chi il pallone lo tocca e lo gioca di più in proporzione al tempo in campo.</p>
+      <p class="sez-desc">Quante azioni con la palla (passaggi, tiri, dribbling) fa ogni giocatore, rapportate a una partita intera di 50 minuti.</p>
       <div id="contenuto-coinvolgimento"></div>
 
       <h3 class="sotto-tit">Formazioni a confronto</h3>
-      <p class="sez-desc">Confronta il rendimento di squadra per modulo tattico. Per usarla, aggiungi una colonna <strong>Modulo</strong> al foglio Partite del tuo Excel (es. «2-3-1», «3-2-1»): finché non la compili, le partite restano in un unico gruppo «Non indicato». <strong>Attenzione ai falsi positivi:</strong> un modulo può risultare migliore solo perché usato contro avversari più deboli, non perché sia davvero il modulo più efficace — con poche partite per modulo questo confronto va letto con cautela, e stiamo valutando come tenere conto anche della forza dell'avversario.</p>
+      <p class="sez-desc">Il rendimento della squadra per modulo di partenza. Con poche partite per modulo la differenza può dipendere dall'avversario.</p>
       <div id="contenuto-formazioni"></div>
 
       <h3 class="sotto-tit">Convocazioni e minutaggio stagionale</h3>
-      <p class="sez-desc">Per «convocazioni» si intende il numero di partite in cui il giocatore risulta sceso in campo (una scheda statistiche registrata per quella partita): i file che carichi non distinguono chi è stato convocato ma è rimasto sempre in panchina, quindi questo è il dato più vicino disponibile. La classifica incrocia le convocazioni con i minuti totali giocati nella stagione, per vedere chi ha giocato di più durante l'anno.</p>
+      <p class="sez-desc">In quante partite ogni giocatore è sceso in campo e quanti minuti ha giocato in tutto.</p>
       <div id="contenuto-convocazioni"></div>
     </section>
 
     <!-- 6b2. ZONE DI RECUPERO E PALLA PERSA -->
     <section id="sez-zone-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">06</span><h2>Zone di recupero e palla persa</h2></div>
-      <p class="sez-desc">Su richiesta del mister: in quali zone del campo avvengono i recuperi e le palle perse, sul periodo selezionato in alto. Richiede che i file caricati includano la posizione (coordinate X/Y) di questi eventi — un dato che Seven Lab non esporta ancora oggi.</p>
+      <p class="sez-desc">In quali zone del campo recuperiamo e perdiamo palla, nel periodo scelto in alto.</p>
       <div id="contenuto-zone-partita"></div>
     </section>
 
@@ -921,21 +977,21 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 6b3. ZONE DI TIRO E ASSIST DEI GOL (Game) -->
     <section id="sez-golgame-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">09</span><h2>Zone di tiro e assist dei gol</h2></div>
-      <p class="sez-desc">Su richiesta del mister: da dove si segna di più e da dove arrivano di più gli assist che portano al gol, sul periodo selezionato in alto. Richiede che i file caricati includano la sezione «DETTAGLIO GOL GAME» — un dato che Seven Lab non esporta ancora in tutti gli export.</p>
+      <p class="sez-desc">Da dove partono i tiri dei nostri gol e da dove arrivano gli assist.</p>
       <div id="contenuto-golgame-partita"></div>
     </section>
 
     <!-- 6b4. DOVE ENTRA LA PALLA IN PORTA (punto d'ingresso dei gol fatti) -->
     <section id="sez-porta-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">10</span><h2>Dove entra la palla in porta</h2></div>
-      <p class="sez-desc">Su richiesta del mister: una porta da calcio disegnata in proporzione, con un pallone su ogni punto in cui la palla è entrata sui gol fatti, sul periodo selezionato in alto. Richiede che l'export Seven Lab includa, nella sezione «DETTAGLIO GOL GAME», le coordinate del punto d'ingresso in porta — un dato nuovo, che i file più vecchi non hanno.</p>
+      <p class="sez-desc">Il punto della porta in cui è entrata la palla sui nostri gol.</p>
       <div id="contenuto-porta-partita"></div>
     </section>
 
     <!-- 6b4. IMPATTO DEI SUBENTRATI -->
     <section id="sez-subentrati" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">11</span><h2>Impatto dei subentrati</h2></div>
-      <p class="sez-desc">Chi, entrando a partita in corso, non solo rende bene ma sposta davvero la gara. Incrocia il minuto d'ingresso (dall'evento «Cambio entra» della timeline), i minuti giocati da subentrato, le convocazioni e il contributo ai gol, e mette a confronto il rendimento del giocatore quando entra con quello che ha quando parte titolare.</p>
+      <p class="sez-desc">Chi entra a partita in corso e cambia la gara: minuti da subentrato, gol e assist, e rendimento da subentrato contro quello da titolare.</p>
       <div id="contenuto-subentrati"></div>
     </section>
 
@@ -945,7 +1001,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
       <div class="sez-testa"><span class="sez-num">01</span><h2>KPI da allenamento (partitelle)</h2></div>
       <p class="sez-desc" id="kpi-stat-allenamento-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
       <div class="griglia g-kpi" id="griglia-kpi-stat-allenamento"></div>
-      <p class="sez-desc">Statistiche di gioco (gol, tiri, passaggi, dribbling, recuperi, parate) registrate durante le partitelle di allenamento: un cluster tenuto sempre separato dalle statistiche di partita vera qui sopra, anche quando Seven Lab le esporta con le stesse colonne.</p>
+      <p class="sez-desc">I numeri delle partitelle di allenamento, sempre separati da quelli delle partite.</p>
     </section>
 
     <!-- 7b. ANDAMENTO DA ALLENAMENTO -->
@@ -972,7 +1028,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8. ALLENAMENTI -->
     <section id="sez-allenamenti" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">05</span><h2>Carico di allenamento e stanchezza stimata</h2></div>
-      <p class="sez-desc">Il carico vero si calcola con il metodo session-RPE (minuti × RPE percepito, un valore soggettivo che il giocatore o lo staff assegnano a fine seduta): quando è disponibile lo vedi qui sotto. Le presenze non compaiono più a schermo — restano solo nel Report PDF, per lo staff — mentre qui trovi una stima di chi accumula più carico, incrociando quanto spesso un giocatore è presente con quanti minuti gioca davvero nelle partitelle. Il periodo qui sotto è indipendente dal filtro Periodo in alto.</p>
+      <p class="sez-desc">Il carico di ogni giocatore (minuti × fatica della seduta) e chi ne accumula di più. Il periodo qui sotto è indipendente da quello in alto.</p>
       <div style="display:flex; gap:14px; flex-wrap:wrap; max-width:420px; margin-bottom:14px">
         <div class="campo" style="flex:1; min-width:150px">
           <label for="sel-all-da">Da</label>
@@ -989,7 +1045,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8b. SEGNALI INCROCIATI -->
     <section id="sez-incroci" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">06</span><h2>Segnali incrociati: carico e rendimento</h2></div>
-      <p class="sez-desc">Confronta, mese su mese, la variazione del carico di allenamento di ogni giocatore con la variazione del suo indice prestazione medio in partita. Non è un cluster nuovo di dati: è una lettura che mette insieme gli allenamenti e le partite, gli unici due cluster che raccogli.</p>
+      <p class="sez-desc">Mese su mese, come cambia il carico di allenamento di ogni giocatore e come cambia il suo rendimento in partita.</p>
       <div id="contenuto-incroci"></div>
     </section>
 
@@ -997,7 +1053,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 7c-bis. POSSESSO PALLA E MOMENTUM (partita singola, 18/10/2026) -->
     <section id="sez-possesso-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">12</span><h2>Possesso palla e momentum</h2></div>
-      <p class="sez-desc">Quanto tempo la palla è stata nostra e quanto degli avversari, e come è cambiato lungo la partita. Con l'interruttore del possesso di SevenLab il tempo degli avversari è misurato; nelle partite senza interruttore il possesso è solo stimato dai nostri eventi e il momentum non c'è. Si guarda una partita alla volta.</p>
+      <p class="sez-desc">Quanto tempo la palla è stata nostra e quanto degli avversari, e come è cambiato lungo la partita. Si guarda una partita alla volta.</p>
       <div class="toolbar">
         <div class="campo"><label for="pos-sel-partita">Partita</label>
           <select id="pos-sel-partita"></select></div>
@@ -1007,14 +1063,14 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 
     <section id="sez-riconquista" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">13</span><h2>Tempo di riconquista della palla</h2></div>
-      <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso: è la misura della reattività nella transizione negativa. Si parte da ogni palla persa e si cerca il primo recupero successivo — nessun dato nuovo da raccogliere, entrambi gli eventi sono già nella timeline di Seven Lab. Le sequenze interrotte da un gol, dalla fine del tempo o che superano il minuto vengono contate a parte invece di entrare nella media.</p>
+      <p class="sez-desc">Quanto ci mette la squadra a riprendersi il pallone dopo averlo perso.</p>
       <div id="contenuto-riconquista"></div>
     </section>
 
     <!-- 7e. PALLE PERSE CHE DIVENTANO GOL SUBITI (partita) -->
     <section id="sez-persa-gol-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">14</span><h2>Palle perse che diventano gol subiti</h2></div>
-      <p class="sez-desc">Quali palle perse si sono trasformate in un gol avversario entro 15 secondi, e chi le ha perse. Serve a capire quale giocatore tende a sbagliare nei momenti in cui l'avversario aggredisce. Nessun dato nuovo da raccogliere: palla persa e gol subito sono già nella timeline di Seven Lab.</p>
+      <p class="sez-desc">Le palle perse diventate un gol avversario entro 15 secondi, e chi le ha perse.</p>
       <div class="toolbar">
         <div class="campo"><label for="pgl-sel-partita">Partita</label>
           <select id="pgl-sel-partita"></select></div>
@@ -1025,7 +1081,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 7f. GOL SUBITI E CHI È IN CAMPO (partita) -->
     <section id="sez-incampo-partita" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">15</span><h2>Gol subiti e chi è in campo</h2></div>
-      <p class="sez-desc">Quanti gol prende la squadra quando un giocatore è in campo, rispetto a quando non c'è — e lo stesso per le coppie di difensori di ruolo in campo insieme. Serve a capire se con certi giocatori, o certe coppie di difesa, la squadra regge meno. Nessun dato nuovo da raccogliere: chi è in campo si ricava dai cambi della timeline.</p>
+      <p class="sez-desc">Quanti gol prende la squadra con ogni giocatore in campo rispetto a quando non c'è, e lo stesso per le coppie di difensori.</p>
       <div class="toolbar">
         <div class="campo"><label for="icp-sel-partita">Partita</label>
           <select id="icp-sel-partita"></select></div>
@@ -1053,27 +1109,11 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
       <div id="contenuto-situazioni-partita"></div>
     </section>
 
-    <!-- 6c. REPORT PARTITA E STAGIONALE (export PDF) — spostata in fondo alla scheda partita il 16/10/2026 -->
-    <section id="sez-report-partita" data-tab-sezione="partita">
-      <div class="sez-testa"><h2>Report PDF: partita e stagione</h2></div>
-      <p class="sez-desc">Il report di una singola partita e il report stagionale sempre aggiornato. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
-      <div class="card">
-        <div class="report-toolbar">
-          <div class="campo">
-            <label for="rp-sel-partita">Partita</label>
-            <select id="rp-sel-partita"></select>
-          </div>
-          <button class="btn primario" id="rp-btn-partita">Scarica Report Partita</button>
-          <button class="btn primario" id="rp-btn-stagionale" style="margin-left:18px">Scarica Report Stagionale</button>
-        </div>
-        <div class="report-status" id="rp-stato-partita">Scegli un report: il PDF viene generato e scaricato sul tuo dispositivo.</div>
-      </div>
-    </section>
 
     <!-- 8b2. ZONE DI RECUPERO E PALLA PERSA (allenamento) -->
     <section id="sez-zone-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">07</span><h2>Zone di recupero e palla persa (allenamento)</h2></div>
-      <p class="sez-desc">Le stesse zone di recupero e palla persa, calcolate sulle partitelle di allenamento nel periodo selezionato in alto (Team A/B interni contano entrambi, sono comunque tuoi giocatori). Richiede la posizione (coordinate X/Y) di questi eventi nei file caricati. Il confronto tra Squadra A e Squadra B compare solo scegliendo una singola sessione qui sotto: le due squadre vengono rifatte a ogni allenamento, quindi sommarle su più sessioni non direbbe niente.</p>
+      <p class="sez-desc">Le zone di recupero e palla persa nelle partitelle. Il confronto fra Squadra A e Squadra B compare scegliendo una sessione sola.</p>
       <div class="toolbar">
         <div class="campo"><label for="zn-sel-sessione">Sessione</label>
           <select id="zn-sel-sessione"></select></div>
@@ -1084,7 +1124,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8b3. CONFRONTO TRA DUE GIOCATORI SUGLI ALLENAMENTI -->
     <section id="sez-confronto-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">08</span><h2>Confronto tra due giocatori (allenamento)</h2></div>
-      <p class="sez-desc">Lo stesso confronto della scheda Giocatori, ma costruito sulle partitelle di allenamento invece che sulle partite ufficiali. Serve soprattutto per i giocatori che in stagione giocano poco o non giocano affatto: in allenamento i dati ci sono comunque, ed è l'unico modo per valutarli prima di decidere una convocazione. Usa il periodo scelto nel filtro in alto.</p>
+      <p class="sez-desc">Due giocatori a confronto sui dati delle partitelle: utile per chi in partita gioca poco.</p>
       <div class="card" style="margin-bottom:16px">
         <div class="report-toolbar">
           <div class="campo">
@@ -1105,7 +1145,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8b4. DOVE PERDE PALLA UN GIOCATORE (allenamento) -->
     <section id="sez-persa-giocatore-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">09</span><h2>Dove perde palla un giocatore (allenamento)</h2></div>
-      <p class="sez-desc">Scegli un giocatore e vedi in quali zone del campo perde più palloni, sul totale delle partitelle del periodo selezionato in alto. Stessa doppia vista delle altre sezioni di campo: griglia a nove zone con le percentuali e heatmap della densità reale, più l'elenco delle zone in numeri assoluti — che su un singolo giocatore è la lettura più solida.</p>
+      <p class="sez-desc">Dove perde palla il giocatore scelto, nelle partitelle del periodo.</p>
       <div class="toolbar">
         <div class="campo"><label for="pg-sel-giocatore">Giocatore</label>
           <select id="pg-sel-giocatore"></select></div>
@@ -1116,7 +1156,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8b5. PALLE PERSE CHE DIVENTANO GOL (allenamento) -->
     <section id="sez-persa-gol-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">10</span><h2>Palle perse che diventano gol (allenamento)</h2></div>
-      <p class="sez-desc">Le palle perse nelle partitelle da cui è nato un gol della squadra avversaria entro 15 secondi. Le due squadre sono entrambe tue, quindi contano i gol di tutte e due: ogni gol ha dall'altra parte un tuo giocatore che ha perso il pallone.</p>
+      <p class="sez-desc">Le palle perse nelle partitelle da cui è nato un gol entro 15 secondi.</p>
       <div class="toolbar">
         <div class="campo"><label for="pgl-sel-allenamento">Allenamento</label>
           <select id="pgl-sel-allenamento"></select></div>
@@ -1127,7 +1167,7 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
     <!-- 8b6. GOL SUBITI E CHI È IN CAMPO (allenamento) -->
     <section id="sez-incampo-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">11</span><h2>Gol subiti e chi è in campo (allenamento)</h2></div>
-      <p class="sez-desc">Quanti gol prende la squadra interna in cui gioca ciascun giocatore, rispetto a quando non c'è lui — e lo stesso per le coppie di difensori della stessa squadra. Con le squadre che cambiano da un allenamento all'altro, sulla stagione si vede se con certi giocatori, o certe coppie di difesa, si prende più gol.</p>
+      <p class="sez-desc">Quanti gol prende la squadra interna di ogni giocatore rispetto a quando non c'è lui.</p>
       <div class="toolbar">
         <div class="campo"><label for="icp-sel-allenamento">Allenamento</label>
           <select id="icp-sel-allenamento"></select></div>
@@ -1153,32 +1193,12 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
       <div id="contenuto-situazioni-allenamento"></div>
     </section>
 
-    <!-- 8c. REPORT PERIODO/STAGIONALE ALLENAMENTI (export PDF) -->
-    <section id="sez-report-allenamento" data-tab-sezione="allenamento">
-      <div class="sez-testa"><h2>Report PDF: allenamenti</h2></div>
-      <p class="sez-desc">Il report di un periodo a tua scelta — un mese solo o un arco più ampio, lascia vuoto Da/A per tutta la stagione — e il report della stagione intera, sempre aggiornati. Includono anche le presenze per giocatore, che non compaiono più nella dashboard a schermo qui sopra. La generazione avviene interamente nel browser: nessun dato viene inviato altrove.</p>
-      <div class="card">
-        <div class="report-toolbar">
-          <div class="campo">
-            <label for="rp-sel-all-da">Da</label>
-            <select id="rp-sel-all-da"><option value="">Inizio stagione</option></select>
-          </div>
-          <div class="campo">
-            <label for="rp-sel-all-a">A</label>
-            <select id="rp-sel-all-a"><option value="">Fine stagione</option></select>
-          </div>
-          <button class="btn primario" id="rp-btn-periodo-allenamento">Scarica Report Periodo</button>
-          <button class="btn primario" id="rp-btn-stagionale-allenamento" style="margin-left:18px">Scarica Report Stagionale</button>
-        </div>
-        <div class="report-status" id="rp-stato-allenamento">Scegli un periodo (o lascia Da/A vuoti per tutta la stagione): il PDF viene generato e scaricato sul tuo dispositivo.</div>
-      </div>
-    </section>
 
     <!-- ===================== GIOCATORI ===================== -->
     <!-- 6c. ANDAMENTO NEL TEMPO PER GIOCATORE (sempre tutta la stagione) -->
     <section id="sez-andamento-giocatore" data-tab-sezione="giocatori">
       <div class="sez-testa"><span class="sez-num">01</span><h2>Andamento nel tempo per giocatore</h2></div>
-      <p class="sez-desc">Vista sempre riferita a tutta la stagione, indipendente dal filtro periodo qui sopra: mette insieme, per il giocatore scelto nel filtro «Giocatore» qui sopra, come sta andando in campo e come sta andando il suo carico di allenamento.</p>
+      <p class="sez-desc">Per il giocatore scelto in alto: come sta andando in partita e quanto carico sta accumulando in allenamento. Sempre su tutta la stagione.</p>
       <div id="contenuto-andamento-individuale"></div>
     </section>
 
@@ -1271,6 +1291,8 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
           <p><strong>Da dove si tira</strong>: un pallino per ogni tiro con posizione, letto dalle righe dei tiri nella sezione «DATI SPAZIALI» del CSV di SevenLab (i nostri verso la porta a destra, quelli subiti verso la nostra porta a sinistra). Se le righe dei gol mancano, i gol si prendono da «DETTAGLIO GOL GAME». La distanza è in linea d'aria dal centro della porta, in tre fasce: entro 8 m, da 8 a 16 m, oltre 16 m. <strong>Respinte</strong>: dalla colonna «Respinte» del riepilogo, dalla colonna «Respinta» della timeline e dalle righe «Respinta» di «DATI SPAZIALI»; non entrano mai nei calcoli dei recuperi. Nei file registrati prima del tasto «Respinta» le respinte sono dentro i recuperi e non si possono separare.</p>
           <h4>Partite registrate senza video</h4>
           <p>Una partita in cui passaggi, recuperi, palle perse e dribbling sono zero per tutti i giocatori è stata registrata solo con gli eventi essenziali (risultato, gol, assist, cambi, cartellini): conta per il risultato, i gol, chi è in campo e la formazione migliore, ma non entra nelle statistiche dei giocatori, nel possesso stimato, nelle palle perse che diventano gol e nelle situazioni che si ripetono. Nel pannello dei file ha l'etichetta «Senza video · solo risultato e gol».</p>
+          <h4>Expected goals (xG)</h4>
+          <p>Per ogni tiro con la posizione di partenza, la probabilità di gol stimata dalla distanza dal centro della porta e dall'angolo sotto cui si vede la porta (6×2 m), con una curva logistica tarata sui valori di riferimento del calcio: circa 0,55 da 5,5 m in posizione centrale, 0,25 da 11 m, 0,10 da 16,5 m, 0,03 da 25 m (con la porta da 6 m i valori scendono un po'). xG della squadra = somma dei suoi tiri; gol − xG positivo = si è segnato più di quanto le occasioni facessero aspettare. Il modello non conosce parte del corpo, rigori, porta vuota o difensori davanti: va ritarato sui tiri della squadra quando saranno qualche centinaio.</p>
           <h4>Nessun dato biometrico richiesto</h4>
           <p>L'intero sistema — indice prestazione, tendenze, carico di allenamento, segnali incrociati, coinvolgimento — è calcolato solo con statistiche legate al pallone (gol, assist, tiri, passaggi, dribbling, recuperi, parate) e con il carico soggettivo session-RPE. Non serve GPS, cardiofrequenzimetro né alcun dato biometrico: se non li puoi rilevare, la dashboard funziona comunque al 100% con quello che hai.</p>
           <h4>Pulizia dei dati</h4>
@@ -1279,30 +1301,6 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
       </details>
     </section>
 
-    <!-- 12. IA -->
-    <section id="sez-ia">
-      <div class="sez-testa"><h2>Assistente IA (opzionale)</h2></div>
-      <p class="sez-desc">Fai una domanda in italiano sui tuoi dati. La chiave API OpenAI resta sul tuo dispositivo e viene usata solo per chiamare OpenAI; all'IA vengono inviati soltanto i dati già aggregati (classifica, tendenze, aggregati mensili, carico di allenamento), non il file.</p>
-      <div class="card">
-        <div class="griglia g-2" style="align-items:end">
-          <div class="campo" style="width:100%">
-            <label for="ia-chiave">Chiave API OpenAI</label>
-            <input type="password" id="ia-chiave" placeholder="sk-..." autocomplete="off">
-            <span class="kpi-nota" id="ia-stato-chiave"></span>
-          </div>
-          <div class="campo" style="width:100%">
-            <label for="ia-domanda">La tua domanda</label>
-            <textarea id="ia-domanda" placeholder="Es. Su cosa dovremmo lavorare in allenamento questo mese?"></textarea>
-          </div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
-          <button class="btn primario" id="ia-invia">Chiedi all'assistente</button>
-          <button class="btn" id="ia-salva">Ricorda la chiave su questo dispositivo</button>
-          <button class="btn" id="ia-dimentica">Dimentica la chiave</button>
-        </div>
-        <div id="ia-risposta" class="ia-risposta nascosto"></div>
-      </div>
-    </section>
   </div>
 
   <div id="report-stage" aria-hidden="true"></div>
