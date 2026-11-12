@@ -81,6 +81,7 @@ function renderLetturaPartita(){
       ${kpi(L.possessoStimato ? "Possesso (stimato)" : "Possesso", L.possesso !== null ? pctTxt(L.possesso, 0) : "—")}
       ${kpi("Tiri", nf0(L.tiri), `${nf0(p.Gol_Fatti)} gol`)}
       ${kpi("Tiri subiti", L.tiriSubiti !== null ? nf0(L.tiriSubiti) : "—")}
+      ${(p.MappeTiri && (p.MappeTiri.conTiri || p.MappeTiri.conSubiti)) ? kpi("xG fatti · concessi", `${p.MappeTiri.conTiri ? nf(p.MappeTiri.tiri.reduce((a, t) => a + (t.xg || 0), 0), 1) : "—"} · ${p.MappeTiri.conSubiti ? nf(p.MappeTiri.subiti.reduce((a, t) => a + (t.xg || 0), 0), 1) : "—"}`, "gol attesi dalle occasioni") : ""}
       ${kpi("Passaggi riusciti", pct(L.passOk, L.passTot), `${nf0(L.passOk)} su ${nf0(L.passTot)}`)}
       ${kpi("Dribbling riusciti", pct(L.dribOk, L.dribTot), `${nf0(L.dribOk)} su ${nf0(L.dribTot)}`)}
       ${kpi("Recuperi · palle perse", `${nf0(rec)} · ${nf0(perse)}`)}

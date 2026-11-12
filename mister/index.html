@@ -709,6 +709,65 @@ td.sit-cella-debole{color:var(--danger); font-weight:800}
 .grafico-wrap-meta{position:relative; width:100%; max-width:440px; margin:0 auto; aspect-ratio:5/6}
 .grafico-wrap-meta canvas{width:100%; height:100%; display:block; border-radius:8px}
 
+/* ---------- cura grafica (1.51.0): stessa identità, più ordine ---------- */
+main section[data-tab-sezione]{margin-bottom:0; padding:30px 0 34px; border-top:1px solid color-mix(in srgb, var(--border) 70%, transparent)}
+main section[data-tab-sezione]:first-of-type{border-top:0}
+.sez-testa{margin-bottom:6px}
+.sez-testa h2{font-size:22px; letter-spacing:-.02em}
+.sez-desc{font-size:14.5px; line-height:1.5; margin:2px 0 18px; max-width:72ch}
+.kpi-delta{align-items:baseline; line-height:1.3}
+.kpi-delta span:last-child{text-wrap:balance}
+.kpi-nota{line-height:1.4}
+@media (min-width:900px){
+  #contenuto-andamento, #contenuto-andamento-stat-allenamento{grid-template-columns:repeat(2, minmax(0,1fr))}
+}
+.toolbar select, .report-toolbar select{max-width:min(100%, 460px)}
+.grafico-titolo{letter-spacing:-.01em}
+/* indice: la sezione che si sta guardando */
+.nav-sezioni a.attiva{background:var(--primary-soft); color:var(--primary); border-color:color-mix(in srgb, var(--primary) 35%, var(--border)); font-weight:700}
+/* note lunghe raccolte */
+details.note-sezione{margin-top:14px; border:1px solid color-mix(in srgb, var(--border) 75%, transparent); border-radius:10px; background:color-mix(in srgb, var(--surface) 60%, transparent); padding:0 14px}
+details.note-sezione > summary{cursor:pointer; list-style:none; padding:10px 0; font-size:13px; font-weight:700; color:var(--muted); display:flex; align-items:center; gap:8px}
+details.note-sezione > summary::-webkit-details-marker{display:none}
+details.note-sezione > summary::before{content:"+"; display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--primary-soft); color:var(--primary); font-weight:800; font-size:13px; flex:none}
+details.note-sezione[open] > summary::before{content:"−"}
+details.note-sezione > summary:hover{color:var(--text)}
+details.note-sezione[open]{padding-bottom:12px}
+details.note-sezione .nota-piccola{margin-top:0; margin-bottom:10px; font-size:13px}
+details.note-sezione .nota-piccola:last-child{margin-bottom:0}
+details.note-sezione .avviso{margin-bottom:8px}
+/* pannello dei file */
+#pannello-file{padding:14px 18px}
+details.file-dettagli > summary{cursor:pointer; list-style:none; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+details.file-dettagli > summary::-webkit-details-marker{display:none}
+details.file-dettagli > summary::after{content:"Mostra"; margin-left:auto; font-size:12.5px; font-weight:700; color:var(--primary); border:1px solid color-mix(in srgb, var(--primary) 35%, var(--border)); border-radius:99px; padding:3px 12px}
+details.file-dettagli[open] > summary::after{content:"Nascondi"}
+.file-tit{font-size:15px; font-weight:800}
+.file-riassunto{font-size:13px; color:var(--muted)}
+.esito-caricamento{display:flex; flex-direction:column; gap:8px; margin-bottom:12px}
+.esito-caricamento .avviso{margin:0}
+/* copertura dei dati */
+.cop-card{margin-bottom:6px}
+.cop-tab{min-width:760px}
+.cop-tab td:first-child{white-space:normal}
+.cop-tipo{display:block; font-size:11.5px; font-weight:500; color:var(--muted)}
+.cop-si{color:var(--success); font-weight:800}
+.cop-no{color:var(--faint)}
+.cop-na{color:var(--faint); font-size:12px}
+.cop-diff{color:var(--warning); font-weight:800; cursor:help; border-bottom:1px dotted currentColor}
+#errore-sezioni{margin-bottom:16px}
+@media (max-width:720px){
+  main section[data-tab-sezione]{padding:22px 0 26px}
+  .sez-testa h2{font-size:19px}
+  details.file-dettagli > summary::after{margin-left:0}
+}
+@media (max-width:560px){
+  .griglia.g-kpi{grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
+  .kpi{padding:12px}
+  .kpi-valore{font-size:24px}
+  .kpi-eti{font-size:11px}
+}
+
 </style>
 <style>
 /* ---------- Portale Mister: solo telefono, una colonna ---------- */
@@ -916,7 +975,7 @@ html[data-tema="scuro"] .p-tabellone{background:#0C4E54}
       <div class="p-contenuto"><div id="sez-kpi-stat-allenamento" class="p-orig">
       <p class="sez-desc" id="kpi-stat-allenamento-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
       <div class="griglia g-kpi" id="griglia-kpi-stat-allenamento"></div>
-      <p class="sez-desc">Statistiche di gioco (gol, tiri, passaggi, dribbling, recuperi, parate) registrate durante le partitelle di allenamento: un cluster tenuto sempre separato dalle statistiche di partita vera qui sopra, anche quando Seven Lab le esporta con le stesse colonne.</p>
+      <p class="sez-desc">I numeri delle partitelle di allenamento, sempre separati da quelli delle partite.</p>
       </div></div>
     </section>
     <section id="p-sez-classifica-all" class="p-sez nascosto" data-tipo="allenamenti">
