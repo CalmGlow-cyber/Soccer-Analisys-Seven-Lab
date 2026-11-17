@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.53.2",
+  numero: "1.54.0",
   data: "2026-11-17",
-  note: "Riquadri per area anche nel Portale Mister. Portale Mister con icona propria (fascia MISTER) e link «Apri Analysis» per l'amministratore; testi senza nomi propri. Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
+  note: "Correzioni di Andrea (17/11/2026): pallini solo verdi o rossi; in Attacco solo i nostri tiri e in Difesa solo quelli subiti, con gol contro xG del lato giusto; respinte senza il conteggio «con posizione» quando ce l'hanno tutte; «Peso» diventa la quota sul totale; coppie di difensori con chi gioca davvero in difesa (adattati compresi); tendenze senza le partite con troppo poco gioco; azioni ogni 50' spiegate; «Tutti i dati» apre la scheda anche su iPhone. Riquadri per area anche nel Portale Mister. Portale Mister con icona propria (fascia MISTER) e link «Apri Analysis» per l'amministratore; testi senza nomi propri. Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
 };
 
 /* =====================================================================
@@ -1272,15 +1272,24 @@ function applicaSchede(){
       if(lunga){
         const ordinata = (tbl.querySelector('thead th[aria-sort="ascending"], thead th[aria-sort="descending"]') || {}).dataset;
         const colOrd = ordinata ? ordinata.col : null;
-        const principali = chiavi.some(c => SCHEDE_PRINCIPALI.includes(c)) ? SCHEDE_PRINCIPALI : chiavi.slice(1, 7);
+        // 1.54.0: le tabelle senza chiavi di colonna (es. «Da una partita all'altra») tenevano tutto in vista e il
+        // tocco su «Tutti i dati» sembrava non fare nulla: lì contano le prime 6 colonne di valori
+        const conChiavi = chiavi.some(c => SCHEDE_PRINCIPALI.includes(c));
         tbl.querySelectorAll("tbody tr").forEach(tr => {
           Array.from(tr.children).forEach((td, i) => {
             if(i === 0) return;
             const c = td.dataset.col || chiavi[i];
-            td.classList.toggle("cella-extra", !(principali.includes(c) || c === colOrd));
+            const principale = conChiavi ? SCHEDE_PRINCIPALI.includes(c) : i <= 6;
+            td.classList.toggle("cella-extra", !(principale || (!!colOrd && c === colOrd)));
             td.classList.toggle("cella-ordinata", !!colOrd && c === colOrd && c !== "Giocatore");
           });
           if(!tr.hasAttribute("tabindex")){ tr.setAttribute("tabindex", "0"); tr.setAttribute("aria-expanded", tr.classList.contains("aperta") ? "true" : "false"); }
+          if(!tr._schedeTocco){ tr._schedeTocco = true; tr.addEventListener("click", e => {
+            if(!SCHEDE_MQ.matches || !tr.closest("table.tab-lunga") || e.target.closest("a, button, select, input, label")) return;
+            e.stopPropagation();
+            const ap = tr.classList.toggle("aperta"); tr.setAttribute("aria-expanded", ap ? "true" : "false");
+            if(ap) tr.querySelectorAll("canvas.spark").forEach(cv => { cv._largSchede = cv.parentElement.clientWidth; disegnaSpark(cv); });
+          }); }
         });
       }
       aggiornaControlliSchede(tbl, wrap);
@@ -1351,9 +1360,11 @@ const CATEGORIE_DASHBOARD = {
   partita: [
     {k:"panoramica", tit:"Panoramica", dom:"Risultati, andamento e numeri di squadra.", ico:"pan", sez:["sez-kpi", "sez-andamento"]},
     {k:"attacco", tit:"Attacco", breve:"Come e da dove creiamo e segniamo.", dom:"Come e da dove creiamo occasioni e segniamo.", ico:"att", tono:"v", lato:"fatti",
-      sez:["sez-tiri-partita", "sez-golgame-partita", "sez-porta-partita"], titoli:{"sez-tiri-partita":"Da dove tiriamo"}},
+      sez:["sez-tiri-partita", "sez-golgame-partita", "sez-porta-partita"], titoli:{"sez-tiri-partita":"Da dove tiriamo"},
+      descrizioni:{"sez-tiri-partita":"Da dove partono i nostri tiri, come finiscono e quanto valevano le occasioni (xG). Richiede la posizione di ogni tiro nel CSV di SevenLab."}},
     {k:"difesa", tit:"Difesa", breve:"Da dove ci tirano, come entrano i gol, chi respinge.", dom:"Da dove ci tirano, dove entrano i gol, chi respinge e chi è in campo quando li prendiamo.", ico:"dif", tono:"r", lato:"subiti",
-      sez:["sez-tiri-partita", "sez-respinte-partita", "sez-incampo-partita"], titoli:{"sez-tiri-partita":"Da dove ci tirano"}},
+      sez:["sez-tiri-partita", "sez-respinte-partita", "sez-incampo-partita"], titoli:{"sez-tiri-partita":"Da dove ci tirano"},
+      descrizioni:{"sez-tiri-partita":"Da dove arrivano i tiri verso la nostra porta, come finiscono, dove entrano i gol e quanto valevano le occasioni concesse (xG)."}},
     {k:"transizioni", tit:"Transizioni", breve:"Palle perse, riconquista, possesso.", dom:"Dove perdiamo e recuperiamo palla, quanto ci mettiamo a riprenderla e quanto ci costa perderla.", ico:"tra", tono:"o",
       sez:["sez-zone-partita", "sez-persa-gol-partita", "sez-riconquista", "sez-possesso-partita"]},
     {k:"giocatori", tit:"Giocatori", breve:"Classifica, tendenze, subentrati.", dom:"Chi rende di più, chi sta crescendo, chi entra e cambia la partita.", ico:"gio",
@@ -1644,6 +1655,15 @@ function htmlTestaCategoria(tab, c, r){
       : `<p class="rq-vuoto">Nel periodo scelto non emerge nulla di netto: guarda i grafici qui sotto, o allarga il periodo dal filtro in alto.</p>`}${nota}</div>`;
 }
 
+/** 1.54.0: quale parte della sezione tiri mostrare. «fatti» in Attacco, «subiti» in Difesa, «» altrove (tutto). */
+function latoTiriAttivo(){
+  try{
+    if(window.PORTALE_MISTER) return (typeof portale !== "undefined" && portale.area === "attacco") ? "fatti" : ((typeof portale !== "undefined" && portale.area === "difesa") ? "subiti" : "");
+    const tab = tabAttivaDashboard(), k = categoriaAttiva[tab];
+    const c = (CATEGORIE_DASHBOARD[tab] || []).find(x => x.k === k);
+    return c && c.lato ? c.lato : "";
+  }catch(e){ return ""; }
+}
 /** Mostra il Riepilogo o l'area scelta nella scheda attiva. */
 function applicaCategoria(){
   if(window.PORTALE_MISTER) return;
@@ -1669,6 +1689,7 @@ function applicaCategoria(){
     const num = s.querySelector(".sez-num");
     if(num){ if(!num.dataset.originale) num.dataset.originale = num.textContent; num.textContent = i < 0 ? num.dataset.originale : String(i + 1).padStart(2, "0"); }
     if(c && c.titoli && c.titoli[s.id]){ const h = s.querySelector(".sez-testa h2"); if(h){ if(!h.dataset.originale) h.dataset.originale = h.textContent; h.textContent = c.titoli[s.id]; } }
+    if(c && c.descrizioni && c.descrizioni[s.id]){ const p = s.querySelector(".sez-desc"); if(p){ if(!p.dataset.originale) p.dataset.originale = p.textContent; p.textContent = c.descrizioni[s.id]; } }
   });
   // sezioni comuni (Cosa contiene ogni file, Metodologia): solo nel Riepilogo
   document.querySelectorAll("#dashboard > section:not([data-tab-sezione]):not(#sez-hub)").forEach(s => s.classList.toggle("fuori-area", !!c));
@@ -1676,7 +1697,7 @@ function applicaCategoria(){
   aggiornaNavArea(tab, c);
 }
 function ripristinaTitoliArea(){
-  document.querySelectorAll(".sez-testa h2[data-originale]").forEach(h => { h.textContent = h.dataset.originale; });
+  document.querySelectorAll(".sez-testa h2[data-originale], .sez-desc[data-originale]").forEach(h => { h.textContent = h.dataset.originale; });
 }
 /** Nella sezione dei tiri, segna cosa riguarda i nostri tiri e cosa quelli subiti (Attacco e Difesa ne mostrano una parte). */
 function segnaLatoTiri(){
@@ -4533,7 +4554,17 @@ function analizzaInCampo(sessioni, tipo){
     // RUOLO (il ruolo del tabellino, cioè il ruolo naturale), in campo nello stesso momento. Conta anche se uno dei
     // due in quel momento occupa un'altra casella del modulo; un centrocampista messo in difesa non fa coppia.
     // Le coppie fra ruoli diversi (un difensore e un centrocampista) non si contano.
-    const difensoreDiRuolo = n => /difens/i.test(r.ruoli.get(n) || "");
+    // 1.54.0 (Andrea, 17/11/2026): «mancano le occasioni in cui in difesa ci giocano anche degli adattati! nelle ultime
+    // 3 partite uno dei due difensori centrali è stato Orlandi». Ora conta chi GIOCA in difesa in quel momento: la
+    // casella del modulo (D1, D2…) se il file la scrive, altrimenti il ruolo dato col cambio, e solo se il file non
+    // dice nulla il ruolo del tabellino. Prima contava solo il ruolo del tabellino (scelta del 16/10/2026).
+    const valoreIn = (m, n) => m ? (m instanceof Map ? m.get(n) : m[n]) : undefined;
+    const difensoreIn = (tr, n) => {
+      const sl = valoreIn(tr && tr.sl, n); if(sl) return /^D/i.test(sl);
+      const rs = valoreIn(tr && tr.r, n); if(rs) return /difens/i.test(rs);
+      return /difens/i.test(r.ruoli.get(n) || "");
+    };
+    const trattoAl = t => r.tratti.find(tr => t > tr.a && t <= tr.b) || null;
     // una coppia con un ospite resta legata al suo allenamento: lo stesso segnaposto non è la stessa persona
     const id = s.Match_ID || s.Sessione_ID;
     const chiaveCoppia = (x, y) => (x.localeCompare(y, "it") < 0 ? x+"\u0001"+y : y+"\u0001"+x) + (nomeOspite(x) || nomeOspite(y) ? "\u0002"+id : "");
@@ -4544,14 +4575,15 @@ function analizzaInCampo(sessioni, tipo){
       r.lati.forEach(l => {
         const f = tr.f[l];
         f.forEach(n => { g(n).sec += d; visti.add(n); });
-        const dif = f.filter(difensoreDiRuolo);
+        const dif = f.filter(n => difensoreIn(tr, n));
         for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++){ const x = c(chiaveCoppia(dif[i], dif[j])); x.sec += d; x.sessioni.add(id); }
       });
     });
     visti.forEach(n => sessioniG.set(n, (sessioniG.get(n)||0) + 1));
     r.gol.forEach(gl => {
       gl.inCampo.forEach(n => g(n).gol++);
-      const dif = gl.inCampo.filter(difensoreDiRuolo);
+      const trG = trattoAl(gl.t - 0.5);
+      const dif = gl.inCampo.filter(n => trG ? difensoreIn(trG, n) : /difens/i.test(valoreIn(gl.ruoli, n) || r.ruoli.get(n) || ""));
       for(let i = 0; i < dif.length; i++) for(let j = i+1; j < dif.length; j++) c(chiaveCoppia(dif[i], dif[j])).gol++;
     });
   });
@@ -4861,6 +4893,12 @@ function limitaTendenza(fit, limiti){
   return Object.assign({}, fit, {valore_iniziale:vi, valore_finale:vf, delta_totale:vf-vi});
 }
 
+/** 1.54.0 (Andrea): «magari ha fatto 1 minuto e 1 passaggio riuscito e sembra che sia migliorato». Una partita entra
+ *  nella tendenza di una percentuale solo se il giocatore ha giocato abbastanza da renderla credibile. */
+const CAMPIONE_MINIMO_TENDENZA = {
+  Tasso_Errore_pct: r => N(r.Minuti_Giocati) >= 10 && N(r.Azioni_Totali) >= 10,
+  Precisione_Tiro_pct: r => N(r.Tiri_Totali) >= 3
+};
 function calcolaTendenze(righe){
   const perG = new Map();
   righe.filter(r=>r.Data).sort((a,b)=>a.Data-b.Data).forEach(r => {
@@ -4872,7 +4910,8 @@ function calcolaTendenze(righe){
     rs.forEach((r,i) => r.__ord = i+1);
     Object.keys(CONFIG_TREND).forEach(metrica => {
       const cfg = CONFIG_TREND[metrica];
-      const punti = rs.filter(r => r[metrica] !== null && r[metrica] !== undefined && isFinite(r[metrica]));
+      const basta = CAMPIONE_MINIMO_TENDENZA[metrica] || (() => true);
+      const punti = rs.filter(r => r[metrica] !== null && r[metrica] !== undefined && isFinite(r[metrica]) && basta(r));
       if(punti.length < 3) return;
       const fitGrezzo = regressione(punti.map(r=>r.__ord), punti.map(r=>r[metrica]));
       if(!fitGrezzo) return;
@@ -5549,7 +5588,7 @@ function renderTendenze(f){
   cont.innerHTML = blocchi.map(b => b.html).join("");
   blocchi.forEach(b => b.rilev.forEach((t,i) => disegnaTrend("gr-trend-"+b.metrica+"-"+i, t)));
   const nRil = tutte.filter(t=>t.rilevante).length;
-  cont.insertAdjacentHTML("beforeend", `<p class="kpi-nota">Analizzati ${nf0(new Set(tutte.map(t=>t.Giocatore)).size)} giocatori con almeno 3 partite: ${nf0(nRil)} tendenze superano la soglia di rilevanza. Le rette sono indicazioni statistiche, da confrontare con quello che hai visto in campo.</p>`);
+  cont.insertAdjacentHTML("beforeend", `<p class="kpi-nota">Per il tasso di errore contano solo le partite in cui il giocatore ha giocato almeno 10' e fatto almeno 10 giocate; per la precisione al tiro quelle con almeno 3 tiri. Le partite con pochissimo gioco darebbero percentuali estreme (0% o 100%) che non dicono nulla.</p><p class="kpi-nota">Analizzati ${nf0(new Set(tutte.map(t=>t.Giocatore)).size)} giocatori con almeno 3 partite: ${nf0(nRil)} tendenze superano la soglia di rilevanza. Le rette sono indicazioni statistiche, da confrontare con quello che hai visto in campo.</p>`);
 }
 
 function disegnaTrend(id, t){
@@ -5581,7 +5620,7 @@ function disegnaTrend(id, t){
           title:{display:true, text:"Partita del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
           ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
           grid:{color:colore("grid")}, border:{color:colore("grid")}},
-        y:{min:Math.max(0, minY-pad), max:maxY+pad,
+        y:{min:Math.max(cfg.limiti ? cfg.limiti[0] : 0, minY-pad), max:(cfg.limiti && cfg.limiti[1] !== null) ? Math.min(cfg.limiti[1], maxY+pad) : maxY+pad,
           title:{display:true, text:cfg.label+" ("+ (cfg.unit==="'"?"minuti":"%") +")", color:colore("faint"), font:{size:10.5}},
           ticks:{color:colore("muted"), font:{size:11}, maxTicksLimit:6, callback:v=>nf0(v)+cfg.unit}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
       }
@@ -5897,7 +5936,7 @@ function disegnaTrendAllenamento(id, t){
           title:{display:true, text:"Sessione del giocatore (in ordine di data)", color:colore("faint"), font:{size:10.5}},
           ticks:{stepSize:1, precision:0, autoSkip:(t.xmax - t.xmin) > 12, maxTicksLimit:14, maxRotation:0, color:colore("muted"), font:{size:11}, callback:v => Number.isInteger(v)? v : ""},
           grid:{color:colore("grid")}, border:{color:colore("grid")}},
-        y:{min:Math.max(0, minY-pad), max:maxY+pad,
+        y:{min:Math.max(cfg.limiti ? cfg.limiti[0] : 0, minY-pad), max:(cfg.limiti && cfg.limiti[1] !== null) ? Math.min(cfg.limiti[1], maxY+pad) : maxY+pad,
           title:{display:true, text:cfg.label+" ("+ (cfg.unit==="'"?"minuti":"%") +")", color:colore("faint"), font:{size:10.5}},
           ticks:{color:colore("muted"), font:{size:11}, maxTicksLimit:6, callback:v=>nf0(v)+cfg.unit}, grid:{color:colore("grid")}, border:{color:colore("grid")}}
       }
@@ -5969,7 +6008,7 @@ function renderCoinvolgimento(ds){
   const pochiMinuti = classifica.filter(c => c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE).length;
   cont.innerHTML = `<div class="tabella-scroll"><table>
     <caption class="solo-sr">Giocatori più coinvolti nel gioco, tutta la stagione</caption>
-    <thead><tr><th scope="col">Giocatore</th><th scope="col">Partite</th><th scope="col">Minuti giocati</th><th scope="col">Azioni tot.</th><th scope="col">Azioni per partita intera</th></tr></thead>
+    <thead><tr><th scope="col">Giocatore</th><th scope="col">Partite</th><th scope="col">Minuti giocati</th><th scope="col">Azioni con la palla</th><th scope="col">Azioni ogni 50'</th></tr></thead>
     <tbody>${classifica.map(c => `<tr${c.Minuti_Totali < MINUTI_MINIMI_NORMALIZZAZIONE ? ' class="riga-attenuata"' : ''}>
       <td>${esc(c.Giocatore)}<span class="ruolo">${esc(c.Ruolo)}</span></td>
       <td>${nf0(c.Partite_Giocate)}</td>
@@ -5978,7 +6017,7 @@ function renderCoinvolgimento(ds){
       <td><div class="barra-wrap"><div class="barra" style="width:${max>0?(c.Coinvolgimento_Partita/max*100):0}%; background:var(--c1)"></div><span>${nf(c.Coinvolgimento_Partita,1)}</span></div></td>
     </tr>`).join("")}</tbody>
   </table></div>
-  <p class="nota-piccola">"Azioni per partita intera" rapporta passaggi, tiri e dribbling tentati a una gara completa di calcio a 7 (${nf0(MINUTI_PARTITA_INTERA)} minuti, due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}): serve a mettere sullo stesso piano chi gioca tutta la partita e chi entra a mezz'ora. La colonna "Azioni tot." resta il dato grezzo di stagione, che dipende anche da quante partite ha giocato — <strong>per questo un giocatore con meno azioni totali può stare più in alto</strong>: ne ha fatte meno ma in molto meno tempo.${pochiMinuti ? ` ${pochiMinuti===1?"Una riga è attenuata":`${nf0(pochiMinuti)} righe sono attenuate`} perché sotto i ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)} minuti giocati in tutta la stagione: su un campione così piccolo il rapporto si gonfia e non è da prendere sul serio.` : ""}</p>`;
+  <p class="nota-piccola"><strong>Azioni con la palla</strong> = passaggi (riusciti e sbagliati) + dribbling tentati + tiri. <strong>Azioni ogni 50'</strong> = le stesse azioni divise per i minuti giocati e moltiplicate per 50: per esempio 30 azioni in 25 minuti diventano 60 ogni 50'. Dice quanto un giocatore entra nel gioco quando è in campo, a parità di minuti. Le righe chiare hanno troppo pochi minuti per fidarsi del numero. "Azioni per partita intera" rapporta passaggi, tiri e dribbling tentati a una gara completa di calcio a 7 (${nf0(MINUTI_PARTITA_INTERA)} minuti, due tempi da ${nf0(MINUTI_PARTITA_INTERA/2)}): serve a mettere sullo stesso piano chi gioca tutta la partita e chi entra a mezz'ora. La colonna "Azioni tot." resta il dato grezzo di stagione, che dipende anche da quante partite ha giocato — <strong>per questo un giocatore con meno azioni totali può stare più in alto</strong>: ne ha fatte meno ma in molto meno tempo.${pochiMinuti ? ` ${pochiMinuti===1?"Una riga è attenuata":`${nf0(pochiMinuti)} righe sono attenuate`} perché sotto i ${nf0(MINUTI_MINIMI_NORMALIZZAZIONE)} minuti giocati in tutta la stagione: su un campione così piccolo il rapporto si gonfia e non è da prendere sul serio.` : ""}</p>`;
 }
 
 function renderFormazioni(ds){
@@ -7338,11 +7377,11 @@ function renderPersaGol(idContenitore, idSelettore, chiaveStato, sessioniPeriodo
       <div class="grafico-sub">Il conteggio vero viene prima della quota: chi tocca molti palloni ne perde di più, e una quota alta su due sole palle perse non dice ancora niente.</div>
       <div class="tabella-scroll"><table>
         <caption class="solo-sr">Palle perse che hanno portato a un gol, per giocatore</caption>
-        <thead><tr><th scope="col">Giocatore</th><th scope="col">Palle perse diventate gol</th><th scope="col">Palle perse in tutto</th><th scope="col">Quota</th>${conZona ? `<th scope="col">Dove le perde, più spesso</th>` : ""}<th scope="col">Peso</th></tr></thead>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col">Palle perse diventate gol</th><th scope="col">Palle perse in tutto</th><th scope="col">Quota</th>${conZona ? `<th scope="col">Dove le perde, più spesso</th>` : ""}<th scope="col">Quota dei gol nati da palla persa</th></tr></thead>
         <tbody>${a.giocatori.map(g => `<tr>
           <td>${esc(g.giocatore)}</td><td>${nf0(g.episodi)}</td><td>${nf0(g.pallePerse)}</td><td>${pctTxt(g.quota,0)}</td>
           ${conZona ? `<td>${g.zonaFrequente ? esc(g.zonaFrequente)+(g.episodi > 1 ? ` (${nf0(g.zonaFrequenteN)} su ${nf0(g.episodi)})` : "") : "—"}</td>` : ""}
-          <td><div class="barra-wrap"><div class="barra" style="width:${(g.episodi/maxEp*100).toFixed(1)}%; background:var(--danger)"></div><span>${nf0(g.episodi)}</span></div></td>
+          <td><div class="barra-wrap"><div class="barra" style="width:${(g.episodi/maxEp*100).toFixed(1)}%; background:var(--danger)"></div><span>${pctTxt(perc(g.episodi, a.giocatori.reduce((t, x) => t + x.episodi, 0)), 0)}</span></div></td>
         </tr>`).join("")}</tbody>
       </table></div>
     </div>
@@ -7450,7 +7489,7 @@ function renderInCampo(idContenitore, idSelettore, chiaveStato, sessioniPeriodo,
   const nomeCoppia = c => `${esc(c.x)} e ${esc(c.y)}${c.ospite && a.analizzate > 1 ? ` <span class="ruolo-mini">${esc(dataLabel(c.data) || "")}</span>` : ""}`;
   const bloccoDifensori = `<div class="card" style="margin-top:16px">
       <div class="grafico-titolo">Le coppie di difensori</div>
-      <div class="grafico-sub">Due difensori di ruolo in campo nello stesso momento${allen ? ", nella stessa squadra" : ""}. Conta il ruolo di partenza (quello del tabellino), non la posizione data con un cambio: due difensori fanno coppia anche se uno dei due è entrato a centrocampo, e un centrocampista messo in difesa non fa coppia. Nel grafico le coppie con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme. <strong>Barra rossa</strong>: gol subiti a partita con la coppia in campo; <strong>barra grigia</strong>: senza quella coppia. In cima la coppia con cui si prende di più.</div>
+      <div class="grafico-sub">Due giocatori in difesa nello stesso momento${allen ? ", nella stessa squadra" : ""}. Conta chi gioca davvero in difesa in quel momento: la casella del modulo (D1, D2) o il ruolo dato con il cambio, e solo se il file non lo dice il ruolo del tabellino. Così entrano anche gli adattati, per esempio un centrocampista schierato centrale. Nel grafico le coppie con almeno ${nf0(IN_CAMPO_MINUTI_MIN)}' insieme. <strong>Barra rossa</strong>: gol subiti a partita con la coppia in campo; <strong>barra grigia</strong>: senza quella coppia. In cima la coppia con cui si prende di più.</div>
       ${difValide.length ? `<div class="grafico-wrap" style="height:${Math.max(200, difValide.length * 44 + 80)}px"><canvas id="${idGrDif}"></canvas></div>` : ""}
       ${difTutte.length ? `${difValide.length ? "" : `<div class="vuoto" style="margin-bottom:10px">${difTutte.every(c => c.ospite)
           ? `In difesa ha sempre giocato almeno un ospite: sotto i numeri delle coppie, senza confronto.`
@@ -8767,10 +8806,12 @@ function renderTiriCampo(f){
   const ambito = singola ? "in questa partita" : `in ${nf0(Math.max(a.partiteTiri, a.partiteSubiti))} ${Math.max(a.partiteTiri, a.partiteSubiti) === 1 ? "partita" : "partite"}`;
   const kpi = (eti, val, nota) => `<div class="kpi"><div class="kpi-eti">${esc(eti)}</div><div class="kpi-valore">${val}</div><div class="kpi-nota">${nota}</div></div>`;
   const vicini = r => r.n ? pctTxt(perc(r.fasce[0].tiri, r.n), 0) : "—";
+  // 1.54.0 (Andrea): in Attacco solo i nostri tiri, in Difesa solo quelli subiti
+  const lato = latoTiriAttivo(), mostraF = lato !== "subiti", mostraS = lato !== "fatti";
   const righeFasce = TIRI_FASCE_ETICHETTE.map((et, i) => {
     const n = a.nostri.fasce[i], l = a.loro.fasce[i];
-    return `<tr><td>${esc(et)}</td><td>${nf0(n.tiri)} <span class="tenue">${a.nostri.n ? pctTxt(n.quota, 0) : ""}</span></td><td>${nf0(n.gol)}</td><td>${n.tiri ? pctTxt(n.realizzazione, 0) : "—"}</td>
-      <td>${nf0(l.tiri)} <span class="tenue">${a.loro.n ? pctTxt(l.quota, 0) : ""}</span></td><td>${nf0(l.gol)}</td><td>${l.tiri ? pctTxt(l.realizzazione, 0) : "—"}</td></tr>`;
+    return `<tr><td>${esc(et)}</td>${mostraF ? `<td>${nf0(n.tiri)} <span class="tenue">${a.nostri.n ? pctTxt(n.quota, 0) : ""}</span></td><td>${nf0(n.gol)}</td><td>${n.tiri ? pctTxt(n.realizzazione, 0) : "—"}</td>` : ""}
+      ${mostraS ? `<td>${nf0(l.tiri)} <span class="tenue">${a.loro.n ? pctTxt(l.quota, 0) : ""}</span></td><td>${nf0(l.gol)}</td><td>${l.tiri ? pctTxt(l.realizzazione, 0) : "—"}</td>` : ""}</tr>`;
   }).join("");
   const note = [];
   const av = avvisoCampioneZone(Math.max(a.nostri.n, a.loro.n), singola ? "in questa partita" : "nel periodo scelto");
@@ -8779,7 +8820,7 @@ function renderTiriCampo(f){
   const senza = f.partite.length && !singola ? f.partite.filter(p => !(p.MappeTiri && (p.MappeTiri.conTiri || p.MappeTiri.conSubiti))).length : 0;
   if(senza) note.push(`${nf0(senza)} ${senza === 1 ? "partita del periodo è esclusa" : "partite del periodo sono escluse"}: registrate prima che SevenLab chiedesse la posizione dei tiri.`);
   cont.innerHTML = `
-    ${fraseTiri(a) ? `<div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseTiri(a)}</span></div>` : ""}
+    ${!lato && fraseTiri(a) ? `<div class="insight-riga"><span class="ic" aria-hidden="true">→</span><span>${fraseTiri(a)}</span></div>` : ""}
     <div class="griglia g-kpi" style="margin-top:14px">
       ${kpi("Nostri tiri con posizione", nf0(a.nostri.n), `${nf0(a.nostri.gol)} gol${a.tiri.some(t => t.arrivo) ? ` · ${nf0(a.tiri.filter(t => t.esito === "porta").length)} in porta · ${nf0(a.tiri.filter(t => t.esito === "respinto").length)} respinti · ${nf0(a.tiri.filter(t => t.esito === "fuori").length)} fuori` : ""} · ${ambito}`)}
       ${kpi("Distanza tipica dei nostri tiri", a.nostri.distanzaMediana !== null ? nf(a.nostri.distanzaMediana, 0) + " m" : "—", `${vicini(a.nostri)} da entro 8 m`)}
@@ -8822,7 +8863,7 @@ function renderTiriCampo(f){
       <div class="grafico-sub">Distanza in linea d'aria dal centro della porta attaccata. La quota accanto ai tiri è sul totale con posizione.</div>
       <div class="tabella-scroll"><table class="tiri-tab">
         <caption class="solo-sr">Tiri fatti e subiti per fascia di distanza</caption>
-        <thead><tr><th scope="col">Distanza</th><th scope="col">Nostri tiri</th><th scope="col">Gol</th><th scope="col">Realizzazione</th><th scope="col">Tiri subiti</th><th scope="col">Gol subiti</th><th scope="col">Diventati gol</th></tr></thead>
+        <thead><tr><th scope="col">Distanza</th>${mostraF ? `<th scope="col">Nostri tiri</th><th scope="col">Gol</th><th scope="col">Realizzazione</th>` : ""}${mostraS ? `<th scope="col">Tiri subiti</th><th scope="col">Gol subiti</th><th scope="col">Diventati gol</th>` : ""}</tr></thead>
         <tbody>${righeFasce}</tbody>
       </table></div>
     </div>
@@ -8837,11 +8878,15 @@ function renderTiriCampo(f){
     </div>` : ""}
     ${a.perPartita.length > 1 ? `<div class="card" style="margin-top:16px">
       <div class="grafico-titolo">xG partita per partita</div>
-      <div class="grafico-sub">Gol che ci si poteva aspettare dalle occasioni create e concesse, accanto al risultato vero.</div>
+      <div class="grafico-sub">${lato === "fatti" ? "I gol che abbiamo segnato accanto ai gol che le nostre occasioni facevano aspettare. Gol − xG sopra zero: abbiamo concretizzato più del previsto." : lato === "subiti" ? "I gol subiti accanto ai gol che le occasioni concesse facevano aspettare. Gol − xG sotto zero: portiere e difesa hanno salvato più del previsto." : "Gol che ci si poteva aspettare dalle occasioni create e concesse, accanto al risultato vero."}</div>
       <div class="tabella-scroll"><table>
         <caption class="solo-sr">Expected goals per partita</caption>
-        <thead><tr><th scope="col">Partita</th><th scope="col">Risultato</th><th scope="col">xG fatti</th><th scope="col">xG concessi</th></tr></thead>
-        <tbody>${a.perPartita.map(p => `<tr><td>${esc(dataCorta(p.data))} vs ${esc(p.avversario)}</td><td>${nf0(p.golF)}–${nf0(p.golS)}</td><td>${p.xgF !== null ? nf(p.xgF, 1) : "—"}</td><td>${p.xgS !== null ? nf(p.xgS, 1) : "—"}</td></tr>`).join("")}</tbody>
+        <thead><tr><th scope="col">Partita</th>${lato === "fatti" ? `<th scope="col">Gol fatti</th><th scope="col">xG fatti</th><th scope="col">Gol − xG</th>` : lato === "subiti" ? `<th scope="col">Gol subiti</th><th scope="col">xG concessi</th><th scope="col">Gol − xG</th>` : `<th scope="col">Risultato</th><th scope="col">xG fatti</th><th scope="col">xG concessi</th>`}</tr></thead>
+        <tbody>${a.perPartita.filter(p => lato === "fatti" ? p.xgF !== null : lato === "subiti" ? p.xgS !== null : true).map(p => {
+          const diff = (g, x) => x === null ? "—" : `<span class="${g - x >= 0.5 ? (lato === "subiti" ? "giu" : "su") : (g - x <= -0.5 ? (lato === "subiti" ? "su" : "giu") : "")}">${g - x > 0 ? "+" : ""}${nf(g - x, 1)}</span>`;
+          return `<tr><td>${esc(dataCorta(p.data))} vs ${esc(p.avversario)}</td>${lato === "fatti" ? `<td>${nf0(p.golF)}</td><td>${nf(p.xgF, 1)}</td><td>${diff(p.golF, p.xgF)}</td>`
+            : lato === "subiti" ? `<td>${nf0(p.golS)}</td><td>${nf(p.xgS, 1)}</td><td>${diff(p.golS, p.xgS)}</td>`
+            : `<td>${nf0(p.golF)}–${nf0(p.golS)}</td><td>${p.xgF !== null ? nf(p.xgF, 1) : "—"}</td><td>${p.xgS !== null ? nf(p.xgS, 1) : "—"}</td>`}</tr>`; }).join("")}</tbody>
       </table></div>
     </div>` : ""}
     ${note.length ? `<p class="nota-piccola" style="margin-top:12px">${note.join(" ")}</p>` : ""}
@@ -8882,7 +8927,8 @@ function renderRespinte(f){
   cont.innerHTML = `
     <div class="griglia g-kpi">
       ${kpi("Respinte", nf0(a.dichiarate), singola ? "in questa partita" : `in ${nf0(a.partiteConRespinte)} ${a.partiteConRespinte === 1 ? "partita" : "partite"} · ${nf(a.dichiarate / a.partiteConRespinte, 1)} a partita`)}
-      ${kpi("Con posizione", nf0(n), n ? "quelle disegnate qui sotto" : "nessuna sul campo")}
+      ${n < a.dichiarate ? kpi("Con posizione", nf0(n), n ? "quelle disegnate qui sotto" : "nessuna sul campo")
+        : (a.giocatori[0] ? kpi("Chi respinge di più", esc(cognome(a.giocatori[0].giocatore)), `${nf0(a.giocatori[0].respinte)} respinte, ${pctTxt(perc(a.giocatori[0].respinte, a.giocatori.reduce((t, g) => t + g.respinte, 0)), 0)} del totale`) : "")}
       ${kpi("Nel nostro terzo", n ? pctTxt(perc(a.nelTerzo, n), 0) : "—", n ? `${nf0(a.nelTerzo)} su ${nf0(n)}, vicino alla nostra porta` : "—")}
       ${kpi("Distanza tipica", a.xMediana !== null ? nf(a.xMediana, 0) + " m" : "—", "dalla nostra linea di porta")}
     </div>
@@ -8903,11 +8949,11 @@ function renderRespinte(f){
       <div class="grafico-sub">Respinte per giocatore${conRecuperi ? ", con i recuperi delle stesse partite accanto: sono due cose diverse e qui si vedono separate" : ""}.</div>
       <div class="tabella-scroll"><table>
         <caption class="solo-sr">Respinte per giocatore</caption>
-        <thead><tr><th scope="col">Giocatore</th><th scope="col">Ruolo</th><th scope="col">Respinte</th>${conRecuperi ? `<th scope="col">Recuperi</th>` : ""}<th scope="col">Nel nostro terzo</th><th scope="col">Zona più frequente</th><th scope="col">Peso</th></tr></thead>
+        <thead><tr><th scope="col">Giocatore</th><th scope="col">Ruolo</th><th scope="col">Respinte</th>${conRecuperi ? `<th scope="col">Recuperi</th>` : ""}<th scope="col">Nel nostro terzo</th><th scope="col">Zona più frequente</th><th scope="col">Quota delle respinte</th></tr></thead>
         <tbody>${a.giocatori.map(g => `<tr><td>${esc(g.giocatore)}</td><td>${esc(g.ruolo || "—")}</td><td>${nf0(g.respinte)}</td>${conRecuperi ? `<td>${g.soloPunti ? "—" : nf0(g.recuperi)}</td>` : ""}
           <td>${g.conPosizione ? `${nf0(g.nelTerzo)} <span class="tenue">su ${nf0(g.conPosizione)}</span>` : "—"}</td>
           <td>${g.zona ? esc(g.zona) + (g.conPosizione > 1 ? ` <span class="tenue">(${nf0(g.zonaN)})</span>` : "") : "—"}</td>
-          <td><div class="barra-wrap"><div class="barra" style="width:${(g.respinte / max * 100).toFixed(1)}%; background:var(--c3)"></div><span>${nf0(g.respinte)}</span></div></td></tr>`).join("")}</tbody>
+          <td><div class="barra-wrap"><div class="barra" style="width:${(g.respinte / max * 100).toFixed(1)}%; background:var(--c3)"></div><span>${pctTxt(perc(g.respinte, a.giocatori.reduce((t, x) => t + x.respinte, 0)), 0)}</span></div></td></tr>`).join("")}</tbody>
       </table></div>
     </div>` : ""}
     ${note.length ? `<p class="nota-piccola" style="margin-top:12px">${note.join(" ")}</p>` : ""}
