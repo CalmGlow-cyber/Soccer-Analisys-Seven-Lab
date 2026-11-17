@@ -117,18 +117,25 @@ render = function(){
   // i selettori interni delle sezioni di Analysis non ci sono: si riparte sempre da «tutto il filtro»
   ["persaGolPartita", "persaGolAllenamento", "inCampoPartita", "inCampoAllenamento", "formazionePartita", "zoneSessione", "tiriPartita", "respintePartita"].forEach(k => { stato[k] = ""; });
   const f = datiFiltrati(), modo = portale.scelta ? "singola" : "stagione";
+  // 1.53.2: nel Riepilogo solo i riquadri; dentro un'area solo le sue sezioni, nel suo ordine
+  const disponibili = SEZIONI_PORTALE.filter(s => s.tipo === portale.tipo && s.modi.includes(modo) && portale.sezioniNascoste[s.k] !== false).map(s => s.k);
+  const aree = areePortaleDisponibili(disponibili);
+  if(portale.area && !aree.includes(portale.area)) portale.area = null;
+  const inArea = portale.area ? AREE_PORTALE[portale.tipo].aree[portale.area] : [];
   let visibili = 0;
   SEZIONI_PORTALE.forEach(s => {
     const el = document.getElementById("p-sez-" + s.k);
     if(!el) return;
-    const mostra = s.tipo === portale.tipo && s.modi.includes(modo) && portale.sezioniNascoste[s.k] !== false;
+    const mostra = disponibili.includes(s.k) && inArea.includes(s.k);
     el.classList.toggle("nascosto", !mostra);
+    el.style.order = mostra ? String(inArea.indexOf(s.k) + 1) : "";
     if(!mostra) return;
     visibili++;
     try{ RENDER_PORTALE[s.k](f); }
     catch(err){ console.error(s.k, err); const c = el.querySelector(".p-contenuto"); if(c) c.innerHTML = `<div class="vuoto">Questa parte non si è potuta mostrare.</div>`; }
   });
-  $p("#p-vuoto").classList.toggle("nascosto", visibili > 0);
+  renderHubPortale(f, aree);
+  $p("#p-vuoto").classList.toggle("nascosto", aree.length > 0);
   adattaLarghezzeColonneSchermo();
   const ultimo = [...stato.ds.partite, ...stato.ds.allenamenti].map(x => x.Data).filter(Boolean).sort((a, b) => b - a)[0];
   $p("#p-aggiornato").textContent = ultimo ? `Ultima sessione caricata: ${dataLabel(ultimo)}` : "";
@@ -209,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-p-tipo]").forEach(b => b.addEventListener("click", () => {
     if(portale.tipo === b.dataset.pTipo) return;
     portale.tipo = b.dataset.pTipo;
+    portale.area = null;
     const ult = elencoSessioniPortale()[0];
     portale.scelta = portale.tipo === "partite" && ult ? ult.id : "";
     aggiornaComandi(); render(); window.scrollTo({top: 0});
@@ -232,4 +240,64 @@ document.addEventListener("DOMContentLoaded", () => {
     if(document.visibilityState === "visible" && stato.ds && Date.now() - portale.caricatoIl > 5 * 60000) apriPortale();
   });
   if(accessoCloud()) apriPortale(); else mostraSchermata("accesso");
+});
+
+/* ---- riquadri per area (1.53.2, 17/11/2026) ----
+   Andrea: «avevo bisogno che si raggruppassero le informazioni in delle schede specifiche e non un elenco sparso
+   di cose sia sulla mia Dashboard sia poi su quella dei mister». Anche qui, come in Analysis: Riepilogo (numeri,
+   «Le 3 cose da sapere», riquadri) e, toccando un riquadro, solo le sezioni di quell'area con «Cosa ci dice».
+   Le aree e le frasi sono le stesse di Analysis (CATEGORIE_DASHBOARD, calcolaRiquadri in app.js); qui si usano
+   solo le sezioni che il portale mostra (quelle scelte nel pannello Mister). */
+const AREE_PORTALE = {
+  partite: {tab: "partita", aree: {panoramica: ["lettura", "kpi", "andamento"], attacco: ["tiri", "golgame", "porta"], difesa: ["tiri", "respinte", "incampo"],
+    transizioni: ["zone", "persagol", "riconquista", "possesso"], giocatori: ["classifica"], formazioni: ["formazione"], lezioni: ["situazioni"]}},
+  allenamenti: {tab: "allenamento", aree: {panoramica: ["kpi-all"], carico: ["carico"], transizioni: ["zone-all", "persagol-all"], giocatori: ["classifica-all"],
+    formazioni: ["incampo-all", "formazione-all"], lezioni: ["situazioni-all"]}}
+};
+portale.area = null;
+function areePortaleDisponibili(disponibili){
+  const conf = AREE_PORTALE[portale.tipo];
+  return CATEGORIE_DASHBOARD[conf.tab].map(c => c.k).filter(k => (conf.aree[k] || []).some(s => disponibili.includes(s)));
+}
+function renderHubPortale(f, aree){
+  let hub = $p("#p-hub");
+  if(!hub){ hub = document.createElement("section"); hub.id = "p-hub"; hub.className = "p-hub"; $p(".p-corpo").insertBefore(hub, $p("#p-vuoto").nextSibling); }
+  const conf = AREE_PORTALE[portale.tipo], app = $p("#p-app");
+  let r = null;
+  try{ r = calcolaRiquadri(f, conf.tab); }catch(e){ console.warn("riquadri portale", e); }
+  const titoloTiri = $p("#p-sez-tiri .p-sez-testa h2");
+  if(titoloTiri){ if(!titoloTiri.dataset.originale) titoloTiri.dataset.originale = titoloTiri.textContent; titoloTiri.textContent = titoloTiri.dataset.originale; }
+  if(portale.area){
+    const c = CATEGORIE_DASHBOARD[conf.tab].find(x => x.k === portale.area);
+    hub.innerHTML = htmlTestaCategoria(conf.tab, c, r);
+    app.setAttribute("data-lato", c.lato || "");
+    if(titoloTiri && c.titoli && c.titoli["sez-tiri-partita"]) titoloTiri.textContent = c.titoli["sez-tiri-partita"];
+    segnaLatoTiri();
+  } else {
+    app.setAttribute("data-lato", "");
+    hub.innerHTML = r && aree.length ? htmlRiepilogo(conf.tab, r) : "";
+    // riquadri e collegamenti solo verso le aree che il portale mostra
+    hub.querySelectorAll("[data-cat]").forEach(b => { if(!aree.includes(b.dataset.cat)) b.remove(); });
+  }
+}
+function apriAreaPortale(k, daStoria){
+  if(!daStoria){
+    try{
+      if(!k && history.state && history.state.portaleArea){ history.back(); return; }
+      if(k) history.pushState({portaleArea: k, tipo: portale.tipo}, "", "#area-" + k);
+    }catch(e){}
+  }
+  portale.area = k || null;
+  render(); window.scrollTo({top: 0});
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("#p-hub [data-cat]");
+  if(!b) return;
+  e.preventDefault();
+  apriAreaPortale(b.dataset.cat || null);
+});
+window.addEventListener("popstate", e => {
+  if(!stato.ds) return;
+  const s = e.state, k = s && s.portaleArea && s.tipo === portale.tipo ? s.portaleArea : null;
+  if((portale.area || null) !== k) apriAreaPortale(k, true);
 });

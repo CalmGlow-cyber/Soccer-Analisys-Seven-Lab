@@ -918,6 +918,16 @@ main section#sez-hub{border-top:0}
   .rq-domanda{font-size:14px}
 }
 
+/* ---------- riquadri per area nel Portale Mister (1.53.2) ---------- */
+.p-corpo{display:flex; flex-direction:column}
+.p-corpo > *{min-width:0}
+.p-corpo > #p-invito{order:-3}
+.p-corpo > #p-vuoto{order:-2}
+.p-corpo > #p-hub{order:-1}
+#p-hub:empty{display:none}
+#p-hub .sez-testa h2{font-size:22px; margin:4px 0 8px}
+#p-app[data-lato="fatti"] [data-lato-tiri="subiti"], #p-app[data-lato="subiti"] [data-lato-tiri="fatti"]{display:none !important}
+
 </style>
 <style>
 /* ---------- Portale Mister: solo telefono, una colonna ---------- */
