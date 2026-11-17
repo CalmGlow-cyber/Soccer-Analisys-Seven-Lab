@@ -265,13 +265,15 @@ function renderHubPortale(f, aree){
   const conf = AREE_PORTALE[portale.tipo], app = $p("#p-app");
   let r = null;
   try{ r = calcolaRiquadri(f, conf.tab); }catch(e){ console.warn("riquadri portale", e); }
-  const titoloTiri = $p("#p-sez-tiri .p-sez-testa h2");
+  const titoloTiri = $p("#p-sez-tiri .p-sez-testa h2"), descTiri = $p("#p-sez-tiri .p-sez-testa p");
+  if(descTiri){ if(!descTiri.dataset.originale) descTiri.dataset.originale = descTiri.textContent; descTiri.textContent = descTiri.dataset.originale; }
   if(titoloTiri){ if(!titoloTiri.dataset.originale) titoloTiri.dataset.originale = titoloTiri.textContent; titoloTiri.textContent = titoloTiri.dataset.originale; }
   if(portale.area){
     const c = CATEGORIE_DASHBOARD[conf.tab].find(x => x.k === portale.area);
     hub.innerHTML = htmlTestaCategoria(conf.tab, c, r);
     app.setAttribute("data-lato", c.lato || "");
     if(titoloTiri && c.titoli && c.titoli["sez-tiri-partita"]) titoloTiri.textContent = c.titoli["sez-tiri-partita"];
+    if(descTiri && c.descrizioni && c.descrizioni["sez-tiri-partita"]) descTiri.textContent = c.descrizioni["sez-tiri-partita"];
     segnaLatoTiri();
   } else {
     app.setAttribute("data-lato", "");
