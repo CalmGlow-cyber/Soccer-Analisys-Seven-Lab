@@ -179,7 +179,7 @@ async function apriPortale(){
   }catch(e){
     const m = messaggioErroreCloud(e);
     if(/scadut|rientra/i.test(m) || !accessoCloud()){ mostraSchermata("accesso"); msgAccesso(m); return; }
-    $p("#p-carico-msg").innerHTML = `${esc(/permission|denied|42501|401|403/i.test(m) ? "Questo account non è abilitato al portale. Chiedi a Elisa." : m)}<br><button type="button" class="btn" data-p="riprova" style="margin-top:12px">Riprova</button> <button type="button" class="btn" data-p="esci" style="margin-top:12px">Esci</button>`;
+    $p("#p-carico-msg").innerHTML = `${esc(/permission|denied|42501|401|403/i.test(m) ? "Questo account non è abilitato al portale. Chiedi a chi ti ha dato l'accesso." : m)}<br><button type="button" class="btn" data-p="riprova" style="margin-top:12px">Riprova</button> <button type="button" class="btn" data-p="esci" style="margin-top:12px">Esci</button>`;
     return;
   }
   const url = new URLSearchParams(location.search);
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if(!email || !pw){ msgAccesso("Scrivi email e password."); return; }
     msgAccesso("Accesso in corso…");
     try{ await entraCloud(email, pw); $p("#p-password").value = ""; msgAccesso(""); apriPortale(); }
-    catch(err){ msgAccesso(/invalid login|invalid_grant|credentials/i.test(err.message) ? "Email o password non corrette. Se non le ricordi, chiedile a Elisa." : messaggioErroreCloud(err)); }
+    catch(err){ msgAccesso(/invalid login|invalid_grant|credentials/i.test(err.message) ? "Email o password non corrette. Se non le ricordi, chiedile a chi ti ha dato l'accesso." : messaggioErroreCloud(err)); }
   });
   document.querySelectorAll("[data-p-tipo]").forEach(b => b.addEventListener("click", () => {
     if(portale.tipo === b.dataset.pTipo) return;

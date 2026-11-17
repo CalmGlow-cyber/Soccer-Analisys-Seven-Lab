@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Mister">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
 <link rel="icon" type="image/png" href="../icona-192.png">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
@@ -967,6 +967,7 @@ html[data-tema="scuro"] .p-tabellone{background:#0C4E54}
 .p-cons.lavorare .grafico-titolo{color:var(--danger)}
 .p-piede{padding:18px 16px 28px; border-top:1px solid var(--border); color:var(--muted); font-size:13px; display:flex; flex-direction:column; gap:10px}
 .p-piede .azioni{display:flex; gap:8px; flex-wrap:wrap}
+.p-admin{color:var(--primary); font-weight:700; text-decoration:none}
 </style>
 </head>
 <body>
@@ -979,7 +980,7 @@ html[data-tema="scuro"] .p-tabellone{background:#0C4E54}
 
 <section id="p-accesso" class="p-accesso nascosto">
   <h1>Entra</h1>
-  <p>Usa l'email e la password che ti ha dato Elisa.</p>
+  <p>Usa l'email e la password che hai ricevuto per il portale.</p>
   <form id="p-form" autocomplete="on">
     <div style="display:flex; flex-direction:column; gap:6px">
       <label for="p-email">Email</label>
@@ -990,6 +991,7 @@ html[data-tema="scuro"] .p-tabellone{background:#0C4E54}
       <div id="p-msg" class="p-msg" role="status"></div>
     </div>
   </form>
+  <p style="margin-top:18px"><a class="p-admin" href="../">Sei l'amministratore? Apri Analysis ›</a></p>
 </section>
 
 <section id="p-carico" class="p-carico nascosto"><div id="p-carico-msg">Carico i dati…</div></section>
@@ -1201,7 +1203,8 @@ html[data-tema="scuro"] .p-tabellone{background:#0C4E54}
     <span id="p-aggiornato"></span>
     <span>Entrato come <strong id="p-utente"></strong></span>
     <div class="azioni"><button type="button" class="btn piccolo" data-p="aggiorna">Aggiorna i dati</button><button type="button" class="btn piccolo" data-p="esci">Esci</button></div>
-    <span>Password dimenticata? Chiedila a Elisa.</span>
+    <span>Password dimenticata? Chiedila a chi ti ha dato l'accesso.</span>
+    <a class="p-admin" href="../">Sei l'amministratore? Apri Analysis ›</a>
   </footer>
 </div>
 <div class="nascosto" aria-hidden="true"><span id="riepilogo-filtri"></span><span id="badge-dataset"></span><select id="sel-periodo"></select><select id="sel-giocatore"></select></div>
