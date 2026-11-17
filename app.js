@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.53.0",
+  numero: "1.53.1",
   data: "2026-11-17",
-  note: "Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
+  note: "Portale Mister con icona propria (fascia MISTER) e link «Apri Analysis» per l'amministratore; testi senza nomi propri. Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
 };
 
 /* =====================================================================
