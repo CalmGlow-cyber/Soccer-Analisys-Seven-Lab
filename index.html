@@ -778,6 +778,156 @@ details.file-dettagli[open] > summary::after{content:"Nascondi"}
   .kpi-eti{font-size:11px}
 }
 
+/* ---------- tabelle sul telefono (1.52.0): niente più scorrimento di lato ---------- */
+.schede-ordina, .schede-tutti{display:none}
+@media (max-width:640px){
+  /* tabelle strette: stanno nello schermo, senza larghezza minima né colonna fissa */
+  table.tab-stretta{min-width:0 !important; width:100% !important; table-layout:auto}
+  table.tab-stretta thead th{width:auto !important; padding:8px 6px; font-size:10.5px; letter-spacing:.03em; word-break:normal; overflow-wrap:anywhere}
+  table.tab-stretta tbody td{padding:8px 6px; white-space:normal}
+  table.tab-stretta thead th:first-child, table.tab-stretta tbody td:first-child{position:static; max-width:none}
+  table.tab-stretta .barra-wrap{min-width:0}
+  .tabella-scroll.wrap-stretta{overflow-x:hidden}
+
+  /* tabelle larghe: ogni riga è una scheda */
+  .tabella-scroll.wrap-schede{overflow:visible; max-height:none; border:0; border-radius:0; background:none}
+  table.tab-schede{display:block; min-width:0 !important; width:auto !important; table-layout:auto; font-size:14px}
+  table.tab-schede caption{display:none}
+  table.tab-schede thead{display:none}
+  table.tab-schede tbody{display:flex; flex-direction:column; gap:8px}
+  table.tab-schede tbody tr{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px 12px; padding:12px 14px;
+    border:1px solid var(--border); border-radius:var(--r); background:var(--surface)}
+  table.tab-schede tbody td{display:flex; flex-direction:column; justify-content:flex-start; gap:2px; min-width:0; padding:0; border:0;
+    text-align:left; white-space:normal; position:static; background:none; font-variant-numeric:tabular-nums; font-weight:700; line-height:1.25}
+  table.tab-schede tbody td::before{content:attr(data-etichetta); font-size:11px; font-weight:600; color:var(--muted); letter-spacing:.01em; line-height:1.25}
+  /* intestazione della scheda: il nome (con il ruolo accanto) su tutta la riga */
+  table.tab-schede tbody td:first-child{grid-column:1 / -1; max-width:none; flex-direction:row; flex-wrap:wrap; align-items:baseline; gap:2px 8px;
+    font-size:15.5px; font-weight:800; padding-bottom:8px; border-bottom:1px solid color-mix(in srgb, var(--border) 70%, transparent)}
+  table.tab-schede tbody td:first-child::before{display:none}
+  table.tab-schede tbody td:first-child .ruolo{display:inline; font-size:12px}
+  table.tab-schede tbody td.cella-larga, table.tab-schede tbody td.cella-piena{grid-column:1 / -1}
+  table.tab-schede tbody td.cella-testo{font-weight:500; line-height:1.45}
+  table.tab-schede tbody td .ruolo{font-weight:500}
+  table.tab-schede .barra-wrap{min-width:0; width:100%}
+  table.tab-schede .barra-wrap .barra{flex:0 1 auto; max-width:calc(100% - 56px)}
+  table.tab-schede .barra-wrap span{flex:none}
+  table.tab-stretta .barra-wrap .barra{flex:0 1 auto; max-width:calc(100% - 44px)}
+  table.tab-schede td .pill{align-self:flex-start; white-space:normal; max-width:100%}
+  table.tab-schede canvas.spark{max-width:100%}
+  /* righe evidenziate e attenuate restano riconoscibili */
+  table.tab-schede tbody tr:hover td, table.tab-schede tbody tr:hover td:first-child{background:none}
+  table.tab-schede tbody tr.riga-attenuata{opacity:.65}
+  table.tab-schede tbody tr.riga-attenuata td{opacity:1}
+  table.tab-schede td.conf-migliore{background:none; color:var(--primary)}
+  table.tab-schede td.conf-migliore::after{content:"migliore"; font-size:10.5px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.05em}
+  table.tab-schede tbody td:first-child.conf-migliore::after{content:none}
+
+  /* schede lunghe (classifica): valori principali in vista, gli altri toccando la scheda */
+  table.tab-lunga tbody tr{cursor:pointer}
+  table.tab-lunga tbody tr:not(.aperta) td.cella-extra{display:none}
+  table.tab-lunga tbody tr{position:relative}
+  table.tab-lunga tbody td:first-child{padding-right:96px}
+  table.tab-lunga tbody td:first-child::after{content:"Tutti i dati ▾"; position:absolute; top:14px; right:14px; font-size:12px; font-weight:700; color:var(--primary)}
+  table.tab-lunga tbody tr.aperta td:first-child::after{content:"Meno ▴"}
+  table.tab-lunga tbody tr:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+  table.tab-schede tbody td.cella-ordinata{color:var(--primary)}
+  table.tab-schede tbody td.cella-ordinata::before{color:var(--primary)}
+
+  /* prime righe e «Mostra tutti» */
+  table.tab-ridotta tbody tr:nth-child(n+7){display:none}
+  .schede-tutti{display:block; width:100%; margin-top:8px; padding:11px 14px; border:1px dashed color-mix(in srgb, var(--primary) 45%, var(--border));
+    border-radius:var(--r); background:var(--primary-soft); color:var(--primary); font-size:14px; font-weight:700; cursor:pointer}
+  .schede-ordina{display:flex; align-items:center; gap:8px; margin:0 0 10px; flex-wrap:wrap}
+  .schede-ordina label{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--muted); flex:1 1 200px; min-width:0}
+  .schede-ordina select{flex:1; min-width:0; font-size:14px}
+  .schede-verso{border:1px solid var(--border); background:var(--surface); color:var(--text); border-radius:9px; padding:7px 12px; font-size:13px; font-weight:700; white-space:nowrap; cursor:pointer}
+  .schede-tutti:focus-visible, .schede-verso:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+}
+
+/* ---------- dashboard a riquadri (1.53.0) ---------- */
+#dashboard.con-riquadri{display:flex; flex-direction:column}
+#dashboard.con-riquadri > *{min-width:0}
+#dashboard.con-riquadri > #sez-hub{order:-1}
+#dashboard.con-riquadri > #errore-sezioni{order:-2}
+#dashboard.con-riquadri > section:not([data-tab-sezione]):not(#sez-hub){order:90}
+.fuori-area{display:none !important}
+.nav-sezioni.nav-riepilogo{display:none}
+main section#sez-hub{border-top:0}
+/* nella Difesa si vedono i tiri subiti, nell'Attacco i nostri */
+#dashboard[data-lato="fatti"] [data-lato-tiri="subiti"], #dashboard[data-lato="subiti"] [data-lato-tiri="fatti"]{display:none !important}
+
+.rq-kpi{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; margin:6px 0 16px}
+.rq-kpi-c{background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:12px 14px; display:flex; flex-direction:column; gap:2px; min-width:0}
+.rq-kpi-e{font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em}
+.rq-kpi-v{font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1.1; font-variant-numeric:tabular-nums}
+.rq-kpi-n{font-size:12.5px; font-weight:700; color:var(--muted)}
+.rq-kpi-n.su{color:var(--success)} .rq-kpi-n.giu{color:var(--danger)}
+
+.rq-lezioni{position:relative; background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:14px 18px 14px 20px; margin-bottom:16px; overflow:hidden; max-width:880px}
+.rq-lezioni::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--c6)}
+.rq-lezioni h3{margin:0 0 8px; font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--warning)}
+.rq-lezioni ol, .rq-frasi{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:8px; font-size:15px; line-height:1.5}
+.rq-frasi{list-style:none; padding-left:0}
+.rq-frasi li{position:relative; padding-left:18px}
+.rq-frasi li::before{content:""; position:absolute; left:2px; top:.55em; width:8px; height:8px; border-radius:50%; background:var(--faint)}
+.rq-frasi li.rq-tono-bene::before{background:var(--success)}
+.rq-frasi li.rq-tono-male::before{background:var(--danger)}
+.rq-frasi li.rq-tono-occhio::before{background:var(--c6)}
+.rq-lezioni ol li::marker{font-weight:800; color:var(--warning)}
+.rq-vai{border:0; background:none; padding:0; margin-left:2px; font:inherit; font-size:13px; font-weight:700; color:var(--primary); cursor:pointer; white-space:nowrap}
+.rq-vai:hover{text-decoration:underline}
+.rq-guida{font-size:13.5px; color:var(--muted); margin:0 0 10px}
+.rq-nota, .rq-vuoto{font-size:13px; color:var(--muted); margin:8px 0 0}
+.rq-vuoto{font-size:14.5px; margin:0}
+
+.rq-griglia{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px}
+@media (min-width:900px){ .rq-griglia{grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px} .rq-tile{min-height:150px} }
+.rq-tile{display:flex; flex-direction:column; align-items:flex-start; gap:8px; text-align:left; font:inherit; color:var(--text); cursor:pointer;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; min-height:170px; box-shadow:var(--shadow);
+  transition:border-color .15s, transform .15s}
+.rq-tile:hover{border-color:color-mix(in srgb, var(--primary) 45%, var(--border))}
+.rq-tile:active{transform:scale(.985)}
+.rq-tile:focus-visible, .rq-indietro:focus-visible, .rq-vai:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+.rq-testi{display:flex; flex-direction:column; gap:3px}
+.rq-tit{font-size:16.5px; font-weight:800; letter-spacing:-.01em; line-height:1.2}
+.rq-dom{font-size:13px; color:var(--muted); line-height:1.4}
+.rq-dato{margin-top:auto; display:flex; flex-direction:column; align-items:flex-start; gap:5px; font-size:13px; font-weight:700; font-variant-numeric:tabular-nums}
+.rq-largo{grid-column:1 / -1; min-height:0; flex-direction:row; align-items:center; gap:14px}
+.rq-largo .rq-dato{margin:0 0 0 auto; align-items:flex-end; text-align:right}
+.rq-ico{width:42px; height:42px; flex:none; border-radius:12px; display:grid; place-items:center; color:var(--primary); background:var(--primary-soft)}
+.rq-ico.rq-r{color:var(--danger); background:color-mix(in srgb, var(--danger) 14%, var(--surface))}
+.rq-ico.rq-o{color:var(--warning); background:color-mix(in srgb, var(--c6) 20%, var(--surface))}
+.rq-ico.rq-v{color:var(--success); background:color-mix(in srgb, var(--success) 15%, var(--surface))}
+.rq-pill{font-size:10.5px; font-weight:800; padding:2px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:.05em; white-space:nowrap}
+.rq-pill-ok{background:color-mix(in srgb, var(--success) 16%, var(--surface)); color:var(--success)}
+.rq-pill-at{background:color-mix(in srgb, var(--c6) 22%, var(--surface)); color:var(--warning)}
+.rq-pill-ko{background:color-mix(in srgb, var(--danger) 15%, var(--surface)); color:var(--danger)}
+
+.rq-indietro{border:0; background:none; padding:4px 0; font:inherit; font-size:14px; font-weight:800; color:var(--primary); cursor:pointer}
+.rq-testa{display:flex; align-items:center; gap:12px; margin:6px 0 4px}
+.rq-testa h2{font-size:26px; letter-spacing:-.02em}
+.rq-domanda{font-size:15px; color:var(--muted); margin:0 0 14px; max-width:72ch}
+#sez-hub.rq-in-area{padding-bottom:6px}
+@media (max-width:640px){
+  .rq-kpi{gap:8px}
+  .rq-kpi-c{padding:9px 10px}
+  .rq-kpi-e{font-size:10px; letter-spacing:.03em}
+  .rq-kpi-v{font-size:21px}
+  .rq-kpi-n{font-size:11px}
+  .rq-griglia{grid-template-columns:1fr 1fr; gap:10px}
+  .rq-tile{padding:12px; min-height:168px; gap:6px}
+  .rq-tit{font-size:15px}
+  .rq-dom{font-size:12px}
+  .rq-dato{font-size:12px}
+  .rq-largo{min-height:0}
+  .rq-largo .rq-dato{display:none}
+  .rq-ico{width:38px; height:38px; border-radius:11px}
+  .rq-lezioni{padding:12px 14px 12px 16px}
+  .rq-lezioni ol, .rq-frasi{font-size:14px}
+  .rq-testa h2{font-size:22px}
+  .rq-domanda{font-size:14px}
+}
+
 </style>
 </head>
 <body>
@@ -900,6 +1050,8 @@ details.file-dettagli[open] > summary::after{content:"Nascondi"}
   <div id="dashboard" class="nascosto">
     <!-- ===================== DASHBOARD PARTITA ===================== -->
     <!-- 3. KPI -->
+    <!-- 1.53.0: Riepilogo con i riquadri delle aree, oppure la testata dell'area aperta (scritto da app.js) -->
+    <section id="sez-hub" class="nascosto" aria-live="polite"></section>
     <section id="sez-kpi" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">01</span><h2>KPI di squadra</h2></div>
       <p class="sez-desc" id="kpi-desc">Sintesi del periodo selezionato. Dove disponibile, il confronto è con il mese precedente con dati.</p>
@@ -916,7 +1068,7 @@ details.file-dettagli[open] > summary::after{content:"Nascondi"}
     <!-- 5. CLASSIFICA -->
     <section id="sez-classifica" data-tab-sezione="partita">
       <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori</h2></div>
-      <p class="sez-desc">Tocca un'intestazione per ordinare. Le percentuali sono calcolate sui totali del periodo.</p>
+      <p class="sez-desc">Tocca un'intestazione per ordinare (sul telefono, il menu «Ordina per»). Le percentuali sono calcolate sui totali del periodo.</p>
       <div id="contenuto-classifica"></div>
     </section>
 
@@ -1014,7 +1166,7 @@ details.file-dettagli[open] > summary::after{content:"Nascondi"}
     <!-- 7c. CLASSIFICA DA ALLENAMENTO -->
     <section id="sez-classifica-stat-allenamento" data-tab-sezione="allenamento">
       <div class="sez-testa"><span class="sez-num">03</span><h2>Classifica giocatori (allenamento)</h2></div>
-      <p class="sez-desc">Clicca su un'intestazione per ordinare. Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole sessioni. La sparkline mostra l'indice prestazione sessione per sessione.</p>
+      <p class="sez-desc">Tocca un'intestazione per ordinare (sul telefono, il menu «Ordina per»). Le percentuali sono ricalcolate sui totali del periodo, non come media delle singole sessioni. La sparkline mostra l'indice prestazione sessione per sessione.</p>
       <div id="contenuto-classifica-stat-allenamento"></div>
     </section>
 

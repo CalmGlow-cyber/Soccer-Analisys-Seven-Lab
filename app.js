@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.51.0",
-  data: "2026-11-12",
-  note: "Cura e affidabilità (12/11/2026). Grafica: pannello dei file richiudibile con l'esito di ogni caricamento, note lunghe raccolte sotto «Come leggere questi dati», descrizioni delle sezioni riscritte e accorciate, indice che segue lo scorrimento, andamento su due colonne, sezioni più distanziate. Precisione: confronti fra mesi sulla media a partita (non sui totali), nuova tabella «Cosa contiene ogni file» con il controllo di coerenza fra riepilogo e timeline, avvisi sui doppioni, niente più falsi allarmi sulle durate degli allenamenti. Affidabilità: richieste al cloud con tempo massimo e nuovi tentativi, conferma prima di eliminare un file, una sezione che dà errore non blocca più le altre, file vuoti o sostituiti segnalati. Comprende la 1.50.0."
+  numero: "1.53.0",
+  data: "2026-11-17",
+  note: "Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
 };
 
 /* =====================================================================
@@ -1121,6 +1121,616 @@ document.addEventListener("DOMContentLoaded", () => {
   pianifica();
   let attesa = false;
   window.addEventListener("scroll", () => { if(attesa) return; attesa = true; requestAnimationFrame(() => { attesa = false; aggiornaIndiceAttivo(); }); }, {passive: true});
+});
+
+
+/* =====================================================================================================
+   TABELLE SUL TELEFONO (1.52.0, 16/11/2026). Elisa: «Fallo» — le tabelle larghe (classifica giocatori e
+   simili) sul telefono si scorrevano ancora di lato. Sotto i 640px di larghezza ogni tabella sceglie da
+   sola come mostrarsi:
+   - fino a 4 colonne, se ci sta nello schermo: resta una tabella, ma senza larghezza minima («tab-stretta»);
+   - altrimenti ogni riga diventa una scheda: il nome in alto, sotto i valori con la loro etichetta
+     («tab-schede»). Barre e testi lunghi prendono tutta la larghezza della scheda.
+   Le tabelle che si possono ordinare hanno sopra un menu «Ordina per» (le intestazioni sono nascoste);
+   quelle con più di 8 righe mostrano le prime 6 e un pulsante «Mostra tutti»; la classifica mostra i
+   valori principali e il resto toccando la scheda. Sul computer nulla cambia: tutto il CSS è dentro la
+   media query, e qui si aggiungono solo classi, etichette e due piccoli controlli nascosti su schermo largo.
+   ===================================================================================================== */
+const SCHEDE_MQ = window.matchMedia("(max-width: 640px)");
+const SCHEDE_RIGHE_INIZIALI = 6;          // righe visibili prima di «Mostra tutti»
+const SCHEDE_SOGLIA_RIGHE = 8;            // oltre questo numero di righe compare il pulsante
+const SCHEDE_SOGLIA_VALORI = 8;           // oltre questo numero di valori la scheda si apre al tocco
+// valori sempre in vista nelle schede della classifica (il resto con «Tutti i dati»)
+const SCHEDE_PRINCIPALI = ["Partite_Giocate", "Minuti_Totali", "Gol", "Assist", "Precisione_Passaggi_pct", "Indice_Prestazione_Tot"];
+const schedeEspanse = new Set();          // tabelle aperte con «Mostra tutti»: restano aperte dopo un riordino
+let schedeInCorso = false;
+
+function chiaveTabellaSchede(tbl){
+  const sez = tbl.closest("section");
+  const tutte = sez ? Array.from(sez.querySelectorAll(".tabella-scroll > table")) : [];
+  return (sez ? sez.id : "x") + ":" + tutte.indexOf(tbl);
+}
+function etichetteSchede(tbl){
+  const ths = Array.from(tbl.querySelectorAll("thead tr:last-child th"));
+  const eti = ths.map(th => th.textContent.replace(/[▾▴]/g, "").replace(/\s+/g, " ").trim());
+  const chiavi = ths.map(th => th.dataset.col || "");
+  tbl.querySelectorAll("tbody tr").forEach(tr => {
+    let i = 0;
+    Array.from(tr.children).forEach(td => {
+      if(td.tagName !== "TD" && td.tagName !== "TH") return;
+      const span = td.colSpan || 1;
+      if(span > 1) td.classList.add("cella-piena");
+      if(!td.hasAttribute("data-etichetta") && eti[i] !== undefined) td.setAttribute("data-etichetta", eti[i]);
+      if(chiavi[i]) td.dataset.col = chiavi[i];
+      // grafici, barre e testi lunghi occupano tutta la larghezza della scheda
+      if(td.querySelector(".barra-wrap, canvas, svg, .pill") || td.classList.contains("cella-testo") || td.textContent.trim().length > 26) td.classList.add("cella-larga");
+      i += span;
+    });
+  });
+  return {n: ths.length, chiavi};
+}
+/** Toglie le tracce della modalità schede (si torna a schermo largo o la tabella ci sta). */
+function togliSchede(tbl){
+  tbl.parentElement.classList.remove("wrap-stretta", "wrap-schede");
+  tbl.classList.remove("tab-schede", "tab-stretta", "tab-lunga", "tab-ridotta");
+  tbl.querySelectorAll("tbody tr[tabindex]").forEach(tr => { tr.removeAttribute("tabindex"); tr.removeAttribute("aria-expanded"); tr.classList.remove("aperta"); });
+}
+function aggiornaControlliSchede(tbl, wrap){
+  const k = chiaveTabellaSchede(tbl);
+  // --- «Ordina per»: le intestazioni cliccabili sono nascoste, il menu fa lo stesso clic ---
+  const ordinabili = Array.from(tbl.querySelectorAll("thead th[aria-sort]"));
+  let barra = wrap.previousElementSibling && wrap.previousElementSibling.classList.contains("schede-ordina") ? wrap.previousElementSibling : null;
+  if(ordinabili.length && tbl.classList.contains("tab-schede")){
+    const attiva = ordinabili.find(th => th.getAttribute("aria-sort") !== "none");
+    const disc = attiva && attiva.getAttribute("aria-sort") === "descending";
+    if(!barra){
+      barra = document.createElement("div"); barra.className = "schede-ordina";
+      barra.innerHTML = `<label>Ordina per <select aria-label="Ordina la tabella per"></select></label>
+        <button type="button" class="schede-verso" aria-label="Inverti l'ordine"></button>`;
+      wrap.parentElement.insertBefore(barra, wrap);
+      // la tabella si cerca ogni volta: dopo un riordino è un elemento nuovo
+      const tabella = () => { const w = barra.nextElementSibling; return w ? w.querySelector(":scope > table") : null; };
+      barra.querySelector("select").addEventListener("change", e => {
+        const t = tabella(); const th = t ? t.querySelector(`thead th[data-col="${CSS.escape(e.target.value)}"]`) : null;
+        if(th) th.click();
+      });
+      barra.querySelector(".schede-verso").addEventListener("click", () => {
+        const t = tabella(); const th = t ? t.querySelector('thead th[aria-sort="ascending"], thead th[aria-sort="descending"]') : null;
+        if(th) th.click();
+      });
+    }
+    const sel = barra.querySelector("select");
+    const opzioni = ordinabili.map(th => `<option value="${esc(th.dataset.col || "")}"${th === attiva ? " selected" : ""}>${esc(th.textContent.replace(/[▾▴]/g, "").trim())}</option>`).join("");
+    if(sel._opzioni !== opzioni){ sel.innerHTML = opzioni; sel._opzioni = opzioni; }
+    const verso = barra.querySelector(".schede-verso");
+    const testoVerso = disc ? "Dal più alto ▾" : "Dal più basso ▴";
+    const tv = (attiva && attiva.dataset.col === "Giocatore") ? (disc ? "Z → A" : "A → Z") : testoVerso;
+    if(verso.textContent !== tv) verso.textContent = tv;
+  } else if(barra) barra.remove();
+  // --- «Mostra tutti» ---
+  const righe = tbl.querySelectorAll("tbody tr").length;
+  let piu = wrap.nextElementSibling && wrap.nextElementSibling.classList.contains("schede-tutti") ? wrap.nextElementSibling : null;
+  if(tbl.classList.contains("tab-schede") && righe > SCHEDE_SOGLIA_RIGHE){
+    const aperta = schedeEspanse.has(k);
+    tbl.classList.toggle("tab-ridotta", !aperta);
+    if(!piu){
+      piu = document.createElement("button"); piu.type = "button"; piu.className = "schede-tutti";
+      wrap.parentElement.insertBefore(piu, wrap.nextSibling);
+      piu.addEventListener("click", () => {
+        const wrap = piu.previousElementSibling; const tbl = wrap && wrap.querySelector(":scope > table");
+        if(!tbl) return;
+        const kk = chiaveTabellaSchede(tbl);
+        if(schedeEspanse.has(kk)){
+          schedeEspanse.delete(kk); tbl.classList.add("tab-ridotta");
+          // chiudendo, si torna all'inizio della tabella invece di restare in fondo alla pagina
+          const top = wrap.getBoundingClientRect().top + window.scrollY - ((parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--altezza-fissa")) || 0) + 60);
+          if(wrap.getBoundingClientRect().top < 0) window.scrollTo({top, behavior: "smooth"});
+        } else { schedeEspanse.add(kk); tbl.classList.remove("tab-ridotta"); }
+        aggiornaControlliSchede(tbl, wrap);
+      });
+    }
+    const txt = aperta ? "Mostra meno" : `Mostra tutti (${righe})`;
+    if(piu.textContent !== txt) piu.textContent = txt;
+    piu.setAttribute("aria-expanded", aperta ? "true" : "false");
+  } else {
+    tbl.classList.remove("tab-ridotta");
+    if(piu) piu.remove();
+  }
+}
+function applicaSchede(){
+  if(schedeInCorso) return;
+  schedeInCorso = true;
+  try{
+    const telefono = SCHEDE_MQ.matches;
+    document.querySelectorAll(".tabella-scroll > table").forEach(tbl => {
+      const wrap = tbl.parentElement;
+      if(!telefono || !tbl.querySelector("tbody tr") || tbl.closest("#report-stage, [data-no-schede]")){
+        togliSchede(tbl);
+        if(wrap.previousElementSibling && wrap.previousElementSibling.classList.contains("schede-ordina")) wrap.previousElementSibling.remove();
+        if(wrap.nextElementSibling && wrap.nextElementSibling.classList.contains("schede-tutti")) wrap.nextElementSibling.remove();
+        return;
+      }
+      const {n, chiavi} = etichetteSchede(tbl);
+      // la scelta si fa una volta per tabella disegnata (se la tabella viene ridisegnata, è un elemento nuovo)
+      if(!tbl.dataset.formaTel){
+        let forma = "schede";
+        if(n <= 4){
+          tbl.classList.add("tab-stretta"); wrap.classList.add("wrap-stretta");
+          forma = tbl.offsetWidth > wrap.clientWidth + 2 ? "schede" : "stretta";
+          tbl.classList.remove("tab-stretta"); wrap.classList.remove("wrap-stretta");
+        }
+        tbl.dataset.formaTel = forma;
+      }
+      const schede = tbl.dataset.formaTel === "schede";
+      tbl.classList.toggle("tab-stretta", !schede);
+      tbl.classList.toggle("tab-schede", schede);
+      wrap.classList.toggle("wrap-stretta", !schede); wrap.classList.toggle("wrap-schede", schede);
+      // schede con molti valori: in vista i principali (e quello per cui è ordinata), il resto al tocco
+      const valori = n - 1;
+      const lunga = schede && valori > SCHEDE_SOGLIA_VALORI;
+      tbl.classList.toggle("tab-lunga", lunga);
+      if(lunga){
+        const ordinata = (tbl.querySelector('thead th[aria-sort="ascending"], thead th[aria-sort="descending"]') || {}).dataset;
+        const colOrd = ordinata ? ordinata.col : null;
+        const principali = chiavi.some(c => SCHEDE_PRINCIPALI.includes(c)) ? SCHEDE_PRINCIPALI : chiavi.slice(1, 7);
+        tbl.querySelectorAll("tbody tr").forEach(tr => {
+          Array.from(tr.children).forEach((td, i) => {
+            if(i === 0) return;
+            const c = td.dataset.col || chiavi[i];
+            td.classList.toggle("cella-extra", !(principali.includes(c) || c === colOrd));
+            td.classList.toggle("cella-ordinata", !!colOrd && c === colOrd && c !== "Giocatore");
+          });
+          if(!tr.hasAttribute("tabindex")){ tr.setAttribute("tabindex", "0"); tr.setAttribute("aria-expanded", tr.classList.contains("aperta") ? "true" : "false"); }
+        });
+      }
+      aggiornaControlliSchede(tbl, wrap);
+      // le linee di andamento si ridisegnano sulla larghezza nuova della cella
+      if(schede) tbl.querySelectorAll("canvas.spark").forEach(cv => { if(cv._largSchede !== cv.parentElement.clientWidth){ cv._largSchede = cv.parentElement.clientWidth; disegnaSpark(cv); } });
+    });
+  } catch(e){ console.warn("schede tabelle:", e); }
+  finally { schedeInCorso = false; }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  let timer = null;
+  const pianifica = () => { if(schedeInCorso) return; clearTimeout(timer); timer = setTimeout(applicaSchede, 80); };
+  new MutationObserver(pianifica).observe(document.body, {childList: true, subtree: true});
+  const cambio = () => {
+    // cambiando orientamento la scelta tabella/schede va rifatta
+    document.querySelectorAll("table[data-forma-tel]").forEach(t => delete t.dataset.formaTel);
+    pianifica();
+  };
+  if(SCHEDE_MQ.addEventListener) SCHEDE_MQ.addEventListener("change", cambio); else if(SCHEDE_MQ.addListener) SCHEDE_MQ.addListener(cambio);
+  window.addEventListener("orientationchange", cambio);
+  // tocco su una scheda lunga: si apre e si chiude
+  const apriChiudi = tr => {
+    const ap = tr.classList.toggle("aperta"); tr.setAttribute("aria-expanded", ap ? "true" : "false");
+    // la linea di andamento era nascosta: si ridisegna sulla larghezza vera della scheda
+    if(ap) tr.querySelectorAll("canvas.spark").forEach(cv => { cv._largSchede = cv.parentElement.clientWidth; disegnaSpark(cv); });
+  };
+  document.addEventListener("click", e => {
+    if(!SCHEDE_MQ.matches) return;
+    const tr = e.target.closest("table.tab-lunga tbody tr");
+    if(!tr || e.target.closest("a, button, select, input, label")) return;
+    apriChiudi(tr);
+  });
+  document.addEventListener("keydown", e => {
+    if(!SCHEDE_MQ.matches || (e.key !== "Enter" && e.key !== " ")) return;
+    const tr = e.target.closest && e.target.closest("table.tab-lunga tbody tr");
+    if(tr && e.target === tr){ e.preventDefault(); apriChiudi(tr); }
+  });
+  pianifica();
+});
+
+
+/* =====================================================================================================
+   DASHBOARD A RIQUADRI (1.53.0, 17/11/2026). Elisa: «così è confusionale … rischiamo di mostrare tanti dati
+   ma non essere in grado di prenderne degli insegnamenti». Approvata la Proposta B, per fase di gioco.
+   Le schede Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» e un
+   riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci
+   insegnano; in Allenamento «Carico e fatica» al posto di Attacco e Difesa). Toccando un riquadro si vedono
+   solo le sezioni di quell'area, con in cima «Cosa ci dice»: 2-4 frasi scritte dai dati del periodo scelto.
+   Nessuna metrica è stata tolta: le sezioni sono le stesse, cambia solo quando si vedono e in che ordine.
+   La sezione dei tiri sta sia in Attacco sia in Difesa: in Attacco si vedono i nostri tiri, in Difesa quelli
+   subiti (e la porta dei gol subiti); la tabella per distanza e gli xG partita per partita restano in tutte e due.
+   Il tasto «indietro» del telefono torna al Riepilogo. Il Portale Mister non cambia (ha il suo elenco di sezioni).
+   ===================================================================================================== */
+const ICONE_RIQUADRI = {
+  pan: '<path d="M4 19V10M10 19V5M16 19v-7M22 19H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+  att: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7l4 3-1.5 4.5h-5L8 10z" fill="currentColor"/>',
+  dif: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>',
+  tra: '<path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18 3v4h-4M6 21v-4h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  gio: '<circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 14.2c2.8 0 5 2.4 5 5.3" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  for: '<rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="17" r="1.6" fill="currentColor"/><circle cx="7" cy="12" r="1.6" fill="currentColor"/><circle cx="17" cy="12" r="1.6" fill="currentColor"/><circle cx="9" cy="7" r="1.6" fill="currentColor"/><circle cx="15" cy="7" r="1.6" fill="currentColor"/>',
+  lez: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  car: '<path d="M3 17l5-6 4 3 4-7 5 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+};
+const iconaRiquadro = (k, tono) => `<span class="rq-ico${tono ? " rq-" + tono : ""}" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24">${ICONE_RIQUADRI[k] || ""}</svg></span>`;
+
+/** Le aree di ogni scheda e le sezioni che contengono, nell'ordine in cui si leggono. */
+const CATEGORIE_DASHBOARD = {
+  partita: [
+    {k:"panoramica", tit:"Panoramica", dom:"Risultati, andamento e numeri di squadra.", ico:"pan", sez:["sez-kpi", "sez-andamento"]},
+    {k:"attacco", tit:"Attacco", breve:"Come e da dove creiamo e segniamo.", dom:"Come e da dove creiamo occasioni e segniamo.", ico:"att", tono:"v", lato:"fatti",
+      sez:["sez-tiri-partita", "sez-golgame-partita", "sez-porta-partita"], titoli:{"sez-tiri-partita":"Da dove tiriamo"}},
+    {k:"difesa", tit:"Difesa", breve:"Da dove ci tirano, come entrano i gol, chi respinge.", dom:"Da dove ci tirano, dove entrano i gol, chi respinge e chi è in campo quando li prendiamo.", ico:"dif", tono:"r", lato:"subiti",
+      sez:["sez-tiri-partita", "sez-respinte-partita", "sez-incampo-partita"], titoli:{"sez-tiri-partita":"Da dove ci tirano"}},
+    {k:"transizioni", tit:"Transizioni", breve:"Palle perse, riconquista, possesso.", dom:"Dove perdiamo e recuperiamo palla, quanto ci mettiamo a riprenderla e quanto ci costa perderla.", ico:"tra", tono:"o",
+      sez:["sez-zone-partita", "sez-persa-gol-partita", "sez-riconquista", "sez-possesso-partita"]},
+    {k:"giocatori", tit:"Giocatori", breve:"Classifica, tendenze, subentrati.", dom:"Chi rende di più, chi sta crescendo, chi entra e cambia la partita.", ico:"gio",
+      sez:["sez-classifica", "sez-tendenze", "sez-subentrati", "sez-coinvolgimento-formazioni"]},
+    {k:"formazioni", tit:"Formazioni", breve:"Chi gioca meglio insieme.", dom:"Chi gioca meglio insieme, con quale modulo e chi viene convocato.", ico:"for",
+      sez:["sez-formazione-partita", "sez-coinvolgimento-formazioni"]},
+    {k:"lezioni", tit:"Cosa ci insegnano le partite", dom:"Le situazioni che si ripetono di partita in partita: da qui si capisce cosa allenare.", ico:"lez", tono:"o", largo:true,
+      sez:["sez-situazioni-partita"]}
+  ],
+  allenamento: [
+    {k:"panoramica", tit:"Panoramica", dom:"I numeri delle partitelle e come cambiano nel tempo.", ico:"pan", sez:["sez-kpi-stat-allenamento", "sez-andamento-stat-allenamento"]},
+    {k:"carico", tit:"Carico e fatica", breve:"Chi lavora di più e chi accumula fatica.", dom:"Quanto lavora ognuno, chi accumula fatica e se pesa sul rendimento in partita.", ico:"car", tono:"r",
+      sez:["sez-allenamenti", "sez-incroci"]},
+    {k:"transizioni", tit:"Transizioni", breve:"Palle perse e recuperi nelle partitelle.", dom:"Dove si perde e si recupera palla nelle partitelle, e quante palle perse diventano gol.", ico:"tra", tono:"o",
+      sez:["sez-zone-allenamento", "sez-persa-gol-allenamento"]},
+    {k:"giocatori", tit:"Giocatori", breve:"Classifica, tendenze, confronto.", dom:"Classifica, tendenze e confronto fra due giocatori nelle partitelle.", ico:"gio",
+      sez:["sez-classifica-stat-allenamento", "sez-tendenze-stat-allenamento", "sez-confronto-allenamento", "sez-persa-giocatore-allenamento"]},
+    {k:"formazioni", tit:"Formazioni", breve:"Chi gioca meglio insieme.", dom:"Con chi in campo la squadra interna prende meno gol e quale formazione rende di più.", ico:"for",
+      sez:["sez-incampo-allenamento", "sez-formazione-allenamento"]},
+    {k:"lezioni", tit:"Cosa ci insegnano gli allenamenti", dom:"Le situazioni che si ripetono nelle partitelle.", ico:"lez", tono:"o", largo:true,
+      sez:["sez-situazioni-allenamento"]}
+  ]
+};
+const categoriaAttiva = {partita: null, allenamento: null};   // area aperta in ogni scheda (null = Riepilogo)
+let riquadriUltimi = {partita: null, allenamento: null};   // frasi e numeri calcolati all'ultimo render
+
+const tabAttivaDashboard = () => { const b = document.querySelector(".tab-btn.attiva"); return b ? b.dataset.tab : "partita"; };
+const unoSu = q => q > 0 ? Math.max(2, Math.round(100 / q)) : null;
+
+/** Dove va una situazione del motore «Situazioni che si ripetono». */
+function categoriaSituazione(x, tipo){
+  const c = x.chiave || "";
+  if(c === "errore-gol" || c === "ripartenza-gol" || c.startsWith("zona-")) return "transizioni";
+  if(c === "piazzato-gol") return tipo === "partita" ? "attacco" : "panoramica";
+  if(c === "cambio-gol") return tipo === "partita" ? "formazioni" : "panoramica";
+  if(c === "calo-passaggi" || c === "aumento-perse") return "panoramica";
+  if(c.startsWith("catena-") || c.startsWith("calo-")) return "giocatori";
+  if(x.fam === "momenti" && c !== "calo-passaggi" && c !== "aumento-perse") return tipo === "partita" ? (x.positiva ? "attacco" : "difesa") : "panoramica";
+  return "panoramica";
+}
+
+/** Calcola, per una scheda, le frasi di ogni area e i numeri dei riquadri. Ogni frase: {html, peso, tono}. */
+function calcolaRiquadri(f, tab){
+  const partita = tab === "partita";
+  const fr = {}, dato = {}, pill = {};
+  CATEGORIE_DASHBOARD[tab].forEach(c => { fr[c.k] = []; });
+  const metti = (k, html, peso, tono) => { if(html && fr[k]) fr[k].push({html, peso: peso || 1, tono: tono || "neutro"}); };
+  const prova = fn => { try{ fn(); }catch(e){ console.warn("riquadri:", e); } };
+  const sessioni = partita ? f.partite : f.allenamenti;
+
+  // ---- situazioni che si ripetono: già scritte, vanno solo smistate ----
+  let sit = null;
+  prova(() => {
+    sit = analizzaSituazioni(sessioni, tab);
+    const tutte = (sit.situazioni || []).concat((sit.tra && sit.tra.frasi) || []);
+    tutte.forEach(x => {
+      // le situazioni di squadra (gol, momenti) contano più di quelle di un singolo giocatore
+      const peso = (x.forza === "ripete" ? 3 : 1.5) + Math.min(1, x.peso || 0) + (x.fam === "giocatori" ? -0.4 : 0.8);
+      const tono = x.positiva ? "bene" : (x.forza === "ripete" ? "male" : "occhio");
+      metti(categoriaSituazione(x, tab), x.frase, peso, tono);
+    });
+    const ord = tutte.slice().sort((a, b) => ((b.forza === "ripete") - (a.forza === "ripete")) || ((b.peso || 0) - (a.peso || 0)));
+    ord.slice(0, 4).forEach(x => metti("lezioni", x.frase, 0, x.positiva ? "bene" : (x.forza === "ripete" ? "male" : "occhio")));
+    const ripete = tutte.filter(x => x.forza === "ripete").length, occhio = tutte.length - ripete;
+    dato.lezioni = tutte.length ? `${nf0(ripete)} si ripetono · ${nf0(occhio)} da tenere d'occhio` : "Nessuna per ora";
+    if(ripete) pill.lezioni = ["at", "da leggere"];
+  });
+
+  if(partita){
+    const s = riepilogoSquadra(f.giocatori, f.partite);
+    const n = f.partite.length;
+    // ---- panoramica ----
+    prova(() => {
+      if(!n) return;
+      const v = f.partite.filter(p => p.Gol_Fatti > p.Gol_Subiti).length, x = f.partite.filter(p => p.Gol_Fatti === p.Gol_Subiti).length, p = n - v - x;
+      metti("panoramica", `In <b>${nf0(n)} ${n === 1 ? "partita" : "partite"}</b>: ${nf0(v)} ${v === 1 ? "vinta" : "vinte"}, ${nf0(x)} ${x === 1 ? "pareggiata" : "pareggiate"}, ${nf0(p)} ${p === 1 ? "persa" : "perse"}. Gol fatti <b>${nf(s.gol_fatti / n, 1)}</b> e subiti <b>${nf(s.gol_subiti / n, 1)}</b> a partita.`,
+        1.2, s.gol_fatti > s.gol_subiti ? "bene" : (s.gol_fatti < s.gol_subiti ? "male" : "neutro"));
+      if(s.tasso_errore !== null && isFinite(s.tasso_errore) && s.passaggi_totali > 0)
+        metti("panoramica", `Precisione passaggi <b>${pctTxt(s.precisione_passaggi, 0)}</b>; in tutto circa <b>una giocata su ${nf0(unoSu(s.tasso_errore))}</b> finisce con la palla persa (tasso di errore ${pctTxt(s.tasso_errore, 0)}).`, 0.8);
+      dato.panoramica = `${nf0(v)}V · ${nf0(x)}N · ${nf0(p)}P`;
+      pill.panoramica = s.gol_fatti > s.gol_subiti ? ["ok", "bene"] : (s.gol_fatti < s.gol_subiti ? ["at", "attenzione"] : null);
+    });
+    // ---- tiri: attacco e difesa ----
+    let a = null;
+    prova(() => { if(stato.ds.haTiriPosizione) a = analizzaTiri(f.partite); });
+    prova(() => {
+      if(a && a.nostri.n){
+        const d = a.nostri.gol - a.nostri.xg;
+        if(d <= -1) metti("attacco", `Abbiamo segnato <b>${nf0(a.nostri.gol)} gol</b> con occasioni che ne valevano <b>${nf(a.nostri.xg, 1)}</b> (xG): creiamo abbastanza, <b>concretizziamo poco</b>.`, 2.6, "male");
+        else if(d >= 1) metti("attacco", `<b>${nf0(a.nostri.gol)} gol</b> su occasioni da <b>${nf(a.nostri.xg, 1)} xG</b>: segniamo più di quanto le occasioni farebbero pensare. Bene sotto porta, ma è difficile restare così a lungo.`, 1.6, "bene");
+        else metti("attacco", `<b>${nf0(a.nostri.gol)} gol</b> su <b>${nf(a.nostri.xg, 1)} xG</b>: segniamo quanto le occasioni create fanno aspettare.`, 1.2, "neutro");
+        const fm = a.nostri.fasce.slice().sort((x, y) => y.tiri - x.tiri)[0];
+        if(fm && fm.tiri) metti("attacco", `Il <b>${pctTxt(fm.quota, 0)}</b> dei nostri tiri parte <b>${esc(fm.etichetta)}</b> e ne diventa gol il ${pctTxt(fm.realizzazione, 0)}.` +
+          (a.nostri.fasce[0].quota < 30 ? ` Da entro 8 m arriva solo il ${pctTxt(a.nostri.fasce[0].quota, 0)} dei tiri: <b>arriviamo poco vicino alla porta</b>.` : ""), a.nostri.fasce[0].quota < 30 ? 2 : 1.1, a.nostri.fasce[0].quota < 30 ? "occhio" : "neutro");
+        const g = a.giocatori.find(x => x.giocatore !== "Non indicato");
+        if(g) metti("attacco", `Chi tira di più è <b>${esc(g.giocatore)}</b>: ${nf0(g.tiri)} tiri e ${nf0(g.gol)} gol (xG ${nf(g.xg, 1)}).`, 0.9);
+        dato.attacco = `xG ${nf(a.nostri.xg, 1)} · gol ${nf0(a.nostri.gol)}`;
+        pill.attacco = a.nostri.gol >= a.nostri.xg - 0.5 ? ["ok", "bene"] : ["at", "da migliorare"];
+        if(a.partiteTiri < n) dato.notaAttacco = `Tiri con posizione in ${nf0(a.partiteTiri)} ${a.partiteTiri === 1 ? "partita" : "partite"} su ${nf0(n)}.`;
+      } else if(s.tiri_totali > 0){
+        metti("attacco", `Segniamo <b>${nf0(s.gol_giocatori)} gol su ${nf0(s.tiri_totali)} tiri</b>: uno ogni ${nf0(unoSu(s.efficacia_realizzativa))}. Con la posizione dei tiri nel CSV qui comparirebbero anche gli xG.`, 1.1);
+      }
+      if(!dato.attacco && n) dato.attacco = `${nf0(s.gol_fatti)} gol · ${nf(s.gol_fatti / n, 1)} a partita`;
+    });
+    prova(() => {
+      if(n) dato.difesa = `${nf0(s.gol_subiti)} gol subiti · ${nf(s.gol_subiti / n, 1)} a partita`;
+      pill.difesa = s.gol_subiti < s.gol_fatti ? ["ok", "bene"] : (s.gol_subiti > s.gol_fatti ? ["at", "attenzione"] : null);
+      if(a && a.loro.n){
+        const d = a.loro.gol - a.loro.xg;
+        if(d <= -1) metti("difesa", `Abbiamo subito <b>${nf0(a.loro.gol)} gol</b>, ma le occasioni concesse ne valevano <b>${nf(a.loro.xg, 1)}</b> (xG): portiere e difesa ci hanno salvato, e non sempre andrà così.`, 2.2, "occhio");
+        else if(d >= 1) metti("difesa", `<b>${nf0(a.loro.gol)} gol subiti</b> su occasioni da <b>${nf(a.loro.xg, 1)} xG</b>: prendiamo più gol di quanto le occasioni concesse farebbero pensare.`, 2.4, "male");
+        else metti("difesa", `<b>${nf0(a.loro.gol)} gol subiti</b> su <b>${nf(a.loro.xg, 1)} xG</b> concessi: in linea con le occasioni lasciate.`, 1, "neutro");
+        const fm = a.loro.fasce.slice().sort((x, y) => y.tiri - x.tiri)[0];
+        if(a.partiteSubiti < n) dato.notaDifesa = `Tiri subiti con posizione in ${nf0(a.partiteSubiti)} ${a.partiteSubiti === 1 ? "partita" : "partite"} su ${nf0(n)}.`;
+        if(fm && fm.tiri) metti("difesa", `Il <b>${pctTxt(fm.quota, 0)}</b> dei tiri avversari arriva <b>${esc(fm.etichetta)}</b>` + (fm.gol ? ` e lì nascono ${nf0(fm.gol)} dei ${nf0(a.loro.gol)} gol subiti` : "") + ".", 1.2, a.loro.fasce[0].quota >= 40 ? "male" : "neutro");
+      }
+    });
+    prova(() => {
+      const r = analizzaRespinte(f.partite, f.giocatori);
+      const tot = r.giocatori.reduce((t, g) => t + g.respinte, 0);
+      const g = r.giocatori[0];
+      if(g && tot >= 5) metti("difesa", `<b>${esc(g.giocatore)}</b> fa ${pctTxt(perc(g.respinte, tot), 0)} delle respinte (${nf0(g.respinte)} su ${nf0(tot)})` + (g.zona ? `, soprattutto nel ${esc(g.zona)}` : "") + ".", 1, "neutro");
+    });
+    let ic = null;
+    prova(() => {
+      ic = analizzaInCampo(f.partite, "partita");
+      const val = (ic.giocatori || []).filter(g => g.valido && !g.portiere && g.segnale && g.segnale !== "caso");
+      const peggio = val.filter(g => g.differenza > 0).sort((x, y) => y.differenza - x.differenza)[0];
+      const meglio = val.filter(g => g.differenza < 0).sort((x, y) => x.differenza - y.differenza)[0];
+      if(peggio) metti("difesa", `Con <b>${esc(peggio.nome)}</b> in campo prendiamo <b>${nf(peggio.ritmoCon, 1)} gol ogni 50'</b>, senza di lui ${nf(peggio.ritmoSenza, 1)}: da tenere d'occhio (può dipendere anche dagli avversari e da chi gioca con lui).`, 1.9, "occhio");
+      if(meglio) metti("difesa", `Con <b>${esc(meglio.nome)}</b> in campo prendiamo <b>${nf(meglio.ritmoCon, 1)} gol ogni 50'</b>, senza di lui ${nf(meglio.ritmoSenza, 1)}.`, 1.5, "bene");
+      const coppie = (ic.coppieDifensori || []).filter(c => c.valido && c.minuti >= 30).sort((x, y) => x.ritmoCon - y.ritmoCon);
+      if(coppie[0] && coppie[0].ritmoCon < ic.ritmoSquadra) metti("formazioni", `In difesa la coppia <b>${esc(coppie[0].nome)}</b> prende ${nf(coppie[0].ritmoCon, 1)} gol ogni 50' (la squadra in media ${nf(ic.ritmoSquadra, 1)}), su ${nf0(coppie[0].minuti)}' insieme.`, 1.6, "bene");
+    });
+    // ---- transizioni ----
+    prova(() => {
+      const r = analizzaRiconquista(f.partite);
+      if(r && r.riconquistate >= 5){
+        const veloce = perc(r.entroImmediata, r.riconquistate);
+        metti("transizioni", `Dopo una palla persa la riprendiamo di solito in <b>${nf0(r.mediana)}"</b>; nel ${pctTxt(veloce, 0)} dei casi entro 5" (riaggressione).` +
+          (r.tempo1 && r.tempo2 && r.tempo1.n >= 5 && r.tempo2.n >= 5 && Math.abs(r.tempo2.mediana - r.tempo1.mediana) >= 4 ? ` Nel secondo tempo ci mettiamo <b>${nf0(Math.abs(r.tempo2.mediana - r.tempo1.mediana))}" ${r.tempo2.mediana > r.tempo1.mediana ? "in più" : "in meno"}</b>.` : ""),
+          1.3, r.mediana <= 10 ? "bene" : "neutro");
+        dato.transizioni = `Palla ripresa in ${nf0(r.mediana)}"`;
+      }
+    });
+    prova(() => {
+      const errore = (fr.transizioni || []).some(x => /entro 15" da un nostro errore/.test(x.html));
+      if(!errore){
+        const pg = analizzaPersaGol(f.partite, "partita");
+        if(pg && pg.episodi && pg.episodi.length && pg.golAnalizzati) metti("transizioni", `<b>${nf0(pg.episodi.length)} gol subiti su ${nf0(pg.golAnalizzati)}</b> sono arrivati entro 15" da una nostra palla persa.`, 2, pg.episodi.length >= 3 ? "male" : "occhio");
+      }
+      const sitErr = sit && (sit.situazioni || []).find(x => x.chiave === "errore-gol");
+      if(sitErr){ dato.transizioni = `${nf0(sitErr.casi)} gol subiti da nostri errori`; pill.transizioni = ["ko", "attenzione"]; }
+      else if(dato.transizioni) pill.transizioni = ["ok", "bene"];
+    });
+    // ---- giocatori ----
+    prova(() => {
+      const agg = aggregaGiocatori(f.giocatori);
+      if(!agg.length) return;
+      const top = agg.slice().sort((x, y) => (y.Indice_Prestazione_Tot || 0) - (x.Indice_Prestazione_Tot || 0))[0];
+      metti("giocatori", `<b>${esc(top.Giocatore)}</b> guida la classifica: indice prestazione ${nf(top.Indice_Prestazione_Tot, 1)} (${nf(top.Indice_Prestazione_Medio, 1)} a partita).`, 1.1, "bene");
+      const gol = agg.slice().sort((x, y) => (y.Gol || 0) - (x.Gol || 0))[0], ass = agg.slice().sort((x, y) => (y.Assist || 0) - (x.Assist || 0))[0];
+      if(gol && gol.Gol) metti("giocatori", `Più gol: <b>${esc(gol.Giocatore)}</b> (${nf0(gol.Gol)}).` + (ass && ass.Assist ? ` Più assist: <b>${esc(ass.Giocatore)}</b> (${nf0(ass.Assist)}).` : ""), 0.9);
+      dato.giocatori = `${nf0(agg.length)} giocatori · primo ${cognome(top.Giocatore)}`;
+    });
+    prova(() => {
+      const sb = analizzaSubentrati(f.partite, f.giocatori);
+      const g = (sb.elenco || []).filter(x => x.subentrato && x.subentrato.partite >= 2 && x.contributoSubentrato > 0).sort((x, y) => y.impatto - x.impatto)[0];
+      if(g) metti("giocatori", `<b>${esc(g.Giocatore)}</b> cambia le partite da subentrato: ${nf0(g.subentrato.gol)} gol e ${nf0(g.subentrato.assist)} assist in ${nf0(g.subentrato.partite)} ingressi.`, 1.4, "bene");
+    });
+    // ---- formazioni ----
+    prova(() => {
+      const fz = analizzaFormazioni(f.partite, "partita");
+      const best = ordinaFormazioni(fz.formazioni, "saldo").find(x => x.idoneo);
+      if(best){
+        const nomi = best.giocatori.map(cognome).join(", ");
+        metti("formazioni", `La formazione che rende di più (${nf0(best.minuti)}' insieme): <b>${nf0(best.gf)} gol fatti e ${nf0(best.ga)} subiti</b>. In campo: ${esc(nomi)}.`, 1.3, best.saldo > 0 ? "bene" : "neutro");
+        dato.formazioni = `Migliore: saldo ${best.saldo > 0 ? "+" : ""}${nf0(best.saldo)} in ${nf0(best.minuti)}'`;
+        if(best.saldo > 0) pill.formazioni = ["ok", "bene"];
+      }
+    });
+  } else {
+    // ---- allenamento ----
+    prova(() => {
+      if(!f.statAllenamento.length) return;
+      const s = riepilogoSquadra(f.statAllenamento, []);
+      const nSess = new Set(f.statAllenamento.map(g => g.Sessione_ID)).size;
+      metti("panoramica", `<b>${nf0(nSess)} ${nSess === 1 ? "partitella" : "partitelle"}</b> con le statistiche: ${nf0(s.gol_giocatori)} gol e ${nf0(s.assist)} assist in tutto.`, 1);
+      if(s.passaggi_totali > 0) metti("panoramica", `Precisione passaggi <b>${pctTxt(s.precisione_passaggi, 0)}</b>; circa <b>una giocata su ${nf0(unoSu(s.tasso_errore))}</b> finisce con la palla persa.`, 0.9);
+      dato.panoramica = `${nf0(nSess)} sessioni · passaggi ${pctTxt(s.precisione_passaggi, 0)}`;
+      const agg = aggregaGiocatori(f.statAllenamento);
+      if(agg.length){
+        const top = agg.slice().sort((x, y) => (y.Indice_Prestazione_Tot || 0) - (x.Indice_Prestazione_Tot || 0))[0];
+        metti("giocatori", `<b>${esc(top.Giocatore)}</b> guida la classifica delle partitelle: indice ${nf(top.Indice_Prestazione_Tot, 1)}.`, 1.1, "bene");
+        dato.giocatori = `${nf0(agg.length)} giocatori · primo ${cognome(top.Giocatore)}`;
+      }
+    });
+    prova(() => {
+      if(!stato.ds.haAllenamenti || !f.allenamenti.length) return;
+      const {totSess, righe} = aggregaAllenamenti(f.allenamenti, f.presenze);
+      const carico = righe.filter(r => r.Carico_Tot > 0 && !nomeOspite(r.Giocatore)).sort((x, y) => y.Carico_Tot - x.Carico_Tot);
+      if(carico.length >= 2){
+        const media = carico.reduce((t, r) => t + r.Carico_Tot, 0) / carico.length;
+        const top = carico[0];
+        metti("carico", `Il carico più alto è di <b>${esc(top.Giocatore)}</b>: ${nf0(top.Carico_Tot)}, ${nf(top.Carico_Tot / media, 1)} volte la media della squadra.`, top.Carico_Tot / media >= 1.5 ? 2 : 1.1, top.Carico_Tot / media >= 1.5 ? "occhio" : "neutro");
+      }
+      const assenti = righe.filter(r => !nomeOspite(r.Giocatore) && r.Tasso_Presenza_pct !== null && r.Tasso_Presenza_pct < 50 && r.Sessioni_Totali >= 4);
+      if(assenti.length) metti("carico", `<b>${nf0(assenti.length)} ${assenti.length === 1 ? "giocatore è stato" : "giocatori sono stati"}</b> a meno della metà degli allenamenti: ${esc(assenti.slice(0, 4).map(r => cognome(r.Giocatore)).join(", "))}${assenti.length > 4 ? "…" : ""}.`, 1.2, "occhio");
+      dato.carico = `${nf0(totSess)} ${totSess === 1 ? "allenamento" : "allenamenti"} · ${nf0(righe.length)} giocatori`;
+    });
+    prova(() => {
+      const ic = analizzaInCampo(f.allenamenti, "allenamento");
+      const val = (ic.giocatori || []).filter(g => g.valido && !g.portiere && g.segnale && g.segnale !== "caso");
+      const meglio = val.filter(g => g.differenza < 0).sort((x, y) => x.differenza - y.differenza)[0];
+      const peggio = val.filter(g => g.differenza > 0).sort((x, y) => y.differenza - x.differenza)[0];
+      if(meglio) metti("formazioni", `Con <b>${esc(meglio.nome)}</b> la sua squadra prende <b>${nf(meglio.ritmoCon, 1)} gol ogni 50'</b>, senza di lui ${nf(meglio.ritmoSenza, 1)}.`, 1.5, "bene");
+      if(peggio) metti("formazioni", `Con <b>${esc(peggio.nome)}</b> la sua squadra prende <b>${nf(peggio.ritmoCon, 1)} gol ogni 50'</b>, senza di lui ${nf(peggio.ritmoSenza, 1)}: da tenere d'occhio.`, 1.5, "occhio");
+      const fz = analizzaFormazioni(f.allenamenti, "allenamento");
+      const best = ordinaFormazioni(fz.formazioni, "saldo").find(x => x.idoneo);
+      if(best){ dato.formazioni = `Migliore: saldo ${best.saldo > 0 ? "+" : ""}${nf0(best.saldo)} in ${nf0(best.minuti)}'`; }
+    });
+    prova(() => {
+      const sitErr = sit && (sit.situazioni || []).find(x => x.chiave === "errore-gol");
+      if(sitErr){ dato.transizioni = `${nf0(sitErr.casi)} gol su ${nf0(sitErr.su)} da errori`; pill.transizioni = ["at", "attenzione"]; }
+    });
+  }
+  Object.keys(fr).forEach(k => fr[k].sort((x, y) => y.peso - x.peso));
+  // ---- le 3 cose da sapere: la frase più forte di tre aree diverse ----
+  const candidati = [];
+  CATEGORIE_DASHBOARD[tab].forEach(c => { if(c.k !== "lezioni" && c.k !== "panoramica" && fr[c.k][0]) candidati.push(Object.assign({cat: c.k, tit: c.tit}, fr[c.k][0])); });
+  candidati.sort((x, y) => y.peso - x.peso);
+  let tre = candidati.slice(0, 3);
+  if(tre.length < 3 && fr.panoramica && fr.panoramica[0]) tre.push(Object.assign({cat: "panoramica", tit: "Panoramica"}, fr.panoramica[0]));
+  return {fr, dato, pill, tre};
+}
+
+function renderRiquadri(f){
+  if(window.PORTALE_MISTER) return;
+  ["partita", "allenamento"].forEach(tab => {
+    riquadriUltimi[tab] = null;
+    try{ riquadriUltimi[tab] = calcolaRiquadri(f, tab); }catch(e){ console.warn("riquadri", tab, e); }
+  });
+  applicaCategoria();
+}
+
+function htmlFrasi(elenco, max){
+  return `<ul class="rq-frasi">${elenco.slice(0, max).map(x => `<li class="rq-tono-${x.tono}">${x.html}</li>`).join("")}</ul>`;
+}
+function htmlRiepilogo(tab, r){
+  const f = datiFiltrati();
+  const kpi = [];
+  if(tab === "partita"){
+    const s = riepilogoSquadra(f.giocatori, f.partite), n = f.partite.length || 1;
+    kpi.push(["Gol fatti", nf0(s.gol_fatti), nf(s.gol_fatti / n, 1) + " a partita", s.gol_fatti >= s.gol_subiti ? "su" : ""]);
+    kpi.push(["Gol subiti", nf0(s.gol_subiti), nf(s.gol_subiti / n, 1) + " a partita", s.gol_subiti > s.gol_fatti ? "giu" : ""]);
+    let a = null; try{ if(stato.ds.haTiriPosizione) a = analizzaTiri(f.partite); }catch(e){}
+    if(a && a.nostri.n) kpi.push(["xG fatti", nf(a.nostri.xg, 1), `${nf0(a.nostri.gol)} gol veri`, ""]);
+    else kpi.push(["Precisione passaggi", pctTxt(s.precisione_passaggi, 0), `${nf0(s.passaggi_totali)} passaggi`, ""]);
+  } else if(f.statAllenamento.length){
+    const s = riepilogoSquadra(f.statAllenamento, []);
+    kpi.push(["Sessioni", nf0(new Set(f.statAllenamento.map(g => g.Sessione_ID)).size), "con le statistiche", ""]);
+    kpi.push(["Gol", nf0(s.gol_giocatori), nf0(s.assist) + " assist", ""]);
+    kpi.push(["Passaggi riusciti", pctTxt(s.precisione_passaggi, 0), `su ${nf0(s.passaggi_totali)}`, ""]);
+  }
+  const cat = CATEGORIE_DASHBOARD[tab];
+  const tile = c => {
+    const p = r.pill[c.k];
+    return `<button type="button" class="rq-tile${c.largo ? " rq-largo" : ""}" data-cat="${c.k}">
+      ${iconaRiquadro(c.ico, c.tono)}
+      <span class="rq-testi"><span class="rq-tit">${esc(c.tit)}</span><span class="rq-dom">${esc(c.breve || c.dom)}</span></span>
+      <span class="rq-dato">${p ? `<span class="rq-pill rq-pill-${p[0]}">${esc(p[1])}</span>` : ""}${r.dato[c.k] ? `<span>${esc(r.dato[c.k])}</span>` : ""}</span>
+    </button>`;
+  };
+  return `<div class="sez-testa"><h2>Riepilogo</h2></div>
+    ${kpi.length ? `<div class="rq-kpi">${kpi.map(k => `<div class="rq-kpi-c"><span class="rq-kpi-e">${esc(k[0])}</span><span class="rq-kpi-v">${k[1]}</span><span class="rq-kpi-n ${k[3]}">${esc(k[2])}</span></div>`).join("")}</div>` : ""}
+    ${r.tre.length ? `<div class="rq-lezioni"><h3>Le ${r.tre.length === 1 ? "cosa" : nf0(r.tre.length) + " cose"} da sapere</h3><ol>${r.tre.map(x => `<li class="rq-tono-${x.tono}"><span>${x.html}</span> <button type="button" class="rq-vai" data-cat="${x.cat}">${esc(x.tit)} ›</button></li>`).join("")}</ol></div>` : ""}
+    <p class="rq-guida">Tocca un riquadro per vedere i grafici di quell'area, con in cima cosa ci dicono.</p>
+    <div class="rq-griglia">${cat.map(tile).join("")}</div>`;
+}
+function htmlTestaCategoria(tab, c, r){
+  const frasi = r ? r.fr[c.k] : [];
+  const testoNota = r ? (c.k === "attacco" ? r.dato.notaAttacco : (c.k === "difesa" ? r.dato.notaDifesa : null)) : null;
+  const nota = testoNota ? `<p class="rq-nota">${esc(testoNota)}</p>` : "";
+  return `<button type="button" class="rq-indietro" data-cat="">‹ Riepilogo</button>
+    <div class="rq-testa">${iconaRiquadro(c.ico, c.tono)}<h2>${esc(c.tit)}</h2></div>
+    <p class="rq-domanda">${esc(c.dom)}</p>
+    <div class="rq-lezioni rq-cosa"><h3>Cosa ci dice</h3>${frasi && frasi.length ? htmlFrasi(frasi, c.k === "lezioni" ? 4 : 4)
+      : `<p class="rq-vuoto">Nel periodo scelto non emerge nulla di netto: guarda i grafici qui sotto, o allarga il periodo dal filtro in alto.</p>`}${nota}</div>`;
+}
+
+/** Mostra il Riepilogo o l'area scelta nella scheda attiva. */
+function applicaCategoria(){
+  if(window.PORTALE_MISTER) return;
+  const dash = document.getElementById("dashboard"), hub = document.getElementById("sez-hub");
+  if(!dash || !hub || !stato.ds) return;
+  const tab = tabAttivaDashboard();
+  const elenco = CATEGORIE_DASHBOARD[tab];
+  dash.classList.toggle("con-riquadri", !!elenco);
+  document.querySelectorAll("#dashboard > section").forEach(s => { s.classList.remove("fuori-area"); s.style.order = ""; });
+  if(!elenco){ hub.classList.add("nascosto"); dash.removeAttribute("data-lato"); ripristinaTitoliArea(); aggiornaNavArea(null, null); return; }
+  hub.classList.remove("nascosto");
+  const k = categoriaAttiva[tab];
+  const c = elenco.find(x => x.k === k) || null;
+  const r = riquadriUltimi[tab];
+  hub.innerHTML = c ? htmlTestaCategoria(tab, c, r) : (r ? htmlRiepilogo(tab, r) : "");
+  hub.classList.toggle("rq-in-area", !!c);
+  dash.setAttribute("data-lato", c && c.lato ? c.lato : "");
+  ripristinaTitoliArea();
+  document.querySelectorAll(`#dashboard > section[data-tab-sezione="${tab}"]`).forEach(s => {
+    const i = c ? c.sez.indexOf(s.id) : -1;
+    s.classList.toggle("fuori-area", i < 0);
+    s.style.order = i < 0 ? "" : String(i + 1);
+    const num = s.querySelector(".sez-num");
+    if(num){ if(!num.dataset.originale) num.dataset.originale = num.textContent; num.textContent = i < 0 ? num.dataset.originale : String(i + 1).padStart(2, "0"); }
+    if(c && c.titoli && c.titoli[s.id]){ const h = s.querySelector(".sez-testa h2"); if(h){ if(!h.dataset.originale) h.dataset.originale = h.textContent; h.textContent = c.titoli[s.id]; } }
+  });
+  // sezioni comuni (Cosa contiene ogni file, Metodologia): solo nel Riepilogo
+  document.querySelectorAll("#dashboard > section:not([data-tab-sezione]):not(#sez-hub)").forEach(s => s.classList.toggle("fuori-area", !!c));
+  segnaLatoTiri();
+  aggiornaNavArea(tab, c);
+}
+function ripristinaTitoliArea(){
+  document.querySelectorAll(".sez-testa h2[data-originale]").forEach(h => { h.textContent = h.dataset.originale; });
+}
+/** Nella sezione dei tiri, segna cosa riguarda i nostri tiri e cosa quelli subiti (Attacco e Difesa ne mostrano una parte). */
+function segnaLatoTiri(){
+  const cont = document.getElementById("contenuto-tiri-partita");
+  if(!cont) return;
+  cont.querySelectorAll(".card, .kpi").forEach(el => {
+    const t = ((el.querySelector(".grafico-titolo, .kpi-eti") || {}).textContent || "").toLowerCase();
+    let lato = "";
+    if(/subit|ci tirano|concess/.test(t)) lato = "subiti";
+    else if(/nostri|tiriamo|chi tira|xg fatti/.test(t)) lato = "fatti";
+    if(lato) el.setAttribute("data-lato-tiri", lato); else el.removeAttribute("data-lato-tiri");
+  });
+}
+/** L'indice delle sezioni mostra solo quelle dell'area aperta; nel Riepilogo si nasconde. */
+function aggiornaNavArea(tab, c){
+  const nav = document.getElementById("nav-sezioni");
+  if(!nav) return;
+  nav.classList.toggle("nav-riepilogo", !!tab && !c && !!CATEGORIE_DASHBOARD[tab]);
+  nav.querySelectorAll("a[data-tab]").forEach(a => {
+    const id = (a.getAttribute("href") || "").slice(1);
+    a.classList.toggle("fuori-area", !!c && !c.sez.includes(id));
+    a.style.order = c && c.sez.includes(id) ? String(c.sez.indexOf(id) + 1) : "";
+  });
+  if(typeof aggiornaAltezzaBarraFissa === "function") aggiornaAltezzaBarraFissa();
+}
+/** Apre un'area (k) o torna al Riepilogo (k vuoto). */
+function apriCategoria(k, daStoria){
+  const tab = tabAttivaDashboard();
+  if(!CATEGORIE_DASHBOARD[tab]) return;
+  if(!daStoria){
+    try{
+      // «‹ Riepilogo» fa lo stesso del tasto indietro del telefono, così la cronologia resta in ordine
+      if(!k && history.state && history.state.analysisArea){ history.back(); return; }
+      if(k) history.pushState({analysisArea: k, tab}, "", "#area-" + k);
+    }catch(e){}
+  }
+  categoriaAttiva[tab] = k || null;
+  // si ridisegna tutto: i grafici delle sezioni appena mostrate prendono la larghezza giusta
+  render();
+  const top = document.getElementById("dashboard");
+  if(top){ const y = top.getBoundingClientRect().top + window.scrollY - ((parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--altezza-fissa")) || 0) + 8); window.scrollTo({top: Math.max(0, y), behavior: "auto"}); }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("#sez-hub [data-cat]");
+  if(!b) return;
+  e.preventDefault();
+  apriCategoria(b.dataset.cat || null);
+});
+window.addEventListener("popstate", e => {
+  if(window.PORTALE_MISTER || !stato.ds) return;
+  const s = e.state;
+  const tab = tabAttivaDashboard();
+  const k = s && s.analysisArea && s.tab === tab ? s.analysisArea : null;
+  if((categoriaAttiva[tab] || null) !== k) apriCategoria(k, true);
 });
 
 /* ---- sincronizzazione ---- */
@@ -8532,6 +9142,7 @@ function render(){
   sicuro("renderSituazioni", () => renderSituazioni("allenamento"));
   sicuro("renderConfrontoAllenamento", () => renderConfrontoAllenamento(f));
   sicuro("renderQualita", () => renderQualita());
+  sicuro("renderRiquadri", () => renderRiquadri(f)); // 1.53.0: Riepilogo e aree (dopo le sezioni: usa le loro tabelle)
   aggiornaSelettoriReport();
   adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
   mostraErroriSezioni();
@@ -11338,6 +11949,7 @@ document.addEventListener("DOMContentLoaded", () => {
       a.classList.toggle("nascosto", a.dataset.tab !== tab);
     });
     if(localOk()) memoriaScrivi("calcio7-tab-dashboard", tab);
+    applicaCategoria(); // 1.53.0: Riepilogo o area aperta di questa scheda
     aggiornaAltezzaBarraFissa(); // cambiando scheda l'indice mostra voci diverse: la barra può cambiare altezza
   }
   document.querySelectorAll(".tab-btn").forEach(b => {
