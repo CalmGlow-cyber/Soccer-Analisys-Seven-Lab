@@ -105,6 +105,7 @@ const RENDER_PORTALE = {
   "persagol": f => renderPersaGol("contenuto-persa-gol-partita", "pgl-sel-partita", "persaGolPartita", f.partite, "partita"),
   "incampo": f => renderInCampo("contenuto-incampo-partita", "icp-sel-partita", "inCampoPartita", f.partite, "partita"),
   "formazione": () => renderFormazioneMigliore("partita"), "situazioni": () => renderSituazioni("partita"),
+  "casafuori": f => renderCasaFuori(f), "campionato": f => renderCampionato(f),
   "kpi-all": f => renderKPIAllenamentoStat(f), "classifica-all": f => renderClassificaAllenamentoStat(f),
   "carico": () => renderAllenamenti(), "zone-all": f => renderZoneAllenamento(f),
   "persagol-all": f => renderPersaGol("contenuto-persa-gol-allenamento", "pgl-sel-allenamento", "persaGolAllenamento", f.allenamenti, "allenamento"),
@@ -249,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
    Le aree e le frasi sono le stesse di Analysis (CATEGORIE_DASHBOARD, calcolaRiquadri in app.js); qui si usano
    solo le sezioni che il portale mostra (quelle scelte nel pannello Mister). */
 const AREE_PORTALE = {
-  partite: {tab: "partita", aree: {panoramica: ["lettura", "kpi", "andamento"], attacco: ["tiri", "golgame", "porta"], difesa: ["tiri", "respinte", "incampo"],
+  partite: {tab: "partita", aree: {panoramica: ["lettura", "kpi", "andamento", "casafuori"], campionato: ["campionato"], attacco: ["tiri", "golgame", "porta"], difesa: ["tiri", "respinte", "incampo"],
     transizioni: ["zone", "persagol", "riconquista", "possesso"], giocatori: ["classifica"], formazioni: ["formazione"], lezioni: ["situazioni"]}},
   allenamenti: {tab: "allenamento", aree: {panoramica: ["kpi-all"], carico: ["carico"], transizioni: ["zone-all", "persagol-all"], giocatori: ["classifica-all"],
     formazioni: ["incampo-all", "formazione-all"], lezioni: ["situazioni-all"]}}
