@@ -939,6 +939,43 @@ td span.su{color:var(--success); font-weight:800} td span.giu{color:var(--danger
 #p-hub .sez-testa h2{font-size:22px; margin:4px 0 8px}
 #p-app[data-lato="fatti"] [data-lato-tiri="subiti"], #p-app[data-lato="subiti"] [data-lato-tiri="fatti"]{display:none !important}
 
+/* ---------- casa/fuori e campionato (1.55.0) ---------- */
+.cp-fonte{font-size:13px; color:var(--muted); margin:0 0 12px}
+.cp-tab tr.cp-noi td{background:var(--primary-soft); font-weight:800}
+td span.su, .cf-tab span.su{color:var(--success); font-weight:800}
+td span.giu, .cf-tab span.giu{color:var(--danger); font-weight:800}
+.cp-forma{display:inline-grid; place-items:center; width:20px; height:20px; border-radius:6px; font-size:11px; font-weight:800; color:#fff; margin-right:3px}
+.cp-forma.v{background:var(--success)} .cp-forma.p{background:var(--danger)} .cp-forma.x{background:var(--faint)}
+.cp-barre{display:flex; flex-direction:column; gap:6px; margin-top:8px}
+.cp-barra-riga{display:grid; grid-template-columns:minmax(0, 190px) 1fr 44px; align-items:center; gap:10px; font-size:13px}
+.cp-barra-riga.cp-noi{font-weight:800; color:var(--primary)}
+.cp-barra-nome{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.cp-barra-asse{position:relative; height:14px; background:linear-gradient(to right, transparent calc(50% - 1px), var(--border) calc(50% - 1px), var(--border) calc(50% + 1px), transparent calc(50% + 1px))}
+.cp-barra{position:absolute; top:2px; bottom:2px; border-radius:4px}
+.cp-barra.pos{background:var(--success)} .cp-barra.neg{background:var(--danger)}
+.cp-barra-val{text-align:right; font-variant-numeric:tabular-nums; font-weight:700}
+.cp-scheda-numeri{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:14px; align-items:center}
+.cp-gare{display:flex; flex-direction:column; gap:6px; margin-top:6px}
+.cp-gara{display:flex; gap:10px; align-items:center; font-size:14px}
+.cp-gara .tenue{margin-left:auto}
+.cp-agg > summary{cursor:pointer}
+.cp-agg textarea{width:100%; min-height:110px; font:inherit; font-size:14px; padding:10px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text)}
+.cp-azioni{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0}
+.cp-file{cursor:pointer}
+.cp-riga-man{display:grid; grid-template-columns:140px minmax(0,1fr) 64px 64px minmax(0,1fr) auto; gap:8px; align-items:center}
+.cp-riga-man input, .cp-riga-man select{min-width:0; font:inherit; font-size:14px; padding:7px 8px; border-radius:9px; border:1px solid var(--border); background:var(--surface); color:var(--text)}
+.cp-prev{display:flex; flex-direction:column; gap:6px; margin:10px 0}
+.cf-elenco{display:flex; flex-direction:column; gap:8px; margin-top:8px}
+.cf-partita{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 0; border-bottom:1px solid color-mix(in srgb, var(--border) 60%, transparent)}
+.cf-partita select{max-width:240px}
+@media (max-width:640px){
+  .cp-barra-riga{grid-template-columns:110px 1fr 40px; gap:6px; font-size:12px}
+  .cp-riga-man{grid-template-columns:minmax(0,1fr) 72px; grid-template-areas:"data data" "casa gc" "ospite go" "btn btn"}
+  #cp-man-data{grid-area:data} #cp-man-casa{grid-area:casa} #cp-man-gc{grid-area:gc} #cp-man-go{grid-area:go} #cp-man-ospite{grid-area:ospite}
+  .cp-riga-man button{grid-area:btn}
+  .cf-partita select{max-width:100%; width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -993,6 +1030,8 @@ td span.su{color:var(--success); font-weight:800} td span.giu{color:var(--danger
   <nav class="nav-sezioni nascosto" id="nav-sezioni" aria-label="Sezioni della dashboard">
     <a href="#sez-kpi" data-tab="partita">KPI di squadra</a>
     <a href="#sez-andamento" data-tab="partita">Andamento stagionale</a>
+    <a href="#sez-casa-fuori" data-tab="partita">Casa e fuori casa</a>
+    <a href="#sez-campionato" data-tab="partita">Campionato e avversarie</a>
     <a href="#sez-classifica" data-tab="partita">Classifica giocatori</a>
     <a href="#sez-tendenze" data-tab="partita">Tendenze individuali</a>
     <a href="#sez-coinvolgimento-formazioni" data-tab="partita">Coinvolgimento e formazioni</a>
@@ -1074,6 +1113,20 @@ td span.su{color:var(--success); font-weight:800} td span.giu{color:var(--danger
       <div class="sez-testa"><span class="sez-num">02</span><h2>Andamento stagionale</h2></div>
       <p class="sez-desc">Una partita per punto, in ordine cronologico. La linea tratteggiata è la media del periodo.</p>
       <div id="contenuto-andamento" class="griglia g-2"></div>
+    </section>
+
+    <!-- 1.55.0: casa e fuori casa -->
+    <section id="sez-casa-fuori" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">03</span><h2>Casa e fuori casa</h2></div>
+      <p class="sez-desc">Le stesse partite divise fra casa e fuori: punti, gol, xG e qualità del gioco a confronto.</p>
+      <div id="contenuto-casa-fuori"></div>
+    </section>
+
+    <!-- 1.55.0: campionato e avversarie -->
+    <section id="sez-campionato" data-tab-sezione="partita">
+      <div class="sez-testa"><span class="sez-num">04</span><h2>Campionato e avversarie</h2></div>
+      <p class="sez-desc">Classifica del girone, rapporti di forza fra le squadre e cosa dicono i risultati di ogni avversaria.</p>
+      <div id="contenuto-campionato"></div>
     </section>
 
     <!-- 5. CLASSIFICA -->

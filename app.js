@@ -8,9 +8,9 @@ const DATI_DEMO = {"Partite":[{"Match_ID":"P0","Data":"2026-04-05","Avversario":
    sito, se la revisione che ha caricato su GitHub è davvero online (mostrata in alto nella pagina).
    ===================================================================== */
 const VERSIONE_APP = {
-  numero: "1.54.0",
-  data: "2026-11-17",
-  note: "Correzioni di Andrea (17/11/2026): pallini solo verdi o rossi; in Attacco solo i nostri tiri e in Difesa solo quelli subiti, con gol contro xG del lato giusto; respinte senza il conteggio «con posizione» quando ce l'hanno tutte; «Peso» diventa la quota sul totale; coppie di difensori con chi gioca davvero in difesa (adattati compresi); tendenze senza le partite con troppo poco gioco; azioni ogni 50' spiegate; «Tutti i dati» apre la scheda anche su iPhone. Riquadri per area anche nel Portale Mister. Portale Mister con icona propria (fascia MISTER) e link «Apri Analysis» per l'amministratore; testi senza nomi propri. Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
+  numero: "1.55.0",
+  data: "2026-11-21",
+  note: "Casa e fuori casa, campionato e avversarie (21/11/2026): ogni partita sa se era in casa o fuori (dal calendario del girone, oppure segnato a mano) e c'è il confronto casa/fuori; nuova area «Campionato e avversarie» con classifica, indice di forza, rapporti di forza e «Come affrontare un'avversaria»; risultati aggiornabili incollando la pagina di Tuttocampo o caricando un Excel. Correzioni di Andrea (17/11/2026): pallini solo verdi o rossi; in Attacco solo i nostri tiri e in Difesa solo quelli subiti, con gol contro xG del lato giusto; respinte senza il conteggio «con posizione» quando ce l'hanno tutte; «Peso» diventa la quota sul totale; coppie di difensori con chi gioca davvero in difesa (adattati compresi); tendenze senza le partite con troppo poco gioco; azioni ogni 50' spiegate; «Tutti i dati» apre la scheda anche su iPhone. Riquadri per area anche nel Portale Mister. Portale Mister con icona propria (fascia MISTER) e link «Apri Analysis» per l'amministratore; testi senza nomi propri. Dashboard a riquadri (17/11/2026). Partite e Allenamento si aprono su un Riepilogo: i numeri chiave, «Le 3 cose da sapere» scritte dai dati e un riquadro con icona per ogni area (Panoramica, Attacco, Difesa, Transizioni, Giocatori, Formazioni, Cosa ci insegnano; in Allenamento anche Carico e fatica). Toccando un riquadro si vedono solo le sezioni di quell'area, con in cima «Cosa ci dice». Nessuna metrica tolta: cambiano solo posto e ordine. Comprende la 1.52.0 (tabelle a schede sul telefono). Comprende la 1.52.0."
 };
 
 /* =====================================================================
@@ -912,6 +912,8 @@ const SEZIONI_PORTALE = [
   {k: "incampo", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-incampo-partita", titolo: "Gol subiti e chi è in campo", desc: "Quanti gol prende la squadra con ogni giocatore in campo."},
   {k: "formazione", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-formazione-partita", titolo: "La formazione migliore", desc: "I sette che hanno funzionato meglio insieme."},
   {k: "situazioni", tipo: "partite", modi: ["stagione"], sez: "sez-situazioni-partita", titolo: "Situazioni che si ripetono", desc: "Quello che è tornato in più partite."},
+  {k: "casafuori", tipo: "partite", modi: ["stagione"], sez: "sez-casa-fuori", titolo: "Casa e fuori casa", desc: "Come rendiamo in casa e fuori, partita per partita."},
+  {k: "campionato", tipo: "partite", modi: ["stagione", "singola"], sez: "sez-campionato", titolo: "Campionato e avversarie", desc: "Classifica del girone, rapporti di forza e come affrontare ogni avversaria."},
   {k: "kpi-all", tipo: "allenamenti", modi: ["stagione"], sez: "sez-kpi-stat-allenamento", titolo: "Numeri degli allenamenti", desc: "Le statistiche delle partitelle."},
   {k: "classifica-all", tipo: "allenamenti", modi: ["stagione", "singola"], sez: "sez-classifica-stat-allenamento", titolo: "Giocatori in allenamento", desc: "I numeri di ogni giocatore nelle partitelle."},
   {k: "carico", tipo: "allenamenti", modi: ["stagione"], sez: "sez-allenamenti", titolo: "Presenze e carico", desc: "Presenze, minuti e fatica degli allenamenti."},
@@ -1351,6 +1353,7 @@ const ICONE_RIQUADRI = {
   gio: '<circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 14.2c2.8 0 5 2.4 5 5.3" fill="none" stroke="currentColor" stroke-width="1.8"/>',
   for: '<rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="17" r="1.6" fill="currentColor"/><circle cx="7" cy="12" r="1.6" fill="currentColor"/><circle cx="17" cy="12" r="1.6" fill="currentColor"/><circle cx="9" cy="7" r="1.6" fill="currentColor"/><circle cx="15" cy="7" r="1.6" fill="currentColor"/>',
   lez: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  cup: '<path d="M7 4h10v4a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
   car: '<path d="M3 17l5-6 4 3 4-7 5 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
 };
 const iconaRiquadro = (k, tono) => `<span class="rq-ico${tono ? " rq-" + tono : ""}" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24">${ICONE_RIQUADRI[k] || ""}</svg></span>`;
@@ -1358,7 +1361,7 @@ const iconaRiquadro = (k, tono) => `<span class="rq-ico${tono ? " rq-" + tono : 
 /** Le aree di ogni scheda e le sezioni che contengono, nell'ordine in cui si leggono. */
 const CATEGORIE_DASHBOARD = {
   partita: [
-    {k:"panoramica", tit:"Panoramica", dom:"Risultati, andamento e numeri di squadra.", ico:"pan", sez:["sez-kpi", "sez-andamento"]},
+    {k:"panoramica", tit:"Panoramica", dom:"Risultati, andamento, numeri di squadra e differenza fra casa e fuori.", ico:"pan", sez:["sez-kpi", "sez-andamento", "sez-casa-fuori"]},
     {k:"attacco", tit:"Attacco", breve:"Come e da dove creiamo e segniamo.", dom:"Come e da dove creiamo occasioni e segniamo.", ico:"att", tono:"v", lato:"fatti",
       sez:["sez-tiri-partita", "sez-golgame-partita", "sez-porta-partita"], titoli:{"sez-tiri-partita":"Da dove tiriamo"},
       descrizioni:{"sez-tiri-partita":"Da dove partono i nostri tiri, come finiscono e quanto valevano le occasioni (xG). Richiede la posizione di ogni tiro nel CSV di SevenLab."}},
@@ -1371,6 +1374,8 @@ const CATEGORIE_DASHBOARD = {
       sez:["sez-classifica", "sez-tendenze", "sez-subentrati", "sez-coinvolgimento-formazioni"]},
     {k:"formazioni", tit:"Formazioni", breve:"Chi gioca meglio insieme.", dom:"Chi gioca meglio insieme, con quale modulo e chi viene convocato.", ico:"for",
       sez:["sez-formazione-partita", "sez-coinvolgimento-formazioni"]},
+    {k:"campionato", tit:"Campionato e avversarie", breve:"Classifica, rapporti di forza, come affrontarle.", dom:"Classifica del girone, quanto è forte ogni squadra e cosa dicono i risultati di ogni avversaria.", ico:"cup", tono:"v",
+      sez:["sez-campionato"]},
     {k:"lezioni", tit:"Cosa ci insegnano le partite", dom:"Le situazioni che si ripetono di partita in partita: da qui si capisce cosa allenare.", ico:"lez", tono:"o", largo:true,
       sez:["sez-situazioni-partita"]}
   ],
@@ -1519,6 +1524,30 @@ function calcolaRiquadri(f, tab){
       const sitErr = sit && (sit.situazioni || []).find(x => x.chiave === "errore-gol");
       if(sitErr){ dato.transizioni = `${nf0(sitErr.casi)} gol subiti da nostri errori`; pill.transizioni = ["ko", "attenzione"]; }
       else if(dato.transizioni) pill.transizioni = ["ok", "bene"];
+    });
+    // ---- casa e fuori (1.55.0) ----
+    prova(() => {
+      const c = confrontoCasaFuori(f);
+      if(c.casa && c.fuori){
+        const diff = c.casa.pt - c.fuori.pt;
+        metti("panoramica", `In casa facciamo <b>${nf(c.casa.pt, 1)} punti a partita</b>, fuori ${nf(c.fuori.pt, 1)} (${nf0(c.casa.n)} e ${nf0(c.fuori.n)} partite); gol subiti ${nf(c.casa.gs, 1)} in casa e ${nf(c.fuori.gs, 1)} fuori.`, Math.abs(diff) >= 1 ? 2.1 : 1, diff >= -0.3 ? "bene" : "male");
+      }
+    });
+    // ---- campionato (1.55.0) ----
+    prova(() => {
+      const d = campionato.dati; if(!d || !d.partite || !d.partite.length) return;
+      const cl = classificaCampionato(d), noi = cl.squadre.find(x => eNostra(x.nome, d));
+      if(!noi) return;
+      const meta = cl.squadre.length / 2;
+      metti("campionato", `Siamo <b>${nf0(noi.pos)}° con ${nf0(noi.pt)} punti</b> in ${nf0(noi.g)} partite; per indice di forza siamo ${nf0(noi.posForza)}° (${noi.forza > 0 ? "+" : ""}${nf(noi.forza, 1)} gol rispetto a una squadra media).`, 1.6, noi.posForza <= meta ? "bene" : "male");
+      if(noi.casa.g && noi.fuori.g) metti("campionato", `In campionato: <b>${nf(noi.casa.pt / noi.casa.g, 1)} punti a partita in casa</b>, ${nf(noi.fuori.pt / noi.fuori.g, 1)} fuori.`, 1.2, noi.casa.pt / noi.casa.g >= noi.fuori.pt / noi.fuori.g ? "bene" : "male");
+      if(noi.posForza < noi.pos - 1) metti("campionato", `Valiamo più della classifica: per indice di forza saremmo ${nf0(noi.posForza)}°, in classifica siamo ${nf0(noi.pos)}°. I risultati dovrebbero arrivare.`, 1.4, "bene");
+      else if(noi.posForza > noi.pos + 1) metti("campionato", `La classifica ci premia più del gioco: per indice di forza saremmo ${nf0(noi.posForza)}°, in classifica siamo ${nf0(noi.pos)}°.`, 1.4, "male");
+      const top = cl.perForza.find(x => x !== noi);
+      if(top) metti("campionato", `La più forte del girone per indice di forza è <b>${esc(top.nome)}</b> (${top.forza > 0 ? "+" : ""}${nf(top.forza, 1)}).`, 0.8, "bene");
+      metti("campionato", `Nel girone chi gioca in casa vince il ${pctTxt(perc(cl.vCasa, cl.tot), 0)} delle partite (${cl.vantaggioCasa > 0 ? "+" : ""}${nf(cl.vantaggioCasa, 1)} gol di media).`, 0.7, "bene");
+      dato.campionato = `${nf0(noi.pos)}° · ${nf0(noi.pt)} punti`;
+      pill.campionato = noi.pos <= meta ? ["ok", "metà alta"] : ["at", "metà bassa"];
     });
     // ---- giocatori ----
     prova(() => {
@@ -1752,6 +1781,470 @@ window.addEventListener("popstate", e => {
   const tab = tabAttivaDashboard();
   const k = s && s.analysisArea && s.tab === tab ? s.analysisArea : null;
   if((categoriaAttiva[tab] || null) !== k) apriCategoria(k, true);
+});
+
+
+/* =====================================================================================================
+   CASA/FUORI E CAMPIONATO (1.55.0, 21/11/2026). Andrea: «vorrei identificare quando giochiamo in casa o fuori casa
+   e capire se c'è differenza, anche sulle partite già inserite» e «una sezione dedicata all'analisi dei risultati
+   delle avversarie del campionato … un rapporto di forza … come sfruttare le difficoltà delle avversarie».
+   - I risultati del girone stanno nel cloud (tabella analysis_campionato; squadra e girone in analysis_campionato_info).
+     Tuttocampo e il sito CSI non si lasciano leggere in automatico, quindi si aggiornano incollando qui il testo
+     della pagina Risultati (o a mano): la squadra scritta per prima è quella di casa.
+   - Casa/fuori di ogni nostra partita: dal calendario del girone (stessa avversaria e, se c'è, stesso punteggio);
+     per amichevoli e coppe si segna a mano (tabella analysis_campo), e la scelta a mano vince sempre.
+   - Forza: «indice di forza» = scarto reti medio corretto per la forza delle avversarie incontrate (Simple Rating
+     System), con lo scarto di ogni partita limitato a ±5 perché un 8-1 non pesi come tre vittorie.
+   ===================================================================================================== */
+const CAMP_TABELLA = "analysis_campionato", CAMP_INFO = "analysis_campionato_info", CAMP_CAMPO = "analysis_campo";
+const CAMP_MEMORIA = "analysis-campionato-cache-v1";
+const CAMP_SCARTO_MAX = 5;
+const campionato = {dati: null, stato: "vuoto", errore: null, scelta: null, anteprima: null};
+const normNome = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]/g, "");
+const PAROLE_VUOTE = new Set(["asd", "ssd", "aps", "usd", "us", "ac", "as", "fc", "pol", "polisportiva", "calcio", "sport", "sportiva", "a7", "ssdarl", "srl"]);
+function paroleNome(s){
+  return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\b([a-z])\.(?=[a-z]\.?)/g, "$1").replace(/\./g, "")   // «M.D.P.» → «mdp», «A.S.D» → «asd»
+    .split(/[^a-z0-9]+/).filter(w => w.length >= 2 && !PAROLE_VUOTE.has(w));
+}
+function somiglianzaNomi(a, b){
+  const x = new Set(paroleNome(a)), y = new Set(paroleNome(b));
+  if(!x.size || !y.size) return normNome(a) === normNome(b) ? 1 : 0;
+  let comuni = 0; x.forEach(w => { if(y.has(w)) comuni++; });
+  return comuni / Math.min(x.size, y.size);
+}
+/** Nome corto per i grafici: senza «Asd», «Polisportiva»… (le squadre restano distinguibili). */
+const nomeBreveCamp = s => String(s || "").replace(/^(asd|a\.s\.d\.?|ssd|polisportiva|pol\.|us|usd)\s+/i, "").replace(/\s+(a\.?s\.?d\.?|asd|aps)$/i, "").trim();
+const idPartitaCamp = (casa, ospite) => normNome(casa) + "|" + normNome(ospite);
+
+/* ---- dati dal cloud (con copia nel browser per quando manca la rete) ---- */
+async function caricaCampionato(forza){
+  if(campionato.stato === "carico" || (!forza && campionato.stato === "pronto")) return;
+  if(!accessoCloud()){
+    if(!campionato.dati){ try{ const c = JSON.parse(memoriaLeggi(CAMP_MEMORIA) || "null"); if(c){ campionato.dati = c; campionato.stato = "pronto"; return; } }catch(e){} }
+    campionato.stato = "senza-cloud"; return;
+  }
+  campionato.stato = "carico";
+  try{
+    const [righe, info, campi] = await Promise.all([
+      restTabella("GET", CAMP_TABELLA, "?select=*&order=data.asc,ora.asc"),
+      restTabella("GET", CAMP_INFO, "?select=*&id=eq.1"),
+      restTabella("GET", CAMP_CAMPO, "?select=*")]);
+    campionato.dati = {partite: righe || [], info: (info || [])[0] || null, campo: Object.fromEntries((campi || []).map(c => [c.match_id, c.campo])), letti: Date.now()};
+    campionato.stato = "pronto"; campionato.errore = null;
+    memoriaScrivi(CAMP_MEMORIA, JSON.stringify(campionato.dati));
+  }catch(e){
+    campionato.errore = typeof messaggioErroreCloud === "function" ? messaggioErroreCloud(e) : e.message;
+    try{ const c = JSON.parse(memoriaLeggi(CAMP_MEMORIA) || "null"); if(c) campionato.dati = c; }catch(x){}
+    campionato.stato = campionato.dati ? "pronto" : "errore";
+  }
+  if(stato.ds) render();
+}
+function datiCampionato(){
+  if(campionato.stato === "vuoto") caricaCampionato();
+  return campionato.dati;
+}
+
+/* ---- casa o fuori per ogni nostra partita ---- */
+function nostraSquadraCamp(d){ return d && d.info ? d.info.squadra : null; }
+function eNostra(nome, d){ const n = nostraSquadraCamp(d); return !!n && (normNome(nome) === normNome(n) || somiglianzaNomi(nome, n) >= 1); }
+/** {campo: "casa"|"fuori"|"neutro"|null, fonte: "manuale"|"calendario"|null, gara} */
+function campoPartita(p, d){
+  d = d || campionato.dati;
+  if(!p) return {campo: null, fonte: null};
+  if(d && d.campo && d.campo[p.Match_ID]) return {campo: d.campo[p.Match_ID], fonte: "manuale"};
+  if(!d || !d.partite || !nostraSquadraCamp(d)) return {campo: null, fonte: null};
+  const cand = d.partite.map(g => {
+    const casaNoi = eNostra(g.casa, d), fuoriNoi = eNostra(g.ospite, d);
+    if(casaNoi === fuoriNoi) return null;
+    const avv = casaNoi ? g.ospite : g.casa;
+    const sim = somiglianzaNomi(p.Avversario, avv);
+    if(sim < 0.6) return null;
+    const gf = casaNoi ? g.gol_casa : g.gol_ospite, gs = casaNoi ? g.gol_ospite : g.gol_casa;
+    const stessoRis = N(p.Gol_Fatti) === gf && N(p.Gol_Subiti) === gs;
+    const giorni = (p.Data instanceof Date && g.data) ? Math.abs((p.Data - new Date(g.data + "T12:00:00")) / 86400000) : 999;
+    return {g, campo: casaNoi ? "casa" : "fuori", punti: sim + (stessoRis ? 2 : 0) - Math.min(giorni, 60) / 100};
+  }).filter(Boolean).sort((a, b) => b.punti - a.punti);
+  return cand[0] ? {campo: cand[0].campo, fonte: "calendario", gara: cand[0].g} : {campo: null, fonte: null};
+}
+
+/* ---- classifica e forza ---- */
+function classificaCampionato(d){
+  const sq = new Map();
+  const s = n => { if(!sq.has(n)) sq.set(n, {nome: n, g: 0, v: 0, x: 0, p: 0, gf: 0, gs: 0, pt: 0, casa: {g: 0, pt: 0, gf: 0, gs: 0}, fuori: {g: 0, pt: 0, gf: 0, gs: 0}, gare: []}); return sq.get(n); };
+  const partite = (d.partite || []).slice().sort((a, b) => String(a.data).localeCompare(String(b.data)) || String(a.ora || "").localeCompare(String(b.ora || "")));
+  partite.forEach(g => {
+    [[g.casa, g.gol_casa, g.gol_ospite, "casa", g.ospite], [g.ospite, g.gol_ospite, g.gol_casa, "fuori", g.casa]].forEach(([n, f, a, lato, avv]) => {
+      const o = s(n), pt = f > a ? 3 : f === a ? 1 : 0;
+      o.g++; o.gf += f; o.gs += a; o.pt += pt; if(pt === 3) o.v++; else if(pt === 1) o.x++; else o.p++;
+      const l = o[lato]; l.g++; l.pt += pt; l.gf += f; l.gs += a;
+      o.gare.push({data: g.data, giornata: g.giornata, avv, lato, f, a, pt});
+    });
+  });
+  const squadre = [...sq.values()];
+  // indice di forza (SRS): scarto medio + forza media delle avversarie, iterato fino a stabilità
+  const r = new Map(squadre.map(x => [x.nome, 0]));
+  for(let it = 0; it < 200; it++){
+    const nuovo = new Map();
+    squadre.forEach(x => {
+      const m = x.gare.reduce((t, k) => t + Math.max(-CAMP_SCARTO_MAX, Math.min(CAMP_SCARTO_MAX, k.f - k.a)), 0) / Math.max(1, x.g);
+      const so = x.gare.reduce((t, k) => t + r.get(k.avv), 0) / Math.max(1, x.g);
+      nuovo.set(x.nome, m + so);
+    });
+    const media = [...nuovo.values()].reduce((a, b) => a + b, 0) / Math.max(1, nuovo.size);
+    nuovo.forEach((v, k) => r.set(k, v - media));
+  }
+  squadre.forEach(x => { x.forza = r.get(x.nome); x.forma = x.gare.slice(-3); });
+  squadre.sort((a, b) => (b.pt - a.pt) || ((b.gf - b.gs) - (a.gf - a.gs)) || (b.gf - a.gf) || a.nome.localeCompare(b.nome, "it"));
+  squadre.forEach((x, i) => { x.pos = i + 1; });
+  const perForza = squadre.slice().sort((a, b) => b.forza - a.forza);
+  perForza.forEach((x, i) => { x.posForza = i + 1; });
+  const tot = partite.length;
+  const vCasa = partite.filter(g => g.gol_casa > g.gol_ospite).length, pari = partite.filter(g => g.gol_casa === g.gol_ospite).length;
+  const golMedi = tot ? partite.reduce((t, g) => t + g.gol_casa + g.gol_ospite, 0) / tot : 0;
+  const vantaggioCasa = tot ? partite.reduce((t, g) => t + (g.gol_casa - g.gol_ospite), 0) / tot : 0;
+  return {squadre, perForza, partite, tot, vCasa, pari, vFuori: tot - vCasa - pari, golMedi, vantaggioCasa,
+    ultima: partite.length ? partite[partite.length - 1] : null, giornate: new Set(partite.map(g => g.giornata).filter(Boolean)).size};
+}
+
+/** Cosa si può dire di un'avversaria solo dai risultati: frasi {html, tono}. */
+function letturaAvversaria(x, cl, noi){
+  const out = [];
+  const media = cl.golMedi / 2;
+  const gfm = x.gf / Math.max(1, x.g), gsm = x.gs / Math.max(1, x.g);
+  if(x.g >= 2){
+    if(gsm >= media + 0.7) out.push({tono: "bene", html: `Prende tanti gol: <b>${nf(gsm, 1)} a partita</b> (media del girone ${nf(media, 1)}). Conviene attaccarla con continuità e tirare tanto.`});
+    else if(gsm <= media - 0.7) out.push({tono: "male", html: `Difesa solida: prende solo <b>${nf(gsm, 1)} gol a partita</b> (media ${nf(media, 1)}). Servirà pazienza: poche occasioni, meglio cercare tiri da vicino che da lontano.`});
+    if(gfm >= media + 0.7) out.push({tono: "male", html: `Segna molto: <b>${nf(gfm, 1)} gol a partita</b>. Attenzione alle palle perse in uscita e alle ripartenze.`});
+    else if(gfm <= media - 0.7) out.push({tono: "bene", html: `Segna poco: <b>${nf(gfm, 1)} gol a partita</b>. Se andiamo in vantaggio, fa fatica a rimontare.`});
+  }
+  if(x.casa.g >= 1 && x.fuori.g >= 1){
+    const pc = x.casa.pt / x.casa.g, pf = x.fuori.pt / x.fuori.g;
+    if(Math.abs(pc - pf) >= 1) out.push({tono: "male", html: `${pc > pf ? "Molto più forte in casa" : "Rende più fuori casa"}: <b>${nf(pc, 1)} punti a partita in casa</b>, ${nf(pf, 1)} fuori.${pc > pf ? " A casa sua va presa sul serio; da noi è più battibile." : ""}`});
+  }
+  if(x.forma.length >= 3){
+    const pf = x.forma.reduce((t, k) => t + k.pt, 0);
+    if(pf <= 1) out.push({tono: "bene", html: `Momento difficile: <b>${nf0(pf)} ${pf === 1 ? "punto" : "punti"} nelle ultime 3</b>.`});
+    else if(pf >= 7) out.push({tono: "male", html: `In forma: <b>${nf0(pf)} punti nelle ultime 3</b>.`});
+  }
+  // contro le squadre della metà alta e bassa (per indice di forza)
+  const alta = new Set(cl.perForza.slice(0, Math.ceil(cl.perForza.length / 2)).map(s => s.nome));
+  const contro = sopra => x.gare.filter(k => alta.has(k.avv) === sopra);
+  const a = contro(true), b = contro(false);
+  if(a.length >= 2 && b.length >= 1){
+    const pa = a.reduce((t, k) => t + k.pt, 0) / a.length, pb = b.reduce((t, k) => t + k.pt, 0) / b.length;
+    if(pb - pa >= 1.5) out.push({tono: "bene", html: `Batte le squadre deboli ma fatica con le forti: <b>${nf(pa, 1)} punti a partita</b> contro la metà alta del girone, ${nf(pb, 1)} contro la metà bassa.`});
+  }
+  const tirate = x.gare.filter(k => Math.abs(k.f - k.a) <= 1).length;
+  if(x.g >= 3 && tirate / x.g >= 0.6) out.push({tono: "male", html: `Partite quasi sempre tirate (${nf0(tirate)} su ${nf0(x.g)} finite con al massimo un gol di scarto): conta ogni episodio, anche i calci piazzati.`});
+  if(noi && noi.nome !== x.nome){
+    const sc = noi.forza - x.forza;
+    out.push({tono: sc >= 0 ? "bene" : "male", html: `Sulla carta: per indice di forza ${sc >= 0.5 ? `siamo favoriti di circa <b>${nf(sc, 1)} gol</b>` : sc <= -0.5 ? `è favorita lei di circa <b>${nf(-sc, 1)} gol</b>` : "partita alla pari"}${Math.abs(cl.vantaggioCasa) >= 0.3 ? `, a cui aggiungere il fattore campo del girone (${cl.vantaggioCasa > 0 ? "+" : ""}${nf(cl.vantaggioCasa, 1)} gol per chi gioca in casa)` : ""}.`});
+    const prec = x.gare.filter(k => eNostra(k.avv, campionato.dati));
+    prec.forEach(k => out.push({tono: k.pt === 0 ? "bene" : "male", html: `${k.lato === "casa" ? "In casa sua" : "Da noi"} è finita <b>${nf0(k.a)}-${nf0(k.f)}</b> per noi${k.pt === 0 ? " (vinta)" : k.pt === 1 ? " (pari)" : " (persa)"}.`}));
+  }
+  if(!out.length) out.push({tono: "bene", html: "Risultati nella media del girone: nessun punto debole evidente dai soli punteggi."});
+  return out;
+}
+
+/* ---- sezione «Campionato e avversarie» ---- */
+function renderCampionato(f){
+  const cont = $("#contenuto-campionato");
+  if(!cont) return;
+  const d = datiCampionato();
+  const admin = !window.PORTALE_MISTER && !!accessoCloud();
+  if(!d){
+    cont.innerHTML = campionato.stato === "carico" || campionato.stato === "vuoto" ? `<div class="vuoto">Carico i risultati del campionato…</div>`
+      : campionato.stato === "senza-cloud" ? `<div class="vuoto">I risultati del campionato stanno nel cloud: entra con «Sincronizza i dispositivi» per vederli.</div>`
+      : `<div class="vuoto">Non riesco a leggere i risultati del campionato: ${esc(campionato.errore || "")}</div>`;
+    return;
+  }
+  if(!d.partite.length){ cont.innerHTML = `<div class="vuoto">Nessun risultato del campionato ancora caricato.</div>` + (admin ? htmlAggiornaCampionato(d) : ""); if(admin) collegaAggiornaCampionato(cont); return; }
+  const cl = classificaCampionato(d);
+  const noi = cl.squadre.find(x => eNostra(x.nome, d));
+  const avversarie = cl.squadre.filter(x => x !== noi);
+  if(!campionato.scelta || !avversarie.some(x => x.nome === campionato.scelta)){
+    // di partenza: la squadra più vicina a noi per forza che non abbiamo ancora incontrato, altrimenti la prima
+    const giocate = new Set(noi ? noi.gare.map(k => k.avv) : []);
+    const libere = avversarie.filter(x => !giocate.has(x.nome));
+    const vicine = (libere.length ? libere : avversarie).slice().sort((a, b) => Math.abs(a.forza - (noi ? noi.forza : 0)) - Math.abs(b.forza - (noi ? noi.forza : 0)));
+    campionato.scelta = vicine[0] ? vicine[0].nome : null;
+  }
+  const scelta = avversarie.find(x => x.nome === campionato.scelta);
+  const forma = x => x.forma.map(k => `<span class="cp-forma ${k.pt === 3 ? "v" : k.pt === 1 ? "x" : "p"}" title="${esc(k.avv)} ${nf0(k.f)}-${nf0(k.a)}">${k.pt === 3 ? "V" : k.pt === 1 ? "N" : "P"}</span>`).join("");
+  const maxF = Math.max(...cl.squadre.map(x => Math.abs(x.forza)), 0.5);
+  const righe = cl.squadre.map(x => `<tr class="${x === noi ? "cp-noi" : ""}"><td>${nf0(x.pos)}. ${esc(x.nome)}</td><td><strong>${nf0(x.pt)}</strong></td><td>${nf0(x.v)}-${nf0(x.x)}-${nf0(x.p)}</td><td>${nf0(x.gf)}:${nf0(x.gs)}</td>
+    <td><span class="${x.forza >= 0 ? "su" : "giu"}">${x.forza > 0 ? "+" : ""}${nf(x.forza, 1)}</span></td><td>${forma(x)}</td><td>${nf0(x.g)}</td><td>${x.casa.g ? nf(x.casa.pt / x.casa.g, 1) : "—"}</td><td>${x.fuori.g ? nf(x.fuori.pt / x.fuori.g, 1) : "—"}</td></tr>`).join("");
+  const barre = cl.perForza.map(x => `<div class="cp-barra-riga${x === noi ? " cp-noi" : ""}"><span class="cp-barra-nome" title="${esc(x.nome)}">${esc(nomeBreveCamp(x.nome))}</span>
+      <span class="cp-barra-asse"><span class="cp-barra ${x.forza >= 0 ? "pos" : "neg"}" style="${x.forza >= 0 ? "left:50%" : `right:50%`}; width:${(Math.abs(x.forza) / maxF * 50).toFixed(1)}%"></span></span>
+      <span class="cp-barra-val">${x.forza > 0 ? "+" : ""}${nf(x.forza, 1)}</span></div>`).join("");
+  const lett = scelta ? letturaAvversaria(scelta, cl, noi) : [];
+  const ultima = cl.ultima;
+  cont.innerHTML = `
+    <p class="cp-fonte">${esc((d.info && d.info.girone) || "Girone")} · ${nf0(cl.tot)} partite giocate${ultima && ultima.data ? `, l'ultima il ${esc(dataLabel(new Date(ultima.data + "T12:00:00")))}` : ""}. Squadra di casa sempre scritta per prima.</p>
+    <div class="griglia g-kpi">
+      ${noi ? `<div class="kpi"><div class="kpi-eti">La nostra posizione</div><div class="kpi-valore">${nf0(noi.pos)}°</div><div class="kpi-nota">${nf0(noi.pt)} punti in ${nf0(noi.g)} partite</div></div>
+      <div class="kpi"><div class="kpi-eti">Per indice di forza</div><div class="kpi-valore">${nf0(noi.posForza)}°</div><div class="kpi-nota">${noi.forza > 0 ? "+" : ""}${nf(noi.forza, 1)} gol rispetto a una squadra media</div></div>` : ""}
+      <div class="kpi"><div class="kpi-eti">Vince chi gioca in casa</div><div class="kpi-valore">${pctTxt(perc(cl.vCasa, cl.tot), 0)}</div><div class="kpi-nota">pareggi ${pctTxt(perc(cl.pari, cl.tot), 0)}, vittorie fuori ${pctTxt(perc(cl.vFuori, cl.tot), 0)}</div></div>
+      <div class="kpi"><div class="kpi-eti">Gol a partita nel girone</div><div class="kpi-valore">${nf(cl.golMedi, 1)}</div><div class="kpi-nota">fattore campo ${cl.vantaggioCasa > 0 ? "+" : ""}${nf(cl.vantaggioCasa, 1)} gol per chi gioca in casa</div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Classifica</div>
+      <div class="grafico-sub">Punti in casa e fuori sono a partita. L'indice di forza dice di quanti gol una squadra è migliore (+) o peggiore (−) di una squadra media del girone, tenendo conto di contro chi ha giocato.</div>
+      <div class="tabella-scroll"><table class="cp-tab"><caption class="solo-sr">Classifica del girone</caption>
+        <thead><tr><th scope="col">Squadra</th><th scope="col">Punti</th><th scope="col">V-N-P</th><th scope="col">Gol</th><th scope="col">Forza</th><th scope="col">Ultime 3</th><th scope="col">Giocate</th><th scope="col">Punti in casa</th><th scope="col">Punti fuori</th></tr></thead>
+        <tbody>${righe}</tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="grafico-titolo">Rapporti di forza</div>
+      <div class="grafico-sub">Dalla più forte alla più debole per indice di forza (scarto reti medio corretto per le avversarie incontrate). Con poche giornate è un'indicazione, non una sentenza.</div>
+      <div class="cp-barre">${barre}</div>
+    </div>
+    ${scelta ? `<div class="card cp-scheda" style="margin-top:16px">
+      <div class="grafico-titolo">Come affrontare un'avversaria</div>
+      <div class="toolbar" style="margin:8px 0 12px"><div class="campo"><label for="cp-sel-avv">Avversaria</label>
+        <select id="cp-sel-avv">${avversarie.map(x => `<option value="${esc(x.nome)}"${x === scelta ? " selected" : ""}>${esc(x.nome)} · ${nf0(x.pos)}ª</option>`).join("")}</select></div></div>
+      <div class="cp-scheda-numeri"><span><b>${nf0(scelta.pos)}ª</b> con ${nf0(scelta.pt)} punti</span><span>forza ${scelta.forza > 0 ? "+" : ""}${nf(scelta.forza, 1)} (${nf0(scelta.posForza)}ª)</span><span>gol ${nf(scelta.gf / Math.max(1, scelta.g), 1)} fatti e ${nf(scelta.gs / Math.max(1, scelta.g), 1)} subiti a partita</span><span>forma ${forma(scelta)}</span></div>
+      <ul class="rq-frasi" style="margin-top:12px">${lett.map(x => `<li class="rq-tono-${x.tono}">${x.html}</li>`).join("")}</ul>
+      <div class="grafico-sub" style="margin-top:12px">Le sue partite</div>
+      <div class="cp-gare">${scelta.gare.slice().reverse().map(k => `<div class="cp-gara"><span class="cp-forma ${k.pt === 3 ? "v" : k.pt === 1 ? "x" : "p"}">${k.pt === 3 ? "V" : k.pt === 1 ? "N" : "P"}</span><span>${k.lato === "casa" ? `<b>${esc(scelta.nome)}</b> ${nf0(k.f)}-${nf0(k.a)} ${esc(k.avv)}` : `${esc(k.avv)} ${nf0(k.a)}-${nf0(k.f)} <b>${esc(scelta.nome)}</b>`}</span><span class="tenue">${k.data ? esc(dataCorta(new Date(k.data + "T12:00:00"))) : ""}</span></div>`).join("")}</div>
+    </div>` : ""}
+    ${admin ? htmlAggiornaCampionato(d) : ""}
+    <p class="nota-piccola">Le letture sulle avversarie vengono solo dai punteggi: dicono quanto segna e quanto prende una squadra, dove fa punti e contro chi, non come gioca. Con il passare delle giornate diventano più affidabili.</p>`;
+  const sel = $("#cp-sel-avv", cont);
+  if(sel) sel.addEventListener("change", e => { campionato.scelta = e.target.value; renderCampionato(datiFiltrati()); });
+  if(admin) collegaAggiornaCampionato(cont);
+}
+
+/* ---- aggiornamento dei risultati (solo in Analysis) ---- */
+function htmlAggiornaCampionato(d){
+  const squadre = [...new Set((d.partite || []).flatMap(g => [g.casa, g.ospite]))].sort((a, b) => a.localeCompare(b, "it"));
+  const opz = squadre.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+  return `<details class="card cp-agg" style="margin-top:16px"${campionato.anteprima ? " open" : ""}>
+    <summary class="grafico-titolo">Aggiorna i risultati</summary>
+    <p class="grafico-sub">Apri la pagina Risultati del girone su Tuttocampo, scegli la giornata, seleziona tutto il testo, copia e incolla qui. Puoi incollare più giornate insieme. Analysis riconosce le squadre del girone e i punteggi; le partite già salvate si aggiornano, non si duplicano.</p>
+    <textarea id="cp-incolla" rows="6" placeholder="Incolla qui il testo della pagina Risultati"></textarea>
+    <div class="cp-azioni"><button type="button" class="btn" data-cp="leggi">Leggi il testo</button>
+      <label class="btn cp-file">Carica il file Excel<input type="file" id="cp-file" accept=".xlsx,.xls,.csv" hidden></label></div>
+    <p class="nota-piccola"><strong>File Excel</strong>: una riga per partita con le colonne Giornata, Data, Casa, Gol casa, Gol ospite, Ospite. Ogni settimana carica lo stesso file con le partite nuove aggiunte: sostituisce quello di prima (le partite corrette si aggiornano, quelle tolte dal file spariscono).</p>
+    <div id="cp-anteprima">${campionato.anteprima ? htmlAnteprimaCampionato(campionato.anteprima) : ""}</div>
+    <div class="cp-manuale">
+      <div class="grafico-sub" style="margin-top:14px">Oppure a mano</div>
+      <div class="cp-riga-man">
+        <input id="cp-man-data" type="date" aria-label="Data">
+        <select id="cp-man-casa" aria-label="Squadra di casa">${opz}</select>
+        <input id="cp-man-gc" type="number" min="0" max="40" inputmode="numeric" aria-label="Gol della squadra di casa" placeholder="0">
+        <input id="cp-man-go" type="number" min="0" max="40" inputmode="numeric" aria-label="Gol della squadra ospite" placeholder="0">
+        <select id="cp-man-ospite" aria-label="Squadra ospite">${opz}</select>
+        <button type="button" class="btn" data-cp="aggiungi">Aggiungi</button>
+      </div>
+    </div>
+    <div id="cp-msg" class="nota-piccola" role="status"></div>
+  </details>`;
+}
+function htmlAnteprimaCampionato(a){
+  if(!a.partite.length) return `<div class="avviso attenzione"><span class="ic" aria-hidden="true">!</span><span>Nel testo non ho trovato partite con le squadre del girone e un punteggio. Controlla di aver copiato la pagina Risultati, oppure aggiungile a mano qui sotto.</span></div>`;
+  return `<div class="cp-prev">${a.partite.map(g => `<div class="cp-gara"><span class="cp-forma ${g.nuova ? "v" : "x"}">${g.nuova ? "+" : "="}</span><span>${esc(g.casa)} <b>${nf0(g.gol_casa)}-${nf0(g.gol_ospite)}</b> ${esc(g.ospite)}</span><span class="tenue">${g.data ? esc(dataCorta(new Date(g.data + "T12:00:00"))) : "data?"}</span></div>`).join("")}</div>
+    <p class="nota-piccola">${a.file ? `Dal file «${esc(a.file)}», che sostituisce il campionato salvato: ` : ""}${nf0(a.partite.filter(g => g.nuova).length)} nuove, ${nf0(a.partite.filter(g => !g.nuova).length)} già salvate (si aggiornano)${a.daTogliere && a.daTogliere.length ? `, <strong>${nf0(a.daTogliere.length)} da togliere</strong> perché non sono più nel file (${a.daTogliere.slice(0, 4).map(g => esc(g.casa + " - " + g.ospite)).join("; ")}${a.daTogliere.length > 4 ? "…" : ""})` : ""}.</p>
+    <div class="cp-azioni"><button type="button" class="btn primario" data-cp="salva">Salva ${nf0(a.partite.length)} ${a.partite.length === 1 ? "partita" : "partite"}</button> <button type="button" class="btn" data-cp="annulla">Annulla</button></div>`;
+}
+const MESI_CAMP = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
+/** Legge il testo copiato da Tuttocampo: «Squadra A 4 3 Squadra B», con le date di giornata nel mezzo. */
+function leggiTestoCampionato(testo, d){
+  const squadre = [...new Set((d.partite || []).flatMap(g => [g.casa, g.ospite]).concat(d.info ? [d.info.squadra] : []))];
+  if(!squadre.length) return [];
+  const piatto = String(testo || "").replace(/ /g, " ").replace(/[ \t]+/g, " ");
+  const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+  const alt = squadre.slice().sort((a, b) => b.length - a.length).map(escRe).join("|");
+  const re = new RegExp(`(${alt})\\s*(?:\\n\\s*)*(\\d{1,2})\\s*(?:[-–]\\s*)?(?:\\n\\s*)*(\\d{1,2})\\s*(?:\\n\\s*)*(${alt})`, "gi");
+  const date = [];
+  const reData = new RegExp(`(?:lun|mar|mer|gio|ven|sab|dom)[a-zì]*\\.?\\s+(\\d{1,2})\\s+(${MESI_CAMP.join("|")})`, "gi");
+  let m;
+  while((m = reData.exec(piatto))) date.push({pos: m.index, g: +m[1], m: MESI_CAMP.indexOf(m[2].toLowerCase())});
+  const annoBase = (() => { const ds = (d.partite || []).map(g => g.data).filter(Boolean).sort(); return ds.length ? +ds[0].slice(0, 4) : new Date().getFullYear(); })();
+  const canonico = s => squadre.find(x => x.toLowerCase().replace(/\s+/g, " ") === s.toLowerCase().replace(/\s+/g, " ")) || s;
+  const esistenti = new Set((d.partite || []).map(g => g.id));
+  const out = [], visti = new Set();
+  while((m = re.exec(piatto))){
+    const casa = canonico(m[1]), ospite = canonico(m[4]);
+    if(normNome(casa) === normNome(ospite)) continue;
+    const dd = date.filter(x => x.pos < m.index).pop();
+    let data = null;
+    if(dd){ const anno = dd.m >= 7 ? annoBase : annoBase + 1; data = `${anno}-${String(dd.m + 1).padStart(2, "0")}-${String(dd.g).padStart(2, "0")}`; }
+    const id = idPartitaCamp(casa, ospite);
+    if(visti.has(id)) continue; visti.add(id);
+    out.push({id, casa, ospite, gol_casa: +m[2], gol_ospite: +m[3], data, nuova: !esistenti.has(id)});
+  }
+  return out;
+}
+/** Giornata: dalla settimana della data (le giornate del girone vanno da venerdì a domenica). */
+function giornataDaData(data, d){
+  if(!data) return null;
+  const sett = x => { const t = new Date(x + "T12:00:00"); const g = (t.getDay() + 2) % 7; t.setDate(t.getDate() - g); return t.toISOString().slice(0, 10); };
+  const s = sett(data);
+  const note = new Map();
+  (d.partite || []).forEach(g => { if(g.data && g.giornata) note.set(sett(g.data), g.giornata); });
+  if(note.has(s)) return note.get(s);
+  const prima = [...note.entries()].filter(([k]) => k < s).sort().pop();
+  return prima ? prima[1] + Math.round((new Date(s) - new Date(prima[0])) / (7 * 86400000)) : null;
+}
+async function salvaPartiteCampionato(partite, daTogliere){
+  const d = campionato.dati;
+  const righe = partite.map(g => ({id: g.id, giornata: g.giornata ?? giornataDaData(g.data, d), data: g.data, casa: g.casa, ospite: g.ospite, gol_casa: g.gol_casa, gol_ospite: g.gol_ospite, aggiornato: new Date().toISOString()}));
+  if(righe.length) await restTabella("POST", CAMP_TABELLA, "?on_conflict=id", righe, "resolution=merge-duplicates,return=minimal");
+  if(daTogliere && daTogliere.length) await restTabella("DELETE", CAMP_TABELLA, "?id=in.(" + daTogliere.map(g => '"' + String(g.id).replace(/"/g, "") + '"').join(",") + ")");
+  await caricaCampionato(true);
+}
+/** File Excel o CSV: una riga per partita (Giornata, Data, Casa, Gol casa, Gol ospite, Ospite), intestazione facoltativa. */
+function leggiFoglioCampionato(righe, d){
+  const esistenti = new Set((d.partite || []).map(g => g.id));
+  const testa = (righe[0] || []).map(x => normNome(x));
+  const trova = (...nomi) => testa.findIndex(h => nomi.some(n => h === n || h.startsWith(n)));
+  let col = {g: trova("giornata", "g"), d: trova("data"), c: trova("casa", "squadracasa", "squadradicasa"), gc: trova("golcasa", "retecasa"), go: trova("golospite", "goltrasferta", "reteospite"), o: trova("ospite", "ospiti", "squadraospite", "trasferta")};
+  let inizio = 1;
+  if(col.c < 0 || col.o < 0 || col.gc < 0 || col.go < 0){ col = {g: 0, d: 1, c: 2, gc: 3, go: 4, o: 5}; inizio = /^\d+$/.test(String((righe[0] || [])[3] ?? "").trim()) ? 0 : 1; }
+  const data = v => {
+    if(v === null || v === undefined || v === "") return null;
+    if(typeof v === "number"){ const t = new Date(Math.round((v - 25569) * 86400000)); return isNaN(t) ? null : t.toISOString().slice(0, 10); }
+    if(v instanceof Date) return isNaN(v) ? null : v.toISOString().slice(0, 10);
+    const m = String(v).match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);
+    if(m){ const y = m[3].length === 2 ? 2000 + +m[3] : +m[3]; return `${y}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`; }
+    const iso = String(v).match(/(\d{4})-(\d{2})-(\d{2})/); return iso ? iso[0] : null;
+  };
+  const out = [];
+  righe.slice(inizio).forEach(r => {
+    const casa = String(r[col.c] ?? "").trim(), ospite = String(r[col.o] ?? "").trim();
+    const gc = r[col.gc], go = r[col.go];
+    if(!casa || !ospite || gc === "" || go === "" || gc === undefined || go === undefined || !isFinite(+gc) || !isFinite(+go)) return;
+    // nomi scritti in modo un po' diverso: si usa quello già salvato se è chiaramente la stessa squadra
+    const note = [...new Set((d.partite || []).flatMap(g => [g.casa, g.ospite]))];
+    const canon = n => note.find(x => normNome(x) === normNome(n)) || note.find(x => somiglianzaNomi(x, n) >= 1) || n;
+    const c = canon(casa), o = canon(ospite), id = idPartitaCamp(c, o);
+    out.push({id, casa: c, ospite: o, gol_casa: +gc, gol_ospite: +go, data: col.d >= 0 ? data(r[col.d]) : null, giornata: col.g >= 0 && isFinite(+r[col.g]) && String(r[col.g]).trim() !== "" ? +r[col.g] : null, nuova: !esistenti.has(id)});
+  });
+  return out;
+}
+function collegaAggiornaCampionato(cont){
+  const box = $(".cp-agg", cont);
+  if(!box) return;
+  const msg = t => { const m = $("#cp-msg", box); if(m) m.textContent = t || ""; };
+  const file = $("#cp-file", box);
+  if(file) file.addEventListener("change", async () => {
+    const fl = file.files && file.files[0]; if(!fl) return;
+    try{
+      if(typeof XLSX === "undefined") throw new Error("lettore Excel non caricato: controlla la connessione e riprova");
+      const wb = XLSX.read(await fl.arrayBuffer(), {type: "array", cellDates: false});
+      const foglio = wb.Sheets[wb.SheetNames[0]];
+      const righe = XLSX.utils.sheet_to_json(foglio, {header: 1, raw: true, defval: ""});
+      // 1.55.0 (Andrea): «lo carichi su Analysis settimanalmente aggiornato riscrivendo il precedente». Il file è la
+      // copia completa del campionato: quello che non c'è più nel file si toglie anche dal cloud.
+      const partite = leggiFoglioCampionato(righe, campionato.dati);
+      const nelFile = new Set(partite.map(g => g.id));
+      const daTogliere = partite.length ? (campionato.dati.partite || []).filter(g => !nelFile.has(g.id)) : [];
+      campionato.anteprima = {partite, daTogliere, file: fl.name};
+      $("#cp-anteprima", box).innerHTML = htmlAnteprimaCampionato(campionato.anteprima);
+      msg("");
+    }catch(err){ msg("File non letto: " + err.message); }
+    file.value = "";
+  });
+  box.addEventListener("click", async e => {
+    const b = e.target.closest("[data-cp]"); if(!b) return;
+    const az = b.dataset.cp;
+    if(az === "leggi"){
+      campionato.anteprima = {partite: leggiTestoCampionato($("#cp-incolla", box).value, campionato.dati)};
+      $("#cp-anteprima", box).innerHTML = htmlAnteprimaCampionato(campionato.anteprima);
+      return;
+    }
+    if(az === "annulla"){ campionato.anteprima = null; $("#cp-anteprima", box).innerHTML = ""; return; }
+    if(az === "salva" || az === "aggiungi"){
+      let partite;
+      if(az === "salva") partite = campionato.anteprima ? campionato.anteprima.partite : [];
+      else {
+        const casa = $("#cp-man-casa", box).value, ospite = $("#cp-man-ospite", box).value;
+        const gc = $("#cp-man-gc", box).value, go = $("#cp-man-go", box).value, data = $("#cp-man-data", box).value || null;
+        if(!casa || !ospite || casa === ospite || gc === "" || go === ""){ msg("Scegli due squadre diverse e scrivi i due punteggi."); return; }
+        partite = [{id: idPartitaCamp(casa, ospite), casa, ospite, gol_casa: +gc, gol_ospite: +go, data}];
+      }
+      if(!partite.length) return;
+      b.disabled = true; msg("Salvo nel cloud…");
+      try{ await salvaPartiteCampionato(partite, az === "salva" && campionato.anteprima ? campionato.anteprima.daTogliere : null); campionato.anteprima = null; msg(""); }
+      catch(err){ msg("Non salvato: " + (typeof messaggioErroreCloud === "function" ? messaggioErroreCloud(err) : err.message)); b.disabled = false; }
+    }
+  });
+}
+
+/* ---- sezione «Casa e fuori casa» ---- */
+function statCampo(partite, giocatori){
+  const n = partite.length;
+  if(!n) return null;
+  const v = partite.filter(p => p.Gol_Fatti > p.Gol_Subiti).length, x = partite.filter(p => p.Gol_Fatti === p.Gol_Subiti).length;
+  const conGioco = partite.filter(p => !p.SoloEssenziali);
+  const ids = new Set(conGioco.map(p => p.Match_ID));
+  const s = riepilogoSquadra(giocatori.filter(g => ids.has(g.Match_ID)), conGioco);
+  const conXg = partite.filter(p => p.MappeTiri && p.MappeTiri.conTiri);
+  const conXgS = partite.filter(p => p.MappeTiri && p.MappeTiri.conSubiti);
+  const somma = (arr, k) => arr.reduce((t, p) => t + p.MappeTiri[k].reduce((a, q) => a + (q.xg || 0), 0), 0);
+  return {n, v, x, p: n - v - x, pt: (3 * v + x) / n, gf: partite.reduce((t, p) => t + N(p.Gol_Fatti), 0) / n, gs: partite.reduce((t, p) => t + N(p.Gol_Subiti), 0) / n,
+    nGioco: conGioco.length, prec: s.precisione_passaggi, errore: s.tasso_errore, recuperi: conGioco.length ? s.recuperi / conGioco.length : null,
+    xgF: conXg.length ? somma(conXg, "tiri") / conXg.length : null, nXgF: conXg.length, xgS: conXgS.length ? somma(conXgS, "subiti") / conXgS.length : null, nXgS: conXgS.length};
+}
+function confrontoCasaFuori(f){
+  const d = datiCampionato();
+  const lista = f.partite.map(p => Object.assign({p}, campoPartita(p, d)));
+  const casa = lista.filter(x => x.campo === "casa").map(x => x.p), fuori = lista.filter(x => x.campo === "fuori").map(x => x.p);
+  return {lista, casa: statCampo(casa, f.giocatori), fuori: statCampo(fuori, f.giocatori), senza: lista.filter(x => !x.campo).length};
+}
+function renderCasaFuori(f){
+  const cont = $("#contenuto-casa-fuori");
+  if(!cont) return;
+  const d = datiCampionato();
+  const c = confrontoCasaFuori(f);
+  const admin = !window.PORTALE_MISTER && !!accessoCloud();
+  const riga = (eti, fn, dec, meglio) => {
+    const a = c.casa ? fn(c.casa) : null, b = c.fuori ? fn(c.fuori) : null;
+    const ok = a !== null && b !== null && isFinite(a) && isFinite(b);
+    const diff = ok ? a - b : null;
+    const cl = (val, altro) => !ok || Math.abs(diff) < (dec === 0 ? 0.5 : Math.pow(10, -dec) * 3) || !meglio ? "" : ((meglio === "alto" ? val > altro : val < altro) ? "su" : "giu");
+    const fmt = v => v === null || !isFinite(v) ? "—" : (dec === "pct" ? pctTxt(v, 0) : nf(v, dec));
+    return `<tr><td>${esc(eti)}</td><td><span class="${cl(a, b)}">${fmt(a)}</span></td><td><span class="${cl(b, a)}">${fmt(b)}</span></td></tr>`;
+  };
+  const tab = (c.casa || c.fuori) ? `<div class="tabella-scroll"><table class="cf-tab"><caption class="solo-sr">Casa e fuori casa a confronto</caption>
+    <thead><tr><th scope="col">A partita</th><th scope="col">In casa${c.casa ? ` (${nf0(c.casa.n)})` : ""}</th><th scope="col">Fuori${c.fuori ? ` (${nf0(c.fuori.n)})` : ""}</th></tr></thead><tbody>
+    ${riga("Vinte-pari-perse", s => null, 0)}
+    ${riga("Punti", s => s.pt, 1, "alto")}${riga("Gol fatti", s => s.gf, 1, "alto")}${riga("Gol subiti", s => s.gs, 1, "basso")}
+    ${riga("xG fatti", s => s.xgF, 1, "alto")}${riga("xG concessi", s => s.xgS, 1, "basso")}
+    ${riga("Precisione passaggi", s => s.prec, "pct", "alto")}${riga("Tasso di errore", s => s.errore, "pct", "basso")}${riga("Recuperi", s => s.recuperi, 1, "alto")}
+    </tbody></table></div>` : `<div class="vuoto">Nessuna partita del periodo ha ancora casa o fuori: ${d ? "segnale qui sotto" : "carico il calendario del campionato…"}.</div>`;
+  const vnp = s => s ? `${nf0(s.v)}-${nf0(s.x)}-${nf0(s.p)}` : "—";
+  const elenco = c.lista.slice().sort((a, b) => (b.p.Ordine || 0) - (a.p.Ordine || 0)).map(x => {
+    const p = x.p, ris = `${nf0(p.Gol_Fatti)}-${nf0(p.Gol_Subiti)}`;
+    const ctrl = admin ? `<select data-cf-match="${esc(p.Match_ID)}" aria-label="Casa o fuori per ${esc(p.Avversario)}">
+        <option value=""${x.fonte !== "manuale" ? " selected" : ""}>${x.fonte === "calendario" ? `Dal calendario: ${x.campo === "casa" ? "casa" : "fuori"}` : "Non segnata"}</option>
+        <option value="casa"${x.fonte === "manuale" && x.campo === "casa" ? " selected" : ""}>Casa</option>
+        <option value="fuori"${x.fonte === "manuale" && x.campo === "fuori" ? " selected" : ""}>Fuori</option>
+        <option value="neutro"${x.fonte === "manuale" && x.campo === "neutro" ? " selected" : ""}>Campo neutro</option></select>`
+      : `<span class="pill ${x.campo === "casa" ? "pos" : x.campo === "fuori" ? "neu" : "neu"}">${x.campo === "casa" ? "Casa" : x.campo === "fuori" ? "Fuori" : x.campo === "neutro" ? "Neutro" : "—"}</span>`;
+    return `<div class="cf-partita"><span class="cf-p-nome">${esc(dataCorta(p.Data))} · ${esc(p.Avversario)} <b>${ris}</b></span>${ctrl}</div>`;
+  }).join("");
+  cont.innerHTML = `${tab.replace("<td>—</td><td>—</td></tr>", "").replace(/<tr><td>Vinte-pari-perse<\/td>.*?<\/tr>/, `<tr><td>Vinte-pari-perse</td><td>${vnp(c.casa)}</td><td>${vnp(c.fuori)}</td></tr>`)}
+    ${c.senza ? `<p class="nota-piccola">${nf0(c.senza)} ${c.senza === 1 ? "partita del periodo non è" : "partite del periodo non sono"} né casa né fuori: amichevoli o coppe da segnare a mano qui sotto.</p>` : ""}
+    <div class="card" style="margin-top:16px"><div class="grafico-titolo">Le partite</div>
+      <div class="grafico-sub">${admin ? "Le partite di campionato prendono casa o fuori dal calendario del girone (la squadra di casa è scritta per prima). Per amichevoli e coppe, o se il calendario sbaglia, sceglilo qui: la tua scelta vince sempre." : "Casa o fuori di ogni partita."}</div>
+      <div class="cf-elenco">${elenco}</div><div id="cf-msg" class="nota-piccola" role="status"></div></div>
+    <p class="nota-piccola">Il verde indica il lato in cui va meglio, il rosso quello in cui va peggio. Con poche partite per lato le differenze possono dipendere dagli avversari incontrati più che dal campo.</p>`;
+  if(admin) cont.querySelectorAll("select[data-cf-match]").forEach(sel => sel.addEventListener("change", async e => {
+    const id = e.target.dataset.cfMatch, v = e.target.value, m = $("#cf-msg", cont);
+    e.target.disabled = true; if(m) m.textContent = "Salvo nel cloud…";
+    try{
+      if(v) await restTabella("POST", CAMP_CAMPO, "?on_conflict=match_id", [{match_id: id, campo: v, aggiornato: new Date().toISOString()}], "resolution=merge-duplicates,return=minimal");
+      else await restTabella("DELETE", CAMP_CAMPO, "?match_id=eq." + encodeURIComponent(id));
+      await caricaCampionato(true);
+    }catch(err){ if(m) m.textContent = "Non salvato: " + (typeof messaggioErroreCloud === "function" ? messaggioErroreCloud(err) : err.message); e.target.disabled = false; }
+  }));
+}
+// ricarica i risultati quando si torna sull'app dopo un po' (il lunedì si incollano le partite nuove)
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible" && campionato.dati && Date.now() - (campionato.dati.letti || 0) > 10 * 60000 && accessoCloud()) caricaCampionato(true);
 });
 
 /* ---- sincronizzazione ---- */
@@ -9188,6 +9681,8 @@ function render(){
   sicuro("renderSituazioni", () => renderSituazioni("allenamento"));
   sicuro("renderConfrontoAllenamento", () => renderConfrontoAllenamento(f));
   sicuro("renderQualita", () => renderQualita());
+  sicuro("renderCasaFuori", () => renderCasaFuori(f));
+  sicuro("renderCampionato", () => renderCampionato(f));
   sicuro("renderRiquadri", () => renderRiquadri(f)); // 1.53.0: Riepilogo e aree (dopo le sezioni: usa le loro tabelle)
   aggiornaSelettoriReport();
   adattaLarghezzeColonneSchermo(); // dopo che tutte le tabelle sono nel DOM: vedi la funzione per il perché
